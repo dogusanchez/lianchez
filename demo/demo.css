@@ -1,5 +1,6 @@
 /* Demo sayfası — modern.css tasarım sistemini (değişkenler, glass, button) kullanır */
 html, body { overflow-x: hidden; max-width: 100%; }
+.logo a { display: block; line-height: 0; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .accent { color: var(--primary-color, #fd0606); }
 
@@ -22,7 +23,7 @@ html, body { overflow-x: hidden; max-width: 100%; }
 
 .demo-search { flex: 1 1 220px; max-width: 320px; }
 .demo-search input {
-    width: 100%; box-sizing: border-box; font: inherit; color: inherit;
+    width: 100%; box-sizing: border-box; font: inherit; font-size: max(16px, .95rem); color: inherit;
     padding: 10px 16px; border-radius: 999px;
     background: var(--glass-bg); border: 1px solid var(--glass-border);
 }

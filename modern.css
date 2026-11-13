@@ -17,7 +17,7 @@
     --radius-md: 16px;
     --radius-lg: 24px;
     --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-    --logo-h: 84px;
+    --logo-h: 69px;
     --header-h: calc(var(--logo-h) + 16px);
 }
 
@@ -719,5 +719,5 @@ body.menu-open::after {
 }
 
 /* Logo: her ekranda aynı boyut, üst/alt boşluklu */
-@media (max-width: 768px) { :root { --logo-h: 72px; } }
-@media (max-width: 380px) { :root { --logo-h: 64px; } }
+@media (max-width: 768px) { :root { --logo-h: 59px; } }
+@media (max-width: 380px) { :root { --logo-h: 52px; } }

@@ -141,7 +141,9 @@ header.is-scrolled::before { background: rgba(9, 8, 8, 0.82); }
 header .container { width: 100%; }
 
 .logo { width: auto; height: auto; }
-.header-logo { width: clamp(150px, 40vw, 220px); height: auto; display: block; }
+.header-logo { height: 38px; width: auto; max-width: 100%; object-fit: contain; display: block; }
+header .logo { display: flex; align-items: center; }
+@media (max-width: 768px) { .header-logo { height: 31px; } }
 
 .menu-toggle {
     width: 48px; height: 48px;           /* touch-friendly */

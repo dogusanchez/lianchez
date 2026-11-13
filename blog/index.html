@@ -15,11 +15,11 @@
     
     <header class="blog-header">
         <div class="container header-inner">
-            <a href="/index.html" class="blog-logo">
-                <img src="/logo.png" alt="Lianchez">
+            <a href="../index.html" class="blog-logo" aria-label="Lianchez Ana Sayfa">
+                <img src="../logo.png" alt="Lianchez" class="header-logo" width="240" height="60">
             </a>
             
-            <button class="hamburger-menu-btn" id="open-sidebar" aria-label="Menüyü Aç">
+            <button class="hamburger-menu-btn" id="open-sidebar" type="button" aria-label="Menüyü Aç/Kapat" aria-expanded="false" aria-controls="blog-sidebar">
                 <span class="bar"></span>
                 <span class="bar"></span>
                 <span class="bar"></span>
@@ -28,7 +28,7 @@
     </header>
 
     <div class="blog-sidebar-overlay" id="sidebar-overlay"></div>
-    <div class="blog-sidebar" id="blog-sidebar">
+    <div class="blog-sidebar" id="blog-sidebar" aria-hidden="true">
         <div class="sidebar-header">
             <h3>Menü</h3>
             <button class="close-sidebar-btn" id="close-sidebar">&times;</button>
@@ -267,5 +267,24 @@
 
     <script type="module" src="/blog/blog.js"></script>
 
+    <script>
+    (function () {
+        var btn = document.getElementById('open-sidebar');
+        var sb = document.getElementById('blog-sidebar');
+        if (!btn || !sb) return;
+        function sync() {
+            var open = sb.classList.contains('active');
+            btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+            btn.classList.toggle('is-open', open);
+            sb.setAttribute('aria-hidden', open ? 'false' : 'true');
+            document.body.style.overflow = open ? 'hidden' : '';
+        }
+        new MutationObserver(sync).observe(sb, { attributes: true, attributeFilter: ['class'] });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && sb.classList.contains('active')) { var c = document.getElementById('close-sidebar'); if (c) c.click(); }
+        });
+        sync();
+    })();
+    </script>
 </body>
 </html>

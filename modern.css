@@ -17,7 +17,8 @@
     --radius-md: 16px;
     --radius-lg: 24px;
     --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-    --header-h: 72px;
+    --logo-h: 84px;
+    --header-h: calc(var(--logo-h) + 16px);
 }
 
 /* ---------- Temel ---------- */
@@ -141,9 +142,9 @@ header.is-scrolled::before { background: rgba(9, 8, 8, 0.82); }
 header .container { width: 100%; }
 
 .logo { width: auto; height: auto; }
-.header-logo { height: 38px; width: auto; max-width: 100%; object-fit: contain; display: block; }
+.header-logo { height: var(--logo-h); width: auto; max-width: 100%; object-fit: contain; display: block; }
 header .logo { display: flex; align-items: center; }
-@media (max-width: 768px) { .header-logo { height: 31px; } }
+
 
 .menu-toggle {
     width: 48px; height: 48px;           /* touch-friendly */
@@ -716,3 +717,7 @@ body.menu-open::after {
     .hero-glow--b, .hero-card--b { display: none; }
     .hero-visual { min-height: 220px; }
 }
+
+/* Logo: her ekranda aynı boyut, üst/alt boşluklu */
+@media (max-width: 768px) { :root { --logo-h: 72px; } }
+@media (max-width: 380px) { :root { --logo-h: 64px; } }

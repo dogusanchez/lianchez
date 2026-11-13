@@ -1628,10 +1628,10 @@
 
 
 /* ===== Modern header, logo & mobil menü (modern.css ile uyumlu) ===== */
-.blog-header { padding: 12px 0; background: rgba(9, 8, 8, 0.72); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+.blog-header { padding: 8px 0; background: rgba(9, 8, 8, 0.72); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
 .blog-header .header-inner { min-height: 48px; gap: 16px; }
 .blog-logo { display: flex; align-items: center; flex: 0 1 auto; min-width: 0; }
-.blog-logo img, .blog-logo:hover img { width: auto; height: 38px; max-width: 100%; object-fit: contain; display: block; }
+.blog-logo img, .blog-logo:hover img { width: auto; height: var(--logo-h, 84px); max-width: 100%; object-fit: contain; display: block; }
 .blog-logo:hover img { transform: none; opacity: .85; }
 
 .hamburger-menu-btn {
@@ -1662,7 +1662,11 @@
 
 @media (max-width: 768px) {
     .blog-header { padding: 10px 0; }
-    .blog-logo img, .blog-logo:hover img { height: 31px; }
+    
     .blog-header .header-inner { padding-right: max(20px, env(safe-area-inset-right)); padding-left: max(20px, env(safe-area-inset-left)); }
 }
 @media (prefers-reduced-motion: reduce) { .blog-sidebar, .hamburger-menu-btn .bar { transition: none; } }
+
+:root { --logo-h: 84px; }
+@media (max-width: 768px) { :root { --logo-h: 72px; } .blog-header { padding: 8px 0; } }
+@media (max-width: 380px) { :root { --logo-h: 64px; } }

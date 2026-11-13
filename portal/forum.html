@@ -4,6 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Tartışma Forumu - Üni Portal</title>
+    <meta name="description" content="Üni Portal Tartışma Forumu: sorular sor, konular aç, öğrencilerle fikir alışverişi yap.">
+    <meta property="og:title" content="Tartışma Forumu - Üni Portal">
+    <meta property="og:description" content="Üni Portal Tartışma Forumu: sorular sor, konular aç, öğrencilerle fikir alışverişi yap.">
+    <meta property="og:url" content="/portal/forum.html">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Üni Portal">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Tartışma Forumu - Üni Portal">
+    <meta name="twitter:description" content="Üni Portal Tartışma Forumu: sorular sor, konular aç, öğrencilerle fikir alışverişi yap.">
     <link rel="icon" type="image/png" href="/portal/fav.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -298,6 +307,7 @@
                         <button onclick="filterCategory('Üniversite')" data-cat="Üniversite" class="cat-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-700 text-slate-300 hover:bg-slate-600 transition whitespace-nowrap flex items-center space-x-1.5">
                             <i class="fa-solid fa-graduation-cap text-indigo-400"></i><span>Üniversite</span>
                         </button>
+                        <button onclick="filterCategory('Ders Notları')" data-cat="Ders Notları" class="cat-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-700 text-slate-300 hover:bg-slate-600 transition whitespace-nowrap flex items-center space-x-1.5"><i class="fa-solid fa-book-open text-amber-400"></i><span>Ders Notları</span></button>
                         <button onclick="filterCategory('Etkinlik')" data-cat="Etkinlik" class="cat-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-700 text-slate-300 hover:bg-slate-600 transition whitespace-nowrap flex items-center space-x-1.5">
                             <i class="fa-solid fa-calendar-check text-pink-400"></i><span>Etkinlik</span>
                         </button>
@@ -426,6 +436,7 @@
                         <option value="Soru & Cevap">Soru & Cevap</option>
                         <option value="Yazılım">Yazılım</option>
                         <option value="Üniversite">Üniversite</option>
+                        <option value="Ders Notları">Ders Notları</option>
                         <option value="Etkinlik">Etkinlik</option>
                         <option value="Hakkında">Hakkında</option>
                         <option value="Yardım">Yardım</option>
@@ -1894,7 +1905,31 @@ window.showToast = (message, type = 'info') => {
             } catch(e) { console.error(e); showToast("Güncellenemedi", "error"); }
         };
 
-        window.openPinnedRulesTopic = () => {
+        const DEFAULT_PAGE_TITLE = 'Tartışma Forumu - Üni Portal';
+        const DEFAULT_PAGE_DESC = 'Üni Portal Tartışma Forumu: sorular sor, konular aç, öğrencilerle fikir alışverişi yap.';
+        const _stripMd = (txt) => {
+            if (typeof window.stripMarkdown === 'function') return window.stripMarkdown(txt || '');
+            if (typeof stripMarkdown === 'function') return stripMarkdown(txt || '');
+            return (txt || '').replace(/!?\[([^\]]*)\]\([^)]*\)/g, '$1').replace(/[*_`~#>]/g, '').replace(/\s+/g, ' ').trim();
+        };
+        function setPageMeta(title, desc, url) {
+            const setM = (sel, val) => { const el = document.querySelector(sel); if (el) el.setAttribute('content', val); };
+            document.title = title;
+            setM('meta[name="description"]', desc);
+            setM('meta[property="og:title"]', title);
+            setM('meta[property="og:description"]', desc);
+            setM('meta[property="og:url"]', url || (window.location.origin + window.location.pathname));
+            setM('meta[name="twitter:title"]', title);
+            setM('meta[name="twitter:description"]', desc);
+        }
+        function resetPageMeta() {
+            setPageMeta(DEFAULT_PAGE_TITLE, DEFAULT_PAGE_DESC, window.location.origin + window.location.pathname);
+        }
+
+        window.openPinnedRulesTopic = (skipPush = false) => {
+            if (!skipPush && new URLSearchParams(window.location.search).get('topic') !== 'pinned-rules') {
+                window.history.pushState({ topicId: 'pinned-rules' }, '', '?topic=pinned-rules');
+            }
             const rulesContent = `🎓 **Üni Portal Forum Kuralları** 🎓
 
 Merhaba değerli öğrenci arkadaşım! 👋
@@ -1910,7 +1945,7 @@ Forumumuzun herkes için keyifli, güvenli ve verimli bir ortam olması adına a
 
 📚 **2. KONU BAŞLIĞI VE KATEGORİ UYUMU**
 • Konu başlığı içeriği yansıtmalı: "Yardım!" yerine "Python'da hata alıyorum, çözüm var mı?" 🎯
-• Konuyu doğru kategoriye açın: Genel, Soru & Cevap, Yazılım, Üniversite, Etkinlik, Hakkında, Yardım.
+• Konuyu doğru kategoriye açın: Genel, Soru & Cevap, Yazılım, Üniversite, Ders Notları, Etkinlik, Hakkında, Yardım.
 
 🚫 **3. SPAM VE REKLAM YASAK**
 • Aynı mesajı tekrar tekrar atmayın.
@@ -1953,6 +1988,7 @@ Keyifli forumlar! 🎉
 
             activeTopicId = "pinned-rules";
             activeTopicData = { isLocked: true };
+            setPageMeta('📌 Forum ve Kurallar Hakkında - Üni Portal', _stripMd(rulesContent).slice(0, 155), `${window.location.origin}/portal/forum.html?topic=pinned-rules`);
             document.getElementById('main-forum-view').classList.add('hidden');
             document.getElementById('topic-detail-view').classList.remove('hidden');
             document.getElementById('locked-notice').classList.add('hidden');
@@ -1986,8 +2022,11 @@ Keyifli forumlar! 🎉
             if (replyFormContainer) replyFormContainer.style.display = 'none';
         };
 
-        window.openTopicDetail = async (topicId) => {
-            if (topicId === 'pinned-rules') { openPinnedRulesTopic(); return; }
+        window.openTopicDetail = async (topicId, skipPush = false) => {
+            if (topicId === 'pinned-rules') { openPinnedRulesTopic(skipPush); return; }
+            if (!skipPush && new URLSearchParams(window.location.search).get('topic') !== topicId) {
+                window.history.pushState({ topicId }, '', '?topic=' + encodeURIComponent(topicId));
+            }
             activeTopicId = topicId;
             document.getElementById('main-forum-view').classList.add('hidden');
             document.getElementById('topic-detail-view').classList.remove('hidden');
@@ -1995,7 +2034,7 @@ Keyifli forumlar! 🎉
             await loadTopicDetail(topicId);
         };
 
-        window.backToForumList = () => {
+        window.backToForumList = (skipPush = false) => {
             activeTopicId = null;
             activeTopicData = null;
             window.cancelQuote();
@@ -2006,7 +2045,13 @@ Keyifli forumlar! 🎉
             document.getElementById('locked-notice').classList.add('hidden');
             const replyFormContainer = document.getElementById('reply-form-container');
             if (replyFormContainer) replyFormContainer.style.display = 'block';
-            loadTopics(true);
+            resetPageMeta();
+            if (!skipPush && new URLSearchParams(window.location.search).get('topic')) {
+                window.history.pushState({}, '', window.location.pathname);
+            }
+            // Kota dostu: önbellek doluysa Firestore okuması yapmadan listeyi göster
+            if (skipPush && allLoadedTopics.length > 0) renderTopicsWithFilter();
+            else loadTopics(true);
         };
 
         async function loadRepliesForTopic(topicId) {
@@ -2129,6 +2174,7 @@ Keyifli forumlar! 🎉
                 }
             } catch(e){}
             activeTopicData = topic;
+            setPageMeta(`${topic.title || 'Konu'} - Üni Portal`, _stripMd(topic.content).slice(0, 155), `${window.location.origin}/portal/forum.html?topic=${encodeURIComponent(topicId)}`);
             const isLiked = currentUser && (topic.likedBy || []).includes(currentUser.uid);
             const isOwner = currentUser && topic.authorUid === currentUser.uid;
             const isPinned = topic.isPinned || false;
@@ -2338,11 +2384,18 @@ Keyifli forumlar! 🎉
                 event.stopPropagation();
             }
             const shareUrl = `${window.location.origin}/portal/forum.html?topic=${topicId}`;
+            let shareCategory = '', shareSummary = '';
+            const shareSrc = (activeTopicId === topicId && activeTopicData && activeTopicData.title) ? activeTopicData : allLoadedTopics.find(t => t.id === topicId);
+            if (shareSrc) {
+                shareCategory = shareSrc.category || '';
+                shareSummary = _stripMd(shareSrc.content).slice(0, 100);
+            }
+            const shareText = `${shareCategory ? '[' + shareCategory + '] ' : ''}"${topicTitle}"${shareSummary ? ' — ' + shareSummary + '…' : ''}`;
             if (navigator.share) {
                 try {
                     await navigator.share({
                         title: `${topicTitle} - Üni Portal Forum`,
-                        text: `Üni Portal forumundaki bu konuya göz at: "${topicTitle}"`,
+                        text: `Üni Portal forumundaki bu konuya göz at: ${shareText}`,
                         url: shareUrl
                     });
                     return;
@@ -2350,21 +2403,62 @@ Keyifli forumlar! 🎉
                     if (err && err.name === 'AbortError') return;
                 }
             }
+            openSharePopover(shareUrl, topicTitle, shareText);
+        };
+
+        window.closeSharePopover = () => {
+            document.getElementById('share-popover')?.remove();
+            document.removeEventListener('mousedown', window._shareOutside, true);
+            document.removeEventListener('keydown', window._shareEsc, true);
+        };
+
+        window.copyShareLink = async (url) => {
             try {
-                await navigator.clipboard.writeText(shareUrl);
-                showToast("Konu bağlantısı panoya kopyalandı! 📋", "success");
+                await navigator.clipboard.writeText(url);
             } catch (clipErr) {
                 const ta = document.createElement('textarea');
-                ta.value = shareUrl;
+                ta.value = url;
                 ta.style.position = 'fixed';
                 ta.style.opacity = '0';
                 document.body.appendChild(ta);
                 ta.select();
                 try { document.execCommand('copy'); } catch (e) {}
                 ta.remove();
-                showToast("Konu bağlantısı panoya kopyalandı! 📋", "success");
             }
+            showToast("Konu bağlantısı panoya kopyalandı! 📋", "success");
+            closeSharePopover();
         };
+
+        function openSharePopover(shareUrl, topicTitle, shareText) {
+            closeSharePopover();
+            const u = encodeURIComponent(shareUrl);
+            const t = encodeURIComponent(`${shareText}`);
+            const itemCls = 'flex items-center gap-2 px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 hover:border-cyan-500/50 text-slate-200 text-xs transition';
+            const pop = document.createElement('div');
+            pop.id = 'share-popover';
+            pop.className = 'fixed bottom-4 right-4 z-[9999] w-64 bg-slate-800 border border-slate-600 rounded-2xl shadow-2xl p-4 space-y-2';
+            pop.innerHTML = `
+                <div class="flex items-center justify-between mb-1">
+                    <span class="text-sm font-bold text-white"><i class="fa-solid fa-share-nodes text-cyan-400 mr-1.5"></i>Konuyu Paylaş</span>
+                    <button type="button" id="share-popover-close" class="text-slate-400 hover:text-white p-1" aria-label="Kapat"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <a href="https://wa.me/?text=${t}%20${u}" target="_blank" rel="noopener" class="${itemCls}"><i class="fa-brands fa-whatsapp text-green-400 w-4 text-center"></i>WhatsApp</a>
+                <a href="https://twitter.com/intent/tweet?text=${encodeURIComponent(`"${topicTitle}"`)}&url=${u}" target="_blank" rel="noopener" class="${itemCls}"><i class="fa-brands fa-x-twitter w-4 text-center"></i>X (Twitter)</a>
+                <a href="https://t.me/share/url?url=${u}&text=${t}" target="_blank" rel="noopener" class="${itemCls}"><i class="fa-brands fa-telegram text-sky-400 w-4 text-center"></i>Telegram</a>
+                <button type="button" id="share-popover-copy" class="${itemCls} w-full text-left"><i class="fa-solid fa-link text-purple-400 w-4 text-center"></i>Linki Kopyala</button>
+            `;
+            document.body.appendChild(pop);
+            pop.querySelector('#share-popover-close').onclick = closeSharePopover;
+            pop.querySelector('#share-popover-copy').onclick = () => copyShareLink(shareUrl);
+            pop.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setTimeout(closeSharePopover, 100)));
+            window._shareOutside = (e) => { if (!pop.contains(e.target)) closeSharePopover(); };
+            window._shareEsc = (e) => { if (e.key === 'Escape') closeSharePopover(); };
+            // Açılışı tetikleyen tıklama hemen kapatmasın
+            setTimeout(() => {
+                document.addEventListener('mousedown', window._shareOutside, true);
+                document.addEventListener('keydown', window._shareEsc, true);
+            }, 0);
+        }
 
         window.handleForumSearch = () => {
             currentSearchKeyword = document.getElementById('forum-search-input').value.trim();
@@ -2517,8 +2611,21 @@ Keyifli forumlar! 🎉
 
         const urlParams = new URLSearchParams(window.location.search);
         const topicFromUrl = urlParams.get('topic');
-        if (topicFromUrl) setTimeout(() => openTopicDetail(topicFromUrl), 500);
+        resetPageMeta();
+        if (topicFromUrl === 'pinned-rules') setTimeout(() => openPinnedRulesTopic(true), 500);
+        else if (topicFromUrl) setTimeout(() => openTopicDetail(topicFromUrl, true), 500);
         else loadTopics(true);
+
+        window.addEventListener('popstate', () => {
+            const topicParam = new URLSearchParams(window.location.search).get('topic');
+            if (topicParam) {
+                openTopicDetail(topicParam, true);
+            } else {
+                const detail = document.getElementById('topic-detail-view');
+                if (detail && !detail.classList.contains('hidden')) backToForumList(true);
+                else if (allLoadedTopics.length === 0) loadTopics(true);
+            }
+        });
     </script>
 </body>
 </html>

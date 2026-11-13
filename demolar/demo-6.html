@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmileArt Dental Studio | Estetik ve Dijital Gülüş Tasarımı</title>
+    <meta name="description" content="SmileArt Dental Studio ile gülüşünüzü bir sanat eserine dönüştürün. Dijital gülüş tasarımı, porselen lamina ve lüks dental çözümler.">
+    
+    <style>
+        /* --- DESIGN SYSTEM & VARS --- */
+        :root {
+            --bg-primary: #FAFAFB;
+            --bg-secondary: #F4F1EA;
+            --text-dark: #1A1A1A;
+            --text-muted: #5A5A5A;
+            --gold: #D4AF37;
+            --gold-light: #F3E5AB;
+            --gold-dark: #AA7C11;
+            --white: #FFFFFF;
+            --glass: rgba(255, 255, 255, 0.75);
+            --shadow-premium: 0 20px 40px rgba(0,0,0,0.04);
+            --transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-dark);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* --- REUSABLE COMPONENTS --- */
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .section-padding {
+            padding: 100px 0;
+        }
+
+        @media (max-width: 768px) {
+            .section-padding { padding: 70px 0; }
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-header .tag {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--gold-dark);
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: inline-block;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            letter-spacing: -0.5px;
+        }
+
+        /* --- BUTTONS --- */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px 36px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-decoration: none;
+            border-radius: 0;
+            transition: var(--transition);
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        .btn-gold {
+            background-color: var(--gold);
+            color: var(--white);
+            border: 1px solid var(--gold);
+        }
+
+        .btn-gold:hover {
+            background-color: var(--gold-dark);
+            border-color: var(--gold-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--text-dark);
+            border: 1px solid var(--text-dark);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--text-dark);
+            color: var(--white);
+            transform: translateY(-2px);
+        }
+
+        /* --- HEADER / NAVIGATION --- */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+            transition: var(--transition);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 90px;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 300;
+            letter-spacing: 2px;
+            color: var(--text-dark);
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            transition: var(--transition);
+        }
+
+        .nav-link:hover {
+            color: var(--gold);
+        }
+
+        .nav-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            cursor: pointer;
+            border: none;
+            background: none;
+        }
+
+        .nav-toggle span {
+            width: 28px;
+            height: 2px;
+            background-color: var(--text-dark);
+            transition: var(--transition);
+        }
+
+        @media (max-width: 992px) {
+            .nav-menu {
+                position: fixed;
+                top: 90px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 90px);
+                background: var(--white);
+                flex-direction: column;
+                align-items: center;
+                padding-top: 50px;
+                gap: 30px;
+                transition: var(--transition);
+            }
+            .nav-menu.active {
+                left: 0;
+            }
+            .nav-toggle {
+                display: flex;
+            }
+            .nav-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(6px, 5px); }
+            .nav-toggle.active span:nth-child(2) { opacity: 0; }
+            .nav-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(6px, -5px); }
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(rgba(244, 241, 234, 0.85), rgba(254, 254, 254, 0.85)), 
+                        url('https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=1920') center/cover no-repeat;
+            padding-top: 120px;
+        }
+
+        .hero-content {
+            max-width: 650px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .hero h1 {
+            font-size: 3.8rem;
+            font-weight: 300;
+            line-height: 1.15;
+            letter-spacing: -1px;
+            margin-bottom: 24px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+            font-weight: 300;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .hero p { font-size: 1.05rem; }
+            .hero-actions .btn { width: 100%; }
+        }
+
+        /* --- SHOWCASE (BEFORE/AFTER) --- */
+        .showcase {
+            background-color: var(--bg-secondary);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 100%);
+            gap: 0;
+            overflow: hidden;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .comparison-slider {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            overflow: hidden;
+            box-shadow: var(--shadow-premium);
+        }
+
+        .comparison-slider img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .comparison-slider .resize {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 50%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .comparison-slider .handle {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 2px;
+            height: 100%;
+            background: var(--gold);
+            cursor: ew-resize;
+            z-index: 10;
+        }
+
+        .comparison-slider .handle::after {
+            content: "↔";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            background: var(--white);
+            border: 1px solid var(--gold);
+            color: var(--text-dark);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        @media (max-width: 768px) {
+            .comparison-slider { height: 350px; }
+        }
+
+        /* --- PREMIUM TREATMENTS --- */
+        .treatments-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+        }
+
+        .treatment-card {
+            background: var(--white);
+            border: 1px solid rgba(0,0,0,0.03);
+            padding: 40px;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .treatment-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: var(--gold);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: var(--transition);
+        }
+
+        .treatment-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-premium);
+        }
+
+        .treatment-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .treatment-card h3 {
+            font-size: 1.35rem;
+            font-weight: 400;
+            margin-bottom: 16px;
+            letter-spacing: -0.3px;
+        }
+
+        .treatment-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 24px;
+        }
+
+        .treatment-card .arrow-link {
+            color: var(--gold-dark);
+            text-decoration: none;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        /* --- PATIENT JOURNEY (TIMELINE) --- */
+        .journey {
+            background-color: var(--bg-secondary);
+        }
+
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px 0;
+        }
+
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 1px;
+            background-color: rgba(212, 175, 55, 0.3);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -0.5px;
+        }
+
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            background-color: inherit;
+            width: 50%;
+        }
+
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            right: -6px;
+            background-color: var(--bg-secondary);
+            border: 2px solid var(--gold);
+            top: 15px;
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        .left { left: 0; text-align: right; }
+        .right { left: 50%; }
+        .right::after { left: -6px; }
+
+        .timeline-content {
+            padding: 20px 30px;
+            background: var(--white);
+            position: relative;
+            box-shadow: var(--shadow-premium);
+        }
+
+        .timeline-content h3 {
+            font-size: 1.2rem;
+            font-weight: 400;
+            color: var(--gold-dark);
+            margin-bottom: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .timeline::after { left: 31px; }
+            .timeline-item { width: 100%; padding-left: 70px; padding-right: 25px; text-align: left; }
+            .timeline-item::after { left: 25px; top: 25px; }
+            .left { left: 0; }
+        }
+
+        /* --- WHY CHOOSE US --- */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 40px;
+        }
+
+        .feature-item {
+            text-align: center;
+        }
+
+        .feature-item .icon-wrapper {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 24px;
+            background-color: var(--bg-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold-dark);
+            font-size: 1.5rem;
+        }
+
+        .feature-item h3 {
+            font-size: 1.2rem;
+            font-weight: 400;
+            margin-bottom: 12px;
+        }
+
+        .feature-item p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* --- DOCTORS --- */
+        .doctors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .doctor-card {
+            background: var(--white);
+            overflow: hidden;
+            box-shadow: var(--shadow-premium);
+        }
+
+        .doctor-img {
+            height: 400px;
+            background-size: cover;
+            background-position: center;
+            filter: grayscale(20%);
+            transition: var(--transition);
+        }
+
+        .doctor-card:hover .doctor-img {
+            filter: grayscale(0%);
+            transform: scale(1.03);
+        }
+
+        .doctor-info {
+            padding: 30px;
+            text-align: center;
+        }
+
+        .doctor-info h3 {
+            font-size: 1.3rem;
+            font-weight: 400;
+            margin-bottom: 4px;
+        }
+
+        .doctor-info p {
+            color: var(--gold-dark);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* --- STATISTICS --- */
+        .stats {
+            background-color: var(--text-dark);
+            color: var(--white);
+            padding: 80px 0;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 300;
+            color: var(--gold);
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: rgba(255,255,255,0.7);
+        }
+
+        /* --- TESTIMONIALS --- */
+        .testimonials {
+            background-color: var(--bg-secondary);
+        }
+
+        .testimonial-slider {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .testimonial-card {
+            background: var(--white);
+            padding: 40px;
+            box-shadow: var(--shadow-premium);
+        }
+
+        .testimonial-quote {
+            font-style: italic;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+
+        .testimonial-author {
+            font-weight: 500;
+            font-size: 0.95rem;
+            color: var(--text-dark);
+        }
+
+        /* --- APPOINTMENT FORM --- */
+        .appointment-wrapper {
+            background: linear-gradient(rgba(26, 26, 26, 0.4), rgba(26, 26, 26, 0.4)),
+                        url('https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&q=80&w=1920') center/cover no-repeat;
+            padding: 100px 0;
+        }
+
+        .glass-form {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 50px;
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.15);
+        }
+
+        @media (max-width: 768px) {
+            .glass-form { padding: 30px 20px; }
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 16px;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid rgba(0,0,0,0.15);
+            color: var(--text-dark);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-bottom-color: var(--gold);
+        }
+
+        select.form-control option {
+            background-color: var(--white);
+            color: var(--text-dark);
+        }
+
+        /* --- CONTACT & MAP --- */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        @media (max-width: 768px) {
+            .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+        }
+
+        .contact-info h3 {
+            font-size: 1.8rem;
+            font-weight: 300;
+            margin-bottom: 30px;
+        }
+
+        .contact-details-item {
+            margin-bottom: 24px;
+        }
+
+        .contact-details-item p strong {
+            display: block;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--gold-dark);
+            margin-bottom: 4px;
+        }
+
+        .map-placeholder {
+            height: 400px;
+            background: #EAEAEA;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .map-placeholder iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+            filter: grayscale(100%) invert(92%) contrast(83%);
+        }
+
+        /* --- FOOTER & CREDITS --- */
+        footer {
+            background-color: #111;
+            color: rgba(255,255,255,0.5);
+            padding: 40px 0;
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .footer-content { flex-direction: column; text-align: center; }
+        }
+
+        .lianchez-credit {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+
+        .lianchez-credit:hover {
+            color: var(--gold);
+        }
+
+        /* --- MOBILE BAR & FLOATING BUTTONS --- */
+        .mobile-actions {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: var(--white);
+            display: none;
+            grid-template-columns: repeat(3, 1fr);
+            z-index: 999;
+            box-shadow: 0 -4px 15px rgba(0,0,0,0.05);
+            border-top: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .mobile-action-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 0;
+            font-size: 0.75rem;
+            text-decoration: none;
+            color: var(--text-dark);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+        }
+
+        .mobile-action-btn.wp {
+            background-color: #25D366;
+            color: var(--white);
+        }
+
+        .mobile-action-btn.premium {
+            background-color: var(--gold);
+            color: var(--white);
+        }
+
+        @media (max-width: 768px) {
+            .mobile-actions { display: grid; }
+            body { padding-bottom: 60px; } /* Space for mobile action menu */
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container nav-container">
+            <a href="#" class="logo">SMILEART<span>.</span></a>
+            <button class="nav-toggle" aria-label="Toggle Navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-menu">
+                <li><a href="#" class="nav-link">Ana Sayfa</a></li>
+                <li><a href="#treatments" class="nav-link">Tedaviler</a></li>
+                <li><a href="#journey" class="nav-link">Süreç</a></li>
+                <li><a href="#doctors" class="nav-link">Hekimlerimiz</a></li>
+                <li><a href="#contact" class="nav-link">İletişim</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Gülüşünüzü Bir Sanat Eserine Dönüştürüyoruz</h1>
+                <p>Estetik diş hekimliği ve dijital gülüş tasarımıyla kendinizi yeniden keşfedin. Premium klinik deneyimini yaşayın.</p>
+                <div class="hero-actions">
+                    <a href="#appointment" class="btn btn-gold">Ücretsiz Konsültasyon</a>
+                    <a href="https://wa.me/900000000000" target="_blank" class="btn btn-outline">WhatsApp'tan Ulaşın</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="showcase section-padding">
+        <div class="container">
+            <div class="section-header">
+                <span class="tag">Dönüşüm</span>
+                <h2>Öncesi ve Sonrası</h2>
+            </div>
+            <div class="gallery-grid">
+                <div class="comparison-slider">
+                    <img src="https://images.unsplash.com/photo-1598256989800-fe5f95da9787?auto=format&fit=crop&q=80&w=1200" alt="Sonrası">
+                    <div class="resize">
+                        <img src="https://images.unsplash.com/photo-1606811841689-23dfddce3e95?auto=format&fit=crop&q=80&w=1200" alt="Öncesi">
+                    </div>
+                    <div class="handle"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="treatments" class="section-padding">
+        <div class="container">
+            <div class="section-header">
+                <span class="tag">Çözümlerimiz</span>
+                <h2>Premium Tedaviler</h2>
+            </div>
+            <div class="treatments-grid">
+                <div class="treatment-card">
+                    <h3>Dijital Gülüş Tasarımı</h3>
+                    <p>Yüz hatlarınıza en uygun ideal gülüşü tedaviye başlamadan önce dijital ortamda tasarlıyoruz.</p>
+                    <a href="#appointment" class="arrow-link">Keşfet &rarr;</a>
+                </div>
+                <div class="treatment-card">
+                    <h3>Porselen Lamina</h3>
+                    <p>Minimum müdahale ile diş yüzeyine uygulanan lüks, estetik ve dayanıklı yaprak porselenler.</p>
+                    <a href="#appointment" class="arrow-link">Keşfet &rarr;</a>
+                </div>
+                <div class="treatment-card">
+                    <h3>Zirkonyum Kaplama</h3>
+                    <p>Yüksek ışık geçirgenliği ve dayanıklılık sunan, doğal dişe en yakın premium materyaller.</p>
+                    <a href="#appointment" class="arrow-link">Keşfet &rarr;</a>
+                </div>
+                <div class="treatment-card">
+                    <h3>Hollywood Smile</h3>
+                    <p>Kişiye özel tasarlanan, beyaz, simetrik ve kusursuz bir Hollywood yıldızı gülüşü tasarımı.</p>
+                    <a href="#appointment" class="arrow-link">Keşfet &rarr;</a>
+                </div>
+                <div class="treatment-card">
+                    <h3>İmplant Tedavisi</h3>
+                    <p>Eksik dişlerinizi son teknoloji cerrahi yaklaşımlarla ve ömür boyu kalıcı çözümlerle tamamlayın.</p>
+                    <a href="#appointment" class="arrow-link">Keşfet &rarr;</a>
+                </div>
+                <div class="treatment-card">
+                    <h3>Diş Beyazlatma</h3>
+                    <p>Kısa sürede güvenli ve maksimum etkiye sahip klinik tipi premium beyazlatma sistemleri.</p>
+                    <a href="#appointment" class="arrow-link">Keşfet &rarr;</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="journey" class="journey section-padding">
+        <div class="container">
+            <div class="section-header">
+                <span class="tag">Deneyim</span>
+                <h2>Hasta Yolculuğu</h2>
+            </div>
+            <div class="timeline">
+                <div class="timeline-item left">
+                    <div class="timeline-content">
+                        <h3>01. İlk Muayene</h3>
+                        <p>Klinik ve radyolojik muayene ile mevcut dental durumunuz detaylıca değerlendirilir.</p>
+                    </div>
+                </div>
+                <div class="timeline-item right">
+                    <div class="timeline-content">
+                        <h3>02. Dijital Analiz</h3>
+                        <p>3D tarayıcılar yardımıyla dijital kayıtlarınız alınarak simülasyon hazırlanır.</p>
+                    </div>
+                </div>
+                <div class="timeline-item left">
+                    <div class="timeline-content">
+                        <h3>03. Tedavi Planı</h3>
+                        <p>Talepleriniz doğrultusunda uzman hekimlerimiz ile kişiselleştirilmiş lüks tedavi planı oluşturulur.</p>
+                    </div>
+                </div>
+                <div class="timeline-item right">
+                    <div class="timeline-content">
+                        <h3>04. Uygulama</h3>
+                        <p>Son derece konforlu ve acısız yöntemlerle işlemleriniz titizlikle tamamlanır.</p>
+                    </div>
+                </div>
+                <div class="timeline-item left">
+                    <div class="timeline-content">
+                        <h3>05. Kontrol Süreci</h3>
+                        <p>Uzun ömürlü ve kusursuz sonuç için periyodik takip ve bakım seanslarımız başlar.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-padding">
+        <div class="container">
+            <div class="section-header">
+                <span class="tag">Ayrıcalıklar</span>
+                <h2>Neden SmileArt?</h2>
+            </div>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="icon-wrapper">✧</div>
+                    <h3>Dijital Teknoloji</h3>
+                    <p>En gelişmiş 3D ağız içi tarayıcılar ve dental yazılımlar kullanıyoruz.</p>
+                </div>
+                <div class="feature-item">
+                    <div class="icon-wrapper">✧</div>
+                    <h3>Ağrısız Yaklaşım</h3>
+                    <p>Konforunuzu ön planda tutan yeni nesil acısız anestezi yöntemleri.</p>
+                </div>
+                <div class="feature-item">
+                    <div class="icon-wrapper">✧</div>
+                    <h3>Uzman Kadro</h3>
+                    <p>Akademik ve uluslararası tecrübeye sahip estetik diş hekimleri.</p>
+                </div>
+                <div class="feature-item">
+                    <div class="icon-wrapper">✧</div>
+                    <h3>VIP Deneyim</h3>
+                    <p>Kişiselleştirilmiş lüks otel konforunda klinik ve asistanlık hizmetleri.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats">
+        <div class="container stats-grid">
+            <div>
+                <div class="stat-number" data-target="15000">0</div>
+                <div class="stat-label">Mutlu Hasta</div>
+            </div>
+            <div>
+                <div class="stat-number" data-target="20">0</div>
+                <div class="stat-label">Yıllık Deneyim</div>
+            </div>
+            <div>
+                <div class="stat-number" data-target="99">0</div>
+                <div class="stat-label">Memnuniyet Oranı</div>
+            </div>
+            <div>
+                <div class="stat-number" data-target="5000">0</div>
+                <div class="stat-label">Gülüş Tasarımı</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="doctors" class="section-padding">
+        <div class="container">
+            <div class="section-header">
+                <span class="tag">Sanatçılarımız</span>
+                <h2>Uzman Hekim Kadrosu</h2>
+            </div>
+            <div class="doctors-grid">
+                <div class="doctor-card">
+                    <div class="doctor-img" style="background-image: url('https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=600');"></div>
+                    <div class="doctor-info">
+                        <h3>Dt. Eren Yılmaz</h3>
+                        <p>Estetik Diş Hekimi / Protez Uzmanı</p>
+                    </div>
+                </div>
+                <div class="doctor-card">
+                    <div class="doctor-img" style="background-image: url('https://images.unsplash.com/photo-1594824813573-246434de83fb?auto=format&fit=crop&q=80&w=600');"></div>
+                    <div class="doctor-info">
+                        <h3>Dr. Med. Dent. Aylin Kaya</h3>
+                        <p>Ortodonti & Gülüş Tasarımı Uzmanı</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonials section-padding">
+        <div class="container">
+            <div class="section-header">
+                <span class="tag">Yorumlar</span>
+                <h2>Misafirlerimizin Deneyimleri</h2>
+            </div>
+            <div class="testimonial-slider">
+                <div class="testimonial-card">
+                    <p class="testimonial-quote">"SmileArt ekibi sayesinde yıllardır sakladığım gülüşümü gururla sergiliyorum. Tam anlamıyla kusursuz bir dijital gülüş tasarımı süreciydi."</p>
+                    <div class="testimonial-author">Canan Y. — İş İnsanı</div>
+                </div>
+                <div class="testimonial-card">
+                    <p class="testimonial-quote">"Klinikten içeri girdiğiniz andan itibaren lüks bir otelde gibi hissediyorsunuz. Lamina uygulamalarından olağanüstü memnun kaldım."</p>
+                    <div class="testimonial-author">Murat T. — Sanat Direktörü</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="appointment" class="appointment-wrapper">
+        <div class="container">
+            <div class="glass-form">
+                <div style="text-align: center; margin-bottom: 30px;">
+                    <span style="font-size:0.85rem; letter-spacing: 2px; text-transform: uppercase; color: var(--gold-dark);">Rezervasyon</span>
+                    <h2 style="font-weight: 300; margin-top: 5px;">Ayrıcalıklı Görüşme</h2>
+                </div>
+                <form id="consultationForm">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Adınız Soyadınız" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="tel" class="form-control" placeholder="Telefon Numaranız" required>
+                    </div>
+                    <div class="form-group">
+                        <select class="form-control" required>
+                            <option value="" disabled selected>İlgilendiğiniz Tedavi</option>
+                            <option value="smile">Dijital Gülüş Tasarımı</option>
+                            <option value="lamina">Porselen Lamina</option>
+                            <option value="hollywood">Hollywood Smile</option>
+                            <option value="other">Diğer Estetik Çözümler</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-gold" style="width: 100%; margin-top: 10px;">Randevu Talebi Gönder</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="section-padding">
+        <div class="container contact-grid">
+            <div class="contact-info">
+                <h3>Sizi Ağırlamaktan Onur Duyarız</h3>
+                <div class="contact-details-item">
+                    <p><strong>Telefon</strong>+90 (212) 000 00 00</p>
+                </div>
+                <div class="contact-details-item">
+                    <p><strong>E-Posta</strong>info@smileartdental.com</p>
+                </div>
+                <div class="contact-details-item">
+                    <p><strong>Adres</strong>Zorlu Center Bölgesi, Premium Ofisler Kat: 4, Beşiktaş / İstanbul</p>
+                </div>
+            </div>
+            <div class="map-placeholder">
+                <iframe src="https://maps.google.com/maps?q=Zorlu%20Center%20Istanbul&t=&z=13&ie=UTF8&iwloc=&output=embed"></iframe>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container footer-content">
+            <p>&copy; 2026 SmileArt Dental Studio. Tüm Hakları Saklıdır.</p>
+            <p>Designed & Developed by <a href="https://lianchez.com" target="_blank" class="lianchez-credit">Lianchez Software</a></p>
+        </div>
+    </footer>
+
+    <div class="mobile-actions">
+        <a href="tel:+902120000000" class="mobile-action-btn">Ara</a>
+        <a href="https://wa.me/900000000000" class="mobile-action-btn wp" target="_blank">WhatsApp</a>
+        <a href="#appointment" class="mobile-action-btn premium">Randevu</a>
+    </div>
+
+    <script>
+        // Toggle Mobile Menu
+        const navToggle = document.querySelector('.nav-toggle');
+        const navMenu = document.querySelector('.nav-menu');
+
+        navToggle.addEventListener('click', () => {
+            navToggle.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+
+        // Close mobile menu upon clicking links
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                navToggle.classList.remove('active');
+                navMenu.classList.remove('active');
+            });
+        });
+
+        // Premium Before/After Slider Engine
+        const slider = document.querySelector('.comparison-slider');
+        const resizeImg = document.querySelector('.comparison-slider .resize');
+        const handle = document.querySelector('.comparison-slider .handle');
+
+        if (slider) {
+            const moveSlider = (e) => {
+                let clientX = e.clientX || (e.touches && e.touches[0].clientX);
+                let rect = slider.getBoundingClientRect();
+                let position = ((clientX - rect.left) / rect.width) * 100;
+
+                if (position >= 0 && position <= 100) {
+                    handle.style.left = position + '%';
+                    resizeImg.style.width = position + '%';
+                }
+            };
+
+            slider.addEventListener('mousemove', moveSlider);
+            slider.addEventListener('touchmove', moveSlider);
+        }
+
+        // Numerical Premium Statistics Counter Animation
+        const stats = document.querySelectorAll('.stat-number');
+        const speed = 150;
+
+        const startCounters = () => {
+            stats.forEach(counter => {
+                const animate = () => {
+                    const value = +counter.getAttribute('data-target');
+                    const data = +counter.innerText.replace(/[+%]/, '');
+                    const time = value / speed;
+
+                    if (data < value) {
+                        const nextValue = Math.ceil(data + time);
+                        counter.innerText = nextValue + (counter.getAttribute('data-target') === '99' ? '%' : '+');
+                        setTimeout(animate, 10);
+                    } else {
+                        counter.innerText = value + (counter.getAttribute('data-target') === '99' ? '%' : '+');
+                    }
+                };
+                animate();
+            });
+        };
+
+        // Simple Intersection Observer for Stats
+        let observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    startCounters();
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        if(document.querySelector('.stats')) {
+            observer.observe(document.querySelector('.stats'));
+        }
+
+        // Premium Form Handle
+        document.getElementById('consultationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Talebiniz başarıyla alındı. VIP Danışmanımız en kısa sürede sizinle iletişime geçecektir.');
+            this.reset();
+        });
+
+        //#################################
+        document.addEventListener("DOMContentLoaded", () => {
+            const popup = document.createElement("div");
+            popup.id = "lianchez-demo-popup";
+
+            popup.innerHTML = `
+                <div class="popup-header">
+                    <span>✨ Bu Tasarımı Beğendiniz mi?</span>
+                    <button id="popup-minimize">−</button>
+                </div>
+
+                <div class="popup-content">
+                    <p>
+                        Bu demo uygun maliyetle size özel hazırlanabilir.
+                    </p>
+
+                    <p>
+                        Diğer tasarımlarımızı inceleyin veya tamamen kendi hayalinize göre yeni bir tasarım oluşturun.
+                    </p>
+
+                    <a href="https://lianchez.com/demo/demo" target="_blank" class="popup-btn">
+                        Tüm Demoları Gör
+                    </a>
+                </div>
+            `;
+
+            const style = document.createElement("style");
+
+            style.textContent = `
+                #lianchez-demo-popup{
+                    position:fixed;
+                    right:20px;
+                    bottom:20px;
+                    width:320px;
+                    max-width:calc(100vw - 30px);
+                    background:#ffffff;
+                    border-radius:16px;
+                    box-shadow:0 10px 35px rgba(0,0,0,.15);
+                    z-index:99999;
+                    overflow:hidden;
+                    animation:popupSlide .5s ease;
+                    font-family:inherit;
+                }
+
+                @keyframes popupSlide{
+                    from{
+                        transform:translateY(30px);
+                        opacity:0;
+                    }
+                    to{
+                        transform:translateY(0);
+                        opacity:1;
+                    }
+                }
+
+                #lianchez-demo-popup .popup-header{
+                    display:flex;
+                    justify-content:space-between;
+                    align-items:center;
+                    padding:12px 16px;
+                    font-weight:600;
+                    border-bottom:1px solid rgba(0,0,0,.08);
+                }
+
+                #popup-minimize{
+                    border:none;
+                    background:none;
+                    cursor:pointer;
+                    font-size:22px;
+                    line-height:1;
+                }
+
+                #lianchez-demo-popup .popup-content{
+                    padding:14px 16px;
+                }
+
+                #lianchez-demo-popup p{
+                    margin:0 0 10px;
+                    font-size:13px;
+                    line-height:1.5;
+                    opacity:.85;
+                }
+
+                .popup-btn{
+                    display:block;
+                    text-align:center;
+                    text-decoration:none;
+                    padding:10px;
+                    border-radius:10px;
+                    font-size:14px;
+                    font-weight:600;
+                    margin-top:10px;
+                    background:#111;
+                    color:#fff;
+                    transition:.2s;
+                }
+
+                .popup-btn:hover{
+                    transform:translateY(-2px);
+                }
+
+                .popup-minimized{
+                    height:52px !important;
+                }
+
+                .popup-minimized .popup-content{
+                    display:none;
+                }
+
+                @media (max-width:768px){
+                    #lianchez-demo-popup{
+                        right:12px;
+                        left:12px;
+                        width:auto;
+                        bottom:12px;
+                    }
+                }
+            `;
+
+            document.head.appendChild(style);
+            document.body.appendChild(popup);
+
+            document.getElementById("popup-minimize").addEventListener("click", () => {
+                popup.classList.toggle("popup-minimized");
+            });
+
+            popup.querySelector(".popup-btn").addEventListener("click", () => {
+                window.open("https://lianchez.com/demo/demo", "_blank");
+            });
+        });
+    </script>
+</body>
+</html>

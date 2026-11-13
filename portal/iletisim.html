@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>İletişim - Üni Portal</title>
+    <link rel="icon" type="image/png" href="/portal/fav.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        input[type="text"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="password"], input[type="tel"], textarea, select {
+            font-size: 16px !important;
+            -webkit-text-size-adjust: 100%;
+        }
+        @media (min-width: 640px) {
+            input[type="text"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="password"], input[type="tel"], textarea, select {
+                font-size: 12px !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col justify-between">
+
+    <header class="bg-slate-800 border-b border-slate-700 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <a href="/portal/index.html" class="text-sm sm:text-xl font-bold bg-gradient-to-r from-blue-400 to-indigo-500 bg-clip-text text-transparent flex items-center whitespace-nowrap">
+                    <i class="fa-solid fa-graduation-cap mr-1.5 sm:mr-2"></i>Üni Portal
+                </a>
+            </div>
+            
+            <nav class="hidden md:flex items-center space-x-6 text-sm font-medium">
+                <a href="/portal/index.html" class="text-slate-300 hover:text-white transition">Ana Sayfa</a>
+                <a href="/portal/forum.html" class="px-2.5 py-1 rounded-xl bg-purple-500/15 text-purple-300 border border-purple-500/30 font-semibold hover:bg-purple-500/25 transition flex items-center space-x-1.5"><i class="fa-solid fa-comments text-purple-400 text-xs"></i><span>Forum</span></a>
+                <a href="/portal/ilanlar.html" class="text-slate-300 hover:text-white transition">İlanlar</a>
+                <a href="/portal/ogrenciler.html" class="text-slate-300 hover:text-white transition">Öğrenciler</a>
+                <a href="/portal/topluluk.html" class="text-slate-300 hover:text-white transition">Topluluklar</a>
+                <a href="/portal/iletisim.html" class="text-cyan-400 transition">İletişim</a>
+            </nav>
+
+            <div class="flex items-center space-x-2 sm:space-x-4">
+                <div id="auth-section" class="flex items-center">
+                    <button id="login-btn" onclick="googleLogin()" class="hidden flex items-center space-x-1 sm:space-x-2 bg-white text-slate-900 px-2 sm:px-3 py-1.5 rounded-lg font-semibold hover:bg-slate-100 transition shadow-sm text-[10px] sm:text-sm whitespace-nowrap">
+                        <i class="fa-brands fa-google text-red-500 text-[10px] sm:text-sm"></i>
+                        <span>Giriş Yap</span>
+                    </button>
+
+                    <div id="user-profile" class="hidden flex items-center space-x-2 sm:space-x-3 relative">
+                        <div class="flex items-center bg-slate-700 px-2 sm:px-2.5 py-1 rounded-full border border-slate-600 shadow-inner">
+                            <i class="fa-solid fa-coins text-yellow-400 mr-1 sm:mr-1.5 text-[10px] sm:text-sm"></i>
+                            <span id="user-coins" class="font-bold text-yellow-400 text-[10px] sm:text-sm">0</span>
+                        </div>
+                        <div class="relative cursor-pointer" onclick="toggleUserDropdown(event)">
+                            <img id="user-avatar" src="" alt="Profil" class="w-8 h-8 sm:w-9 sm:h-9 rounded-full border-2 border-slate-600 hover:border-blue-400 transition object-cover">
+                            <span id="notification-badge" class="hidden absolute -bottom-0.5 -right-0.5 bg-red-500 text-white text-[10px] font-extrabold min-w-[16px] h-4 px-1 rounded-full flex items-center justify-center border-2 border-slate-800 animate-pulse">0</span>
+                        </div>
+                        <div id="user-dropdown" class="hidden absolute right-0 top-12 w-56 bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl py-2 z-50">
+                            <div class="px-4 py-2 border-b border-slate-700">
+                                <p id="dropdown-user-name" class="text-xs font-bold text-white truncate">Kullanıcı Adı</p>
+                                <p id="dropdown-user-email" class="text-[11px] text-slate-400 truncate">email@domain.com</p>
+                            </div>
+                            <a href="/portal/profil.html" class="block w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center space-x-2 transition">
+                                <i class="fa-solid fa-user text-indigo-400"></i>
+                                <span>Profilim</span>
+                            </a>
+                            <a href="/portal/magaza.html" class="block w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center space-x-2 transition">
+                                <i class="fa-solid fa-store text-yellow-400"></i>
+                                <span>Mağaza</span>
+                            </a>
+                            <button onclick="openDailyStreakModal()" class="w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center justify-between transition">
+                                <span class="flex items-center space-x-2">
+                                    <i class="fa-solid fa-calendar-check text-amber-400"></i>
+                                    <span>Günlük Ödül</span>
+                                    <span id="streak-unclaimed-dot" class="hidden w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+                                </span>
+                                <span id="streak-dropdown-badge" class="bg-amber-500/20 text-amber-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-amber-500/30">0 Gün</span>
+                            </button>
+                            <button onclick="openNotificationsModal()" class="w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center justify-between transition">
+                                <span class="flex items-center space-x-2">
+                                    <i class="fa-solid fa-bell text-blue-400"></i>
+                                    <span>Bildirimler</span>
+                                </span>
+                                <span id="dropdown-notif-count" class="bg-slate-700 text-slate-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-slate-600">0</span>
+                            </button>
+                            <div class="border-t border-slate-700/80 my-1"></div>
+                            <button onclick="googleLogout()" class="w-full text-left px-4 py-2 text-xs text-red-400 hover:bg-red-500/10 flex items-center space-x-2 transition font-semibold">
+                                <i class="fa-solid fa-right-from-bracket"></i>
+                                <span>Çıkış Yap</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <button onclick="toggleMobileMenu()" class="md:hidden text-slate-300 hover:text-white focus:outline-none text-xl p-1.5">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden bg-slate-800 border-t border-slate-700 px-4 pt-3 pb-4 space-y-2">
+            <a href="/portal/index.html" class="block px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-700 transition">Ana Sayfa</a>
+            <a href="/portal/forum.html" class="block px-3 py-2 rounded-lg text-sm font-semibold text-purple-300 bg-purple-500/10 border border-purple-500/20 hover:bg-purple-500/20 transition flex items-center"><i class="fa-solid fa-comments text-purple-400 mr-2"></i>Forum</a>
+            <a href="/portal/ilanlar.html" class="block px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-700 transition">İlanlar</a>
+            <a href="/portal/ogrenciler.html" class="block px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-700 transition">Öğrenciler</a>
+            <a href="/portal/topluluk.html" class="block px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-700 transition">Topluluklar</a>
+            <a href="/portal/iletisim.html" class="block px-3 py-2 rounded-lg text-sm font-medium text-cyan-400 bg-slate-700/50">İletişim</a>
+        </div>
+    </header>
+
+    <div id="toast-container" class="fixed bottom-5 right-5 z-[200] space-y-2 max-w-sm"></div>
+
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-grow w-full space-y-6">
+
+        <div class="bg-gradient-to-br from-slate-800 via-slate-800 to-cyan-900/30 border border-cyan-500/30 p-6 rounded-2xl shadow-lg">
+            <div class="flex items-center space-x-3 mb-2">
+                <div class="w-12 h-12 bg-cyan-500/20 text-cyan-400 rounded-2xl flex items-center justify-center text-xl border border-cyan-500/30">
+                    <i class="fa-solid fa-envelope-open-text"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-extrabold text-white">Bize Ulaşın</h1>
+                    <p class="text-slate-400 text-xs mt-0.5">İstek, öneri, şikayet ve tüm taleplerinizi bize iletebilirsiniz.</p>
+                </div>
+            </div>
+            <p class="text-xs text-slate-400 leading-relaxed mt-3">
+                <i class="fa-solid fa-circle-info text-cyan-400 mr-1"></i>
+                Talebiniz admin panelimize düşecek ve <strong class="text-cyan-300">en kısa sürede</strong> size dönüş yapacağız. 
+                Lütfen geçerli bir e-posta adresi ve (varsa) telefon numarası giriniz.
+            </p>
+        </div>
+
+        <div id="contact-form-wrapper" class="bg-slate-800 border border-slate-700 p-6 rounded-2xl shadow-lg">
+            <h2 class="text-lg font-bold text-white flex items-center mb-4">
+                <i class="fa-solid fa-paper-plane text-cyan-400 mr-2"></i>Talep Formu
+            </h2>
+
+            <form id="contact-form" onsubmit="prepareContactRequest(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Talep Türü <span class="text-red-400">*</span></label>
+                    <select id="contact-type" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-cyan-500">
+                        <option value="">Seçiniz...</option>
+                        <option value="sikayet">İstek/Öneri/Şikayet</option>
+                        <option value="destek">Yardım/Destek Talebi</option>
+                        <option value="topluluk_kaydi">Topluluk Kaydı İsteği</option>
+                        <option value="ilan_ekleme">İlan Ekleme İsteği</option>
+                        <option value="is_birligi">İş Birliği Talebi</option>
+                    </select>
+                </div>
+
+                <div id="guest-name-field">
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Adınız Soyadınız <span class="text-red-400">*</span></label>
+                    <input type="text" id="contact-name" required minlength="2" maxlength="60" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-cyan-500" placeholder="Adınız Soyadınız">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">E-posta Adresiniz <span class="text-red-400">*</span></label>
+                    <input type="email" id="contact-email" required maxlength="120" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-cyan-500" placeholder="ornek@mail.com">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Telefon Numaranız <span class="text-slate-500 font-normal">(opsiyonel)</span></label>
+                    <input type="tel" id="contact-phone" maxlength="20" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-cyan-500" placeholder="+90 5XX XXX XX XX">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Talep Başlığı <span class="text-red-400">*</span></label>
+                    <input type="text" id="contact-subject" required minlength="3" maxlength="100" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-cyan-500" placeholder="Kısa bir başlık girin">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Detaylı Açıklama <span class="text-red-400">*</span></label>
+                    <textarea id="contact-message" required minlength="10" maxlength="1500" rows="6" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-cyan-500" placeholder="Talebinizi detaylıca açıklayın..."></textarea>
+                    <p class="text-[10px] text-slate-500 mt-1"><span id="msg-char-count">0</span>/1500 karakter</p>
+                </div>
+
+                <div class="flex justify-end pt-2">
+                    <button type="submit" id="submit-btn" class="bg-cyan-600 hover:bg-cyan-700 text-white px-6 py-2.5 rounded-xl text-xs font-semibold transition flex items-center space-x-1.5 shadow-md">
+                        <i class="fa-solid fa-paper-plane"></i>
+                        <span>Talebi Gönder</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div id="success-card" class="hidden bg-gradient-to-br from-emerald-900/40 to-slate-800 border border-emerald-500/40 p-8 rounded-2xl shadow-lg text-center">
+            <div class="w-16 h-16 bg-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center text-3xl mx-auto mb-4 border border-emerald-500/30">
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
+            <h2 class="text-xl font-bold text-white mb-2">Talebiniz Alındı! 🎉</h2>
+            <p class="text-slate-300 text-sm mb-4">Talebiniz başarıyla admin panelimize iletildi.</p>
+            <div class="bg-slate-900/60 border border-emerald-500/30 rounded-xl p-4 max-w-md mx-auto mb-6">
+                <p class="text-xs text-emerald-300 font-semibold"><i class="fa-solid fa-clock mr-1"></i>En kısa sürede size geri dönüş yapacağız.</p>
+                <p class="text-[11px] text-slate-400 mt-2">Talebinize ait takip numarası: <strong id="request-id-display" class="text-emerald-400 font-mono">-</strong></p>
+            </div>
+            <div class="flex justify-center gap-3">
+                <a href="/portal/index.html" class="bg-slate-700 hover:bg-slate-600 text-slate-200 px-5 py-2.5 rounded-xl text-xs font-semibold transition">
+                    <i class="fa-solid fa-home mr-1"></i>Ana Sayfa
+                </a>
+                <button onclick="resetContactForm()" class="bg-cyan-600 hover:bg-cyan-700 text-white px-5 py-2.5 rounded-xl text-xs font-semibold transition">
+                    <i class="fa-solid fa-plus mr-1"></i>Yeni Talep
+                </button>
+            </div>
+        </div>
+
+        <div class="bg-slate-800 border border-slate-700 p-6 rounded-2xl shadow-lg">
+            <h2 class="text-base font-bold text-white flex items-center mb-4">
+                <i class="fa-solid fa-address-card text-cyan-400 mr-2"></i>Diğer İletişim Kanalları
+            </h2>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                <div class="bg-slate-900/60 border border-slate-700 rounded-xl p-4 text-center">
+                    <i class="fa-solid fa-envelope text-cyan-400 text-lg mb-2"></i>
+                    <p class="text-slate-400 text-[10px] uppercase tracking-wider mb-1">E-posta</p>
+                    <p class="text-slate-200 font-semibold">destek@lianchez.com</p>
+                </div>
+                <div class="bg-slate-900/60 border border-slate-700 rounded-xl p-4 text-center">
+                    <i class="fa-solid fa-globe text-cyan-400 text-lg mb-2"></i>
+                    <p class="text-slate-400 text-[10px] uppercase tracking-wider mb-1">Web Sitesi</p>
+                    <a href="https://lianchez.com" target="_blank" class="text-cyan-400 hover:text-cyan-300 font-semibold">lianchez.com</a>
+                </div>
+                <div class="bg-slate-900/60 border border-slate-700 rounded-xl p-4 text-center">
+                    <i class="fa-solid fa-comment-dots text-cyan-400 text-lg mb-2"></i>
+                    <p class="text-slate-400 text-[10px] uppercase tracking-wider mb-1">Canlı Sohbet</p>
+                    <a href="/portal/forum.html" class="text-cyan-400 hover:text-cyan-300 font-semibold">Foruma Git</a>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <div id="math-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div class="bg-slate-800 border border-cyan-500/50 rounded-2xl max-w-sm w-full p-6 shadow-2xl text-center space-y-4">
+            <div class="w-14 h-14 bg-cyan-500/20 text-cyan-400 rounded-full flex items-center justify-center text-2xl mx-auto border border-cyan-500/30">
+                <i class="fa-solid fa-robot"></i>
+            </div>
+            <h3 class="text-lg font-bold text-white">Bot Doğrulaması</h3>
+            <p class="text-xs text-slate-300">Talebi göndermek için lütfen aşağıdaki işlemi çözün:</p>
+            <div id="math-question-box" class="text-base font-extrabold text-yellow-400 bg-slate-900 py-3 rounded-xl border border-slate-700">? + ? = ?</div>
+            <input type="number" id="math-answer-input" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-center text-sm text-white focus:outline-none focus:border-cyan-500" placeholder="Sonucu yazın">
+            <div class="flex space-x-2 pt-2">
+                <button type="button" onclick="closeMathModal()" class="w-1/2 bg-slate-700 hover:bg-slate-600 text-white py-2.5 rounded-xl text-xs font-semibold transition">İptal</button>
+                <button type="button" onclick="verifyAndSubmitContact()" class="w-1/2 bg-cyan-600 hover:bg-cyan-700 text-white py-2.5 rounded-xl text-xs font-semibold transition">Doğrula & Gönder</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="cooldown-popup" class="fixed inset-0 bg-black/75 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div class="bg-slate-800 border border-amber-500/50 rounded-2xl max-w-sm w-full p-6 text-center shadow-2xl space-y-4">
+            <div class="w-14 h-14 bg-amber-500/20 text-amber-400 rounded-full flex items-center justify-center text-2xl mx-auto border border-amber-500/30">
+                <i class="fa-solid fa-hourglass-half"></i>
+            </div>
+            <h3 class="text-lg font-bold text-white">Lütfen Bekleyin</h3>
+            <p id="cooldown-msg" class="text-xs text-slate-300">Beklemeniz gerekiyor.</p>
+            <button onclick="closeCooldownPopup()" class="w-full bg-slate-700 hover:bg-slate-600 text-white py-2.5 rounded-xl text-xs font-semibold transition">Anladım</button>
+        </div>
+    </div>
+
+    <div id="notifications-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div class="bg-slate-800 border border-slate-700 rounded-2xl max-w-md w-full p-6 shadow-2xl relative">
+            <div class="flex justify-between items-center mb-4 border-b border-slate-700 pb-3">
+                <h3 class="text-lg font-bold text-white flex items-center">
+                    <i class="fa-solid fa-bell text-blue-400 mr-2"></i>Bildirimler
+                </h3>
+                <button onclick="closeNotificationsModal()" class="text-slate-400 hover:text-white p-1">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <div id="notifications-list" class="space-y-3 max-h-80 overflow-y-auto pr-1">
+                <div class="text-center py-8 text-slate-500 text-xs">Henüz bir bildiriminiz yok.</div>
+            </div>
+            <div class="mt-5 pt-3 border-t border-slate-700 flex justify-end">
+                <button onclick="closeNotificationsModal()" class="bg-slate-700 hover:bg-slate-600 text-slate-200 px-4 py-1.5 rounded-xl text-xs font-semibold transition">Kapat</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SABİT YÖNLENDİRME ASİSTANI (İletişim) -->
+    <div class="fixed bottom-4 right-4 z-[150]" id="assistant-widget">
+        <div class="relative">
+            <button onclick="closeAssistantWidget()" title="Kapat" class="absolute -top-2 -right-2 z-10 w-6 h-6 bg-slate-800 hover:bg-red-600 text-slate-300 hover:text-white rounded-full flex items-center justify-center text-[10px] border border-slate-600 hover:border-red-500 shadow-lg transition">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <a href="/portal/iletisim.html" class="assistant-btn group flex items-center gap-2 bg-gradient-to-r from-cyan-600 to-blue-600 text-white pl-3 pr-4 py-2.5 rounded-full shadow-2xl border border-cyan-400/40 hover:from-cyan-500 hover:to-blue-500 transition-all">
+                <span class="assistant-icon w-8 h-8 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
+                    <i class="fa-solid fa-headset text-sm"></i>
+                </span>
+                <span class="text-left leading-tight">
+                    <span class="block text-[10px] font-extrabold tracking-wide">SORUN / İSTEK Mİ VAR?</span>
+                    <span class="block text-[9px] font-medium opacity-90">İletişim formundan bize ilet, hemen ilgilenelim!</span>
+                </span>
+                <i class="fa-solid fa-arrow-right text-[10px] opacity-80 group-hover:translate-x-0.5 transition"></i>
+            </a>
+        </div>
+    </div>
+
+    <footer class="relative bg-gradient-to-b from-slate-800 to-slate-900 border-t border-slate-700 mt-auto z-10">
+        <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-500/40 to-transparent"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-graduation-cap text-blue-400 text-lg"></i>
+                    <span class="text-sm font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">Üni Portal</span>
+                </div>
+                <p class="text-xs text-slate-500 text-center">&copy; <span class="current-year"></span> Üni Portal — Tüm hakları saklıdır.</p>
+                <p class="text-xs text-slate-500">Powered by <a href="https://lianchez.com" target="_blank" class="text-blue-400 hover:text-blue-300 font-semibold transition">lianchez.com</a></p>
+            </div>
+        </div>
+    </footer>
+    <script>
+        document.querySelectorAll('.current-year').forEach(el => el.innerText = new Date().getFullYear());
+        function closeAssistantWidget() {
+            const w = document.getElementById('assistant-widget');
+            if (w) w.style.display = 'none';
+        }
+    </script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, collection, getDocs, getCountFromServer, onSnapshot, deleteDoc, updateDoc, addDoc, query, where, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { primeAuthor, injectCoreStyles, initDailyStreak } from '/portal/portal-core.js';
+        injectCoreStyles();
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAYTaUdfhWAngCSZQjAyFtP_IRubX_Gw4c",
+            authDomain: "lianchezportal.firebaseapp.com",
+            projectId: "lianchezportal",
+            storageBucket: "lianchezportal.firebasestorage.app",
+            messagingSenderId: "283567832811",
+            appId: "1:283567832811:web:cff0981ba1fa305a0dc8ae",
+            measurementId: "G-8KPN5EG95S"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const provider = new GoogleAuthProvider();
+
+        let currentUser = null;
+        let currentUserData = null;
+        let notificationsUnsubscribe = null;
+        let correctMathAnswer = 0;
+        let pendingPayload = null;
+        const COOLDOWN_SECONDS = 120;
+
+        window.googleLogin = () => signInWithPopup(auth, provider);
+        window.googleLogout = () => signOut(auth);
+        window.toggleMobileMenu = () => document.getElementById('mobile-menu').classList.toggle('hidden');
+        window.toggleUserDropdown = (e) => { e.stopPropagation(); document.getElementById('user-dropdown').classList.toggle('hidden'); };
+        document.addEventListener('click', () => { const d = document.getElementById('user-dropdown'); if (d) d.classList.add('hidden'); });
+
+        // ===== KOTA OPTİMİZASYONU: Liste sadece modal açılınca yüklensin =====
+        window.openNotificationsModal = async () => {
+            document.getElementById('user-dropdown').classList.add('hidden');
+            const modal = document.getElementById('notifications-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            
+            if (!currentUser) return;
+            const listContainer = document.getElementById('notifications-list');
+            listContainer.innerHTML = '<div class="text-center py-8 text-slate-500 text-xs">Yükleniyor...</div>';
+            
+            try {
+                // Sadece son 20 bildirimi çek (limit ile)
+                const snap = await getDocs(query(
+                    collection(db, "users", currentUser.uid, "notifications"),
+                    orderBy("createdAt", "desc"),
+                    limit(20)
+                ));
+                if (snap.empty) {
+                    listContainer.innerHTML = '<div class="text-center py-8 text-slate-500 text-xs">Henüz bir bildiriminiz yok.</div>';
+                    return;
+                }
+                let itemsHTML = "";
+                snap.forEach((docSnap) => {
+                    const notif = docSnap.data();
+                    const notifId = docSnap.id;
+                    const safeLink = (notif.link || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+                    itemsHTML += `
+                        <div class="notif-item p-3 bg-slate-900/60 hover:bg-slate-700/50 border border-slate-700/70 rounded-xl flex items-start justify-between gap-3 transition group">
+                            <div class="flex-1 cursor-pointer" onclick="handleNotificationClick('${notifId}', '${safeLink}')">
+                                <p class="text-xs text-slate-200 font-medium group-hover:text-blue-400 transition">${notif.message || 'Bildirim'}</p>
+                                ${notif.link ? `<span class="text-[10px] text-blue-400 underline mt-1 inline-block"><i class="fa-solid fa-arrow-up-right-from-square mr-1"></i>Bağlantıya Git</span>` : ''}
+                            </div>
+                            <button onclick="deleteNotification(event, '${notifId}')" title="Bildirimi Sil" class="text-slate-500 hover:text-red-400 p-1 text-xs transition flex-shrink-0">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        </div>
+                    `;
+                });
+                listContainer.innerHTML = itemsHTML;
+            } catch(e) {
+                console.error(e);
+                listContainer.innerHTML = '<div class="text-center py-8 text-red-400 text-xs">Bildirimler yüklenemedi.</div>';
+            }
+        };
+        window.closeNotificationsModal = () => { document.getElementById('notifications-modal').classList.remove('flex'); document.getElementById('notifications-modal').classList.add('hidden'); };
+        window.closeMathModal = () => { document.getElementById('math-modal').classList.remove('flex'); document.getElementById('math-modal').classList.add('hidden'); };
+        window.closeCooldownPopup = () => { document.getElementById('cooldown-popup').classList.remove('flex'); document.getElementById('cooldown-popup').classList.add('hidden'); };
+
+        window.showToast = (message, type = 'info') => {
+            const container = document.getElementById('toast-container');
+            const colors = { success: 'bg-emerald-600 border-emerald-500', error: 'bg-red-600 border-red-500', warning: 'bg-amber-600 border-amber-500', info: 'bg-slate-700 border-slate-600' };
+            const icons = { success: 'fa-circle-check', error: 'fa-circle-exclamation', warning: 'fa-triangle-exclamation', info: 'fa-circle-info' };
+            const toast = document.createElement('div');
+            toast.className = `${colors[type]} border text-white px-4 py-3 rounded-xl shadow-2xl flex items-center justify-between gap-3 text-xs font-semibold transition-all duration-300 opacity-0 translate-x-full min-w-[250px]`;
+            toast.innerHTML = `<span class="flex items-center space-x-2"><i class="fa-solid ${icons[type]}"></i><span>${message}</span></span><button onclick="this.parentElement.remove()" class="text-white/70 hover:text-white transition"><i class="fa-solid fa-xmark"></i></button>`;
+            container.appendChild(toast);
+            requestAnimationFrame(() => toast.classList.remove('opacity-0', 'translate-x-full'));
+            setTimeout(() => { toast.classList.add('opacity-0', 'translate-x-full'); setTimeout(() => toast.remove(), 300); }, 3500);
+        };
+
+        window.handleNotificationClick = async (notifId, link) => {
+            if (currentUser && notifId) {
+                try { await updateDoc(doc(db, "users", currentUser.uid, "notifications", notifId), { read: true }); } catch(e) {}
+            }
+            if (link) {
+                if (link.startsWith('http')) window.open(link, '_blank');
+                else window.location.href = link;
+            }
+        };
+
+        window.deleteNotification = async (e, notifId) => {
+            e.stopPropagation();
+            if (!currentUser || !notifId) return;
+            
+            // 1. DOM'dan hemen kaldır (kullanıcı anında görsün)
+            const btn = e.currentTarget;
+            const notifItem = btn.closest('.notif-item');
+            if (notifItem) {
+                notifItem.style.transition = 'opacity 0.2s, transform 0.2s';
+                notifItem.style.opacity = '0';
+                notifItem.style.transform = 'translateX(20px)';
+                setTimeout(() => notifItem.remove(), 200);
+            }
+            
+            // 2. Firebase'den sil (arka planda)
+            try {
+                await deleteDoc(doc(db, "users", currentUser.uid, "notifications", notifId));
+            } catch (err) {
+                console.error("Bildirim silinirken hata:", err);
+                // Hata olursa element geri gelsin (opsiyonel)
+            }
+        };
+
+        // ===== KOTA OPTİMİZASYONU: onSnapshot yerine tek seferlik sayım =====
+        async function listenNotifications(uid) {
+            // Sadece okunmamış sayısını al (1 okuma, tüm dokümanları çekmez)
+            try {
+                const countSnap = await getCountFromServer(
+                    query(collection(db, "users", uid, "notifications"), where("read", "==", false))
+                );
+                const unreadCount = countSnap.data().count;
+                const badge = document.getElementById('notification-badge');
+                const dropdownCount = document.getElementById('dropdown-notif-count');
+                if (unreadCount > 0) {
+                    badge.innerText = unreadCount;
+                    badge.classList.remove('hidden');
+                } else {
+                    badge.classList.add('hidden');
+                }
+                if (dropdownCount) dropdownCount.innerText = unreadCount;
+            } catch(e) { console.error("Bildirim sayısı alınamadı:", e); }
+        }
+
+        document.getElementById('contact-message').addEventListener('input', (e) => {
+            document.getElementById('msg-char-count').innerText = e.target.value.length;
+        });
+
+        onAuthStateChanged(auth, async (user) => {
+            currentUser = user;
+            const loginBtn = document.getElementById('login-btn');
+            const userProfile = document.getElementById('user-profile');
+            const userAvatar = document.getElementById('user-avatar');
+            const userCoins = document.getElementById('user-coins');
+            const dropdownName = document.getElementById('dropdown-user-name');
+            const dropdownEmail = document.getElementById('dropdown-user-email');
+            const guestNameField = document.getElementById('guest-name-field');
+            const contactEmail = document.getElementById('contact-email');
+            const contactName = document.getElementById('contact-name');
+
+            if (user) {
+                loginBtn.classList.add('hidden');
+                userProfile.classList.remove('hidden');
+                userAvatar.src = user.photoURL || 'https://via.placeholder.com/40';
+
+                const userRef = doc(db, "users", user.uid);
+                const userSnap = await getDoc(userRef);
+                if (userSnap.exists()) {
+                    currentUserData = userSnap.data();
+                    userCoins.innerText = currentUserData.coins || 0;
+                    dropdownName.innerText = currentUserData.displayName || currentUserData.name || "Kullanıcı";
+                    dropdownEmail.innerText = currentUserData.email || user.email || "";
+                    contactEmail.value = currentUserData.email || user.email || "";
+                    guestNameField.classList.add('hidden');
+                    contactName.required = false;
+                } else {
+                    await setDoc(userRef, {
+                        uid: user.uid,
+                        name: user.displayName || "Öğrenci",
+                        displayName: user.displayName || "Öğrenci",
+                        email: user.email || "",
+                        photoURL: user.photoURL || "",
+                        coins: 10,
+                        role: "user",
+                        createdAt: new Date()
+                    });
+                    currentUserData = { 
+                        displayName: user.displayName || "Öğrenci", 
+                        name: user.displayName || "Öğrenci", 
+                        email: user.email || "", 
+                        coins: 10 
+                    };
+                    userCoins.innerText = "10";
+                    contactEmail.value = user.email || "";
+                    guestNameField.classList.add('hidden');
+                    contactName.required = false;
+                }
+                initDailyStreak(db, user.uid, currentUserData);
+                listenNotifications(user.uid);
+            } else {
+                loginBtn.classList.remove('hidden');
+                userProfile.classList.add('hidden');
+                guestNameField.classList.remove('hidden');
+                contactName.required = true;
+                currentUserData = null;
+                if (notificationsUnsubscribe) notificationsUnsubscribe();
+                initDailyStreak(db, null, null);
+            }
+        });
+
+        window.prepareContactRequest = async (e) => {
+            e.preventDefault();
+
+            const type = document.getElementById('contact-type').value;
+            const email = document.getElementById('contact-email').value.trim();
+            const phone = document.getElementById('contact-phone').value.trim();
+            const subject = document.getElementById('contact-subject').value.trim();
+            const message = document.getElementById('contact-message').value.trim();
+            const guestName = document.getElementById('contact-name').value.trim();
+
+            if (!type) { showToast("Lütfen talep türü seçin", "warning"); return; }
+            if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showToast("Geçerli bir e-posta adresi girin", "warning"); return; }
+            if (phone && !/^[0-9+\s\-()]{7,20}$/.test(phone)) { showToast("Geçerli bir telefon numarası girin veya boş bırakın", "warning"); return; }
+            if (!subject || subject.length < 3) { showToast("Başlık en az 3 karakter olmalı", "warning"); return; }
+            if (!message || message.length < 10) { showToast("Açıklama en az 10 karakter olmalı", "warning"); return; }
+            if (!currentUser && (!guestName || guestName.length < 2)) { showToast("Lütfen adınızı ve soyadınızı girin", "warning"); return; }
+
+            if (currentUser) {
+                try {
+                    const userSnap = await getDoc(doc(db, "users", currentUser.uid));
+                    if (userSnap.exists()) {
+                        const lastTime = userSnap.data().lastContactTime?.toDate?.() || null;
+                        if (lastTime) {
+                            const diffSec = Math.floor((new Date() - lastTime) / 1000);
+                            if (diffSec < COOLDOWN_SECONDS) {
+                                const remaining = COOLDOWN_SECONDS - diffSec;
+                                const mins = Math.floor(remaining / 60);
+                                const secs = remaining % 60;
+                                document.getElementById('cooldown-msg').innerText = `Yeni bir talep göndermek için ${mins > 0 ? mins + ' dakika ' : ''}${secs} saniye daha beklemelisiniz.`;
+                                document.getElementById('cooldown-popup').classList.remove('hidden');
+                                document.getElementById('cooldown-popup').classList.add('flex');
+                                return;
+                            }
+                        }
+                    }
+                } catch(e) { console.error(e); }
+            }
+
+            pendingPayload = {
+                type, email, phone: phone || null, subject, message,
+                name: currentUser ? (currentUserData?.displayName || currentUserData?.name || currentUser.displayName) : guestName,
+                userId: currentUser ? currentUser.uid : null,
+                userDisplayName: currentUser ? (currentUserData?.displayName || currentUserData?.name || currentUser.displayName) : null,
+                userPhotoURL: currentUser ? (currentUser.photoURL || null) : null
+            };
+
+            const num1 = Math.floor(Math.random() * 20) + 1;
+            const num2 = Math.floor(Math.random() * 20) + 1;
+            correctMathAnswer = num1 + num2;
+            document.getElementById('math-question-box').innerText = `${num1} + ${num2} = ?`;
+            document.getElementById('math-answer-input').value = "";
+            document.getElementById('math-modal').classList.remove('hidden');
+            document.getElementById('math-modal').classList.add('flex');
+        };
+
+        window.verifyAndSubmitContact = async () => {
+            const userAnswer = parseInt(document.getElementById('math-answer-input').value);
+            if (isNaN(userAnswer) || userAnswer !== correctMathAnswer) {
+                showToast("Matematik işlemi yanlış. Tekrar deneyin", "error");
+                return;
+            }
+            if (!pendingPayload) return;
+
+            closeMathModal();
+            const submitBtn = document.getElementById('submit-btn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i><span>Gönderiliyor...</span>';
+
+            try {
+                const docRef = await addDoc(collection(db, "contactRequests"), {
+                    ...pendingPayload,
+                    status: 'pending',
+                    adminNote: null,
+                    createdAt: serverTimestamp(),
+                    resolvedAt: null,
+                    resolvedBy: null
+                });
+
+                if (currentUser) {
+                    try {
+                        await updateDoc(doc(db, "users", currentUser.uid), { lastContactTime: new Date() });
+                    } catch(e) { console.error(e); }
+                }
+
+                document.getElementById('request-id-display').innerText = docRef.id.substring(0, 8).toUpperCase();
+                document.getElementById('contact-form-wrapper').classList.add('hidden');
+                document.getElementById('success-card').classList.remove('hidden');
+                showToast("Talebiniz başarıyla gönderildi!", "success");
+
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            } catch(err) {
+                console.error(err);
+                showToast("Talep gönderilemedi, lütfen tekrar deneyin", "error");
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i><span>Talebi Gönder</span>';
+                pendingPayload = null;
+            }
+        };
+
+        window.resetContactForm = () => {
+            document.getElementById('contact-form').reset();
+            document.getElementById('msg-char-count').innerText = '0';
+            document.getElementById('success-card').classList.add('hidden');
+            document.getElementById('contact-form-wrapper').classList.remove('hidden');
+            if (currentUser) {
+                document.getElementById('contact-email').value = currentUserData?.email || currentUser.email || "";
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+    </script>
+</body>
+</html>

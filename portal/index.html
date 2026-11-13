@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Öğrenci Portalı - Üni Portal</title>
+    <link rel="icon" type="image/png" href="/portal/fav.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        input[type="text"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="password"], input[type="tel"], textarea, select {
+            font-size: 16px !important;
+            -webkit-text-size-adjust: 100%;
+        }
+        @media (min-width: 640px) {
+            input[type="text"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="password"], input[type="tel"], textarea, select {
+                font-size: 12px !important;
+            }
+        }
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.4; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.05); }
+        }
+        .animate-glow { animation: pulseGlow 6s ease-in-out infinite; }
+        @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        .animate-float { animation: float 4s ease-in-out infinite; }
+        @keyframes forumGlow {
+            0%, 100% { box-shadow: 0 0 18px rgba(168,85,247,0.22), 0 10px 25px rgba(0,0,0,0.25); }
+            50% { box-shadow: 0 0 30px rgba(168,85,247,0.38), 0 10px 25px rgba(0,0,0,0.25); }
+        }
+        .forum-highlight { animation: forumGlow 3.5s ease-in-out infinite; }
+        @keyframes assistantBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
+        @keyframes assistantPulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(6, 182, 212, 0.7), 0 8px 20px rgba(0,0,0,0.4); }
+            50% { box-shadow: 0 0 0 8px rgba(6, 182, 212, 0), 0 8px 24px rgba(0,0,0,0.5); }
+        }
+        .assistant-btn { animation: assistantPulse 2.5s ease-in-out infinite; }
+        .assistant-btn:hover .assistant-icon { animation: assistantBounce 0.6s ease infinite; }
+        @keyframes shimmer {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+        .shimmer-text {
+            background: linear-gradient(90deg, #a855f7, #ec4899, #a855f7, #6366f1, #a855f7);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 4s linear infinite;
+        }
+
+        html {
+            overflow-y: scroll;
+            overflow-x: hidden;
+        }
+        body {
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col justify-between">
+
+    <div class="relative overflow-hidden">
+        <div class="absolute top-0 left-1/4 w-96 h-96 bg-blue-600/15 rounded-full blur-3xl pointer-events-none animate-glow -z-0"></div>
+        <div class="absolute top-1/3 right-1/4 w-96 h-96 bg-purple-600/15 rounded-full blur-3xl pointer-events-none animate-glow -z-0" style="animation-delay: 3s;"></div>
+        <div class="absolute bottom-0 left-1/3 w-96 h-96 bg-pink-600/10 rounded-full blur-3xl pointer-events-none animate-glow -z-0" style="animation-delay: 1.5s;"></div>
+    </div>
+    <header class="bg-slate-800/80 backdrop-blur-md border-b border-slate-700/80 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <a href="/portal/index.html" class="text-sm sm:text-xl font-extrabold bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-500 bg-clip-text text-transparent flex items-center tracking-wide whitespace-nowrap">
+                    <i class="fa-solid fa-graduation-cap mr-1.5 sm:mr-2.5 text-blue-400"></i>Üni Portal
+                </a>
+            </div>
+            
+            <nav class="hidden md:flex items-center space-x-6 text-sm font-medium">
+                <a href="/portal/index.html" class="text-blue-400 font-semibold transition">Ana Sayfa</a>
+                <a href="/portal/forum.html" class="px-2.5 py-1 rounded-xl bg-purple-500/15 text-purple-300 border border-purple-500/30 font-semibold hover:bg-purple-500/25 transition flex items-center space-x-1.5"><i class="fa-solid fa-comments text-purple-400 text-xs"></i><span>Forum</span></a>
+                <a href="/portal/ilanlar.html" class="text-slate-300 hover:text-white transition">İlanlar</a>
+                <a href="/portal/ogrenciler.html" class="text-slate-300 hover:text-white transition">Öğrenciler</a>
+                <a href="/portal/topluluk.html" class="text-slate-300 hover:text-white transition">Topluluklar</a>
+                <a href="/portal/iletisim.html" class="text-slate-300 hover:text-white transition">İletişim</a>
+            </nav>
+
+            <div class="flex items-center space-x-2 sm:space-x-4">
+                <div id="auth-section" class="flex items-center space-x-2 sm:space-x-3">
+                    <a href="/portal/admin.html" id="admin-panel-link" class="hidden bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white px-2 sm:px-3.5 py-1.5 rounded-xl text-[10px] sm:text-xs font-semibold transition border border-red-500/30 flex items-center space-x-1 sm:space-x-1.5 whitespace-nowrap">
+                        <i class="fa-solid fa-shield-halved"></i>
+                        <span class="hidden sm:inline">Yönetim</span>
+                        <span class="sm:hidden">Admin</span>
+                    </a>
+
+                    <button id="login-btn" onclick="googleLogin()" class="hidden flex items-center space-x-1 sm:space-x-2 bg-gradient-to-r from-white to-slate-100 text-slate-900 px-2 sm:px-3.5 py-1.5 rounded-xl font-bold hover:shadow-lg hover:from-slate-100 hover:to-white transition shadow-sm text-[10px] sm:text-sm whitespace-nowrap">
+                        <i class="fa-brands fa-google text-red-500 text-[10px] sm:text-sm"></i>
+                        <span>Giriş Yap</span>
+                    </button>
+
+                    <div id="user-profile" class="hidden flex items-center space-x-2 sm:space-x-3 relative">
+                        <div class="flex items-center bg-slate-800/90 px-2 sm:px-3 py-1.5 rounded-full border border-slate-700 shadow-inner">
+                            <i class="fa-solid fa-coins text-yellow-400 mr-1 sm:mr-1.5 animate-bounce text-[10px] sm:text-sm"></i>
+                            <span id="user-coins" class="font-extrabold text-yellow-400 text-[10px] sm:text-sm">0</span>
+                        </div>
+
+                        <div class="relative cursor-pointer" onclick="toggleUserDropdown(event)">
+                            <img id="user-avatar" src="" alt="Profil" class="w-8 h-8 sm:w-9 sm:h-9 rounded-full border-2 border-indigo-500/50 hover:border-blue-400 transition object-cover shadow-md">
+                            <span id="notification-badge" class="hidden absolute -bottom-0.5 -right-0.5 bg-red-500 text-white text-[10px] font-extrabold min-w-[16px] h-4 px-1 rounded-full flex items-center justify-center border-2 border-slate-800 animate-pulse">0</span>
+                        </div>
+
+                        <div id="user-dropdown" class="hidden absolute right-0 top-12 w-56 bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl py-2 z-50 transition-all duration-200">
+                            <div class="px-4 py-2 border-b border-slate-700">
+                                <p id="dropdown-user-name" class="text-xs font-bold text-white truncate">Kullanıcı Adı</p>
+                                <p id="dropdown-user-email" class="text-[11px] text-slate-400 truncate">email@domain.com</p>
+                            </div>
+
+                            <a href="/portal/profil.html" class="block w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center space-x-2 transition">
+                                <i class="fa-solid fa-user text-indigo-400"></i>
+                                <span>Profilim</span>
+                            </a>
+                            <a href="/portal/magaza.html" class="block w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center space-x-2 transition">
+                                <i class="fa-solid fa-store text-yellow-400"></i>
+                                <span>Mağaza</span>
+                            </a>
+                            <button onclick="openDailyStreakModal()" class="w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center justify-between transition">
+                                <span class="flex items-center space-x-2">
+                                    <i class="fa-solid fa-calendar-check text-amber-400"></i>
+                                    <span>Günlük Ödül</span>
+                                    <span id="streak-unclaimed-dot" class="hidden w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+                                </span>
+                                <span id="streak-dropdown-badge" class="bg-amber-500/20 text-amber-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-amber-500/30">0 Gün</span>
+                            </button>
+                            
+                            <button onclick="openNotificationsModal()" class="w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center justify-between transition">
+                                <span class="flex items-center space-x-2">
+                                    <i class="fa-solid fa-bell text-blue-400"></i>
+                                    <span>Bildirimler</span>
+                                </span>
+                                <span id="dropdown-notif-count" class="bg-slate-700 text-slate-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-slate-600">0</span>
+                            </button>
+
+                            <div class="border-t border-slate-700/80 my-1"></div>
+
+                            <button onclick="googleLogout()" class="w-full text-left px-4 py-2 text-xs text-red-400 hover:bg-red-500/10 flex items-center space-x-2 transition font-semibold">
+                                <i class="fa-solid fa-right-from-bracket"></i>
+                                <span>Çıkış Yap</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <button onclick="toggleMobileMenu()" class="md:hidden text-slate-300 hover:text-white focus:outline-none text-xl p-1.5">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="hidden md:hidden bg-slate-800 border-t border-slate-700 px-4 pt-3 pb-4 space-y-2">
+            <a href="/portal/index.html" class="block px-3 py-2 rounded-lg text-sm font-medium text-blue-400 bg-slate-700/50">Ana Sayfa</a>
+            <a href="/portal/forum.html" class="block px-3 py-2 rounded-lg text-sm font-semibold text-purple-300 bg-purple-500/10 border border-purple-500/20 hover:bg-purple-500/20 transition flex items-center"><i class="fa-solid fa-comments text-purple-400 mr-2"></i>Forum</a>
+            <a href="/portal/ilanlar.html" class="block px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-700 transition">İlanlar</a>
+            <a href="/portal/ogrenciler.html" class="block px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-700 transition">Öğrenciler</a>
+            <a href="/portal/topluluk.html" class="block px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-700 transition">Topluluklar</a>
+            <a href="/portal/iletisim.html" class="block px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-700 transition">İletişim</a>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-grow w-full relative z-10">
+        
+        <!-- HERO -->
+        <div class="text-center max-w-4xl mx-auto mb-12">
+            <div class="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10 border border-purple-500/30 text-purple-300 text-xs font-semibold mb-6 shadow-inner">
+                <i class="fa-solid fa-graduation-cap text-indigo-400"></i>
+                <span>Kampüsün Öğrenci Topluluğu</span>
+            </div>
+            
+            <h1 class="text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-6 leading-tight">
+                Kampüsünü Keşfet, <span class="shimmer-text">Öğrencilerle Bağlantı Kur</span>
+            </h1>
+            
+            <p class="text-sm sm:text-base text-slate-300 max-w-2xl mx-auto leading-relaxed">
+                Topluluklara katıl, forumda soru sor ve öğrenciden öğrenciye paylaşılan ilanlara göz at.
+            </p>
+        </div>
+
+        <!-- FORUM ÖNE ÇIKAN KART (KÜÇÜLTÜLDÜ) -->
+        <div class="mb-8">
+            <a href="/portal/forum.html" class="forum-highlight block relative overflow-hidden rounded-2xl border-2 border-purple-500/50 hover:border-purple-400 transition-all duration-300 group">
+                <div class="absolute inset-0 bg-gradient-to-br from-purple-900/70 via-indigo-900/60 to-slate-900/80"></div>
+                <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(168,85,247,0.3),transparent_60%)]"></div>
+                <div class="relative p-4 sm:p-6 flex flex-col md:flex-row items-center justify-between gap-4">
+                    <div class="flex-1 text-center md:text-left">
+                        <div class="inline-flex items-center space-x-1.5 bg-purple-500/30 text-purple-200 px-2.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold mb-2.5 border border-purple-400/40">
+                            <i class="fa-solid fa-fire text-orange-400 animate-pulse"></i>
+                            <span>EN POPÜLER BÖLÜM</span>
+                        </div>
+                        <h2 class="text-lg sm:text-2xl font-extrabold text-white mb-2 leading-tight">
+                            Tartışma Forumu 💬
+                        </h2>
+                        <p class="text-slate-300 text-[11px] sm:text-xs max-w-xl mx-auto md:mx-0 mb-3 leading-relaxed">
+                            Sorular sor, fikirlerini paylaş, deneyimlerini aktar ve tartışmalara katıl. Her konu açarak <strong class="text-yellow-400">+5 Coin & +15 XP</strong>, her yanıtla <strong class="text-yellow-400">+2 Coin & +8 XP</strong> kazan!
+                        </p>
+                        <div class="flex flex-wrap justify-center md:justify-start gap-1.5 mb-2">
+                            <span class="text-[9px] bg-purple-500/20 text-purple-200 px-2 py-0.5 rounded-md border border-purple-400/30"><i class="fa-solid fa-lightbulb mr-1 text-yellow-400"></i>Soru & Cevap</span>
+                            <span class="text-[9px] bg-purple-500/20 text-purple-200 px-2 py-0.5 rounded-md border border-purple-400/30"><i class="fa-solid fa-users mr-1"></i>Aktif Topluluk</span>
+                            <span class="text-[9px] bg-purple-500/20 text-purple-200 px-2 py-0.5 rounded-md border border-purple-400/30"><i class="fa-solid fa-bolt mr-1"></i>Coin Kazan</span>
+                        </div>
+                    </div>
+                    <div class="flex-shrink-0 flex items-center justify-center">
+                        <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-3xl sm:text-4xl shadow-2xl animate-float">
+                            <i class="fa-solid fa-comments text-white drop-shadow-lg"></i>
+                        </div>
+                    </div>
+                    <div class="flex-shrink-0 w-full md:w-auto">
+                        <div class="bg-white text-purple-700 font-extrabold px-4 py-2 rounded-xl text-xs flex items-center justify-center space-x-1.5 group-hover:bg-purple-100 transition shadow-lg">
+                            <span>Foruma Git</span>
+                            <i class="fa-solid fa-arrow-right text-xs group-hover:translate-x-1 transition"></i>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- DİĞER KARTLAR -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+            
+            <a href="/portal/ilanlar.html" class="bg-slate-800/80 backdrop-blur border border-slate-700/80 p-6 rounded-2xl hover:border-blue-500 transition-all duration-300 group shadow-xl flex flex-col justify-between hover:-translate-y-1">
+                <div>
+                    <div class="w-12 h-12 bg-blue-500/10 text-blue-400 rounded-2xl flex items-center justify-center text-xl mb-4 group-hover:scale-110 group-hover:bg-blue-500 group-hover:text-white transition shadow-inner">
+                        <i class="fa-solid fa-bag-shopping"></i>
+                    </div>
+                    <h2 class="text-lg font-bold text-white mb-2 group-hover:text-blue-400 transition">Öğrenci İlanları</h2>
+                    <p class="text-slate-400 text-xs leading-relaxed">İkinci el ders kitapları, ev arkadaşı, proje ekibi ve öğrenci duyurularına göz atın.</p>
+                </div>
+                <div class="mt-6 pt-4 border-t border-slate-700/60 flex items-center justify-between text-xs font-semibold text-blue-400">
+                    <span>İlanları İncele</span>
+                    <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition"></i>
+                </div>
+            </a>
+
+            <a href="/portal/ogrenciler.html" class="bg-slate-800/80 backdrop-blur border border-slate-700/80 p-6 rounded-2xl hover:border-indigo-500 transition-all duration-300 group shadow-xl flex flex-col justify-between hover:-translate-y-1">
+                <div>
+                    <div class="w-12 h-12 bg-indigo-500/10 text-indigo-400 rounded-2xl flex items-center justify-center text-xl mb-4 group-hover:scale-110 group-hover:bg-indigo-500 group-hover:text-white transition shadow-inner">
+                        <i class="fa-solid fa-users"></i>
+                    </div>
+                    <h2 class="text-lg font-bold text-white mb-2 group-hover:text-indigo-400 transition">Öğrenci Ağı</h2>
+                    <p class="text-slate-400 text-xs leading-relaxed">Kampüsteki diğer öğrencilerle tanışın, liderlik tablosundaki yerinizi görün.</p>
+                </div>
+                <div class="mt-6 pt-4 border-t border-slate-700/60 flex items-center justify-between text-xs font-semibold text-indigo-400">
+                    <span>Ağa Katıl</span>
+                    <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition"></i>
+                </div>
+            </a>
+
+            <a href="/portal/topluluk.html" class="bg-slate-800/80 backdrop-blur border border-slate-700/80 p-6 rounded-2xl hover:border-emerald-500 transition-all duration-300 group shadow-xl flex flex-col justify-between hover:-translate-y-1">
+                <div>
+                    <div class="w-12 h-12 bg-emerald-500/10 text-emerald-400 rounded-2xl flex items-center justify-center text-xl mb-4 group-hover:scale-110 group-hover:bg-emerald-500 group-hover:text-white transition shadow-inner">
+                        <i class="fa-solid fa-users-rectangle"></i>
+                    </div>
+                    <h2 class="text-lg font-bold text-white mb-2 group-hover:text-emerald-400 transition">Üniversite Toplulukları</h2>
+                    <p class="text-slate-400 text-xs leading-relaxed">Aktif kulüpleri keşfedin, projelerine katılın ve ortak etkinliklerde buluşun.</p>
+                </div>
+                <div class="mt-6 pt-4 border-t border-slate-700/60 flex items-center justify-between text-xs font-semibold text-emerald-400">
+                    <span>Kulüpleri Keşfet</span>
+                    <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition"></i>
+                </div>
+            </a>
+
+        </div>
+    </main>
+
+    <div id="notifications-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div class="bg-slate-800 border border-slate-700 rounded-2xl max-w-md w-full p-6 shadow-2xl relative">
+            <div class="flex justify-between items-center mb-4 border-b border-slate-700 pb-3">
+                <h3 class="text-lg font-bold text-white flex items-center">
+                    <i class="fa-solid fa-bell text-blue-400 mr-2"></i>Bildirimler
+                </h3>
+                <button onclick="closeNotificationsModal()" class="text-slate-400 hover:text-white p-1">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <div id="notifications-list" class="space-y-3 max-h-80 overflow-y-auto pr-1">
+                <div class="text-center py-8 text-slate-500 text-xs">Henüz bir bildiriminiz yok.</div>
+            </div>
+            <div class="mt-5 pt-3 border-t border-slate-700 flex justify-end">
+                <button onclick="closeNotificationsModal()" class="bg-slate-700 hover:bg-slate-600 text-slate-200 px-4 py-1.5 rounded-xl text-xs font-semibold transition">
+                    Kapat
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="fixed bottom-4 right-4 z-[150]" id="assistant-widget">
+        <div class="relative">
+            <button onclick="closeAssistantWidget()" title="Kapat" class="absolute -top-2 -right-2 z-10 w-6 h-6 bg-slate-800 hover:bg-red-600 text-slate-300 hover:text-white rounded-full flex items-center justify-center text-[10px] border border-slate-600 hover:border-red-500 shadow-lg transition">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <a href="/portal/iletisim.html" class="assistant-btn group flex items-center gap-2 bg-gradient-to-r from-cyan-600 to-blue-600 text-white pl-3 pr-4 py-2.5 rounded-full shadow-2xl border border-cyan-400/40 hover:from-cyan-500 hover:to-blue-500 transition-all">
+                <span class="assistant-icon w-8 h-8 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
+                    <i class="fa-solid fa-headset text-sm"></i>
+                </span>
+                <span class="text-left leading-tight">
+                    <span class="block text-[10px] font-extrabold tracking-wide">SORUN / İSTEK Mİ VAR?</span>
+                    <span class="block text-[9px] font-medium opacity-90">İletişim formundan bize ilet, hemen ilgilenelim!</span>
+                </span>
+                <i class="fa-solid fa-arrow-right text-[10px] opacity-80 group-hover:translate-x-0.5 transition"></i>
+            </a>
+        </div>
+    </div>
+
+    <footer class="relative bg-gradient-to-b from-slate-800 to-slate-900 border-t border-slate-700 mt-auto z-10">
+        <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-purple-500/40 to-transparent"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-graduation-cap text-blue-400 text-lg"></i>
+                    <span class="text-sm font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">Üni Portal</span>
+                </div>
+                <p class="text-xs text-slate-500 text-center">
+                    &copy; <span class="current-year"></span> Üni Portal — Tüm hakları saklıdır.
+                </p>
+                <p class="text-xs text-slate-500">
+                    Powered by <a href="https://lianchez.com" target="_blank" class="text-blue-400 hover:text-blue-300 font-semibold transition">lianchez.com</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+    <script>
+        document.querySelectorAll('.current-year').forEach(el => el.innerText = new Date().getFullYear());
+        function closeAssistantWidget() {
+            const w = document.getElementById('assistant-widget');
+            if (w) w.style.display = 'none';
+        }
+    </script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, collection, getDocs, getCountFromServer, onSnapshot, deleteDoc, updateDoc, addDoc, query, where, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { primeAuthor, injectCoreStyles, initDailyStreak } from '/portal/portal-core.js';
+        injectCoreStyles();
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAYTaUdfhWAngCSZQjAyFtP_IRubX_Gw4c",
+            authDomain: "lianchezportal.firebaseapp.com",
+            projectId: "lianchezportal",
+            storageBucket: "lianchezportal.firebasestorage.app",
+            messagingSenderId: "283567832811",
+            appId: "1:283567832811:web:cff0981ba1fa305a0dc8ae",
+            measurementId: "G-8KPN5EG95S"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const provider = new GoogleAuthProvider();
+
+        let currentUser = null;
+        let notificationsUnsubscribe = null;
+
+        window.googleLogin = () => signInWithPopup(auth, provider);
+        window.googleLogout = () => signOut(auth);
+
+        window.toggleMobileMenu = () => document.getElementById('mobile-menu').classList.toggle('hidden');
+        window.toggleUserDropdown = (e) => { e.stopPropagation(); document.getElementById('user-dropdown').classList.toggle('hidden'); };
+        document.addEventListener('click', () => { const d = document.getElementById('user-dropdown'); if (d && !d.classList.contains('hidden')) d.classList.add('hidden'); });
+
+        function escapeHtml(text) {
+            if (text === null || text === undefined) return "";
+            return String(text).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+        }
+
+        window.openNotificationsModal = async () => {
+            document.getElementById('user-dropdown').classList.add('hidden');
+            const modal = document.getElementById('notifications-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            if (!currentUser) return;
+            const listContainer = document.getElementById('notifications-list');
+            listContainer.innerHTML = '<div class="text-center py-8 text-slate-500 text-xs">Yükleniyor...</div>';
+            try {
+                const snap = await getDocs(query(collection(db, "users", currentUser.uid, "notifications"), orderBy("createdAt", "desc"), limit(20)));
+                if (snap.empty) { listContainer.innerHTML = '<div class="text-center py-8 text-slate-500 text-xs">Henüz bir bildiriminiz yok.</div>'; return; }
+                let itemsHTML = "";
+                snap.forEach((docSnap) => {
+                    const notif = docSnap.data();
+                    const notifId = docSnap.id;
+                    const safeLink = (notif.link || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+                    itemsHTML += `
+                        <div class="notif-item p-3 bg-slate-900/60 hover:bg-slate-700/50 border border-slate-700/70 rounded-xl flex items-start justify-between gap-3 transition group">
+                            <div class="flex-1 cursor-pointer" onclick="handleNotificationClick('${notifId}', '${safeLink}')">
+                                <p class="text-xs text-slate-200 font-medium group-hover:text-blue-400 transition">${escapeHtml(notif.message || 'Bildirim')}</p>
+                                ${notif.link ? `<span class="text-[10px] text-blue-400 underline mt-1 inline-block"><i class="fa-solid fa-arrow-up-right-from-square mr-1"></i>Bağlantıya Git</span>` : ''}
+                            </div>
+                            <button onclick="deleteNotification(event, '${notifId}')" title="Bildirimi Sil" class="text-slate-500 hover:text-red-400 p-1 text-xs transition flex-shrink-0">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        </div>
+                    `;
+                });
+                listContainer.innerHTML = itemsHTML;
+            } catch(e) { console.error(e); listContainer.innerHTML = '<div class="text-center py-8 text-red-400 text-xs">Bildirimler yüklenemedi.</div>'; }
+        };
+
+        window.closeNotificationsModal = () => { document.getElementById('notifications-modal').classList.remove('flex'); document.getElementById('notifications-modal').classList.add('hidden'); };
+        window.handleNotificationClick = async (notifId, link) => {
+            if (currentUser && notifId) { try { await updateDoc(doc(db, "users", currentUser.uid, "notifications", notifId), { read: true }); } catch(e) {} }
+            if (link) { if (link.startsWith('http')) window.open(link, '_blank'); else window.location.href = link; }
+        };
+        window.deleteNotification = async (e, notifId) => {
+            e.stopPropagation();
+            if (!currentUser || !notifId) return;
+            const btn = e.currentTarget;
+            const notifItem = btn.closest('.notif-item');
+            if (notifItem) { notifItem.style.transition = 'opacity 0.2s, transform 0.2s'; notifItem.style.opacity = '0'; notifItem.style.transform = 'translateX(20px)'; setTimeout(() => notifItem.remove(), 200); }
+            try { await deleteDoc(doc(db, "users", currentUser.uid, "notifications", notifId)); } catch (err) { console.error(err); }
+        };
+
+        async function listenNotifications(uid) {
+            try {
+                const countSnap = await getCountFromServer(query(collection(db, "users", uid, "notifications"), where("read", "==", false)));
+                const unreadCount = countSnap.data().count;
+                const badge = document.getElementById('notification-badge');
+                const dropdownCount = document.getElementById('dropdown-notif-count');
+                if (unreadCount > 0) { badge.innerText = unreadCount; badge.classList.remove('hidden'); }
+                else badge.classList.add('hidden');
+                if (dropdownCount) dropdownCount.innerText = unreadCount;
+            } catch(e) { console.error("Bildirim sayısı alınamadı:", e); }
+        }
+
+        onAuthStateChanged(auth, async (user) => {
+            currentUser = user;
+            const loginBtn = document.getElementById('login-btn');
+            const userProfile = document.getElementById('user-profile');
+            const userAvatar = document.getElementById('user-avatar');
+            const userCoins = document.getElementById('user-coins');
+            const dropdownName = document.getElementById('dropdown-user-name');
+            const dropdownEmail = document.getElementById('dropdown-user-email');
+            const adminPanelLink = document.getElementById('admin-panel-link');
+
+            if (user) {
+                loginBtn.classList.add('hidden');
+                userProfile.classList.remove('hidden');
+                userAvatar.src = user.photoURL;
+                dropdownName.innerText = user.displayName || "Kullanıcı";
+                dropdownEmail.innerText = user.email || "";
+
+                const userRef = doc(db, "users", user.uid);
+                const userSnap = await getDoc(userRef);
+
+                if (!userSnap.exists()) {
+                    const newUserData = {
+                        uid: user.uid, name: user.displayName, email: user.email, photoURL: user.photoURL,
+                        coins: 10, role: "user", createdAt: new Date()
+                    };
+                    await setDoc(userRef, newUserData);
+                    userCoins.innerText = "10";
+                    initDailyStreak(db, user.uid, newUserData);
+                    try {
+                        await addDoc(collection(db, "users", user.uid, "notifications"), {
+                            message: `Hoş geldin ${user.displayName || 'öğrenci'}! 🎉 Üni Portal'a katıldığın için teşekkürler. Forumda konu açarak +5 Coin kazanabilirsin!`,
+                            link: "/portal/forum.html", read: false, createdAt: new Date()
+                        });
+                    } catch (notifErr) { console.error(notifErr); }
+                } else {
+                    const userData = userSnap.data();
+                    userCoins.innerText = userData.coins || 0;
+                    if (userData.role === 'admin' || userData.role === 'moderator') adminPanelLink.classList.remove('hidden');
+                    else adminPanelLink.classList.add('hidden');
+                    initDailyStreak(db, user.uid, userData);
+                }
+                listenNotifications(user.uid);
+            } else {
+                loginBtn.classList.remove('hidden');
+                userProfile.classList.add('hidden');
+                adminPanelLink.classList.add('hidden');
+                if (notificationsUnsubscribe) notificationsUnsubscribe();
+                initDailyStreak(db, null, null);
+            }
+        });
+    </script>
+</body>
+</html>

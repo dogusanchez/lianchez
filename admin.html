@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lianchez | Yönetici Paneli</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <link rel="stylesheet" href="admin.css">
+<style>
+      .post-id-link {
+        font-size: 0.8rem;
+        color: var(--accent-color);
+        text-decoration: none;
+        transition: text-decoration 0.3s;
+      }
+      .post-id-link:hover {
+        text-decoration: underline;
+      }
+    </style>
+</head>
+<body>
+
+    <!-- Bildirim Alanı (Toast) -->
+    <div id="toast-container"></div>
+
+    <!-- Giriş Ekranı -->
+    <div id="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <h2>Admin Panel</h2>
+                <p>Yönetici girişi yapınız</p>
+            </div>
+            <form id="login-form">
+                <div class="form-group">
+                    <label>E-posta</label>
+                    <input type="email" id="login-email" placeholder="ornek@site.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Şifre</label>
+                    <input type="password" id="login-password" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">
+                    <span class="btn-text">Giriş Yap</span>
+                    <span class="loader"></span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Paneli -->
+    <div id="admin-panel" style="display: none;">
+        
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h3>Lianchez<span class="dot">.</span></h3>
+                <button id="close-sidebar-mobile" class="close-sidebar-btn-mobile">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            
+            <nav class="sidebar-menu">
+                <button class="menu-item active" data-target="overview-section">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                    <span>Genel Bakış</span>
+                </button>
+                <button class="menu-item" data-target="portfolio-section">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                    <span>Portfolyo</span>
+                </button>
+                <button class="menu-item" data-target="announcements-section">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8v8h5l5 5v-18l-5 5h-5zm14-1.5c1.3 1.3 2 3 2 5s-.7 3.7-2 5m3.5-12c2.3 2.3 3.5 5.3 3.5 8.5s-1.2 6.2-3.5 8.5"></path></svg>
+                    <span>Duyurular</span>
+                </button>
+                <button class="menu-item" data-target="blog-section">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                    <span>Blog Yönetimi</span>
+                </button>
+                <button class="menu-item" data-target="messages-section">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                    <span>Mesajlar</span>
+                    <span class="badge" id="msg-badge" style="display:none">0</span>
+                </button>
+                <button class="menu-item" data-target="wheel-leads-section">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
+                    <span>Çarkıfelek Leadleri</span>
+                </button>
+                <button class="menu-item" data-target="comments-section">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                    <span>Yorum Onayı</span>
+                    <span class="badge" id="comment-badge" style="display:none">0</span>
+                </button>
+                <button class="menu-item" data-target="logs-section">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    <span>Sistem Kayıtları</span>
+                </button>
+                <button class="menu-item" data-target="ads-section">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>
+                    <span>Reklam Yönetimi</span>
+                </button>
+                <button class="menu-item" data-target="words-section">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20h-5.5"></path><path d="M10 10h6"></path><path d="M10 14h6"></path><path d="M10 18h3"></path></svg>
+                    <span>Kelime Yönetimi</span>
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button id="logout-btn" class="menu-item logout">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                    <span>Çıkış Yap</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Ana İçerik -->
+        <main class="main-content">
+            <header class="top-bar">
+                <button class="hamburger-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                </button>
+                <h2 id="page-title">Genel Bakış</h2>
+                <div class="user-info">
+                    <span class="status-dot"></span>
+                    <span>Admin</span>
+                </div>
+            </header>
+
+            <div class="content-wrapper">
+                
+                <!-- BÖLÜM: Genel Bakış -->
+                <section id="overview-section" class="section active">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon project-bg">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Toplam Proje</h3>
+                                <p id="total-projects-stat">...</p>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon message-bg">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Gelen Mesajlar</h3>
+                                <p id="total-messages-stat">...</p>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon announcement-bg">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8v8h5l5 5v-18l-5 5h-5zm14-1.5c1.3 1.3 2 3 2 5s-.7 3.7-2 5m3.5-12c2.3 2.3 3.5 5.3 3.5 8.5s-1.2 6.2-3.5 8.5"></path></svg>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Aktif Duyurular</h3>
+                                <p id="total-announcements-stat">...</p>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon blog-bg">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Toplam Blog Yazısı</h3>
+                                <p id="total-blogs-stat">...</p>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon comment-bg">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path><line x1="9" y1="10" x2="15" y2="10"></line><line x1="12" y1="7" x2="12" y2="13"></line></svg>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Onay Bekleyen Yorum</h3>
+                                <p id="pending-comments-stat">...</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon project-bg">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3 6 10 6 10-6 10-6"/><path d="M22 2v10h-10"/></svg>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Toplam Kelime Sayısı</h3>
+                                <p id="total-words-stat">...</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+
+                <!-- BÖLÜM: Portfolyo -->
+                <section id="portfolio-section" class="section">
+                    <div class="section-header">
+                        <p class="section-desc">Web sitesinde görünen projeleri yönetin.</p>
+                        <button id="show-add-project-modal-btn" class="btn btn-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                            Yeni Proje Ekle
+                        </button>
+                    </div>
+                    
+                    <div id="projects-list" class="projects-grid">
+                        <!-- JS ile doldurulacak -->
+                    </div>
+                </section>
+
+                <section id="blog-section" class="section">
+                    <div class="section-header">
+                        <div style="display:flex; flex-direction:column;">
+                            <p class="section-desc">Blog yazılarını yönetin, düzenleyin veya yeni ekleyin.</p>
+                        </div>
+                        <button id="toggle-blog-view-btn" class="btn btn-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                            Yeni Yazı Ekle
+                        </button>
+                    </div>
+
+                    <div id="blog-list-view">
+                        <div id="blog-posts-list" class="projects-grid">
+                            </div>
+                    </div>
+
+                    <div id="blog-form-view" style="display: none; background: var(--bg-card); padding: 25px; border-radius: 12px; border: 1px solid var(--border-color);">
+                        <div class="ai-generator-box" style="background: rgba(30, 30, 35, 0.6); border: 1px solid var(--accent-color); padding: 20px; border-radius: 12px; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(253, 6, 6, 0.1);">
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fd0606" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10H12V2z"></path><path d="M12 2a10 10 0 0 1 10 10"></path><path d="M2.05 10.99A10 10 0 0 1 12 2"></path></svg>
+                                <h4 style="margin: 0; color: white;">AI Hızlı İçerik Oluşturucu (Grok 4.1 Fast)</h4>
+                            </div>
+                            <p style="font-size: 0.9rem; color: #aaa; margin-bottom: 15px;">Kaynak haberin metnini veya özetini aşağıya yapıştırın. Yapay zeka tüm alanları otomatik dolduracaktır.</p>
+                            
+                            <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                                <textarea id="ai-source-text" rows="3" placeholder="Örn: Apple yeni iPhone 16'yı tanıttı, özellikleri şunlar..." style="flex: 1; min-width: 250px; padding: 12px; background: #111; border: 1px solid #444; color: white; border-radius: 8px; font-family: 'Inter', sans-serif;"></textarea>
+                                
+                                <button type="button" id="generate-ai-btn" class="btn btn-primary" style="align-self: flex-start; height: auto; padding: 15px 25px;">
+                                    <span class="btn-text">🚀 Otomatik Oluştur</span>
+                                    <span class="loader"></span>
+                                </button>
+                            </div>
+                            <small style="display: block; color: #666; margin-top: 5px;">API: Grok 4.1 Fast | Kalan Kotanızı OpenRouter'dan kontrol edebilirsiniz.</small>
+                        </div>
+                        <h3 id="blog-form-title" style="margin-bottom: 20px; color: var(--text-main);">Yeni Yazı Oluştur</h3>
+                        
+                        <form id="blog-form">
+                            <input type="hidden" id="blog-id"> <div class="form-group">
+                                <label>Konu Başlığı</label>
+                                <input type="text" id="post-title" placeholder="Örn: Mobil Oyun Nasıl Yapılır?" required>
+                            </div>
+                            
+                            <div class="form-row" style="display: flex; gap: 20px;">
+                                <div class="form-group" style="flex: 1;">
+                                    <label>Kategori</label>
+                                    <input type="text" id="post-category" placeholder="Örn: Teknoloji" required>
+                                </div>
+                                <div class="form-group" style="flex: 1;">
+                                    <label>Kapak Görseli URL</label>
+                                    <input type="text" id="post-image" placeholder="https://..." required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>SEO Açıklaması (Meta Description)</label>
+                                <textarea id="post-meta-desc" rows="2" placeholder="Google arama sonuçlarında görünecek kısa açıklama (Max 160 karakter)..." maxlength="160" style="width: 100%; padding: 12px; background: var(--bg-body); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-main);"></textarea>
+                                <small style="color: #666;">Bu alan boş bırakılırsa yazının özetinden otomatik alınır.</small>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Anahtar Kelimeler (Meta Keywords)</label>
+                                <input type="text" id="post-meta-keywords" placeholder="Örn: mobil oyun, unity dersleri, yazılım" style="width: 100%; padding: 12px; background: var(--bg-body); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-main);">
+                            </div>
+
+                            <div class="form-group">
+                                <label>İçerik</label>
+                                <small style="display:block; margin-bottom:5px; color:#666;">Editördeki resim butonuna tıklayarak resim URL'si ekleyebilirsiniz.</small>
+                                <div id="editor-wrapper" style="height: 400px; background: var(--bg-body);"></div>
+                            </div>
+
+                            <div style="display:flex; gap:10px; margin-top: 20px;">
+                                <button type="submit" class="btn btn-primary">
+                                    <span class="btn-text">Kaydet ve Yayınla</span>
+                                    <span class="loader"></span>
+                                </button>
+                                <button type="button" id="cancel-blog-btn" class="btn btn-secondary">İptal</button>
+                            </div>
+                        </form>
+                    </div>
+                </section>
+
+                <!-- BÖLÜM: Mesajlar -->
+                <section id="messages-section" class="section">
+                    <div class="section-header">
+                        <p class="section-desc">İletişim formundan gelen talepler.</p>
+                    </div>
+                    <div class="messages-container">
+                        <div id="messages-list" class="messages-list">
+                            <!-- JS ile doldurulacak -->
+                        </div>
+                    </div>
+                </section>
+
+                <section id="announcements-section" class="section">
+                    <div class="section-header">
+                        <p class="section-desc">Web sitesindeki duyuru bandını yönetin.</p>
+                    </div>
+
+                    <div style="background: var(--bg-card); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 20px;">
+                        <form id="add-announcement-form">
+                            <div class="form-group">
+                                <label>Duyuru Başlığı</label>
+                                <input type="text" id="announcement-title" placeholder="Örn: Yeni v1.2 Güncellemesi" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Kısa Açıklama</label>
+                                <textarea id="announcement-desc" rows="3" placeholder="Güncelleme detayları..."></textarea>
+                            </div>
+                            <div class="form-row" style="display: flex; gap: 20px;">
+                                <div class="form-group" style="flex: 1;">
+                                    <label>Arka Plan Görsel URL</label>
+                                    <input type="text" id="announcement-image" placeholder="https://...">
+                                </div>
+                                <div class="form-group" style="flex: 1;">
+                                    <label>Buton Linki</label>
+                                    <input type="text" id="announcement-link" placeholder="https://.../indir">
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Ekle</button>
+                        </form>
+                    </div>
+                    
+                    <div id="announcements-list" class="messages-container">
+                        </div>
+                </section>
+
+                <section id="comments-section" class="section">
+                    <div class="section-header">
+                        <p class="section-desc">Onay bekleyen blog yorumlarını inceleyin ve yayınlayın.</p>
+                    </div>
+                    
+                    <div class="messages-container">
+                        <div id="pending-comments-list" class="messages-list">
+                            <p style="padding: 20px; color: #888;">Yükleniyor...</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="wheel-leads-section" class="section">
+                    <div class="section-header">
+                        <p class="section-desc">Çarkıfelek çevirerek e-posta bırakan potansiyel müşteriler.</p>
+                        <button id="export-leads-btn" class="btn btn-secondary" style="font-size: 0.8rem;">
+                            Listeyi Yazdır (Konsol)
+                        </button>
+                    </div>
+                    
+                    <div class="messages-container">
+                        <div class="log-header-row" style="display: grid; grid-template-columns: 2fr 1.5fr 1fr 0.5fr; padding: 15px; border-bottom: 1px solid var(--border-color); color: var(--text-muted); font-weight: bold; font-size: 0.9rem;">
+                            <div>E-posta Adresi</div>
+                            <div>Kazandığı Ödül</div>
+                            <div>Tarih</div>
+                            <div>İşlem</div>
+                        </div>
+                        <div id="wheel-leads-list">
+                            <p style="padding: 20px; color: #888;">Leadler yükleniyor...</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="ads-section" class="section">
+                    <div class="section-header">
+                        <p class="section-desc">Blog sayfalarında görünecek reklam alanlarını (728x90) yönetin.</p>
+                    </div>
+
+                    <div style="background: var(--bg-card); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 20px;">
+                        <h4 style="margin-bottom: 15px; color: var(--text-main);">Yeni Reklam Ekle</h4>
+                        <form id="add-ad-form">
+                            <div class="form-group">
+                                <label>Reklam Başlığı (Sadece panelde görünür)</label>
+                                <input type="text" id="ad-title" placeholder="Örn: Google Adsense Alternatifi" required>
+                            </div>
+                            <div class="form-row" style="display: flex; gap: 20px;">
+                                <div class="form-group" style="flex: 1;">
+                                    <label>Masaüstü Görsel (728x90)</label>
+                                    <input type="text" id="ad-image-desktop" placeholder="https://..." required>
+                                </div>
+                                <div class="form-group" style="flex: 1;">
+                                    <label>Mobil Görsel (300x250 veya 320x100)</label>
+                                    <input type="text" id="ad-image-mobile" placeholder="https://..." required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Yönlendirilecek Link</label>
+                                <input type="text" id="ad-link" placeholder="https://..." required>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary">
+                                <span class="btn-text">Reklamı Ekle</span>
+                                <span class="loader"></span>
+                            </button>
+                        </form>
+                    </div>
+
+                    <h4 style="margin-bottom: 15px; color: var(--text-muted);">Aktif Reklamlar</h4>
+                    <div id="ads-list" class="projects-grid">
+                        </div>
+                </section>
+
+                <section id="logs-section" class="section">
+                    <div class="section-header">
+                        <p class="section-desc">Yöneticiler tarafından yapılan tüm işlemlerin kaydı.</p>
+                        <button id="refresh-logs-btn" class="btn btn-secondary" style="padding: 5px 10px; font-size: 0.8rem;">
+                            Yenile
+                        </button>
+                    </div>
+                    
+                    <div class="messages-container">
+                        <div class="log-header-row" style="display: grid; grid-template-columns: 1fr 2fr 1.5fr 1fr; padding: 15px; border-bottom: 1px solid var(--border-color); color: var(--text-muted); font-weight: bold; font-size: 0.9rem;">
+                            <div>İşlem</div>
+                            <div>Detay / ID</div>
+                            <div>Kullanıcı</div>
+                            <div>Tarih</div>
+                        </div>
+                        <div id="logs-list">
+                            <p style="padding: 20px; color: #888;">Kayıtlar yükleniyor...</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="words-section" class="section">
+                    <div class="section-header">
+                        <p class="section-desc">English Master uygulamasındaki kelimeleri yönetin.</p>
+                        <button id="show-add-word-modal-btn" class="btn btn-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                            Yeni Kelime Ekle
+                        </button>
+                    </div>
+                    
+                    <div id="words-list" class="messages-container">
+                        <p style="padding: 20px; color: #888;">Kelimeler yükleniyor...</p>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal: Proje Ekle -->
+    <div id="add-project-modal" class="modal-backdrop">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Yeni Proje Ekle</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="add-project-form">
+                    <div class="form-group">
+                        <label>Proje Başlığı</label>
+                        <input type="text" id="project-title" placeholder="Örn: E-Ticaret Sitesi" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Kısa Açıklama</label>
+                        <textarea id="project-desc" rows="3" placeholder="Projenin amacı ve kullanılan teknolojiler..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Görsel URL</label>
+                        <input type="text" id="project-image-url" placeholder="https://..." required>
+                        <small>Resim bağlantısını buraya yapıştırın.</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Proje Linki</label>
+                        <input type="text" id="project-link" placeholder="https://..." required>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-secondary close-modal-btn">İptal</button>
+                        <button type="submit" class="btn btn-primary">Kaydet</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="edit-ad-modal" class="modal-backdrop">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Reklamı Düzenle</h3>
+                <button class="close-modal-edit-ad">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="edit-ad-form">
+                    <input type="hidden" id="edit-ad-id">
+                    <div class="form-group">
+                        <label>Reklam Başlığı</label>
+                        <input type="text" id="edit-ad-title" required>
+                    </div>
+                    <div class="form-row" style="display: flex; gap: 20px;">
+                        <div class="form-group" style="flex: 1;">
+                            <label>Masaüstü Görsel</label>
+                            <input type="text" id="edit-ad-desktop" required>
+                        </div>
+                        <div class="form-group" style="flex: 1;">
+                            <label>Mobil Görsel</label>
+                            <input type="text" id="edit-ad-mobile" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Link</label>
+                        <input type="text" id="edit-ad-link" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Durum</label>
+                        <select id="edit-ad-status" style="width: 100%; padding: 12px; background: var(--bg-body); border: 1px solid var(--border-color); color: var(--text-main); border-radius: 8px;">
+                            <option value="true">Aktif (Yayında)</option>
+                            <option value="false">Pasif (Gizli)</option>
+                        </select>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-secondary close-modal-edit-ad-btn">İptal</button>
+                        <button type="submit" class="btn btn-primary">Güncelle</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="add-word-modal" class="modal-backdrop">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="word-modal-title">Yeni Kelime Ekle</h3>
+                <button class="close-modal-word">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="add-word-form">
+                    <input type="hidden" id="word-id-input">
+                    <div class="form-group">
+                        <label>Kelime (İngilizce)</label>
+                        <input type="text" id="word-english" placeholder="Örn: acquire" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Çeviri (Türkçe)</label>
+                        <input type="text" id="word-turkish" placeholder="Örn: edinmek" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Örnek Cümle (İngilizce)</label>
+                        <input type="text" id="word-example-english" placeholder="Örn: He tried to acquire new skills." required>
+                    </div>
+                    <div class="form-group">
+                        <label>Örnek Cümle Çevirisi (Türkçe)</label>
+                        <input type="text" id="word-example-turkish" placeholder="Örn: Yeni beceriler edinmeye çalıştı." required>
+                    </div>
+                    <div class="form-group">
+                        <label>Seviye</label>
+                        <select id="word-level" required style="width: 100%; padding: 12px; background: var(--bg-body); border: 1px solid var(--border-color); color: var(--text-main); border-radius: 8px;">
+                            <option value="A1">A1</option>
+                            <option value="A2">A2</option>
+                            <option value="B1">B1</option>
+                            <option value="B2">B2</option>
+                            <option value="C1">C1</option>
+                        </select>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-secondary close-modal-word-btn">İptal</button>
+                        <button type="submit" class="btn btn-primary">Kaydet</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <script type="module" src="firebase-config.js"></script>
+    <script type="module" src="admin.js"></script>
+</body>
+</html>

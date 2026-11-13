@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Salon Premium | Yönetim Paneli</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- GLOBAL PREMIUM STİLLER --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            background-color: #0b0f19;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        body {
+            padding: 24px 16px;
+        }
+
+        .admin-container {
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
+            display: none; /* Giriş yapılana kadar gizli */
+        }
+
+        /* --- LOGIN GATE (GİRİŞ EKRANI) --- */
+        .login-gate {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #0b0f19;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            padding: 16px;
+        }
+
+        .login-box {
+            width: 100%;
+            max-width: 400px;
+            background-color: #151c2c;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 30px 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        .login-box h2 {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+
+        .login-box h2 span { color: #00ffa3; }
+
+        .input-group {
+            margin-bottom: 18px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 0.85rem;
+            color: #94a3b8;
+            margin-bottom: 6px;
+        }
+
+        .form-control {
+            width: 100%;
+            height: 50px;
+            background-color: #0b0f19;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 0 16px;
+            color: #ffffff;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            border: none;
+            height: 50px;
+            width: 100%;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #00ffa3 0%, #00b8ff 100%);
+            color: #0b0f19;
+            box-shadow: 0 4px 15px rgba(0, 255, 163, 0.2);
+        }
+
+        /* --- PANEL ÜST BAR --- */
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .admin-header h1 span { color: #00ffa3; }
+
+        .btn-logout {
+            width: auto;
+            padding: 0 16px;
+            height: 38px;
+            background-color: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            font-size: 0.8rem;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        /* --- OVERVIEW (İSTATİSTİK KARTLARI) --- */
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background-color: #151c2c;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 20px 16px;
+        }
+
+        .stat-card p {
+            font-size: 0.8rem;
+            color: #94a3b8;
+        }
+
+        .stat-card .number {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-top: 4px;
+        }
+
+        .stat-card .number.accent { color: #00ffa3; }
+
+        /* --- 3 SEKMELİ MODERN GEZİNTİ BARBARI --- */
+        .admin-tabs-nav {
+            display: flex;
+            background-color: #151c2c;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 6px;
+            border-radius: 14px;
+            margin-bottom: 30px;
+            gap: 6px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: #94a3b8;
+            font-size: 0.9rem;
+            font-weight: 600;
+            padding: 12px 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .tab-btn.active {
+            background-color: #0b0f19;
+            color: #00ffa3;
+            box-shadow: 0 4px 15px rgba(0, 255, 163, 0.05);
+        }
+
+        .tab-content {
+            display: none;
+            animation: tabFadeIn 0.3s ease forwards;
+        }
+
+        .tab-content.active { display: block; }
+
+        @keyframes tabFadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- İŞLETME AJANDASI --- */
+        .agenda-section {
+            background-color: #151c2c;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 24px;
+        }
+
+        .agenda-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 14px;
+        }
+
+        .agenda-date-picker {
+            max-width: 200px;
+            height: 42px;
+            font-size: 0.9rem;
+        }
+
+        .agenda-split-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .agenda-column {
+            flex: 1;
+            background-color: #0b0f19;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 14px;
+            padding: 16px;
+        }
+
+        .agenda-column-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #00ffa3;
+            margin-bottom: 14px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .agenda-column-header img {
+            width: 30px; height: 30px; border-radius: 50%; object-fit: cover;
+        }
+
+        .agenda-timeline { display: flex; flex-direction: column; gap: 8px; }
+
+        .agenda-slot-row {
+            display: flex; align-items: center; gap: 12px; padding: 8px;
+            border-radius: 8px; background-color: rgba(255, 255, 255, 0.01);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .agenda-slot-time { font-size: 0.85rem; font-weight: 700; color: #94a3b8; min-width: 45px; }
+        .agenda-slot-content { flex: 1; font-size: 0.85rem; }
+        .agenda-slot-content.vacant { color: rgba(148, 163, 184, 0.3); font-style: italic; }
+        .agenda-slot-content.booked {
+            color: #ffffff; font-weight: 500; background-color: rgba(0, 255, 163, 0.05);
+            border-left: 3px solid #00ffa3; padding: 4px 10px; border-radius: 4px;
+        }
+        .agenda-slot-content.pending {
+            color: #f59e0b; font-weight: 500; background-color: rgba(245, 158, 11, 0.08);
+            border-left: 3px solid #f59e0b; padding: 4px 10px; border-radius: 4px;
+        }
+        .agenda-slot-content .service-sub { font-size: 0.75rem; color: #94a3b8; display: block; }
+
+        /* --- HEADER AKSİYON BUTONLARI --- */
+        .btn-header-action {
+            width: auto;
+            padding: 0 14px;
+            height: 38px;
+            font-size: 0.82rem;
+            border-radius: 8px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            border: none;
+            text-transform: none;
+            letter-spacing: normal;
+        }
+        .btn-sound {
+            background-color: rgba(0, 184, 255, 0.1);
+            color: #00b8ff;
+            border: 1px solid rgba(0, 184, 255, 0.25);
+        }
+        .btn-sound.sound-off {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border-color: rgba(239, 68, 68, 0.25);
+        }
+        .btn-add-appt {
+            background: linear-gradient(135deg, #00ffa3 0%, #00b8ff 100%);
+            color: #0b0f19;
+            box-shadow: 0 2px 10px rgba(0, 255, 163, 0.2);
+        }
+        .btn-header-pass {
+            background-color: rgba(255, 255, 255, 0.04);
+            color: #94a3b8;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        /* --- TALEP FİLTRELEME & ARAMA --- */
+        .filter-pills-row {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        .filter-pill {
+            background-color: #151c2c;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #94a3b8;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .filter-pill:hover { border-color: rgba(0, 255, 163, 0.3); color: #ffffff; }
+        .filter-pill.active {
+            background-color: rgba(0, 255, 163, 0.12);
+            border-color: #00ffa3;
+            color: #00ffa3;
+        }
+        .filter-pill.pill-pending.active {
+            background-color: rgba(245, 158, 11, 0.12);
+            border-color: #f59e0b;
+            color: #f59e0b;
+        }
+        .filter-pill.pill-approved.active {
+            background-color: rgba(0, 255, 163, 0.12);
+            border-color: #00ffa3;
+            color: #00ffa3;
+        }
+        .filter-pill.pill-rejected.active {
+            background-color: rgba(239, 68, 68, 0.12);
+            border-color: #ef4444;
+            color: #ef4444;
+        }
+
+        /* --- KARA LİSTE STİLLERİ --- */
+        .blacklist-list { display: flex; flex-direction: column; gap: 12px; }
+        .blacklist-card {
+            background-color: #151c2c;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 14px;
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .blacklist-info h4 { font-size: 0.95rem; color: #ff5c5c; margin-bottom: 2px; font-weight: 600; }
+        .blacklist-info p { font-size: 0.8rem; color: #94a3b8; }
+        .btn-unban {
+            background-color: rgba(0, 255, 163, 0.1);
+            color: #00ffa3;
+            border: 1px solid rgba(0, 255, 163, 0.25);
+            padding: 6px 14px;
+            height: 36px;
+            width: auto;
+            font-size: 0.82rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        /* --- RAPORLAMA VE PERFORMANS STİLLERİ --- */
+        .report-card-wrapper {
+            background-color: #151c2c;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .report-block h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 14px; color: #00ffa3; }
+
+        .report-row { margin-bottom: 14px; }
+        .report-info-flex { display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 6px; color: #e2e8f0; }
+        
+        .progress-bar-bg { width: 100%; height: 10px; background-color: #0b0f19; border-radius: 50px; overflow: hidden; }
+        .progress-bar-fill { height: 100%; background: linear-gradient(90deg, #00ffa3, #00b8ff); border-radius: 50px; width: 0%; transition: width 0.5s ease; }
+
+        /* --- RANDEVU KARTLARI VE BAN BUTONU --- */
+        .section-title { font-size: 1.2rem; font-weight: 600; margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
+        .section-title span { background-color: rgba(0, 255, 163, 0.1); color: #00ffa3; padding: 2px 10px; border-radius: 20px; font-size: 0.8rem; }
+        .appointments-list { display: flex; flex-direction: column; gap: 16px; }
+        .appointment-card { background-color: #151c2c; border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 14px; position: relative; }
+
+        .status-badge { position: absolute; top: 20px; right: 20px; font-size: 0.75rem; font-weight: 600; padding: 4px 10px; border-radius: 6px; text-transform: uppercase; }
+        .status-pending { background-color: rgba(245, 158, 11, 0.1); color: #f59e0b; }
+        .status-approved { background-color: rgba(0, 255, 163, 0.1); color: #00ffa3; }
+        .status-rejected { background-color: rgba(239, 68, 68, 0.1); color: #ef4444; }
+
+        .client-info h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 2px; max-width: 75%; }
+        .client-info p { font-size: 0.85rem; color: #94a3b8; }
+
+        .details-row { display: flex; align-items: center; gap: 12px; background-color: #0b0f19; padding: 10px 14px; border-radius: 10px; font-size: 0.9rem; }
+        .details-row img { width: 35px; height: 35px; border-radius: 50%; object-fit: cover; }
+
+        .services-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+        .tag { background-color: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.06); padding: 4px 10px; border-radius: 8px; font-size: 0.8rem; color: #e2e8f0; }
+        .note-box { font-size: 0.85rem; color: #94a3b8; background-color: rgba(255,255,255,0.01); border-left: 2px solid #00ffa3; padding-left: 10px; font-style: italic; }
+
+        .card-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; }
+        .btn-action { height: 40px; font-size: 0.85rem; border-radius: 8px; text-transform: none; }
+        .btn-approve { background-color: #00ffa3; color: #0b0f19; font-weight: 700; }
+        .btn-reject { background-color: rgba(255,255,255,0.03); color: #ffffff; border: 1px solid rgba(255,255,255,0.08); }
+        
+        .btn-ban { background-color: rgba(239, 68, 68, 0.15); color: #ff5c5c; border: 1px solid rgba(239, 68, 68, 0.25); }
+        .btn-delete { background-color: rgba(255, 255, 255, 0.02); color: #94a3b8; border: 1px solid rgba(255, 255, 255, 0.05); margin-left: auto; width: auto; padding: 0 14px; }
+
+        /* --- MODAL --- */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(7, 10, 19, 0.8); backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: center; z-index: 10000; padding: 16px; opacity: 0; pointer-events: none; transition: all 0.3s ease; }
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
+        .modal-box { width: 100%; max-width: 500px; background-color: #151c2c; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px; padding: 24px; box-shadow: 0 15px 40px rgba(0,0,0,0.4); }
+        .modal-box h2 { font-size: 1.3rem; font-weight: 600; margin-bottom: 6px; }
+        .modal-box h2 span { color: #00ffa3; }
+        .modal-summary { background-color: #0b0f19; border: 1px solid rgba(255,255,255,0.04); border-radius: 12px; padding: 14px; font-size: 0.85rem; color: #94a3b8; margin-bottom: 18px; display: flex; flex-direction: column; gap: 4px; }
+        .modal-summary strong { color: #ffffff; }
+        .modal-textarea { width: 100%; height: 110px; background-color: #0b0f19; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 12px; color: #ffffff; font-size: 0.9rem; resize: none; outline: none; margin-bottom: 18px; }
+        .modal-footer-btns { display: flex; gap: 12px; }
+        .btn-whatsapp { background: linear-gradient(135deg, #25D366 0%, #1BD742 100%); color: #ffffff; font-weight: 600; gap: 8px; }
+        .btn-whatsapp.wa-approved { background: linear-gradient(135deg, #25D366 0%, #1BD742 100%); }
+        .btn-whatsapp.wa-rejected { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); }
+        .btn-close-modal { background-color: rgba(255,255,255,0.03); color: #94a3b8; border: 1px solid rgba(255,255,255,0.06); max-width: 110px; }
+
+        @media (min-width: 768px) {
+            body { padding: 40px 24px; }
+            .overview-grid { grid-template-columns: repeat(4, 1fr); gap: 20px; }
+            .stat-card { padding: 24px; }
+            .stat-card .number { font-size: 2rem; }
+            .agenda-split-grid { flex-direction: row; gap: 24px; }
+            .appointment-card { flex-direction: row; align-items: center; justify-content: space-between; padding: 24px; }
+            .card-main-info { flex: 1; display: flex; flex-direction: column; gap: 12px; }
+            .card-actions { flex-direction: column; gap: 8px; margin-top: 0; min-width: 160px; }
+            .btn-delete { margin-left: 0; width: 100%; }
+            .status-badge { position: static; display: inline-block; width: fit-content; }
+            .client-header-flex { display: flex; align-items: center; gap: 14px; }
+            .report-card-wrapper { grid-template-columns: 1fr 1fr; display: grid; gap: 30px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-gate" id="loginGate">
+        <div class="login-box">
+            <h2>Salon <span>Premium</span></h2>
+            <p>Lütfen dükkan yönetim paneli şifrenizi girin.</p>
+            <div class="input-group">
+                <label for="adminPass">Yönetici Şifresi</label>
+                <input type="password" id="adminPass" class="form-control" placeholder="•••••">
+            </div>
+            <button type="button" class="btn btn-primary" onclick="checkAdminLogin()">Sisteme Giriş Yap</button>
+        </div>
+    </div>
+
+    <div class="admin-container" id="adminPanel">
+        
+        <div class="admin-header">
+            <h1>Yönetim <span>Paneli</span></h1>
+            <button type="button" class="btn-logout" onclick="adminLogout()">Güvenli Çıkış</button>
+        </div>
+
+        <div class="overview-grid">
+            <div class="stat-card"><p>Toplam Başvuru</p><div class="number" id="statTotal">0</div></div>
+            <div class="stat-card"><p>Onay Bekleyenler</p><div class="number text-gold" id="statPending" style="color: #f59e0b;">0</div></div>
+            <div class="stat-card"><p>Onaylananlar</p><div class="number accent" id="statApproved">0</div></div>
+            <div class="stat-card"><p>Toplam Kasa (Ciro)</p><div class="number accent" id="statCiro">0 TL</div></div>
+        </div>
+
+        <div class="admin-tabs-nav">
+            <button type="button" class="tab-btn active" onclick="switchTab('requestsTab', this)">🕒 Talepler</button>
+            <button type="button" class="tab-btn" onclick="switchTab('agendaTab', this)">📅 Ajanda</button>
+            <button type="button" class="tab-btn" onclick="switchTab('reportsTab', this)">📊 Raporlar</button>
+        </div>
+
+        <div class="tab-content active" id="requestsTab">
+            <div class="section-title">Gelen Randevu Talepleri <span id="listCount">0</span></div>
+            <div class="appointments-list" id="appointmentsList"></div>
+        </div>
+
+        <div class="tab-content" id="agendaTab">
+            <div class="agenda-section">
+                <div class="agenda-controls">
+                    <h2 style="font-size: 1.2rem; font-weight: 600;">📅 Günlük <span>Koltuk Dağılımı</span></h2>
+                    <input type="date" id="agendaDatePicker" class="form-control agenda-date-picker" onchange="updateAgenda()">
+                </div>
+                <div class="agenda-split-grid">
+                    <div class="agenda-column">
+                        <div class="agenda-column-header"><img src="https://i.imgur.com/Cd6H9lN.png" alt="Ahmet Usta" referrerpolicy="no-referrer"><span>Ahmet Usta Çizelgesi</span></div>
+                        <div class="agenda-timeline" id="timelineAhmet"></div>
+                    </div>
+                    <div class="agenda-column">
+                        <div class="agenda-column-header"><img src="https://i.imgur.com/Wjoy8TK.png" alt="Mehmet Usta" referrerpolicy="no-referrer"><span>Mehmet Usta Çizelgesi</span></div>
+                        <div class="agenda-timeline" id="timelineMehmet"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="reportsTab">
+            <div class="report-card-wrapper">
+                <div class="report-block">
+                    <h3>💈 Usta Ciro Performansı</h3>
+                    <div class="report-row">
+                        <div class="report-info-flex"><span>Ahmet Usta</span><span id="repAhmetCiro">0 TL</span></div>
+                        <div class="progress-bar-bg"><div class="progress-bar-fill" id="barAhmet" style="width: 0%;"></div></div>
+                    </div>
+                    <div class="report-row">
+                        <div class="report-info-flex"><span>Mehmet Usta</span><span id="repMehmetCiro">0 TL</span></div>
+                        <div class="progress-bar-bg"><div class="progress-bar-fill" id="barMehmet" style="width: 0%;"></div></div>
+                    </div>
+                </div>
+                <div class="report-block">
+                    <h3>✂️ Tercih Edilen Hizmetler</h3>
+                    <div id="servicesReportContainer"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="modal-overlay" id="whatsappModal">
+        <div class="modal-box">
+            <h2 id="modalMainTitle">Randevu <span>Başvurusu İşlemi</span></h2>
+            <p style="font-size:0.85rem; color:#94a3b8; margin-bottom:14px;">Müşteriyi bilgilendirmek için hazır şablon mesajı gönderin.</p>
+            <div class="modal-summary" id="modalSummary"></div>
+            <label style="display:block; font-size:0.8rem; color:#94a3b8; margin-bottom:6px; font-weight:500;">Müşteriye Gidecek WhatsApp Mesajı</label>
+            <textarea class="modal-textarea" id="modalMessageText"></textarea>
+            <div class="modal-footer-btns">
+                <button type="button" class="btn btn-close-modal" onclick="closeWhatsappModal()">Kapat</button>
+                <button type="button" class="btn btn-whatsapp" id="btnSendWhatsapp"><svg style="width:20px; height:20px; fill:currentColor;" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.713-1.455L0 24zm6.59-4.846c1.62.962 3.377 1.47 5.356 1.472 5.548 0 10.061-4.512 10.064-10.066.002-2.69-1.044-5.217-2.946-7.119C17.159 1.539 14.636.492 11.95.492 6.405.492 1.892 5.004 1.889 10.56c-.001 1.93.499 3.81 1.448 5.46l-.994 3.63 3.714-.974zm11.005-7.458c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg><span id="btnWhatsappText">WhatsApp İle Gönder ve Tamamla</span></button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getFirestore, collection, onSnapshot, doc, updateDoc, deleteDoc, addDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyC2J84uXSKfBTYR0r6yxhXfSh-qkcxVo34",
+            authDomain: "randevu-141ce.firebaseapp.com",
+            projectId: "randevu-141ce",
+            storageBucket: "randevu-141ce.firebasestorage.app",
+            messagingSenderId: "755795260664",
+            appId: "1:755795260664:web:ff190ba59890d9ac15770d",
+            measurementId: "G-YBBTX7BHHF"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const masterAvatars = {
+            "Ahmet Usta": "https://i.imgur.com/Cd6H9lN.png",
+            "Mehmet Usta": "https://i.imgur.com/Wjoy8TK.png"
+        };
+
+        const baseHours = [
+            "10:00", "10:30", "11:00", "11:30", "12:00", "12:30",
+            "13:00", "13:30", "14:00", "14:30", "15:00", "15:30",
+            "16:00", "16:30", "17:00", "17:30"
+        ];
+
+        let currentActiveModalData = null;
+        let targetStatusAction = "approved";
+        let globalAppointmentsData = [];
+        let isFirstLoad = true;
+
+        const notificationSound = new Audio("a.mp3");
+
+        window.checkAdminLogin = function() {
+            const pass = document.getElementById("adminPass").value;
+            if (pass === "123456") {
+                sessionStorage.setItem("isAdminLoggedIn", "true");
+                notificationSound.play().then(() => {
+                    notificationSound.pause();
+                    notificationSound.currentTime = 0;
+                }).catch(err => console.log("Ses aktivasyon aşaması: ", err));
+                initPanel();
+            } else { alert("Hatalı şifre girdiniz!"); }
+        }
+
+        window.adminLogout = function() {
+            sessionStorage.removeItem("isAdminLoggedIn");
+            window.location.reload();
+        }
+
+        if (sessionStorage.getItem("isAdminLoggedIn") === "true") { initPanel(); }
+
+        function initPanel() {
+            document.getElementById("loginGate").style.display = "none";
+            document.getElementById("adminPanel").style.display = "block";
+            const picker = document.getElementById("agendaDatePicker");
+            picker.value = new Date().toISOString().split('T')[0];
+
+            if ("Notification" in window) {
+                Notification.requestPermission().then(permission => {
+                    if (permission === "granted") {
+                        console.log("Tarayıcı push bildirim izni başarıyla alındı.");
+                    }
+                });
+            }
+
+            listenAppointments();
+        }
+
+        function listenAppointments() {
+            onSnapshot(collection(db, "appointments"), (snapshot) => {
+                const appointments = [];
+                let hasNewPendingAppointment = false;
+                let lastAddedAppointment = null;
+
+                snapshot.docChanges().forEach((change) => {
+                    if (change.type === "added") {
+                        const docData = change.doc.data();
+                        if (docData.status === "pending") {
+                            hasNewPendingAppointment = true;
+                            lastAddedAppointment = docData;
+                        }
+                    }
+                });
+
+                snapshot.forEach((doc) => {
+                    appointments.push({ id: doc.id, ...doc.data() });
+                });
+                appointments.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                globalAppointmentsData = appointments;
+                
+                calculateStats(appointments);
+                renderList(appointments);
+                updateAgenda();
+
+                if (!isFirstLoad && hasNewPendingAppointment && lastAddedAppointment) {
+                    triggerLiveNotification(lastAddedAppointment);
+                }
+                isFirstLoad = false;
+            });
+        }
+
+        function triggerLiveNotification(appData) {
+            notificationSound.play().catch(e => console.log("Arka plan ses çalma engellendi: ", e));
+
+            if ("Notification" in window && Notification.permission === "granted") {
+                const notificationTitle = "Salon Premium: Yeni Randevu!";
+                const notificationOptions = {
+                    body: `Müşteri: ${appData.firstName} ${appData.lastName}\nUsta: ${appData.master} - Saat: ${appData.time}`,
+                    icon: "https://i.imgur.com/Cd6H9lN.png"
+                };
+                new Notification(notificationTitle, notificationOptions);
+            }
+        }
+
+        window.switchTab = function(tabId, buttonElement) {
+            document.querySelectorAll(".tab-content").forEach(content => content.classList.remove("active"));
+            document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
+            document.getElementById(tabId).classList.add("active");
+            buttonElement.classList.add("active");
+        }
+
+        window.updateAgenda = function() {
+            const selectedDate = document.getElementById("agendaDatePicker").value;
+            const timelineAhmet = document.getElementById("timelineAhmet");
+            const timelineMehmet = document.getElementById("timelineMehmet");
+
+            timelineAhmet.innerHTML = ""; timelineMehmet.innerHTML = "";
+            const dayApprovedData = globalAppointmentsData.filter(a => a.date === selectedDate && a.status === "approved");
+
+            baseHours.forEach(hour => {
+                const ahmetMatch = dayApprovedData.find(a => a.time === hour && a.master === "Ahmet Usta");
+                const rowAhmet = document.createElement("div");
+                rowAhmet.className = "agenda-slot-row";
+                let contentAhmet = `<span class="agenda-slot-content vacant">Müsait</span>`;
+                if(ahmetMatch) {
+                    const servicesList = Array.isArray(ahmetMatch.services) ? ahmetMatch.services.map(s => s.name).join(", ") : "";
+                    contentAhmet = `<span class="agenda-slot-content booked">${ahmetMatch.firstName} ${ahmetMatch.lastName} <span class="service-sub">✂️ ${servicesList}</span></span>`;
+                }
+                rowAhmet.innerHTML = `<span class="agenda-slot-time">${hour}</span> ${contentAhmet}`;
+                timelineAhmet.appendChild(rowAhmet);
+
+                const mehmetMatch = dayApprovedData.find(a => a.time === hour && a.master === "Mehmet Usta");
+                const rowMehmet = document.createElement("div");
+                rowMehmet.className = "agenda-slot-row";
+                let contentMehmet = `<span class="agenda-slot-content vacant">Müsait</span>`;
+                if(mehmetMatch) {
+                    const servicesList = Array.isArray(mehmetMatch.services) ? mehmetMatch.services.map(s => s.name).join(", ") : "";
+                    contentMehmet = `<span class="agenda-slot-content booked">${mehmetMatch.firstName} ${mehmetMatch.lastName} <span class="service-sub">✂️ ${servicesList}</span></span>`;
+                }
+                rowMehmet.innerHTML = `<span class="agenda-slot-time">${hour}</span> ${contentMehmet}`;
+                timelineMehmet.appendChild(rowMehmet);
+            });
+        }
+
+        function calculateStats(data) {
+            let total = data.length;
+            let pending = data.filter(a => a.status === "pending").length;
+            let approved = data.filter(a => a.status === "approved").length;
+            
+            let totalCiro = 0;
+            let ahmetCiro = 0;
+            let mehmetCiro = 0;
+            const servicesCount = {};
+
+            data.filter(a => a.status === "approved").forEach(a => {
+                if(Array.isArray(a.services)) {
+                    a.services.forEach(s => {
+                        totalCiro += (s.price || 0);
+                        if(a.master === "Ahmet Usta") ahmetCiro += (s.price || 0);
+                        if(a.master === "Mehmet Usta") mehmetCiro += (s.price || 0);
+
+                        servicesCount[s.name] = (servicesCount[s.name] || 0) + 1;
+                    });
+                }
+            });
+
+            document.getElementById("statTotal").textContent = total;
+            document.getElementById("statPending").textContent = pending;
+            document.getElementById("statApproved").textContent = approved;
+            document.getElementById("statCiro").textContent = totalCiro + " TL";
+            document.getElementById("listCount").textContent = total;
+
+            document.getElementById("repAhmetCiro").textContent = ahmetCiro + " TL";
+            document.getElementById("repMehmetCiro").textContent = mehmetCiro + " TL";
+            
+            const maxUstaCiro = Math.max(ahmetCiro, mehmetCiro, 1);
+            document.getElementById("barAhmet").style.width = (ahmetCiro / maxUstaCiro * 100) + "%";
+            document.getElementById("barMehmet").style.width = (mehmetCiro / maxUstaCiro * 100) + "%";
+
+            const sContainer = document.getElementById("servicesReportContainer");
+            sContainer.innerHTML = "";
+            const totalHizmetAdet = Object.values(servicesCount).reduce((a, b) => a + b, 0) || 1;
+
+            Object.keys(servicesCount).forEach(srvName => {
+                const adet = servicesCount[srvName];
+                const perc = (adet / totalHizmetAdet * 100).toFixed(0);
+                const row = document.createElement("div");
+                row.className = "report-row";
+                row.innerHTML = `
+                    <div class="report-info-flex"><span>${srvName}</span><span>${adet} İşlem (%${perc})</span></div>
+                    <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: ${perc}%;"></div></div>
+                `;
+                sContainer.appendChild(row);
+            });
+        }
+
+        function renderList(data) {
+            const container = document.getElementById("appointmentsList");
+            container.innerHTML = "";
+
+            if(data.length === 0) {
+                container.innerHTML = `<p style="color:#94a3b8; text-align:center; padding: 40px 0;">Henüz hiç randevu başvurusu yok.</p>`;
+                return;
+            }
+
+            data.forEach(item => {
+                const card = document.createElement("div");
+                card.className = "appointment-card";
+
+                let servicesHtml = "";
+                if(Array.isArray(item.services)) {
+                    item.services.forEach(s => { servicesHtml += `<span class="tag">${s.name} (${s.price} TL)</span>`; });
+                }
+
+                const avatar = masterAvatars[item.master] || "";
+                const noteHtml = item.note ? `<div class="note-box">" ${item.note} "</div>` : "";
+
+                let actionButtons = "";
+                const itemString = JSON.stringify(item).replace(/"/g, '&quot;');
+
+                if(item.status === "pending") {
+                    actionButtons = `
+                        <button class="btn btn-action btn-approve" onclick="openWhatsappModal(${itemString}, 'approved')">Onayla</button>
+                        <button class="btn btn-action btn-reject" onclick="openWhatsappModal(${itemString}, 'rejected')">Reddet</button>
+                    `;
+                } else if(item.status === "approved") {
+                    actionButtons = `
+                        <button class="btn btn-action btn-reject" onclick="openWhatsappModal(${itemString}, 'rejected')">İptal Et</button>
+                    `;
+                } else {
+                    actionButtons = `
+                        <button class="btn btn-action btn-approve" onclick="openWhatsappModal(${itemString}, 'approved')">Geri Onayla</button>
+                    `;
+                }
+
+                card.innerHTML = `
+                    <div class="card-main-info">
+                        <div class="client-header-flex">
+                            <span class="status-badge status-${item.status}">${translateStatus(item.status)}</span>
+                            <div class="client-info">
+                                <h3>${item.firstName} ${item.lastName}</h3>
+                                <p>📞 ${item.phone}</p>
+                            </div>
+                        </div>
+                        <div class="details-row">
+                            <img src="${avatar}" alt="${item.master}" referrerpolicy="no-referrer">
+                            <div>
+                                <p style="font-weight:600; color:#00ffa3;">${item.master}</p>
+                                <p style="font-size:0.8rem; color:#94a3b8;">📅 ${formatDate(item.date)} - 🕒 ${item.time}</p>
+                            </div>
+                        </div>
+                        <div class="services-tags">
+                            ${servicesHtml}
+                        </div>
+                        ${noteHtml}
+                    </div>
+                    <div class="card-actions">
+                        ${actionButtons}
+                        <button class="btn btn-action btn-ban" onclick="banCustomer('${item.phone}', '${item.userIp || ''}')">Engelle</button>
+                        <button class="btn btn-action btn-delete" onclick="deleteAppointment('${item.id}')">Sil</button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // CRITICAL SAFARI FIX: Engelleme ve geçmiş temizleme motoru tek hatlı senkronize yapıya kavuşturuldu!
+        window.banCustomer = async function(phoneNum, ipAddr) {
+            // iOS Safari tek bir confirm pop-up penceresine izin verir, ikincisini bloklar.
+            if(confirm("Bu kullanıcıyı engellemek istediğinize emin misiniz? Numarası ve IP adresi kara listeye alınacak, veritabanındaki tüm randevu talepleri kalıcı olarak silinecektir!")) {
+                try {
+                    // 1. ADIM: Kara listeye kaydet (Numara + IP birlikte yazılır)
+                    await addDoc(collection(db, "blacklist"), { 
+                        phone: phoneNum, 
+                        ip: ipAddr || "", 
+                        bannedAt: new Date().toISOString() 
+                    });
+
+                    // 2. ADIM: Randevuları temizlemek için sorgu atıyoruz
+                    const qAppointments = query(collection(db, "appointments"), where("phone", "==", phoneNum));
+                    const querySnapshot = await getDocs(qAppointments);
+                    
+                    // Safari çökmesini engellemek için silme sözlerini paralel hat üzerinde (await beklemeden) çözüyoruz
+                    querySnapshot.forEach((appointmentDoc) => {
+                        deleteDoc(doc(db, "appointments", appointmentDoc.id)).catch(err => {
+                            console.error("Arka plan silme hatası: ", err);
+                        });
+                    });
+
+                    alert("Kullanıcı filtreleriyle birlikte engellendi. Geçmiş randevu temizleme işlemi arka planda başarıyla tamamlandı!");
+                } catch(e) {
+                    console.error("Engelleme hatası: ", e);
+                    alert("İşlem sırasında bir hata oluştu.");
+                }
+            }
+        }
+
+        window.openWhatsappModal = function(itemData, actionType) {
+            currentActiveModalData = itemData;
+            targetStatusAction = actionType;
+            const summaryBox = document.getElementById("modalSummary");
+            const messageArea = document.getElementById("modalMessageText");
+            const modal = document.getElementById("whatsappModal");
+            const mainTitle = document.getElementById("modalMainTitle");
+            const btnText = document.getElementById("btnWhatsappText");
+            const btnSubmit = document.getElementById("btnSendWhatsapp");
+
+            summaryBox.innerHTML = `
+                <div><strong>Müşteri:</strong> ${itemData.firstName} ${itemData.lastName}</div>
+                <div><strong>Telefon:</strong> ${itemData.phone}</div>
+                <div><strong>Zaman:</strong> ${formatDate(itemData.date)} - ${itemData.time}</div>
+                <div><strong>Usta:</strong> ${itemData.master}</div>
+            `;
+
+            let templateMessage = "";
+            if (actionType === "approved") {
+                mainTitle.innerHTML = `Randevu <span>Başvurusu Onaylandı</span>`;
+                btnText.textContent = "WhatsApp İle Gönder ve Onayla";
+                btnSubmit.className = "btn btn-whatsapp wa-approved";
+                templateMessage = `Sayın ${itemData.firstName} ${itemData.lastName}, ${formatDate(itemData.date)} tarihinde saat ${itemData.time} için ${itemData.master} kadromuzdan almış olduğunuz randevu başvurunuz onaylanmıştır. Sıra beklemeden dükkanımızda lüks bakım konforunu yaşayabilirsiniz. Bizi tercih ettiğiniz için teşekkür ederiz.`;
+            } else {
+                btnSubmit.className = "btn btn-whatsapp wa-rejected";
+                if (itemData.status === "approved") {
+                    mainTitle.innerHTML = `Randevu <span>İptal Ediliyor</span>`;
+                    btnText.textContent = "WhatsApp İle Gönder ve İptal Et";
+                    templateMessage = `Sayın ${itemData.firstName} ${itemData.lastName}, ${formatDate(itemData.date)} tarihinde saat ${itemData.time} için planlanan randevunuz dükkan içi beklenmedik bir aksaklık sebebiyle iptal edilmiştir. Yaşanan aksaklık için özür diler, size en kısa sürede yardımcı olabilmek adına sitemiz üzerinden yeni bir randevu oluşturmanızı rica edin.`;
+                } else {
+                    mainTitle.innerHTML = `Randevu <span>Reddediliyor</span>`;
+                    btnText.textContent = "WhatsApp İle Gönder ve Reddet";
+                    templateMessage = `Sayın ${itemData.firstName} ${itemData.lastName}, ${formatDate(itemData.date)} tarihinde saat ${itemData.time} için yapmış olduğunuz randevu başvurunuz, salon içi doluluk veya usta çalışma yoğunluğu sebebiyle maalesef onaylanamamıştır. Size en yakın başka bir zaman dilimine yeni bir ön başvuru yapmanızı rica ederiz. Anlayışınız için teşekkür ederiz.`;
+                }
+            }
+            messageArea.value = templateMessage;
+            modal.classList.add("active");
+        }
+
+        window.closeWhatsappModal = function() {
+            document.getElementById("whatsappModal").classList.remove("active");
+            currentActiveModalData = null;
+        }
+
+        document.getElementById("btnSendWhatsapp").onclick = function() {
+            if (!currentActiveModalData) return;
+            const messageText = document.getElementById("modalMessageText").value.trim();
+            let phoneNumber = currentActiveModalData.phone.replace(/\s+/g, '');
+
+            if (phoneNumber.startsWith("0")) { phoneNumber = "90" + phoneNumber.substring(1); } 
+            else if (!phoneNumber.startsWith("90")) { phoneNumber = "90" + phoneNumber; }
+
+            const whatsappUrl = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(messageText)}`;
+            window.open(whatsappUrl, "_blank");
+
+            const docRef = doc(db, "appointments", currentActiveModalData.id);
+            updateDoc(docRef, { status: targetStatusAction }).catch(error => {
+                console.error("Arka plan veritabanı durum değiştirme hatası: ", error);
+            });
+
+            closeWhatsappModal();
+        }
+
+        window.deleteAppointment = async function(id) {
+            if(confirm("Bu randevu kaydını kalıcı olarak silmek istediğinize emin misiniz?")) {
+                try { await deleteDoc(doc(db, "appointments", id)); } 
+                catch (error) { console.error("Kayıt silinirken hata: ", error); }
+            }
+        }
+
+        function translateStatus(status) {
+            if(status === "pending") return "Bekliyor";
+            if(status === "approved") return "Onaylandı";
+            if(status === "rejected") return "Reddedildi";
+            return status;
+        }
+
+        function formatDate(dateStr) {
+            if(!dateStr) return "";
+            const parts = dateStr.split("-");
+            if(parts.length === 3) return `${parts[2]}/${parts[1]}/${parts[0]}`;
+            return dateStr;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Salon Premium | Profesyonel Mobil Randevu</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- KESİN SIFIRLAMA VE TAŞMA ENGELLEME --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            background-color: #0b0f19;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        body {
+            padding-bottom: 100px;
+        }
+
+        .main-content {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 16px;
+        }
+
+        .container {
+            width: 100%;
+            padding: 0 12px;
+            margin: 0 auto;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: none;
+            width: 100%;
+            height: 52px;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #00ffa3 0%, #00b8ff 100%);
+            color: #0b0f19;
+            box-shadow: 0 4px 15px rgba(0, 255, 163, 0.25);
+        }
+
+        .btn-primary:active {
+            transform: scale(0.98);
+            opacity: 0.9;
+        }
+
+        .btn-secondary {
+            background-color: rgba(255, 255, 255, 0.03);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        header {
+            background-color: rgba(11, 15, 25, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 18px 0;
+            width: 100%;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 28px;
+        }
+
+        .logo {
+            font-size: 1.3rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .logo span {
+            color: #00ffa3;
+        }
+
+        .nav-desktop-btn {
+            display: none;
+        }
+
+        .hero {
+            padding: 50px 0;
+            text-align: center;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(0, 255, 163, 0.08);
+            color: #00ffa3;
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 24px;
+            border: 1px solid rgba(0, 255, 163, 0.15);
+        }
+
+        .hero h1 {
+            font-size: 2.2rem;
+            line-height: 1.25;
+            margin-bottom: 18px;
+            font-weight: 700;
+        }
+
+        .hero h1 span {
+            color: #00ffa3;
+        }
+
+        .hero p {
+            font-size: 1rem;
+            color: #94a3b8;
+            margin-bottom: 35px;
+        }
+
+        .hero-cta {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .services {
+            padding: 40px 0;
+            margin-top: 20px;
+        }
+
+        .section-header {
+            margin-bottom: 30px;
+        }
+
+        .section-header h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .section-header h2 span {
+            color: #00ffa3;
+        }
+
+        .services-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .card-luxury {
+            background-color: #151c2c;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 28px 24px;
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .card-luxury:hover {
+            transform: translateY(-4px);
+            border-color: rgba(0, 255, 163, 0.3);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
+        }
+
+        .card-top {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .card-icon {
+            font-size: 1.8rem;
+        }
+
+        .card-luxury h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .card-luxury p {
+            color: #94a3b8;
+            font-size: 0.95rem;
+            min-height: 48px;
+        }
+
+        .card-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 8px;
+            padding-top: 14px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .price-tag {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #00ffa3;
+        }
+
+        .rating-tag {
+            font-size: 0.85rem;
+            color: #f59e0b;
+            background: rgba(245, 158, 11, 0.1);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        .masters {
+            padding: 40px 0;
+            margin-bottom: 20px;
+        }
+
+        .masters-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .master-box {
+            background-color: #151c2c;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 24px 16px;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+
+        .master-box:active {
+            transform: translateY(-2px);
+            border-color: rgba(0, 255, 163, 0.2);
+        }
+
+        .avatar-wrapper {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 14px auto;
+        }
+
+        .master-avatar {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            background-color: #0b0f19;
+        }
+
+        .status-dot {
+            position: absolute;
+            bottom: 2px;
+            right: 4px;
+            width: 12px;
+            height: 12px;
+            background-color: #00ffa3;
+            border: 2px solid #151c2c;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #00ffa3;
+        }
+
+        .master-box h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .master-box span {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .master-rating {
+            display: inline-flex;
+            align-items: center;
+            font-size: 0.8rem;
+            color: #f59e0b;
+            background: rgba(245, 158, 11, 0.08);
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .info-section {
+            padding: 40px 0;
+            margin-bottom: 20px;
+        }
+
+        .info-section-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .map-box {
+            width: 100%;
+            height: 300px;
+            background-color: #151c2c;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .map-box iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .hours-box {
+            background-color: #151c2c;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 24px;
+        }
+
+        .hours-box h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 10px;
+        }
+
+        .hours-box h3 span {
+            color: #00ffa3;
+        }
+
+        .hours-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .hours-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.95rem;
+        }
+
+        .hours-row .day {
+            color: #94a3b8;
+        }
+
+        .hours-row .time {
+            font-weight: 600;
+        }
+
+        .hours-row.closed .time {
+            color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+            padding: 2px 10px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+        }
+
+        .sticky-action-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(21, 28, 44, 0.95);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 16px 24px;
+            z-index: 999;
+        }
+
+        footer {
+            background-color: #060911;
+            padding: 60px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            width: 100%;
+            margin-top: 40px;
+        }
+
+        .footer-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 28px;
+        }
+
+        .footer-contact {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .footer-bottom {
+            font-size: 0.8rem;
+            color: rgba(148, 163, 184, 0.4);
+        }
+
+        .lianchez-badge {
+            background: rgba(255, 255, 255, 0.02);
+            padding: 14px 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            display: inline-block;
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            width: 100%;
+            max-width: 320px;
+        }
+
+        .lianchez-badge:active {
+            border-color: #00ffa3;
+            color: #ffffff;
+        }
+
+        .lianchez-badge span {
+            color: #00ffa3;
+            font-weight: 600;
+        }
+
+        @media (min-width: 768px) {
+            body {
+                padding-bottom: 40px;
+            }
+            .sticky-action-bar {
+                display: none;
+            }
+            .nav-desktop-btn {
+                display: flex;
+                width: auto;
+                height: 44px;
+                font-size: 0.9rem;
+            }
+            .hero {
+                max-width: 650px;
+                margin: 0 auto;
+            }
+            .hero h1 {
+                font-size: 3.2rem;
+            }
+            .hero-cta {
+                flex-direction: row;
+            }
+            .services-grid {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 24px;
+            }
+            .masters-grid {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 24px;
+            }
+            .master-box:hover {
+                transform: translateY(-4px);
+                border-color: rgba(0, 255, 163, 0.3);
+                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            }
+            .info-section-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 24px;
+                align-items: start;
+            }
+            .map-box {
+                height: 350px;
+            }
+            .footer-container {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                text-align: left;
+                gap: 20px;
+            }
+            .footer-contact {
+                text-align: left;
+            }
+            .lianchez-badge {
+                margin-top: 0;
+                max-width: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sticky-action-bar">
+        <a href="randevu.html" class="btn btn-primary">Hemen Koltuğunu Ayır</a>
+    </div>
+
+    <header>
+        <div class="nav-container">
+            <div class="logo">SALON<span>PREMIUM</span></div>
+            <a href="randevu.html" class="btn btn-primary nav-desktop-btn">Randevu Al</a>
+        </div>
+    </header>
+
+    <main class="main-content">
+
+        <section class="container hero">
+            <div class="badge">Sıra Beklemeden Randevu</div>
+            <h1>Dükkanda Sıra Beklemeyin, <span>Zamanınız</span> Size Kalsın</h1>
+            <p>Haftalık yoğunluk başlamadan önce kendiniz için en uygun günü, saati ve ustanızı seçin. Randevu başvurunuz dükkana anında iletilsin.</p>
+            <div class="hero-cta">
+                <a href="randevu.html" class="btn btn-primary">Randevu Oluştur</a>
+                <a href="#hizmetler" class="btn btn-secondary">Hizmetlerimiz</a>
+            </div>
+        </section>
+
+        <section id="hizmetler" class="container services">
+            <div class="section-header">
+                <h2>Popüler <span>Hizmetler</span></h2>
+            </div>
+            <div class="services-grid">
+                <div class="card-luxury" onclick="window.location.href='randevu.html?service=' + encodeURIComponent('Saç Kesimi')">
+                    <div class="card-top">
+                        <span class="card-icon">✂️</span>
+                        <h3>Saç Kesimi</h3>
+                    </div>
+                    <p>Kafa yapınıza ve tarzınıza en uygun modern saç kesimi ve şekillendirme hizmeti.</p>
+                    <div class="card-meta">
+                        <span class="price-tag">600 TL</span>
+                        <span class="rating-tag">★ 4.9</span>
+                    </div>
+                </div>
+                <div class="card-luxury" onclick="window.location.href='randevu.html?service=' + encodeURIComponent('Sakal Tıraşı')">
+                    <div class="card-top">
+                        <span class="card-icon">🪒</span>
+                        <h3>Sakal Tıraşı</h3>
+                    </div>
+                    <p>Yüzünüze uygun sakal kesimi, şekillendirmesi ve sakal bakımı hizmeti.</p>
+                    <div class="card-meta">
+                        <span class="price-tag">300 TL</span>
+                        <span class="rating-tag">★ 5.0</span>
+                    </div>
+                </div>
+                <div class="card-luxury" onclick="window.location.href='randevu.html?service=' + encodeURIComponent('Cilt Bakımı & Maske')">
+                    <div class="card-top">
+                        <span class="card-icon">🧖‍♂️</span>
+                        <h3>Cilt Bakımı & Maske</h3>
+                    </div>
+                    <p>Yüzdeki siyah noktaları ve kiri temizleyen maske uygulaması hizmeti.</p>
+                    <div class="card-meta">
+                        <span class="price-tag">350 TL</span>
+                        <span class="rating-tag">★ 4.8</span>
+                    </div>
+                </div>
+                <div class="card-luxury" onclick="window.location.href='randevu.html?service=' + encodeURIComponent('Saç Boyama')">
+                    <div class="card-top">
+                        <span class="card-icon">🎨</span>
+                        <h3>Saç Boyama</h3>
+                    </div>
+                    <p>Beyazları tamamen kapatan profesyonel saç boyama ve saç rengi tazeleme hizmeti.</p>
+                    <div class="card-meta">
+                        <span class="price-tag">800 TL</span>
+                        <span class="rating-tag">★ 4.7</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="container masters">
+            <div class="section-header">
+                <h2>Stil <span>Uzmanları</span></h2>
+            </div>
+            <div class="masters-grid">
+                <div class="master-box">
+                    <div class="avatar-wrapper">
+                        <img src="https://i.imgur.com/Cd6H9lN.png" alt="Ahmet Usta" class="master-avatar">
+                        <div class="status-dot"></div>
+                    </div>
+                    <h4>Ahmet Usta</h4>
+                    <span>Erkek Kuaförü</span>
+                    <div class="master-rating">★ 4.9</div>
+                </div>
+                <div class="master-box">
+                    <div class="avatar-wrapper">
+                        <img src="https://i.imgur.com/Wjoy8TK.png" alt="Mehmet Usta" class="master-avatar">
+                        <div class="status-dot"></div>
+                    </div>
+                    <h4>Mehmet Usta</h4>
+                    <span>Usta Yardımcısı</span>
+                    <div class="master-rating">★ 4.8</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="container info-section">
+            <div class="section-header">
+                <h2>Ulaşım & <span>Çalışma Saatleri</span></h2>
+            </div>
+            <div class="info-section-grid">
+                <div class="map-box">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d51152.05929656201!2d31.40578645!3d36.78258165!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14c35952f4dc9e7b%3A0x6b4dbcbdfbfb8a6a!2sManavgat%2FAntalya!5e0!3m2!1str!2str!4v1718784000000!5m2!1str!2str" 
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+                
+                <div class="hours-box">
+                    <h3>🕒 Çalışma <span>Saatlerimiz</span></h3>
+                    <div class="hours-list">
+                        <div class="hours-row">
+                            <span class="day">Pazartesi</span>
+                            <span class="time">10:00 - 18:00</span>
+                        </div>
+                        <div class="hours-row">
+                            <span class="day">Salı</span>
+                            <span class="time">10:00 - 18:00</span>
+                        </div>
+                        <div class="hours-row">
+                            <span class="day">Çarşamba</span>
+                            <span class="time">10:00 - 18:00</span>
+                        </div>
+                        <div class="hours-row">
+                            <span class="day">Perşembe</span>
+                            <span class="time">10:00 - 18:00</span>
+                        </div>
+                        <div class="hours-row">
+                            <span class="day">Cuma</span>
+                            <span class="time">10:00 - 18:00</span>
+                        </div>
+                        <div class="hours-row">
+                            <span class="day">Cumartesi</span>
+                            <span class="time">10:00 - 18:00</span>
+                        </div>
+                        <div class="hours-row closed">
+                            <span class="day">Pazar</span>
+                            <span class="time">Kapalı</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <div class="footer-container">
+            <div>
+                <div class="logo">SALON<span>PREMIUM</span></div>
+                <p class="footer-bottom" style="margin-top: 10px;">© 2026 Salon Premium. Tüm Hakları Saklıdır.</p>
+                <div style="margin-top: 8px;">
+                    <a href="admin.html" style="color: rgba(148, 163, 184, 0.45); font-size: 0.75rem; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; transition: color 0.2s;" onmouseover="this.style.color='#00ffa3'" onmouseout="this.style.color='rgba(148, 163, 184, 0.45)'">🔒 Yönetici Girişi</a>
+                </div>
+            </div>
+            <div class="footer-contact">
+                <span>📍 Manavgat, Antalya</span>
+                <span>📞 +90 (555) 123 45 67</span>
+            </div>
+            
+            <a href="https://lianchez.com" target="_blank" class="lianchez-badge">
+                Bu web sitesini beğendiniz mi? <span>Lianchez Yazılım</span> ile ücretsiz iletişime geçin.
+            </a>
+        </div>
+    </footer>
+
+</body>
+</html>

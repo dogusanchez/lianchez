@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hoş Geldiniz - Üni Portal Test Programı</title>
+    <link rel="icon" type="image/png" href="/portal/fav.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.4; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.05); }
+        }
+        .animate-glow { animation: pulseGlow 6s ease-in-out infinite; }
+        @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        .animate-float { animation: float 4s ease-in-out infinite; }
+        @keyframes shimmer {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+        .shimmer-text {
+            background: linear-gradient(90deg, #a855f7, #ec4899, #a855f7, #6366f1, #a855f7);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 4s linear infinite;
+        }
+        @keyframes assistantPulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(6, 182, 212, 0.7), 0 8px 20px rgba(0,0,0,0.4); }
+            50% { box-shadow: 0 0 0 8px rgba(6, 182, 212, 0), 0 8px 24px rgba(0,0,0,0.5); }
+        }
+        .assistant-btn { animation: assistantPulse 2.5s ease-in-out infinite; }
+        @keyframes assistantBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
+        .assistant-btn:hover .assistant-icon { animation: assistantBounce 0.6s ease infinite; }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-up { animation: fadeUp 0.7s ease-out both; }
+        .delay-1 { animation-delay: 0.12s; }
+        .delay-2 { animation-delay: 0.24s; }
+        .delay-3 { animation-delay: 0.36s; }
+        .delay-4 { animation-delay: 0.48s; }
+        .step-line { background: linear-gradient(180deg, rgba(99,102,241,0.7), rgba(168,85,247,0.2), transparent); }
+
+        html { overflow-y: scroll; overflow-x: hidden; }
+        body { overflow-x: hidden; min-height: 100vh; }
+
+        /* QR kod kutucuğu */
+        #qrcode { line-height: 0; }
+        #qrcode img, #qrcode canvas { width: 100% !important; height: auto !important; display: block; border-radius: 0.5rem; }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col justify-between">
+
+    <div class="relative overflow-hidden">
+        <div class="absolute top-0 left-1/4 w-96 h-96 bg-blue-600/15 rounded-full blur-3xl pointer-events-none animate-glow -z-0"></div>
+        <div class="absolute top-1/3 right-1/4 w-96 h-96 bg-purple-600/15 rounded-full blur-3xl pointer-events-none animate-glow -z-0" style="animation-delay: 3s;"></div>
+        <div class="absolute bottom-0 left-1/3 w-96 h-96 bg-pink-600/10 rounded-full blur-3xl pointer-events-none animate-glow -z-0" style="animation-delay: 1.5s;"></div>
+    </div>
+
+    <header class="bg-slate-800/80 backdrop-blur-md border-b border-slate-700/80 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <a href="/portal/index.html" class="text-sm sm:text-xl font-extrabold bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-500 bg-clip-text text-transparent flex items-center tracking-wide whitespace-nowrap">
+                    <i class="fa-solid fa-graduation-cap mr-1.5 sm:mr-2.5 text-blue-400"></i>Üni Portal
+                </a>
+            </div>
+
+            <nav class="hidden md:flex items-center space-x-6 text-sm font-medium">
+                <a href="/portal/index.html" class="text-slate-300 hover:text-white transition">Ana Sayfa</a>
+                <a href="/portal/ilanlar.html" class="text-slate-300 hover:text-white transition">İlanlar</a>
+                <a href="/portal/ogrenciler.html" class="text-slate-300 hover:text-white transition">Öğrenciler</a>
+                <a href="/portal/forum.html" class="text-slate-300 hover:text-white transition">Forum</a>
+                <a href="/portal/topluluk.html" class="text-slate-300 hover:text-white transition">Topluluklar</a>
+                <a href="/portal/iletisim.html" class="text-slate-300 hover:text-white transition">İletişim</a>
+            </nav>
+
+            <div class="flex items-center space-x-2 sm:space-x-4">
+                <div class="inline-flex items-center space-x-2 bg-gradient-to-r from-cyan-500/15 to-blue-500/15 border border-cyan-400/40 text-cyan-200 px-3 py-1.5 rounded-xl text-[10px] sm:text-xs font-bold whitespace-nowrap">
+                    <i class="fa-solid fa-flask-vial text-cyan-400"></i>
+                    <span>Kapalı Test Sürümü</span>
+                </div>
+                <a href="/portal/index.html" class="hidden sm:inline-flex items-center space-x-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-3.5 py-1.5 rounded-xl font-bold hover:shadow-lg hover:from-blue-400 hover:to-indigo-500 transition text-xs whitespace-nowrap">
+                    <span>Portala Git</span>
+                    <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                </a>
+                <button onclick="toggleMobileMenu()" class="md:hidden text-slate-300 hover:text-white focus:outline-none text-xl p-1.5">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="hidden md:hidden bg-slate-800 border-t border-slate-700 px-4 pt-3 pb-4 space-y-2">
+            <a href="/portal/index.html" class="block px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-700 transition">Ana Sayfa</a>
+            <a href="/portal/ilanlar.html" class="block px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-700 transition">İlanlar</a>
+            <a href="/portal/ogrenciler.html" class="block px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-700 transition">Öğrenciler</a>
+            <a href="/portal/forum.html" class="block px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-700 transition">Forum</a>
+            <a href="/portal/topluluk.html" class="block px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-700 transition">Topluluklar</a>
+            <a href="/portal/iletisim.html" class="block px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-700 transition">İletişim</a>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 flex-grow w-full relative z-10">
+
+        <!-- HERO -->
+        <div class="text-center max-w-3xl mx-auto mb-10 fade-up">
+            <div class="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-cyan-500/10 via-blue-500/10 to-purple-500/10 border border-cyan-400/30 text-cyan-300 text-xs font-semibold mb-5 shadow-inner">
+                <i class="fa-solid fa-flask-vial text-cyan-400"></i>
+                <span>Üni Portal — Kapalı Test Programı</span>
+            </div>
+
+            <div class="flex justify-center mb-4">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-3xl shadow-2xl animate-float border border-blue-400/30">
+                    <i class="fa-solid fa-hand-sparkles text-white drop-shadow-lg"></i>
+                </div>
+            </div>
+
+            <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-4 leading-tight">
+                Hepiniz <span class="shimmer-text">Test Programımıza</span> Hoş Geldiniz!
+            </h1>
+
+            <p class="text-sm sm:text-base text-slate-300 max-w-xl mx-auto leading-relaxed">
+                Üni Portal'ı birlikte daha iyi hale getireceğiz. Sizlerin geri bildirimleri, bu ekosistemi kuran en önemli yapı taşı.
+            </p>
+        </div>
+
+        <!-- TEŞEKKÜR + NE YAPMALIYIM (yan yana) -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-6 fade-up delay-1">
+
+            <!-- Teşekkür -->
+            <div class="lg:col-span-2 bg-slate-800/80 backdrop-blur border border-slate-700/80 rounded-2xl p-6 shadow-xl relative overflow-hidden">
+                <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(59,130,246,0.12),transparent_55%)] pointer-events-none"></div>
+                <div class="relative flex items-start gap-4">
+                    <div class="flex-shrink-0 w-11 h-11 bg-emerald-500/10 text-emerald-400 rounded-xl flex items-center justify-center text-lg shadow-inner border border-emerald-500/20">
+                        <i class="fa-solid fa-heart text-emerald-400 animate-pulse"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-base sm:text-lg font-bold text-white mb-1.5">Öncelikle Teşekkürler <i class="fa-solid fa-people-group text-blue-400 text-sm"></i></h2>
+                        <p class="text-slate-300 text-sm leading-relaxed">
+                            Bu test sürecine katıldığınız ve vakit ayırdığınız için <strong class="text-white">her birinize ayrı ayrı teşekkür ederiz.</strong>
+                            Sizlerin katkılarıyla platformu daha sağlam ve daha keyifli hale getireceğiz.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ne yapmalıyım? -->
+            <div class="bg-gradient-to-br from-indigo-900/50 via-slate-800/80 to-purple-900/40 backdrop-blur border border-indigo-500/40 rounded-2xl p-6 shadow-xl relative overflow-hidden">
+                <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(99,102,241,0.2),transparent_60%)] pointer-events-none"></div>
+                <div class="relative">
+                    <h2 class="text-base font-bold text-white mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-list-check text-cyan-300"></i> Ne Yapmalıyım?
+                    </h2>
+                    <ul class="space-y-2.5 text-xs text-slate-300">
+                        <li class="flex items-start gap-2">
+                            <span class="w-5 h-5 flex-shrink-0 rounded-full bg-cyan-500/20 text-cyan-300 flex items-center justify-center text-[10px] font-bold border border-cyan-400/30">1</span>
+                            <span>Sayfaları gez, özellikle <strong class="text-white">etkileşimli ve işlemli</strong> olanları dene.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="w-5 h-5 flex-shrink-0 rounded-full bg-cyan-500/20 text-cyan-300 flex items-center justify-center text-[10px] font-bold border border-cyan-400/30">2</span>
+                            <span>Hata, eksik veya fikrini <strong class="text-white">sağ alttaki baloncuk</strong> ile ilet.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="w-5 h-5 flex-shrink-0 rounded-full bg-cyan-500/20 text-cyan-300 flex items-center justify-center text-[10px] font-bold border border-cyan-400/30">3</span>
+                            <span>Gördüğün her şeyi <strong class="text-white">çekinmeden</strong> paylaş — hepsi değerli.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- AMACIMIZ (3 kart) -->
+        <div class="bg-slate-800/80 backdrop-blur border border-slate-700/80 rounded-2xl p-6 sm:p-7 shadow-xl mb-6 fade-up delay-2 relative overflow-hidden">
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(168,85,247,0.12),transparent_55%)] pointer-events-none"></div>
+            <div class="relative">
+                <h2 class="text-base sm:text-lg font-bold text-white mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-bullseye text-purple-400"></i> Bizden Bekledikleriniz
+                </h2>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div class="bg-slate-900/60 border border-slate-700/70 rounded-xl p-4 flex items-start gap-3">
+                        <i class="fa-solid fa-bug text-red-400 mt-0.5"></i>
+                        <div>
+                            <p class="text-sm font-semibold text-white mb-0.5">Hatalar</p>
+                            <p class="text-[11px] text-slate-400 leading-relaxed">Görsel veya mantıksal her türlü hata.</p>
+                        </div>
+                    </div>
+                    <div class="bg-slate-900/60 border border-slate-700/70 rounded-xl p-4 flex items-start gap-3">
+                        <i class="fa-solid fa-puzzle-piece text-amber-400 mt-0.5"></i>
+                        <div>
+                            <p class="text-sm font-semibold text-white mb-0.5">Eksiklikler</p>
+                            <p class="text-[11px] text-slate-400 leading-relaxed">Beklediğiniz ama bulamadığınız özellikler.</p>
+                        </div>
+                    </div>
+                    <div class="bg-slate-900/60 border border-slate-700/70 rounded-xl p-4 flex items-start gap-3">
+                        <i class="fa-solid fa-lightbulb text-yellow-400 mt-0.5"></i>
+                        <div>
+                            <p class="text-sm font-semibold text-white mb-0.5">Öneriler</p>
+                            <p class="text-[11px] text-slate-400 leading-relaxed">Görsel ve mantıksal iyileştirme fikirleriniz.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- QR KOD + HIZLI BAĞLANTILAR -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-6 fade-up delay-3">
+
+            <!-- QR KOD KARTI -->
+            <div class="bg-slate-800/80 backdrop-blur border border-cyan-500/40 rounded-2xl p-5 sm:p-6 shadow-xl relative overflow-hidden flex flex-col items-center justify-center text-center">
+                <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(6,182,212,0.15),transparent_60%)] pointer-events-none"></div>
+                <div class="relative w-full">
+                    <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-cyan-500/15 border border-cyan-400/30 text-cyan-200 text-[10px] font-bold mb-4">
+                        <i class="fa-solid fa-mobile-screen-button"></i> Telefonda Test Et
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <!-- QR 1: Portal -->
+                        <div class="flex flex-col items-center">
+                            <span class="inline-flex items-center gap-1 text-[10px] font-bold text-blue-300 bg-blue-500/15 border border-blue-400/30 px-2 py-0.5 rounded-md mb-2">
+                                <i class="fa-solid fa-house"></i> Ana Portal
+                            </span>
+                            <div class="bg-white p-2 rounded-xl shadow-lg w-full">
+                                <div id="qrcode-portal"></div>
+                            </div>
+                            <a href="https://lianchez.com/portal" target="_blank" class="mt-2 text-[10px] text-cyan-300 hover:text-cyan-200 font-semibold underline break-all text-center leading-tight">
+                                lianchez.com/portal
+                            </a>
+                        </div>
+
+                        <!-- QR 2: Tester Sayfası -->
+                        <div class="flex flex-col items-center">
+                            <span class="inline-flex items-center gap-1 text-[10px] font-bold text-purple-300 bg-purple-500/15 border border-purple-400/30 px-2 py-0.5 rounded-md mb-2">
+                                <i class="fa-solid fa-flask-vial"></i> Tester Sayfası
+                            </span>
+                            <div class="bg-white p-2 rounded-xl shadow-lg w-full">
+                                <div id="qrcode-tester"></div>
+                            </div>
+                            <a href="https://lianchez.com/portal/tester" target="_blank" class="mt-2 text-[10px] text-purple-300 hover:text-purple-200 font-semibold underline break-all text-center leading-tight">
+                                lianchez.com/portal/tester
+                            </a>
+                        </div>
+                    </div>
+
+                    <p class="text-[11px] text-slate-400 leading-relaxed mt-4">
+                        Kodları telefonunuzla okutun; portalı ve tester sayfasını mobilde deneyimleyin.
+                    </p>
+                </div>
+            </div>
+
+            <!-- HIZLI BAĞLANTILAR (2 kart, sağ tarafta 2 sütun) -->
+            <div class="lg:col-span-2">
+                <h2 class="text-base sm:text-lg font-bold text-white mb-1 flex items-center gap-2">
+                    <i class="fa-solid fa-link text-blue-400"></i> Hızlı Bağlantılar
+                </h2>
+                <p class="text-xs text-slate-400 mb-4">Test sürecinde en çok ihtiyaç duyacağınız sayfalar.</p>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <a href="https://lianchez.com/portal/forum" target="_blank"
+                       class="bg-slate-800/80 backdrop-blur border border-purple-500/40 p-5 rounded-2xl hover:border-purple-400 transition-all duration-300 group shadow-xl flex flex-col justify-between hover:-translate-y-1">
+                        <div>
+                            <div class="w-10 h-10 bg-purple-500/10 text-purple-400 rounded-xl flex items-center justify-center text-lg mb-3 group-hover:scale-110 group-hover:bg-purple-500 group-hover:text-white transition shadow-inner">
+                                <i class="fa-solid fa-comments"></i>
+                            </div>
+                            <h3 class="text-sm font-bold text-white mb-1 group-hover:text-purple-400 transition">Forum</h3>
+                            <p class="text-slate-400 text-[11px] leading-relaxed">Konu açın, yanıt verin, canlı sohbete katılın.</p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-700/60 flex items-center justify-between text-[11px] font-semibold text-purple-400">
+                            <span>Foruma Git</span>
+                            <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition"></i>
+                        </div>
+                    </a>
+
+                    <a href="https://lianchez.com/portal/iletisim" target="_blank"
+                       class="bg-slate-800/80 backdrop-blur border border-cyan-500/40 p-5 rounded-2xl hover:border-cyan-400 transition-all duration-300 group shadow-xl flex flex-col justify-between hover:-translate-y-1">
+                        <div>
+                            <div class="w-10 h-10 bg-cyan-500/10 text-cyan-400 rounded-xl flex items-center justify-center text-lg mb-3 group-hover:scale-110 group-hover:bg-cyan-500 group-hover:text-white transition shadow-inner">
+                                <i class="fa-solid fa-headset"></i>
+                            </div>
+                            <h3 class="text-sm font-bold text-white mb-1 group-hover:text-cyan-400 transition">Geri Dönüş & İletişim</h3>
+                            <p class="text-slate-400 text-[11px] leading-relaxed">Hata, eksiklik veya önerilerinizi doğrudan iletin.</p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-700/60 flex items-center justify-between text-[11px] font-semibold text-cyan-400">
+                            <span>İletişime Geç</span>
+                            <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition"></i>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- KAPANIŞ -->
+        <div class="mt-8 text-center fade-up delay-4">
+            <p class="text-sm text-slate-300">
+                <i class="fa-solid fa-star text-yellow-400 mr-1"></i>
+                <strong class="text-white">Birlikte daha iyisini inşa edeceğiz.</strong> İyi testler!
+            </p>
+            <p class="text-[11px] text-slate-500 mt-2">Üni Portal Test Ekibi</p>
+        </div>
+    </main>
+
+    <!-- SABİT İLETİŞİM BALONCUĞU -->
+    <div class="fixed bottom-4 right-4 z-[150]" id="assistant-widget">
+        <div class="relative">
+            <button onclick="closeAssistantWidget()" title="Kapat" class="absolute -top-2 -right-2 z-10 w-6 h-6 bg-slate-800 hover:bg-red-600 text-slate-300 hover:text-white rounded-full flex items-center justify-center text-[10px] border border-slate-600 hover:border-red-500 shadow-lg transition">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <a href="/portal/iletisim.html" class="assistant-btn group flex items-center gap-2 bg-gradient-to-r from-cyan-600 to-blue-600 text-white pl-3 pr-4 py-2.5 rounded-full shadow-2xl border border-cyan-400/40 hover:from-cyan-500 hover:to-blue-500 transition-all">
+                <span class="assistant-icon w-8 h-8 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
+                    <i class="fa-solid fa-headset text-sm"></i>
+                </span>
+                <span class="text-left leading-tight">
+                    <span class="block text-[10px] font-extrabold tracking-wide">SORUN / İSTEK Mİ VAR?</span>
+                    <span class="block text-[9px] font-medium opacity-90">İletişim formundan bize ilet, hemen ilgilenelim!</span>
+                </span>
+                <i class="fa-solid fa-arrow-right text-[10px] opacity-80 group-hover:translate-x-0.5 transition"></i>
+            </a>
+        </div>
+    </div>
+
+    <footer class="relative bg-gradient-to-b from-slate-800 to-slate-900 border-t border-slate-700 mt-auto z-10">
+        <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-purple-500/40 to-transparent"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-graduation-cap text-blue-400 text-lg"></i>
+                    <span class="text-sm font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">Üni Portal</span>
+                </div>
+                <p class="text-xs text-slate-500 text-center">
+                    &copy; <span class="current-year"></span> Üni Portal — Tüm hakları saklıdır.
+                </p>
+                <p class="text-xs text-slate-500">
+                    Powered by <a href="https://lianchez.com" target="_blank" class="text-blue-400 hover:text-blue-300 font-semibold transition">lianchez.com</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- QRCode.js (bağımlılıksız, hafif) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script>
+        document.querySelectorAll('.current-year').forEach(el => el.innerText = new Date().getFullYear());
+        function toggleMobileMenu() { document.getElementById('mobile-menu').classList.toggle('hidden'); }
+        function closeAssistantWidget() {
+            const w = document.getElementById('assistant-widget');
+            if (w) w.style.display = 'none';
+        }
+
+        // QR kodları oluştur (portal + tester)
+        (function generateQRCodes() {
+            if (typeof QRCode === 'undefined') return;
+
+            const make = (elId, text) => {
+                const el = document.getElementById(elId);
+                if (!el) return;
+                new QRCode(el, {
+                    text,
+                    width: 256,
+                    height: 256,
+                    colorDark: "#0f172a",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+            };
+
+            make("qrcode-portal", "https://lianchez.com/portal");
+            make("qrcode-tester", "https://lianchez.com/portal/tester");
+        })();
+    </script>
+</body>
+</html>

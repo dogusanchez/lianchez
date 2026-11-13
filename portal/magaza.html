@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Coin Mağazası - Üni Portal</title>
+    <link rel="icon" type="image/png" href="/portal/fav.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        input[type="text"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="password"], input[type="tel"], textarea, select {
+            font-size: 16px !important;
+            -webkit-text-size-adjust: 100%;
+        }
+        @media (min-width: 640px) {
+            input[type="text"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="password"], input[type="tel"], textarea, select {
+                font-size: 12px !important;
+            }
+        }
+        /* ---------- Mağaza'ya özel mikro animasyonlar ---------- */
+        @keyframes coinSpin { 0%, 100% { transform: rotateY(0deg); } 50% { transform: rotateY(180deg); } }
+        @keyframes coinFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+        @keyframes heroGlow { 0%, 100% { opacity: .55; transform: scale(1); } 50% { opacity: .9; transform: scale(1.08); } }
+        @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+        @keyframes confettiFly {
+            0% { transform: translate(0, 0) rotate(0deg) scale(1); opacity: 1; }
+            100% { transform: translate(var(--dx), var(--dy)) rotate(var(--rot)) scale(.6); opacity: 0; }
+        }
+        @keyframes coinDrop { 0% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(26px); opacity: 0; } }
+        @keyframes toastIn { from { opacity: 0; transform: translateY(12px) scale(.97); } to { opacity: 1; transform: none; } }
+        @keyframes toastOut { to { opacity: 0; transform: translateX(24px); } }
+        @keyframes modalIn { from { opacity: 0; transform: translateY(10px) scale(.97); } to { opacity: 1; transform: none; } }
+        @keyframes balancePulse { 0% { transform: scale(1); } 40% { transform: scale(1.12); } 100% { transform: scale(1); } }
+
+        .coin-spin { animation: coinSpin 3.5s ease-in-out infinite; display: inline-block; }
+        .coin-float { animation: coinFloat 3s ease-in-out infinite; }
+        .hero-blob { animation: heroGlow 6s ease-in-out infinite; }
+        .skeleton { background: linear-gradient(90deg, rgba(51,65,85,.35) 25%, rgba(71,85,105,.55) 50%, rgba(51,65,85,.35) 75%); background-size: 200% 100%; animation: shimmer 1.4s linear infinite; }
+        .confetti-piece { position: fixed; width: 8px; height: 8px; border-radius: 2px; pointer-events: none; z-index: 200; animation: confettiFly 1s cubic-bezier(.2,.7,.3,1) forwards; }
+        .coin-drop { position: absolute; pointer-events: none; font-weight: 800; font-size: 12px; color: #fca5a5; animation: coinDrop .9s ease forwards; }
+        .toast { animation: toastIn .3s ease both; }
+        .toast.hide { animation: toastOut .3s ease forwards; }
+        .modal-card { animation: modalIn .25s ease both; }
+        .balance-pulse { animation: balancePulse .5s ease; }
+        .store-chip { transition: all .2s ease; }
+        .store-chip.active { background: linear-gradient(90deg, rgba(139,92,246,.25), rgba(99,102,241,.25)); border-color: rgba(167,139,250,.6); color: #fff; box-shadow: 0 0 14px rgba(139,92,246,.25); }
+        .item-card { position: relative; overflow: hidden; }
+        .item-card::before { content: ""; position: absolute; inset: 0; background: radial-gradient(600px circle at var(--mx, 50%) var(--my, 0%), rgba(139,92,246,.10), transparent 40%); opacity: 0; transition: opacity .3s ease; pointer-events: none; }
+        .item-card:hover::before { opacity: 1; }
+        .item-card:hover .preview-stage { transform: scale(1.03); }
+        .preview-stage { transition: transform .3s ease; }
+        .coupon-edge { background-image: radial-gradient(circle at 0 50%, #0f172a 7px, transparent 8px), radial-gradient(circle at 100% 50%, #0f172a 7px, transparent 8px); }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col justify-between">
+
+    <header class="bg-slate-800 border-b border-slate-700 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <a href="/portal/index.html" class="text-sm sm:text-xl font-bold bg-gradient-to-r from-blue-400 to-indigo-500 bg-clip-text text-transparent flex items-center whitespace-nowrap">
+                    <i class="fa-solid fa-graduation-cap mr-1.5 sm:mr-2"></i>Üni Portal
+                </a>
+            </div>
+            
+            <nav class="hidden md:flex items-center space-x-6 text-sm font-medium">
+                <a href="/portal/index.html" class="text-slate-300 hover:text-white transition">Ana Sayfa</a>
+                <a href="/portal/forum.html" class="px-2.5 py-1 rounded-xl bg-purple-500/15 text-purple-300 border border-purple-500/30 font-semibold hover:bg-purple-500/25 transition flex items-center space-x-1.5"><i class="fa-solid fa-comments text-purple-400 text-xs"></i><span>Forum</span></a>
+                <a href="/portal/ilanlar.html" class="text-slate-300 hover:text-white transition">İlanlar</a>
+                <a href="/portal/ogrenciler.html" class="text-slate-300 hover:text-white transition">Öğrenciler</a>
+                <a href="/portal/topluluk.html" class="text-slate-300 hover:text-white transition">Topluluklar</a>
+                <a href="/portal/iletisim.html" class="text-slate-300 hover:text-white transition">İletişim</a>
+            </nav>
+
+            <div class="flex items-center space-x-2 sm:space-x-4">
+                <div id="auth-section" class="flex items-center">
+                    <button id="login-btn" onclick="googleLogin()" class="hidden flex items-center space-x-1 sm:space-x-2 bg-white text-slate-900 px-2 sm:px-3 py-1.5 rounded-lg font-semibold hover:bg-slate-100 transition shadow-sm text-[10px] sm:text-sm whitespace-nowrap">
+                        <i class="fa-brands fa-google text-red-500 text-[10px] sm:text-sm"></i>
+                        <span>Giriş Yap</span>
+                    </button>
+
+                    <div id="user-profile" class="hidden flex items-center space-x-2 sm:space-x-3 relative">
+                        <div class="flex items-center bg-slate-700 px-2 sm:px-2.5 py-1 rounded-full border border-slate-600 shadow-inner">
+                            <i class="fa-solid fa-coins text-yellow-400 mr-1 sm:mr-1.5 text-[10px] sm:text-sm"></i>
+                            <span id="user-coins" class="font-bold text-yellow-400 text-[10px] sm:text-sm">0</span>
+                        </div>
+
+                        <div class="relative cursor-pointer" onclick="toggleUserDropdown(event)">
+                            <img id="user-avatar" src="" alt="Profil" class="w-8 h-8 sm:w-9 sm:h-9 rounded-full border-2 border-slate-600 hover:border-blue-400 transition object-cover">
+                            <span id="notification-badge" class="hidden absolute -bottom-0.5 -right-0.5 bg-red-500 text-white text-[10px] font-extrabold min-w-[16px] h-4 px-1 rounded-full flex items-center justify-center border-2 border-slate-800 animate-pulse">0</span>
+                        </div>
+
+                        <div id="user-dropdown" class="hidden absolute right-0 top-12 w-56 bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl py-2 z-50 transition-all duration-200">
+                            <div class="px-4 py-2 border-b border-slate-700">
+                                <p id="dropdown-user-name" class="text-xs font-bold text-white truncate">Kullanıcı Adı</p>
+                                <p id="dropdown-user-email" class="text-[11px] text-slate-400 truncate">email@domain.com</p>
+                            </div>
+
+                            <a href="/portal/profil.html" class="block w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center space-x-2 transition">
+                                <i class="fa-solid fa-user text-indigo-400"></i>
+                                <span>Profilim</span>
+                            </a>
+
+                            <a href="/portal/magaza.html" class="block w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center space-x-2 transition">
+                                <i class="fa-solid fa-store text-yellow-400"></i>
+                                <span>Mağaza</span>
+                            </a>
+                            <button onclick="openDailyStreakModal()" class="w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center justify-between transition">
+                                <span class="flex items-center space-x-2">
+                                    <i class="fa-solid fa-calendar-check text-amber-400"></i>
+                                    <span>Günlük Ödül</span>
+                                    <span id="streak-unclaimed-dot" class="hidden w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+                                </span>
+                                <span id="streak-dropdown-badge" class="bg-amber-500/20 text-amber-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-amber-500/30">0 Gün</span>
+                            </button>
+                            
+                            <button onclick="openNotificationsModal()" class="w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center justify-between transition">
+                                <span class="flex items-center space-x-2">
+                                    <i class="fa-solid fa-bell text-blue-400"></i>
+                                    <span>Bildirimler</span>
+                                </span>
+                                <span id="dropdown-notif-count" class="bg-slate-700 text-slate-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-slate-600">0</span>
+                            </button>
+
+                            <div class="border-t border-slate-700/80 my-1"></div>
+
+                            <button onclick="googleLogout()" class="w-full text-left px-4 py-2 text-xs text-red-400 hover:bg-red-500/10 flex items-center space-x-2 transition font-semibold">
+                                <i class="fa-solid fa-right-from-bracket"></i>
+                                <span>Çıkış Yap</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <button onclick="toggleMobileMenu()" class="md:hidden text-slate-300 hover:text-white focus:outline-none text-xl p-1.5">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="hidden md:hidden bg-slate-800 border-t border-slate-700 px-4 pt-3 pb-4 space-y-2">
+            <a href="/portal/index.html" class="block px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-700 transition">Ana Sayfa</a>
+            <a href="/portal/forum.html" class="block px-3 py-2 rounded-lg text-sm font-semibold text-purple-300 bg-purple-500/10 border border-purple-500/20 hover:bg-purple-500/20 transition flex items-center"><i class="fa-solid fa-comments text-purple-400 mr-2"></i>Forum</a>
+            <a href="/portal/ilanlar.html" class="block px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-700 transition">İlanlar</a>
+            <a href="/portal/ogrenciler.html" class="block px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-700 transition">Öğrenciler</a>
+            <a href="/portal/topluluk.html" class="block px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-700 transition">Topluluklar</a>
+            <a href="/portal/iletisim.html" class="block px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-700 transition">İletişim</a>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-grow w-full">
+
+        <!-- ===== HERO ===== -->
+        <section class="relative overflow-hidden bg-gradient-to-br from-slate-800 via-slate-800 to-indigo-950/60 border border-slate-700 rounded-3xl p-6 sm:p-8 mb-8 up-fade-in">
+            <div class="hero-blob absolute -top-24 -right-16 w-72 h-72 bg-purple-600/20 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="hero-blob absolute -bottom-28 -left-10 w-72 h-72 bg-yellow-500/10 rounded-full blur-3xl pointer-events-none" style="animation-delay:-3s"></div>
+
+            <div class="relative flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                <div class="max-w-xl">
+                    <span class="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-purple-300 bg-purple-500/10 border border-purple-500/30 px-2.5 py-1 rounded-full">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i> Kozmetik & Kuponlar
+                    </span>
+                    <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mt-3">
+                        <span class="bg-gradient-to-r from-yellow-300 via-amber-400 to-orange-400 bg-clip-text text-transparent">Coin</span> Mağazası
+                    </h1>
+                    <p class="text-slate-400 text-sm mt-2 leading-relaxed">
+                        Forumda konu açarak, yanıt yazarak ve topluluğa katkı sağlayarak kazandığın coin'leri burada harca.
+                        Profiline havalı bir çerçeve tak, isminin yanına unvan ekle ya da sponsorlarımızın kuponlarını kap!
+                    </p>
+                    <div class="flex flex-wrap gap-2 mt-4">
+                        <a href="/portal/forum.html" class="inline-flex items-center gap-1.5 text-xs font-semibold bg-slate-900/60 hover:bg-slate-700 border border-slate-700 hover:border-indigo-500/50 text-slate-200 px-3 py-1.5 rounded-xl transition">
+                            <i class="fa-solid fa-pen-to-square text-indigo-400"></i> Konu aç <span class="text-yellow-400 font-bold">+5</span>
+                        </a>
+                        <a href="/portal/forum.html" class="inline-flex items-center gap-1.5 text-xs font-semibold bg-slate-900/60 hover:bg-slate-700 border border-slate-700 hover:border-indigo-500/50 text-slate-200 px-3 py-1.5 rounded-xl transition">
+                            <i class="fa-solid fa-comments text-emerald-400"></i> Yanıt yaz, yardım et
+                        </a>
+                        <a href="/portal/profil.html" class="inline-flex items-center gap-1.5 text-xs font-semibold bg-slate-900/60 hover:bg-slate-700 border border-slate-700 hover:border-indigo-500/50 text-slate-200 px-3 py-1.5 rounded-xl transition">
+                            <i class="fa-solid fa-box-open text-purple-400"></i> Envanterim
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Bakiye kartı -->
+                <div id="balance-card" class="relative w-full lg:w-80 bg-slate-900/70 border border-yellow-500/30 rounded-2xl p-5 shadow-[0_0_40px_-12px_rgba(234,179,8,.45)]">
+                    <div class="flex items-center justify-between">
+                        <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Bakiyen</span>
+                        <span class="up-chip"><i class="fa-solid fa-bolt text-yellow-400"></i>Forumda kazan</span>
+                    </div>
+                    <div class="flex items-center gap-3 mt-3">
+                        <div class="coin-float w-14 h-14 rounded-full bg-gradient-to-br from-yellow-300 via-amber-400 to-orange-500 flex items-center justify-center shadow-lg shadow-amber-500/30 border-2 border-yellow-200/60">
+                            <i class="fa-solid fa-coins text-amber-900 text-xl coin-spin"></i>
+                        </div>
+                        <div>
+                            <div class="flex items-baseline gap-1.5">
+                                <span id="balance-amount" class="text-4xl font-extrabold bg-gradient-to-r from-yellow-200 to-amber-400 bg-clip-text text-transparent">0</span>
+                                <span class="text-sm font-bold text-yellow-500/80">coin</span>
+                            </div>
+                            <p id="balance-sub" class="text-[11px] text-slate-500 mt-0.5">Bakiyeni görmek için giriş yap</p>
+                        </div>
+                    </div>
+                    <div id="balance-guest" class="mt-4">
+                        <button onclick="googleLogin()" class="w-full flex items-center justify-center gap-2 bg-white text-slate-900 hover:bg-slate-100 font-semibold text-xs py-2 rounded-xl transition">
+                            <i class="fa-brands fa-google text-red-500"></i> Giriş yap ve alışverişe başla
+                        </button>
+                    </div>
+                    <div id="balance-stats" class="hidden mt-4 grid grid-cols-2 gap-2 text-center">
+                        <div class="bg-slate-800/80 border border-slate-700 rounded-xl py-2">
+                            <p id="stat-owned" class="text-sm font-extrabold text-white">0</p>
+                            <p class="text-[10px] text-slate-500">Sahip olunan</p>
+                        </div>
+                        <div class="bg-slate-800/80 border border-slate-700 rounded-xl py-2">
+                            <p id="stat-affordable" class="text-sm font-extrabold text-emerald-300">0</p>
+                            <p class="text-[10px] text-slate-500">Alınabilir ürün</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== KATEGORİLER ===== -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+            <div id="category-tabs" class="flex flex-wrap gap-2">
+                <button data-cat="title" onclick="setCategory('title')" class="store-chip active text-xs font-semibold px-3.5 py-2 rounded-xl border border-slate-700 bg-slate-800 text-slate-300 hover:text-white">
+                    <i class="fa-solid fa-award mr-1 text-purple-400"></i>Ünvanlar & Rozetler <span data-count="title" class="ml-1 text-[10px] text-slate-400">0</span>
+                </button>
+                <button data-cat="frame" onclick="setCategory('frame')" class="store-chip text-xs font-semibold px-3.5 py-2 rounded-xl border border-slate-700 bg-slate-800 text-slate-300 hover:text-white">
+                    <i class="fa-solid fa-circle-notch mr-1 text-sky-400"></i>Profil Çerçeveleri <span data-count="frame" class="ml-1 text-[10px] text-slate-400">0</span>
+                </button>
+                <button data-cat="coupon" onclick="setCategory('coupon')" class="store-chip text-xs font-semibold px-3.5 py-2 rounded-xl border border-slate-700 bg-slate-800 text-slate-300 hover:text-white">
+                    <i class="fa-solid fa-ticket mr-1 text-emerald-400"></i>Sponsor Kuponları & İndirimler <span data-count="coupon" class="ml-1 text-[10px] text-slate-400">0</span>
+                </button>
+            </div>
+            <label class="flex items-center gap-2 text-xs text-slate-400 cursor-pointer select-none">
+                <input id="only-affordable" type="checkbox" onchange="toggleAffordable(this.checked)" class="accent-purple-500 w-3.5 h-3.5">
+                Sadece alabileceklerim
+            </label>
+        </div>
+
+        <!-- ===== ÜRÜN IZGARASI ===== -->
+        <div id="store-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+            <div class="skeleton h-72 rounded-2xl"></div>
+            <div class="skeleton h-72 rounded-2xl"></div>
+            <div class="skeleton h-72 rounded-2xl"></div>
+            <div class="skeleton h-72 rounded-2xl hidden xl:block"></div>
+        </div>
+
+        <p class="text-center text-[11px] text-slate-500 mt-10">
+            <i class="fa-solid fa-circle-info mr-1"></i>Satın alınan kozmetikler kalıcıdır ve Profil &gt; Envanter bölümünden yönetilebilir. Coin iadesi yapılmaz.
+        </p>
+    </main>
+
+    <!-- ===== SATIN ALMA ONAY MODALI ===== -->
+    <div id="purchase-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden items-center justify-center z-[60] p-4" onclick="if(event.target===this) closePurchaseModal()">
+        <div class="modal-card bg-slate-800 border border-slate-700 rounded-2xl max-w-sm w-full p-6 shadow-2xl relative">
+            <button onclick="closePurchaseModal()" class="absolute top-3 right-3 text-slate-400 hover:text-white p-1"><i class="fa-solid fa-xmark text-lg"></i></button>
+            <div id="purchase-preview" class="flex justify-center mb-4"></div>
+            <h3 class="text-lg font-bold text-white text-center">Satın almayı onayla</h3>
+            <p id="purchase-name" class="text-sm text-slate-300 text-center mt-1"></p>
+            <div class="mt-5 bg-slate-900/70 border border-slate-700 rounded-xl p-3 space-y-1.5 text-xs">
+                <div class="flex justify-between text-slate-400"><span>Mevcut bakiye</span><span id="purchase-balance" class="font-bold text-slate-200"></span></div>
+                <div class="flex justify-between text-slate-400"><span>Fiyat</span><span id="purchase-price" class="font-bold text-red-300"></span></div>
+                <div class="border-t border-slate-700 my-1"></div>
+                <div class="flex justify-between text-slate-300"><span>Kalan bakiye</span><span id="purchase-after" class="font-extrabold text-yellow-400"></span></div>
+            </div>
+            <div class="flex gap-2 mt-5">
+                <button onclick="closePurchaseModal()" class="flex-1 bg-slate-700 hover:bg-slate-600 text-slate-200 py-2.5 rounded-xl text-xs font-semibold transition">Vazgeç</button>
+                <button id="purchase-confirm-btn" onclick="confirmPurchase()" class="flex-1 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white py-2.5 rounded-xl text-xs font-bold transition shadow-lg shadow-purple-900/40 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-bag-shopping"></i><span>Satın Al</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== BAŞARI MODALI (kuşan / kupon kodu) ===== -->
+    <div id="success-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden items-center justify-center z-[60] p-4" onclick="if(event.target===this) closeSuccessModal()">
+        <div class="modal-card bg-slate-800 border border-slate-700 rounded-2xl max-w-sm w-full p-6 shadow-2xl relative text-center">
+            <button onclick="closeSuccessModal()" class="absolute top-3 right-3 text-slate-400 hover:text-white p-1"><i class="fa-solid fa-xmark text-lg"></i></button>
+            <div class="w-14 h-14 mx-auto rounded-full bg-emerald-500/15 border border-emerald-500/40 flex items-center justify-center mb-3 up-heart-pop">
+                <i class="fa-solid fa-check text-emerald-400 text-2xl"></i>
+            </div>
+            <h3 id="success-title" class="text-lg font-bold text-white">Satın alındı!</h3>
+            <p id="success-text" class="text-xs text-slate-400 mt-1"></p>
+            <div id="success-body" class="mt-4"></div>
+            <div id="success-actions" class="flex gap-2 mt-5"></div>
+        </div>
+    </div>
+
+    <!-- ===== TOAST ALANI ===== -->
+    <div id="toast-container" class="fixed bottom-4 right-4 z-[210] flex flex-col gap-2 items-end pointer-events-none"></div>
+
+    <div id="notifications-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div class="bg-slate-800 border border-slate-700 rounded-2xl max-w-md w-full p-6 shadow-2xl relative">
+            <div class="flex justify-between items-center mb-4 border-b border-slate-700 pb-3">
+                <h3 class="text-lg font-bold text-white flex items-center">
+                    <i class="fa-solid fa-bell text-blue-400 mr-2"></i>Bildirimler
+                </h3>
+                <button onclick="closeNotificationsModal()" class="text-slate-400 hover:text-white p-1">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <div id="notifications-list" class="space-y-3 max-h-80 overflow-y-auto pr-1">
+                <div class="text-center py-8 text-slate-500 text-xs">Henüz bir bildiriminiz yok.</div>
+            </div>
+            <div class="mt-5 pt-3 border-t border-slate-700 flex justify-end">
+                <button onclick="closeNotificationsModal()" class="bg-slate-700 hover:bg-slate-600 text-slate-200 px-4 py-1.5 rounded-xl text-xs font-semibold transition">
+                    Kapat
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="relative bg-gradient-to-b from-slate-800 to-slate-900 border-t border-slate-700 mt-auto z-10">
+        <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-purple-500/40 to-transparent"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-graduation-cap text-blue-400 text-lg"></i>
+                    <span class="text-sm font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">Üni Portal</span>
+                </div>
+                <p class="text-xs text-slate-500 text-center">
+                    &copy; <span class="current-year"></span> Üni Portal — Tüm hakları saklıdır.
+                </p>
+                <p class="text-xs text-slate-500">
+                    Powered by <a href="https://lianchez.com" target="_blank" class="text-blue-400 hover:text-blue-300 font-semibold transition">lianchez.com</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+    <script>
+        document.querySelectorAll('.current-year').forEach(el => el.innerText = new Date().getFullYear());
+    </script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, collection, getDocs, getCountFromServer, deleteDoc, updateDoc, addDoc, query, where, orderBy, limit, runTransaction, arrayUnion } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getStoreItems, getAvatarFrameClass, renderTitleBadge, getNameEffectClass, primeAuthor, escapeHtml, injectCoreStyles, initDailyStreak } from '/portal/portal-core.js';
+        injectCoreStyles();
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAYTaUdfhWAngCSZQjAyFtP_IRubX_Gw4c",
+            authDomain: "lianchezportal.firebaseapp.com",
+            projectId: "lianchezportal",
+            storageBucket: "lianchezportal.firebasestorage.app",
+            messagingSenderId: "283567832811",
+            appId: "1:283567832811:web:cff0981ba1fa305a0dc8ae",
+            measurementId: "G-8KPN5EG95S"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const provider = new GoogleAuthProvider();
+
+        let currentUser = null;
+        let notificationsUnsubscribe = null;
+        let userData = null;          // giriş yapan kullanıcının dokümanı (yerel kopya)
+        let storeItems = [];          // aktif katalog
+        let currentCategory = 'title';
+        let onlyAffordable = false;
+        let pendingItem = null;       // onay modalındaki ürün
+        let purchasing = false;
+        let displayedBalance = 0;     // animasyonlu bakiye için
+
+        const TYPE_META = {
+            frame:  { label: 'Profil Çerçevesi', icon: 'fa-circle-notch', chip: 'text-sky-300 bg-sky-500/10 border-sky-500/30' },
+            title:  { label: 'Unvan',            icon: 'fa-award',        chip: 'text-purple-300 bg-purple-500/10 border-purple-500/30' },
+            coupon: { label: 'Sponsor Kuponu',   icon: 'fa-ticket',       chip: 'text-emerald-300 bg-emerald-500/10 border-emerald-500/30' }
+        };
+
+        window.googleLogin = () => signInWithPopup(auth, provider);
+        window.googleLogout = () => signOut(auth);
+        window.toggleMobileMenu = () => document.getElementById('mobile-menu').classList.toggle('hidden');
+
+        window.toggleUserDropdown = (e) => {
+            e.stopPropagation();
+            document.getElementById('user-dropdown').classList.toggle('hidden');
+        };
+
+        document.addEventListener('click', () => {
+            const dropdown = document.getElementById('user-dropdown');
+            if (dropdown && !dropdown.classList.contains('hidden')) dropdown.classList.add('hidden');
+        });
+
+        // ===== KOTA OPTİMİZASYONU: Liste sadece modal açılınca yüklensin =====
+        window.openNotificationsModal = async () => {
+            document.getElementById('user-dropdown').classList.add('hidden');
+            const modal = document.getElementById('notifications-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            
+            if (!currentUser) return;
+            const listContainer = document.getElementById('notifications-list');
+            listContainer.innerHTML = '<div class="text-center py-8 text-slate-500 text-xs">Yükleniyor...</div>';
+            
+            try {
+                // Sadece son 20 bildirimi çek (limit ile)
+                const snap = await getDocs(query(
+                    collection(db, "users", currentUser.uid, "notifications"),
+                    orderBy("createdAt", "desc"),
+                    limit(20)
+                ));
+                if (snap.empty) {
+                    listContainer.innerHTML = '<div class="text-center py-8 text-slate-500 text-xs">Henüz bir bildiriminiz yok.</div>';
+                    return;
+                }
+                let itemsHTML = "";
+                snap.forEach((docSnap) => {
+                    const notif = docSnap.data();
+                    const notifId = docSnap.id;
+                    const safeLink = (notif.link || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+                    itemsHTML += `
+                        <div class="notif-item p-3 bg-slate-900/60 hover:bg-slate-700/50 border border-slate-700/70 rounded-xl flex items-start justify-between gap-3 transition group">
+                            <div class="flex-1 cursor-pointer" onclick="handleNotificationClick('${notifId}', '${safeLink}')">
+                                <p class="text-xs text-slate-200 font-medium group-hover:text-blue-400 transition">${notif.message || 'Bildirim'}</p>
+                                ${notif.link ? `<span class="text-[10px] text-blue-400 underline mt-1 inline-block"><i class="fa-solid fa-arrow-up-right-from-square mr-1"></i>Bağlantıya Git</span>` : ''}
+                            </div>
+                            <button onclick="deleteNotification(event, '${notifId}')" title="Bildirimi Sil" class="text-slate-500 hover:text-red-400 p-1 text-xs transition flex-shrink-0">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        </div>
+                    `;
+                });
+                listContainer.innerHTML = itemsHTML;
+            } catch(e) {
+                console.error(e);
+                listContainer.innerHTML = '<div class="text-center py-8 text-red-400 text-xs">Bildirimler yüklenemedi.</div>';
+            }
+        };
+
+        window.closeNotificationsModal = () => {
+            const modal = document.getElementById('notifications-modal');
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+        };
+
+        window.handleNotificationClick = async (notifId, link) => {
+            if (currentUser && notifId) {
+                try {
+                    await updateDoc(doc(db, "users", currentUser.uid, "notifications", notifId), { read: true });
+                } catch(e) { console.error(e); }
+            }
+            if (link) {
+                if (link.startsWith('http')) {
+                    window.open(link, '_blank');
+                } else {
+                    window.location.href = link;
+                }
+            }
+        };
+
+        window.deleteNotification = async (e, notifId) => {
+            e.stopPropagation();
+            if (!currentUser || !notifId) return;
+            
+            // 1. DOM'dan hemen kaldır (kullanıcı anında görsün)
+            const btn = e.currentTarget;
+            const notifItem = btn.closest('.notif-item');
+            if (notifItem) {
+                notifItem.style.transition = 'opacity 0.2s, transform 0.2s';
+                notifItem.style.opacity = '0';
+                notifItem.style.transform = 'translateX(20px)';
+                setTimeout(() => notifItem.remove(), 200);
+            }
+            
+            // 2. Firebase'den sil (arka planda)
+            try {
+                await deleteDoc(doc(db, "users", currentUser.uid, "notifications", notifId));
+            } catch (err) {
+                console.error("Bildirim silinirken hata:", err);
+            }
+        };
+
+        // ===== KOTA OPTİMİZASYONU: onSnapshot yerine tek seferlik sayım =====
+        async function listenNotifications(uid) {
+            // Sadece okunmamış sayısını al (1 okuma, tüm dokümanları çekmez)
+            try {
+                const countSnap = await getCountFromServer(
+                    query(collection(db, "users", uid, "notifications"), where("read", "==", false))
+                );
+                const unreadCount = countSnap.data().count;
+                const badge = document.getElementById('notification-badge');
+                const dropdownCount = document.getElementById('dropdown-notif-count');
+                if (unreadCount > 0) {
+                    badge.innerText = unreadCount;
+                    badge.classList.remove('hidden');
+                } else {
+                    badge.classList.add('hidden');
+                }
+                if (dropdownCount) dropdownCount.innerText = unreadCount;
+            } catch(e) { console.error("Bildirim sayısı alınamadı:", e); }
+        }
+
+        onAuthStateChanged(auth, async (user) => {
+            currentUser = user;
+            const loginBtn = document.getElementById('login-btn');
+            const userProfile = document.getElementById('user-profile');
+            const userAvatar = document.getElementById('user-avatar');
+            const userCoins = document.getElementById('user-coins');
+            const dropdownName = document.getElementById('dropdown-user-name');
+            const dropdownEmail = document.getElementById('dropdown-user-email');
+
+            if (user) {
+                loginBtn.classList.add('hidden');
+                userProfile.classList.remove('hidden');
+                userAvatar.src = user.photoURL;
+                dropdownName.innerText = user.displayName || "Kullanıcı";
+                dropdownEmail.innerText = user.email || "";
+
+                const userRef = doc(db, "users", user.uid);
+                const userSnap = await getDoc(userRef);
+
+                if (!userSnap.exists()) {
+                    await setDoc(userRef, {
+                        uid: user.uid,
+                        name: user.displayName || "Öğrenci",
+                        email: user.email || "",
+                        photoURL: user.photoURL || "",
+                        coins: 10,
+                        role: "user",
+                        createdAt: new Date()
+                    });
+                    userCoins.innerText = "10";
+                    // Mağaza: yeni oluşturulan dokümanın yerel kopyası (ekstra okuma yok)
+                    userData = { uid: user.uid, name: user.displayName || "Öğrenci", email: user.email || "", photoURL: user.photoURL || "", coins: 10, role: "user" };
+
+                    try {
+                        await addDoc(collection(db, "users", user.uid, "notifications"), {
+                            message: `Hoş geldin ${user.displayName || 'öğrenci'}! 🎉 Üni Portal'a katıldığın için teşekkürler. Forumda konu açarak +5 Coin kazanabilirsin!`,
+                            link: "/portal/forum.html",
+                            read: false,
+                            createdAt: new Date()
+                        });
+                    } catch (notifErr) {
+                        console.error("Hoş geldin bildirimi gönderilemedi:", notifErr);
+                    }
+                } else {
+                    const userDataSnap = userSnap.data();
+                    userData = userDataSnap;
+                    userCoins.innerText = userDataSnap.coins || 0;
+                    if (dropdownName) dropdownName.innerText = userDataSnap.displayName || userDataSnap.name || user.displayName || "Kullanıcı";
+                    if (userDataSnap.photoURL) userAvatar.src = userDataSnap.photoURL;
+                }
+
+                // Kendi profilimizi yazar önbelleğine yaz (0 okuma)
+                primeAuthor(user.uid, userData);
+                initDailyStreak(db, user.uid, userData, () => {
+                    updateBalanceCard(false);
+                    renderStore();
+                });
+                listenNotifications(user.uid);
+            } else {
+                loginBtn.classList.remove('hidden');
+                userProfile.classList.add('hidden');
+                if (notificationsUnsubscribe) notificationsUnsubscribe();
+                userData = null;
+                initDailyStreak(db, null, null);
+            }
+            updateBalanceCard(true);
+            renderStore();
+        });
+
+        // =====================================================================
+        //  YARDIMCILAR
+        // =====================================================================
+        const coinsOf = () => Number(userData && userData.coins) || 0;
+        const inventoryOf = () => (userData && Array.isArray(userData.inventory)) ? userData.inventory : [];
+        const isOwned = (item) => inventoryOf().includes(item.id);
+        const isEquipped = (item) => {
+            if (!userData) return false;
+            if (item.type === 'frame') return !!(userData.equippedFrame && userData.equippedFrame.id === item.id);
+            if (item.type === 'title') return !!(userData.equippedTitle && userData.equippedTitle.id === item.id);
+            return false;
+        };
+        const myName = () => (userData && (userData.displayName || userData.name)) || (currentUser && currentUser.displayName) || 'Öğrenci';
+        const myPhoto = () => (userData && userData.photoURL) || (currentUser && currentUser.photoURL) || '';
+        const findItem = (id) => storeItems.find(i => i.id === id);
+
+        // ---------- Toast ----------
+        window.showToast = (message, type = 'info') => {
+            const styles = {
+                success: { icon: 'fa-circle-check', cls: 'border-emerald-500/40', ic: 'text-emerald-400' },
+                error:   { icon: 'fa-circle-exclamation', cls: 'border-red-500/40', ic: 'text-red-400' },
+                coin:    { icon: 'fa-coins', cls: 'border-yellow-500/40', ic: 'text-yellow-400' },
+                info:    { icon: 'fa-circle-info', cls: 'border-indigo-500/40', ic: 'text-indigo-400' }
+            };
+            const s = styles[type] || styles.info;
+            const el = document.createElement('div');
+            el.className = `toast pointer-events-auto flex items-center gap-2.5 bg-slate-800/95 backdrop-blur border ${s.cls} text-slate-100 text-xs font-medium px-4 py-3 rounded-2xl shadow-2xl max-w-xs`;
+            el.innerHTML = `<i class="fa-solid ${s.icon} ${s.ic} text-sm"></i><span>${escapeHtml(message)}</span>`;
+            document.getElementById('toast-container').appendChild(el);
+            setTimeout(() => { el.classList.add('hide'); setTimeout(() => el.remove(), 300); }, 3200);
+        };
+
+        // ---------- Konfeti ----------
+        function burstConfetti(originEl) {
+            const rect = originEl ? originEl.getBoundingClientRect() : { left: window.innerWidth / 2, top: window.innerHeight / 2, width: 0, height: 0 };
+            const cx = rect.left + rect.width / 2, cy = rect.top + rect.height / 2;
+            const colors = ['#fbbf24', '#a78bfa', '#818cf8', '#34d399', '#f472b6', '#38bdf8'];
+            for (let i = 0; i < 28; i++) {
+                const p = document.createElement('span');
+                p.className = 'confetti-piece';
+                const angle = Math.random() * Math.PI * 2;
+                const dist = 60 + Math.random() * 110;
+                p.style.left = cx + 'px';
+                p.style.top = cy + 'px';
+                p.style.background = colors[i % colors.length];
+                p.style.setProperty('--dx', Math.cos(angle) * dist + 'px');
+                p.style.setProperty('--dy', (Math.sin(angle) * dist - 40) + 'px');
+                p.style.setProperty('--rot', (Math.random() * 720 - 360) + 'deg');
+                p.style.animationDelay = (Math.random() * 0.12) + 's';
+                if (i % 3 === 0) p.style.borderRadius = '9999px';
+                document.body.appendChild(p);
+                setTimeout(() => p.remove(), 1300);
+            }
+        }
+
+        // ---------- Animasyonlu bakiye ----------
+        function animateNumber(el, from, to, duration = 700) {
+            if (!el) return;
+            const start = performance.now();
+            const step = (now) => {
+                const t = Math.min(1, (now - start) / duration);
+                const eased = 1 - Math.pow(1 - t, 3);
+                el.textContent = Math.round(from + (to - from) * eased);
+                if (t < 1) requestAnimationFrame(step);
+            };
+            requestAnimationFrame(step);
+        }
+
+        function updateBalanceCard(fromZero = false) {
+            const amountEl = document.getElementById('balance-amount');
+            const sub = document.getElementById('balance-sub');
+            const guest = document.getElementById('balance-guest');
+            const stats = document.getElementById('balance-stats');
+            if (!currentUser || !userData) {
+                displayedBalance = 0;
+                amountEl.textContent = '0';
+                sub.textContent = 'Bakiyeni görmek için giriş yap';
+                guest.classList.remove('hidden');
+                stats.classList.add('hidden');
+                return;
+            }
+            const coins = coinsOf();
+            animateNumber(amountEl, fromZero ? 0 : displayedBalance, coins, fromZero ? 1100 : 700);
+            displayedBalance = coins;
+            sub.textContent = `Merhaba ${myName().split(' ')[0]}, alışverişe hazırsın!`;
+            guest.classList.add('hidden');
+            stats.classList.remove('hidden');
+            updateStats();
+        }
+
+        function updateStats() {
+            if (!userData) return;
+            const owned = storeItems.filter(isOwned).length;
+            const affordable = storeItems.filter(i => !isOwned(i) && coinsOf() >= (Number(i.price) || 0)).length;
+            document.getElementById('stat-owned').textContent = owned;
+            document.getElementById('stat-affordable').textContent = affordable;
+        }
+
+        function setHeaderCoins(newCoins) {
+            const el = document.getElementById('user-coins');
+            if (el) el.innerText = newCoins;
+            const card = document.getElementById('balance-card');
+            card.classList.remove('balance-pulse'); void card.offsetWidth; card.classList.add('balance-pulse');
+        }
+
+        // =====================================================================
+        //  ÖNİZLEMELER
+        // =====================================================================
+        function avatarHtml(frameStyle, size = 'w-20 h-20') {
+            const cls = `avatar-ring ${frameStyle || ''}`;
+            const photo = myPhoto();
+            if (photo) return `<img src="${escapeHtml(photo)}" alt="" class="${size} ${cls} object-cover">`;
+            return `<div class="${size} ${cls} bg-gradient-to-br from-slate-600 to-slate-700 flex items-center justify-center"><i class="fa-solid fa-user-graduate text-slate-300 text-2xl"></i></div>`;
+        }
+
+        function previewHtml(item, compact = false) {
+            if (item.type === 'frame') {
+                return `<div class="preview-stage flex items-center justify-center ${compact ? 'py-2' : 'h-32'}">${avatarHtml(item.style, compact ? 'w-16 h-16' : 'w-20 h-20')}</div>`;
+            }
+            if (item.type === 'title') {
+                const nameCls = userData ? getNameEffectClass(userData.role, userData.xp) : 'uname uname-l1';
+                return `<div class="preview-stage flex items-center justify-center ${compact ? 'py-2' : 'h-32'}">
+                    <div class="flex items-center gap-2 bg-slate-900/70 border border-slate-700 rounded-xl px-3 py-2 max-w-full">
+                        ${avatarHtml(userData && userData.equippedFrame ? userData.equippedFrame.style : '', 'w-8 h-8')}
+                        <div class="min-w-0 text-left">
+                            <div class="flex items-center gap-1.5 flex-wrap">
+                                <span class="${nameCls} text-xs font-bold truncate max-w-[110px]">${escapeHtml(myName())}</span>
+                                ${renderTitleBadge({ equippedTitle: { name: item.name, style: item.style } })}
+                            </div>
+                            <p class="text-[9px] text-slate-500 mt-0.5">Forumda böyle görünecek</p>
+                        </div>
+                    </div>
+                </div>`;
+            }
+            // coupon
+            return `<div class="preview-stage flex items-center justify-center ${compact ? 'py-2' : 'h-32'}">
+                <div class="coupon-edge relative w-full max-w-[220px] bg-gradient-to-r from-emerald-600/25 to-teal-600/20 border border-dashed border-emerald-500/50 rounded-xl px-4 py-3 text-center">
+                    <i class="fa-solid ${escapeHtml(item.icon || 'fa-ticket')} text-emerald-300 text-xl"></i>
+                    <p class="text-[11px] font-extrabold text-emerald-200 mt-1 truncate">${escapeHtml(item.sponsor || 'Sponsor')}</p>
+                    <p class="text-[10px] font-mono tracking-widest text-emerald-400/70 mt-0.5">•••• ••••</p>
+                </div>
+            </div>`;
+        }
+
+        // =====================================================================
+        //  KATALOG & RENDER
+        // =====================================================================
+        async function loadStore() {
+            try {
+                const items = await getStoreItems(db); // 1 saat localStorage önbellek → çoğunlukla 0 okuma
+                storeItems = (items || []).filter(i => i && i.id && i.active !== false);
+            } catch (e) {
+                console.error('Mağaza yüklenemedi', e);
+                storeItems = [];
+            }
+            window.filterCategory(currentCategory || 'title');
+            updateStats();
+        }
+
+        window.setCategory = (cat) => {
+            currentCategory = cat || 'title';
+            document.querySelectorAll('#category-tabs [data-cat]').forEach(b => b.classList.toggle('active', b.dataset.cat === currentCategory));
+            renderStore();
+        };
+        window.filterCategory = window.setCategory;
+
+        window.toggleAffordable = (checked) => { onlyAffordable = !!checked; renderStore(); };
+
+        function updateCounts() {
+            const counts = { title: 0, frame: 0, coupon: 0 };
+            storeItems.forEach(i => { if (counts[i.type] !== undefined) counts[i.type]++; });
+            Object.keys(counts).forEach(k => {
+                const el = document.querySelector(`[data-count="${k}"]`);
+                if (el) el.textContent = counts[k];
+            });
+        }
+
+        function actionHtml(item) {
+            const price = Number(item.price) || 0;
+            const id = escapeHtml(item.id);
+            if (!currentUser) {
+                return `<button onclick="googleLogin()" class="w-full flex items-center justify-center gap-2 bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs font-semibold py-2.5 rounded-xl transition">
+                    <i class="fa-brands fa-google text-red-400"></i> Satın almak için giriş yap</button>`;
+            }
+            if (isOwned(item)) {
+                if (item.type === 'coupon') {
+                    return `<button data-id="${id}" onclick="showCouponCode(this.dataset.id)" class="w-full flex items-center justify-center gap-2 bg-emerald-600/20 hover:bg-emerald-600/30 border border-emerald-500/40 text-emerald-300 text-xs font-bold py-2.5 rounded-xl transition">
+                        <i class="fa-solid fa-eye"></i> Kodu Gör</button>`;
+                }
+                if (isEquipped(item)) {
+                    return `<button data-id="${id}" onclick="unequipItem(this.dataset.id)" class="w-full flex items-center justify-center gap-2 bg-slate-700/70 hover:bg-slate-700 border border-slate-600 text-slate-300 text-xs font-semibold py-2.5 rounded-xl transition">
+                        <i class="fa-solid fa-rotate-left"></i> Çıkar</button>`;
+                }
+                return `<button data-id="${id}" onclick="equipItem(this.dataset.id)" class="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-xs font-bold py-2.5 rounded-xl transition shadow-lg shadow-indigo-900/40">
+                    <i class="fa-solid fa-shirt"></i> Kuşan</button>`;
+            }
+            const missing = price - coinsOf();
+            if (missing > 0) {
+                return `<button disabled class="w-full flex items-center justify-center gap-2 bg-slate-800 border border-slate-700 text-slate-500 text-xs font-semibold py-2.5 rounded-xl cursor-not-allowed">
+                    <i class="fa-solid fa-lock"></i> Yetersiz Coin <span class="text-red-400/80">(${missing} eksik)</span></button>`;
+            }
+            return `<button data-id="${id}" onclick="openPurchaseModal(this.dataset.id)" class="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-400 hover:to-amber-400 text-slate-900 text-xs font-extrabold py-2.5 rounded-xl transition shadow-lg shadow-amber-900/30 active:scale-[.98]">
+                <i class="fa-solid fa-bag-shopping"></i> Satın Al</button>`;
+        }
+
+        function cardHtml(item, index) {
+            const meta = TYPE_META[item.type] || TYPE_META.frame;
+            const owned = currentUser && isOwned(item);
+            const equipped = currentUser && isEquipped(item);
+            const price = Number(item.price) || 0;
+            const missing = currentUser ? price - coinsOf() : 0;
+            let stateBadge = '';
+            if (equipped) stateBadge = `<span class="text-[10px] font-bold text-emerald-300 bg-emerald-500/15 border border-emerald-500/40 px-2 py-0.5 rounded-full"><i class="fa-solid fa-check mr-1"></i>Kuşanılı</span>`;
+            else if (owned) stateBadge = `<span class="text-[10px] font-bold text-indigo-300 bg-indigo-500/15 border border-indigo-500/40 px-2 py-0.5 rounded-full"><i class="fa-solid fa-box-open mr-1"></i>Sahipsin</span>`;
+            const border = equipped ? 'border-emerald-500/50' : owned ? 'border-indigo-500/40' : 'border-slate-700 hover:border-purple-500/50';
+            const sponsorLine = item.type === 'coupon' && item.sponsor
+                ? `<p class="text-[10px] text-emerald-400 font-semibold mt-0.5"><i class="fa-solid fa-handshake mr-1"></i>${escapeHtml(item.sponsor)}</p>` : '';
+            return `
+            <div data-item-card="${escapeHtml(item.id)}" class="item-card up-card-glow up-fade-in bg-slate-800 border ${border} rounded-2xl p-4 flex flex-col" style="animation-delay:${Math.min(index, 12) * 40}ms">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full border ${meta.chip}"><i class="fa-solid ${meta.icon} mr-1"></i>${meta.label}</span>
+                    ${stateBadge}
+                </div>
+                <div class="rounded-xl bg-slate-900/50 border border-slate-700/60 mb-3 px-2">${previewHtml(item)}</div>
+                <div class="flex-1">
+                    <h3 class="text-sm font-bold text-white flex items-center gap-1.5">
+                        ${item.icon ? `<i class="fa-solid ${escapeHtml(item.icon)} text-slate-400 text-xs"></i>` : ''}${escapeHtml(item.name)}
+                    </h3>
+                    ${sponsorLine}
+                    <p class="text-xs text-slate-400 mt-1 leading-relaxed">${escapeHtml(item.description || '')}</p>
+                </div>
+                <div class="flex items-center justify-between mt-4 mb-3">
+                    <span class="flex items-center gap-1.5 font-extrabold text-lg ${owned ? 'text-slate-500 line-through decoration-slate-600' : 'text-yellow-400'}">
+                        <i class="fa-solid fa-coins text-sm"></i>${price}
+                    </span>
+                    ${currentUser && !owned && missing > 0 ? `<span class="text-[10px] text-slate-500">${missing} coin daha</span>` : ''}
+                </div>
+                ${actionHtml(item)}
+            </div>`;
+        }
+
+        function renderStore() {
+            const grid = document.getElementById('store-grid');
+            if (!grid) return;
+            updateCounts();
+            if (!storeItems.length) {
+                grid.innerHTML = `<div class="col-span-full text-center py-16 bg-slate-800/50 border border-dashed border-slate-700 rounded-2xl">
+                    <i class="fa-solid fa-store-slash text-3xl text-slate-600"></i>
+                    <p class="text-sm text-slate-400 mt-3">Mağaza şu anda boş görünüyor. Yakında yeni ürünler gelecek!</p></div>`;
+                return;
+            }
+            const activeCat = currentCategory || 'title';
+            let list = storeItems.filter(i => i.type === activeCat);
+            if (onlyAffordable && currentUser) list = list.filter(i => !isOwned(i) && coinsOf() >= (Number(i.price) || 0));
+            if (!list.length) {
+                grid.innerHTML = `<div class="col-span-full text-center py-14 bg-slate-800/50 border border-dashed border-slate-700 rounded-2xl">
+                    <i class="fa-solid fa-magnifying-glass text-2xl text-slate-600"></i>
+                    <p class="text-sm text-slate-400 mt-3">${onlyAffordable && currentUser ? 'Bu kategoride şu an alabileceğin ürün yok. Forumda biraz daha coin topla!' : 'Bu kategoride henüz ürün yok.'}</p>
+                    ${onlyAffordable && currentUser ? '<a href="/portal/forum.html" class="inline-flex items-center gap-1.5 mt-4 text-xs font-semibold text-indigo-300 hover:text-indigo-200"><i class="fa-solid fa-arrow-right"></i>Foruma git</a>' : ''}
+                </div>`;
+                return;
+            }
+            // Sıralama: kuşanılı/sahip olunanlar sonda değil; fiyat artan
+            list = [...list].sort((a, b) => (Number(a.price) || 0) - (Number(b.price) || 0));
+            grid.innerHTML = list.map((item, i) => cardHtml(item, i)).join('');
+            grid.querySelectorAll('.item-card').forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const r = card.getBoundingClientRect();
+                    card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+                    card.style.setProperty('--my', (e.clientY - r.top) + 'px');
+                });
+            });
+        }
+
+        // =====================================================================
+        //  SATIN ALMA AKIŞI
+        // =====================================================================
+        window.openPurchaseModal = (id) => {
+            if (!currentUser) { window.googleLogin(); return; }
+            const item = findItem(id);
+            if (!item) return;
+            if (isOwned(item)) { window.showToast('Bu ürüne zaten sahipsin.', 'info'); return; }
+            const price = Number(item.price) || 0;
+            if (coinsOf() < price) { window.showToast(`Yetersiz coin: ${price - coinsOf()} coin eksik.`, 'error'); return; }
+            pendingItem = item;
+            document.getElementById('purchase-preview').innerHTML = `<div class="w-full rounded-xl bg-slate-900/50 border border-slate-700/60 px-2">${previewHtml(item, true)}</div>`;
+            document.getElementById('purchase-name').innerHTML = `<span class="font-semibold text-white">${escapeHtml(item.name)}</span> <span class="text-slate-500">· ${(TYPE_META[item.type] || TYPE_META.frame).label}</span>`;
+            document.getElementById('purchase-balance').innerHTML = `<i class="fa-solid fa-coins text-yellow-400 mr-1"></i>${coinsOf()}`;
+            document.getElementById('purchase-price').textContent = `-${price}`;
+            document.getElementById('purchase-after').innerHTML = `<i class="fa-solid fa-coins mr-1"></i>${coinsOf() - price}`;
+            const btn = document.getElementById('purchase-confirm-btn');
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa-solid fa-bag-shopping"></i><span>Satın Al</span>';
+            const modal = document.getElementById('purchase-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        };
+
+        window.closePurchaseModal = () => {
+            if (purchasing) return;
+            const modal = document.getElementById('purchase-modal');
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+            pendingItem = null;
+        };
+
+        window.confirmPurchase = async () => {
+            if (!currentUser || !pendingItem || purchasing) return;
+            const item = pendingItem;
+            const price = Number(item.price) || 0;
+            const isCoupon = item.type === 'coupon';
+            const btn = document.getElementById('purchase-confirm-btn');
+            purchasing = true;
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i><span>İşleniyor...</span>';
+
+            const userRef = doc(db, "users", currentUser.uid);
+            const couponEntry = isCoupon ? { itemId: item.id, name: item.name || '', sponsor: item.sponsor || '', code: item.couponCode || '', purchasedAt: Date.now() } : null;
+            try {
+                // 1 okuma + 1 yazma: bakiye & envanter atomik olarak kontrol edilir
+                const newCoins = await runTransaction(db, async (transaction) => {
+                    const snap = await transaction.get(userRef);
+                    if (!snap.exists()) throw new Error('NO_USER');
+                    const data = snap.data();
+                    const coins = Number(data.coins) || 0;
+                    const inv = Array.isArray(data.inventory) ? data.inventory : [];
+                    if (inv.includes(item.id)) throw new Error('ALREADY_OWNED');
+                    if (coins < price) throw new Error('INSUFFICIENT');
+                    const updates = { coins: coins - price, inventory: arrayUnion(item.id) };
+                    if (couponEntry) updates.coupons = arrayUnion(couponEntry);
+                    transaction.update(userRef, updates);
+                    return coins - price;
+                });
+
+                // Yerel durumu anında güncelle (yeniden okuma yok)
+                userData.coins = newCoins;
+                userData.inventory = [...inventoryOf().filter(x => x !== item.id), item.id];
+                if (couponEntry) userData.coupons = [...(Array.isArray(userData.coupons) ? userData.coupons : []), couponEntry];
+                setHeaderCoins(newCoins);
+                updateBalanceCard();
+
+                purchasing = false;
+                window.closePurchaseModal();
+                renderStore();
+                const card = document.querySelector(`[data-item-card="${CSS.escape(item.id)}"]`);
+                burstConfetti(card || document.getElementById('balance-card'));
+                if (card) {
+                    const drop = document.createElement('span');
+                    drop.className = 'coin-drop';
+                    drop.style.right = '16px'; drop.style.top = '12px';
+                    drop.textContent = `-${price}`;
+                    card.appendChild(drop);
+                    setTimeout(() => drop.remove(), 950);
+                }
+                window.showToast(`${item.name} satın alındı!`, 'coin');
+                showSuccessModal(item);
+            } catch (err) {
+                console.error('Satın alma hatası:', err);
+                purchasing = false;
+                const msg = err && err.message;
+                if (msg === 'ALREADY_OWNED') {
+                    userData.inventory = [...inventoryOf().filter(x => x !== item.id), item.id];
+                    window.showToast('Bu ürüne zaten sahipsin.', 'info');
+                } else if (msg === 'INSUFFICIENT') {
+                    window.showToast('Yetersiz coin. Bakiyen güncel değil olabilir, sayfayı yenile.', 'error');
+                } else {
+                    window.showToast('Satın alma başarısız oldu. Lütfen tekrar dene.', 'error');
+                }
+                window.closePurchaseModal();
+                renderStore();
+            }
+        };
+
+        // ---------- Başarı modalı ----------
+        function openSuccess() {
+            const modal = document.getElementById('success-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+        window.closeSuccessModal = () => {
+            const modal = document.getElementById('success-modal');
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+        };
+
+        function couponCodeBlock(code) {
+            if (!code) {
+                return `<div class="bg-slate-900/70 border border-slate-700 rounded-xl p-3 text-xs text-slate-400">
+                    <i class="fa-solid fa-hourglass-half text-yellow-400 mr-1"></i>Kupon kodun yönetici tarafından iletilecek. Profil &gt; Envanter bölümünden takip edebilirsin.</div>`;
+            }
+            return `<div class="coupon-edge bg-gradient-to-r from-emerald-600/20 to-teal-600/15 border border-dashed border-emerald-500/50 rounded-xl p-4">
+                    <p class="text-[10px] uppercase tracking-wider text-emerald-400/80 font-bold">Kupon Kodun</p>
+                    <div class="flex items-center justify-center gap-2 mt-2">
+                        <code id="coupon-code-text" class="text-lg font-mono font-extrabold tracking-widest text-emerald-200 select-all">${escapeHtml(code)}</code>
+                        <button onclick="copyCouponCode()" title="Kopyala" class="w-8 h-8 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-300 transition"><i id="copy-icon" class="fa-regular fa-copy"></i></button>
+                    </div>
+                </div>`;
+        }
+
+        function showSuccessModal(item) {
+            const title = document.getElementById('success-title');
+            const text = document.getElementById('success-text');
+            const body = document.getElementById('success-body');
+            const actions = document.getElementById('success-actions');
+            const id = escapeHtml(item.id);
+            title.textContent = 'Satın alındı! 🎉';
+            if (item.type === 'coupon') {
+                text.innerHTML = `<span class="text-slate-300 font-semibold">${escapeHtml(item.sponsor || '')}</span> kuponun hazır.`;
+                body.innerHTML = couponCodeBlock(item.couponCode || '') + `<p class="text-[10px] text-slate-500 mt-3"><i class="fa-solid fa-box-open mr-1"></i>Bu kod ayrıca Profil &gt; Envanter bölümünde saklanır.</p>`;
+                actions.innerHTML = `<a href="/portal/profil.html" class="flex-1 bg-slate-700 hover:bg-slate-600 text-slate-200 py-2.5 rounded-xl text-xs font-semibold transition">Envantere Git</a>
+                    <button onclick="closeSuccessModal()" class="flex-1 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white py-2.5 rounded-xl text-xs font-bold transition">Tamam</button>`;
+            } else {
+                text.textContent = `${item.name} artık envanterinde. Hemen kuşanmak ister misin?`;
+                body.innerHTML = `<div class="rounded-xl bg-slate-900/50 border border-slate-700/60 px-2">${previewHtml(item, true)}</div>`;
+                actions.innerHTML = `<button onclick="closeSuccessModal()" class="flex-1 bg-slate-700 hover:bg-slate-600 text-slate-200 py-2.5 rounded-xl text-xs font-semibold transition">Sonra</button>
+                    <button data-id="${id}" onclick="equipItem(this.dataset.id, true)" class="flex-1 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2"><i class="fa-solid fa-shirt"></i>Hemen Kuşan</button>`;
+            }
+            openSuccess();
+        }
+
+        window.showCouponCode = (id) => {
+            const item = findItem(id);
+            const list = (userData && Array.isArray(userData.coupons)) ? userData.coupons : [];
+            const entry = [...list].reverse().find(c => c && c.itemId === id);
+            if (!entry && !item) return;
+            document.getElementById('success-title').textContent = 'Kuponun';
+            document.getElementById('success-text').innerHTML = `<span class="text-slate-300 font-semibold">${escapeHtml((entry && entry.sponsor) || (item && item.sponsor) || '')}</span> · ${escapeHtml((entry && entry.name) || (item && item.name) || '')}`;
+            document.getElementById('success-body').innerHTML = couponCodeBlock(entry ? entry.code : '') + `<p class="text-[10px] text-slate-500 mt-3"><i class="fa-solid fa-box-open mr-1"></i>Tüm kuponların Profil &gt; Envanter bölümünde.</p>`;
+            document.getElementById('success-actions').innerHTML = `<button onclick="closeSuccessModal()" class="flex-1 bg-slate-700 hover:bg-slate-600 text-slate-200 py-2.5 rounded-xl text-xs font-semibold transition">Kapat</button>`;
+            openSuccess();
+        };
+
+        window.copyCouponCode = async () => {
+            const el = document.getElementById('coupon-code-text');
+            if (!el) return;
+            const code = el.textContent.trim();
+            try {
+                await navigator.clipboard.writeText(code);
+            } catch (e) {
+                const r = document.createRange(); r.selectNodeContents(el);
+                const s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+                try { document.execCommand('copy'); } catch (_) {}
+            }
+            const icon = document.getElementById('copy-icon');
+            if (icon) { icon.className = 'fa-solid fa-check'; setTimeout(() => { icon.className = 'fa-regular fa-copy'; }, 1500); }
+            window.showToast('Kupon kodu kopyalandı.', 'success');
+        };
+
+        // =====================================================================
+        //  KUŞANMA (tek updateDoc)
+        // =====================================================================
+        window.equipItem = async (id, fromModal = false) => {
+            if (!currentUser || !userData) { window.googleLogin(); return; }
+            const item = findItem(id);
+            if (!item || (item.type !== 'frame' && item.type !== 'title')) return;
+            if (!isOwned(item)) { window.showToast('Önce bu ürünü satın almalısın.', 'error'); return; }
+            const field = item.type === 'frame' ? 'equippedFrame' : 'equippedTitle';
+            const value = item.type === 'frame'
+                ? { id: item.id, style: item.style || '' }
+                : { id: item.id, name: item.name || '', style: item.style || '' };
+            const prev = userData[field] || null;
+            // İyimser güncelleme
+            userData[field] = value;
+            renderStore();
+            if (fromModal) window.closeSuccessModal();
+            try {
+                await updateDoc(doc(db, "users", currentUser.uid), { [field]: value });
+                primeAuthor(currentUser.uid, userData); // forum anında yeni görünümü kullansın
+                window.showToast(`${item.name} kuşanıldı!`, 'success');
+            } catch (e) {
+                console.error('Kuşanma hatası:', e);
+                userData[field] = prev;
+                renderStore();
+                window.showToast('Kuşanılamadı, lütfen tekrar dene.', 'error');
+            }
+        };
+
+        window.unequipItem = async (id) => {
+            if (!currentUser || !userData) return;
+            const item = findItem(id);
+            if (!item) return;
+            const field = item.type === 'frame' ? 'equippedFrame' : 'equippedTitle';
+            const prev = userData[field] || null;
+            userData[field] = null;
+            renderStore();
+            try {
+                await updateDoc(doc(db, "users", currentUser.uid), { [field]: null });
+                primeAuthor(currentUser.uid, userData);
+                window.showToast(`${item.name} çıkarıldı.`, 'info');
+            } catch (e) {
+                console.error('Çıkarma hatası:', e);
+                userData[field] = prev;
+                renderStore();
+                window.showToast('İşlem başarısız oldu.', 'error');
+            }
+        };
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') { window.closePurchaseModal(); window.closeSuccessModal(); window.closeNotificationsModal(); }
+        });
+
+        // Katalog girişten bağımsız hemen yüklensin (giriş yapmayanlar da görebilir)
+        loadStore();
+    </script>
+</body>
+</html>

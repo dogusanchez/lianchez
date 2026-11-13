@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kapalı Test Daveti - Üni Portal</title>
+    <link rel="icon" type="image/png" href="/portal/fav.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+        .animate-float { animation: float 4s ease-in-out infinite; }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(18px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-up { animation: fadeUp 0.6s ease-out both; }
+        @keyframes glow {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 0.7; }
+        }
+        .animate-glow { animation: glow 6s ease-in-out infinite; }
+        #qrcode { line-height: 0; }
+        #qrcode img, #qrcode canvas { width: 100% !important; height: auto !important; display: block; border-radius: 0.75rem; }
+    </style>
+</head>
+<body class="min-h-screen bg-slate-900 flex items-center justify-center p-4 sm:p-6 font-sans text-slate-100 relative overflow-hidden">
+
+    <!-- Arka plan glow -->
+    <div class="absolute top-0 left-1/4 w-80 h-80 bg-blue-600/20 rounded-full blur-3xl pointer-events-none animate-glow"></div>
+    <div class="absolute bottom-0 right-1/4 w-80 h-80 bg-purple-600/20 rounded-full blur-3xl pointer-events-none animate-glow" style="animation-delay: 3s;"></div>
+
+    <div class="w-full max-w-sm bg-slate-800/90 backdrop-blur border border-slate-700/80 rounded-3xl shadow-2xl overflow-hidden fade-up relative z-10">
+
+        <!-- ÜST ŞERİT -->
+        <div class="h-1.5 w-full bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500"></div>
+
+        <div class="p-6 sm:p-7 flex flex-col items-center text-center">
+
+            <!-- İKON -->
+            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-2xl text-white shadow-lg shadow-blue-500/30 animate-float mb-4 border border-blue-400/30">
+                <i class="fa-solid fa-flask-vial"></i>
+            </div>
+
+            <!-- ROZET -->
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-cyan-500/15 border border-cyan-400/40 text-cyan-300 text-[10px] font-bold mb-3">
+                <i class="fa-solid fa-lock text-[9px]"></i> KAPALI TEST
+            </span>
+
+            <!-- BAŞLIK -->
+            <h1 class="text-xl font-extrabold text-white mb-1.5 leading-tight">
+                Sizi de Aramızda Görmek İsteriz
+            </h1>
+
+            <!-- AÇIKLAMA -->
+            <p class="text-[13px] text-slate-300 leading-relaxed mb-5">
+                Üni Portal'ı bizimle birlikte test etmek için QR kodu telefonunuzla okutmanız yeterli.
+            </p>
+
+            <!-- QR KOD (beyaz zemin — okunabilirlik için korunuyor) -->
+            <div class="bg-white p-3 rounded-2xl shadow-lg shadow-black/30 w-56 h-56 sm:w-60 sm:h-60 flex items-center justify-center mb-4 ring-4 ring-slate-700/50">
+                <div id="qrcode" class="w-full"></div>
+            </div>
+
+            <!-- URL -->
+            <a href="https://lianchez.com/portal/tester" target="_blank"
+               class="text-[11px] text-cyan-300 hover:text-cyan-200 font-semibold underline break-all mb-4">
+                lianchez.com/portal/tester
+            </a>
+
+            <!-- ALT BİLGİ -->
+            <div class="w-full pt-4 border-t border-slate-700/70 flex items-center justify-center gap-1.5 text-[10px] text-slate-400">
+                <i class="fa-solid fa-graduation-cap text-blue-400"></i>
+                <span class="font-semibold text-slate-300">Üni Portal</span>
+                <span class="text-slate-600">•</span>
+                <span>lianchez.com</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- QRCode.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script>
+        (function generateQR() {
+            const el = document.getElementById('qrcode');
+            if (!el || typeof QRCode === 'undefined') return;
+            new QRCode(el, {
+                text: "https://lianchez.com/portal/tester",
+                width: 300,
+                height: 300,
+                colorDark: "#0f172a",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+        })();
+    </script>
+</body>
+</html>

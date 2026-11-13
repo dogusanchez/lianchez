@@ -1,0 +1,1296 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Atlas Mimarlık | Modern Mimari ve Lüks Tasarım Stüdyosu</title>
+    <meta name="description" content="Atlas Mimarlık - Hayallerinizi modern mimariyle gerçeğe dönüştürüyoruz. Konut, lüks villa, ticari yapı ve iç mimari projelerinde yenilikçi çözümler." />
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+    <style>
+        /* ═══════════════════════════════════════════════
+           RESET & CSS VARIABLES
+           ═══════════════════════════════════════════════ */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --white: #ffffff;
+            --off-white: #fafafa;
+            --light-gray: #f5f5f5;
+            --medium-gray: #e5e5e5;
+            --charcoal: #111111;
+            --dark-charcoal: #0a0a0a;
+            --gold: #c9a96e;
+            --gold-light: #dfcbb5;
+            --gold-dark: #a8874a;
+            --text-primary: #111111;
+            --text-secondary: #555555;
+            --text-light: #888888;
+            --border-light: #eeeeee;
+            --shadow-md: 0 12px 40px rgba(0, 0, 0, 0.04);
+            --shadow-lg: 0 24px 68px rgba(0, 0, 0, 0.08);
+            --transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            --font-sans: 'Inter', sans-serif;
+            --font-serif: 'Playfair Display', serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            color: var(--text-primary);
+            background-color: var(--white);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: var(--transition);
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 30px;
+        }
+
+        .section-padding {
+            padding: 120px 0;
+        }
+
+        /* ═══════════════════════════════════════════════
+           TYPOGRAPHY & UTILITIES
+           ═══════════════════════════════════════════════ */
+        .section-header {
+            margin-bottom: 80px;
+            max-width: 650px;
+        }
+
+        .section-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .section-title {
+            font-family: var(--font-serif);
+            font-size: clamp(2.2rem, 5vw, 3.5rem);
+            font-weight: 400;
+            line-height: 1.2;
+            color: var(--charcoal);
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-top: 20px;
+            font-weight: 300;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 18px 38px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-primary {
+            background: var(--charcoal);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background: var(--gold);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--white);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-outline:hover {
+            background: var(--white);
+            color: var(--charcoal);
+            border-color: var(--white);
+            transform: translateY(-3px);
+        }
+
+        /* Scroll Animation Classes */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 1s var(--transition), transform 1s var(--transition);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ═══════════════════════════════════════════════
+           NAVBAR
+           ═══════════════════════════════════════════════ */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 30px 0;
+            transition: var(--transition);
+        }
+
+        .navbar.scrolled {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 15px 0;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
+            border-bottom: 1px solid var(--medium-gray);
+        }
+
+        .navbar .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-family: var(--font-serif);
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: var(--white);
+        }
+
+        .navbar.scrolled .logo {
+            color: var(--charcoal);
+        }
+
+        .logo span {
+            color: var(--gold);
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 40px;
+        }
+
+        .nav-link {
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: rgba(255, 255, 255, 0.75);
+            position: relative;
+            padding: 5px 0;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--white);
+        }
+
+        .navbar.scrolled .nav-link {
+            color: var(--text-secondary);
+        }
+
+        .navbar.scrolled .nav-link:hover, 
+        .navbar.scrolled .nav-link.active {
+            color: var(--charcoal);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--gold);
+            transition: var(--transition);
+        }
+
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 100%;
+        }
+
+        .nav-toggle {
+            display: none;
+            font-size: 1.5rem;
+            color: var(--white);
+            cursor: pointer;
+        }
+
+        .navbar.scrolled .nav-toggle {
+            color: var(--charcoal);
+        }
+
+        /* ═══════════════════════════════════════════════
+           HERO SECTION
+           ═══════════════════════════════════════════════ */
+        .hero {
+            height: 100vh;
+            position: relative;
+            background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.55)), 
+                        url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1920&q=80') no-repeat center center/cover;
+            display: flex;
+            align-items: center;
+            color: var(--white);
+        }
+
+        .hero-content {
+            max-width: 850px;
+        }
+
+        .hero h1 {
+            font-family: var(--font-serif);
+            font-size: clamp(2.5rem, 6vw, 4.8rem);
+            font-weight: 400;
+            line-height: 1.15;
+            margin-bottom: 25px;
+            animation: fadeInUp 1s var(--transition) forwards;
+        }
+
+        .hero p {
+            font-size: clamp(1.1rem, 2vw, 1.4rem);
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 40px;
+            max-width: 650px;
+            animation: fadeInUp 1.2s var(--transition) forwards;
+        }
+
+        .hero-btns {
+            display: flex;
+            gap: 20px;
+            animation: fadeInUp 1.4s var(--transition) forwards;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ═══════════════════════════════════════════════
+           ABOUT SECTION
+           ═══════════════════════════════════════════════ */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .about-img-box {
+            position: relative;
+        }
+
+        .about-img-main {
+            width: 90%;
+            height: 550px;
+            object-fit: cover;
+        }
+
+        .about-img-sub {
+            position: absolute;
+            bottom: -50px;
+            right: 0;
+            width: 55%;
+            height: 320px;
+            object-fit: cover;
+            border: 10px solid var(--white);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .about-text p {
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+            font-size: 1.05rem;
+        }
+
+        .about-quote {
+            font-family: var(--font-serif);
+            font-size: 1.3rem;
+            font-style: italic;
+            color: var(--gold-dark);
+            border-left: 3px solid var(--gold);
+            padding-left: 20px;
+            margin-top: 40px;
+        }
+
+        /* ═══════════════════════════════════════════════
+           SERVICES SECTION
+           ═══════════════════════════════════════════════ */
+        .services {
+            background-color: var(--off-white);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+        }
+
+        .service-card {
+            background: var(--white);
+            padding: 50px 40px;
+            border-bottom: 3px solid transparent;
+            transition: var(--transition);
+            box-shadow: var(--shadow-md);
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            border-bottom-color: var(--gold);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .service-icon {
+            font-size: 2.5rem;
+            color: var(--gold);
+            margin-bottom: 30px;
+        }
+
+        .service-card h3 {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--charcoal);
+        }
+
+        .service-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* ═══════════════════════════════════════════════
+           PORTFOLIO / FEATURED PROJECTS
+           ═══════════════════════════════════════════════ */
+        .portfolio-filters {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 50px;
+            border-bottom: 1px solid var(--medium-gray);
+            padding-bottom: 15px;
+        }
+
+        .filter-btn {
+            background: none;
+            border: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .filter-btn.active, .filter-btn:hover {
+            color: var(--charcoal);
+        }
+
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+        }
+
+        .project-card {
+            position: relative;
+            overflow: hidden;
+            height: 500px;
+        }
+
+        .project-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .project-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.2) 60%, transparent 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 40px;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .project-card:hover .project-img {
+            transform: scale(1.06);
+        }
+
+        .project-card:hover .project-overlay {
+            opacity: 1;
+        }
+
+        .project-category {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--gold);
+            margin-bottom: 10px;
+        }
+
+        .project-title {
+            font-family: var(--font-serif);
+            font-size: 1.8rem;
+            color: var(--white);
+            font-weight: 400;
+        }
+
+        /* ═══════════════════════════════════════════════
+           WHY CHOOSE US & STATISTICS
+           ═══════════════════════════════════════════════ */
+        .why-us {
+            background-color: var(--charcoal);
+            color: var(--white);
+        }
+
+        .why-us .section-title {
+            color: var(--white);
+        }
+
+        .why-us-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .why-us-features {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+        }
+
+        .feature-item h3 {
+            font-family: var(--font-sans);
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--gold);
+        }
+
+        .feature-item p {
+            color: #aaaaaa;
+            font-size: 0.95rem;
+        }
+
+        /* Stats */
+        .stats-bar {
+            background: var(--dark-charcoal);
+            padding: 60px 0;
+            border-top: 1px solid #222222;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            text-align: center;
+            gap: 40px;
+        }
+
+        .stat-number {
+            font-family: var(--font-serif);
+            font-size: 4rem;
+            color: var(--gold);
+            line-height: 1;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #cccccc;
+        }
+
+        /* ═══════════════════════════════════════════════
+           TESTIMONIALS SECTION
+           ═══════════════════════════════════════════════ */
+        .testimonials-slider {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .testimonial-item p {
+            font-family: var(--font-serif);
+            font-size: clamp(1.3rem, 3vw, 1.8rem);
+            line-height: 1.5;
+            color: var(--charcoal);
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+
+        .client-info h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--gold-dark);
+        }
+
+        .client-info span {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        /* ═══════════════════════════════════════════════
+           CONTACT SECTION
+           ═══════════════════════════════════════════════ */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 80px;
+        }
+
+        .contact-info-box {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        .info-item {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .info-item i {
+            font-size: 1.5rem;
+            color: var(--gold);
+            margin-top: 5px;
+        }
+
+        .info-item h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .info-item p {
+            color: var(--text-secondary);
+        }
+
+        .map-wrapper {
+            margin-top: 20px;
+            height: 250px;
+            filter: grayscale(1);
+            border: 1px solid var(--medium-gray);
+        }
+
+        /* Contact Form */
+        .contact-form {
+            background: var(--off-white);
+            padding: 50px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 15px 0;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid var(--medium-gray);
+            font-family: var(--font-sans);
+            font-size: 0.95rem;
+            color: var(--charcoal);
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-bottom-color: var(--gold);
+        }
+
+        textarea.form-control {
+            height: 120px;
+            resize: none;
+        }
+
+        /* ═══════════════════════════════════════════════
+           FOOTER
+           ═══════════════════════════════════════════════ */
+        .footer {
+            background: var(--dark-charcoal);
+            color: #ffffff;
+            padding: 80px 0 40px;
+            border-top: 1px solid #1a1a1a;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr;
+            gap: 60px;
+            margin-bottom: 60px;
+        }
+
+        .footer-logo {
+            font-family: var(--font-serif);
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 20px;
+        }
+
+        .footer-logo span {
+            color: var(--gold);
+        }
+
+        .footer-about p {
+            color: #888888;
+            max-width: 320px;
+        }
+
+        .footer-links h3 {
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--gold);
+            margin-bottom: 25px;
+        }
+
+        .footer-links ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .footer-links a {
+            color: #aaaaaa;
+            font-size: 0.95rem;
+        }
+
+        .footer-links a:hover {
+            color: var(--white);
+            padding-left: 5px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .social-links a {
+            width: 45px;
+            height: 45px;
+            border: 1px solid #333333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #aaaaaa;
+            transition: var(--transition);
+        }
+
+        .social-links a:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+            background: rgba(201,169,110,0.05);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #1a1a1a;
+            padding-top: 30px;
+            display: flex;
+            justify-content: space-between;
+            color: #666666;
+            font-size: 0.85rem;
+        }
+
+        /* ═══════════════════════════════════════════════
+           RESPONSIVE DESIGN (MOBILE FIRST)
+           ═══════════════════════════════════════════════ */
+        @media (max-width: 1024px) {
+            .about-grid, .services-grid, .why-us-grid, .contact-grid {
+                grid-template-columns: 1fr;
+                gap: 60px;
+            }
+            .about-img-main { width: 100%; height: 450px; }
+            .portfolio-grid { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 80%;
+                height: 100vh;
+                background: var(--dark-charcoal);
+                flex-direction: column;
+                padding: 100px 40px;
+                transition: 0.5s ease-in-out;
+            }
+            .nav-menu.active { right: 0; }
+            .nav-toggle { display: block; }
+            .navbar.scrolled .nav-toggle { color: var(--charcoal); }
+            .nav-link { color: var(--white); font-size: 1.1rem; }
+            .hero-btns { flex-direction: column; }
+            .why-us-features { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: 1fr; gap: 30px; }
+            .contact-form { padding: 30px; }
+            .footer-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ═══════════════════════════════════════════════
+       NAVBAR SECTION
+       ═══════════════════════════════════════════════ -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="#" class="logo">ATLAS<span>.</span></a>
+            <div class="nav-menu" id="navMenu">
+                <a href="#" class="nav-link active">Anasayfa</a>
+                <a href="#about" class="nav-link">Hakkımızda</a>
+                <a href="#services" class="nav-link">Hizmetler</a>
+                <a href="#portfolio" class="nav-link">Projeler</a>
+                <a href="#contact" class="nav-link">İletişim</a>
+            </div>
+            <div class="nav-toggle" id="navToggle">
+                <i class="fa-solid fa-bars"></i>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ═══════════════════════════════════════════════
+       HERO SECTION
+       ═══════════════════════════════════════════════ -->
+    <header class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <span class="section-label" style="color: var(--gold-light);">Lüks & Modern Mimari</span>
+                <h1>Hayallerinizi Modern Mimariyle Gerçeğe Dönüştürüyoruz</h1>
+                <p>Konut, villa, ticari yapı ve iç mimari projelerinde yenilikçi solutions, estetik dokunuşlar ve zamansız alanlar yaratıyoruz.</p>
+                <div class="hero-btns">
+                    <a href="#portfolio" class="btn btn-primary">Projelerimizi İnceleyin <i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="#contact" class="btn btn-outline">Teklif Alın</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ═══════════════════════════════════════════════
+       ABOUT SECTION
+       ═══════════════════════════════════════════════ -->
+    <section id="about" class="section-padding container reveal">
+        <div class="about-grid">
+            <div class="about-img-box">
+                <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80" alt="Atlas Mimarlık Ofis" class="about-img-main" />
+                <img src="https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=600&q=80" alt="Modern Tasarım Süreci" class="about-img-sub" />
+            </div>
+            <div class="about-text">
+                <span class="section-label">Biz Kimiz?</span>
+                <h2 class="section-title">Geleceğin Yaşam Alanlarını Tasarlıyoruz</h2>
+                <p>Atlas Mimarlık, kurulduğu günden bu yana estetik, işlevsellik ve sürdürülebilirlik ilkelerini bir araya getirerek üst düzey mimari projelere imza atmaktadır. Her detayı titizlikle işlenmiş lüks konutlar, modern iş merkezleri ve özgün iç mekan tasarımları ile sektörde fark yaratıyoruz.</p>
+                <p>Müşterilerimizin vizyonunu ham bir fikirden alıp, dünya standartlarında yaşayan yapılara dönüştürmek en büyük tutkumuzdur. Deneyimli ekibimizle sadece binalar değil, kalıcı sanat eserleri inşa ediyoruz.</p>
+                <div class="about-quote">
+                    "Mimarlık, zamana kazınmış kalıcı bir şiirdir."
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════
+       SERVICES SECTION
+       ═══════════════════════════════════════════════ -->
+    <section id="services" class="section-padding services">
+        <div class="container reveal">
+            <div class="section-header">
+                <span class="section-label">Uzmanlık Alanlarımız</span>
+                <h2 class="section-title">Ayrıcalıklı Hizmetler</h2>
+                <p class="section-subtitle">A'dan Z'ye tüm süreçlerde kusursuz mühendislik ve lüks estetik algısı.</p>
+            </div>
+            <div class="services-grid">
+                <!-- Card 1 -->
+                <div class="service-card">
+                    <i class="fa-solid fa-compass-drafting service-icon"></i>
+                    <h3>Mimari Tasarım</h3>
+                    <p>Modern çağın gereksinimlerine uygun, yenilikçi ve fonksiyonel yapı projeleri tasarımı.</p>
+                </div>
+                <!-- Card 2 -->
+                <div class="service-card">
+                    <i class="fa-solid fa-couch service-icon"></i>
+                    <h3>İç Mimarlık</h3>
+                    <p>Karakteri olan, konforlu, kişiselleştirilmiş ve lüks detaylarla donatılmış iç mekanlar.</p>
+                </div>
+                <!-- Card 3 -->
+                <div class="service-card">
+                    <i class="fa-solid fa-hotel service-icon"></i>
+                    <h3>Villa Projeleri</h3>
+                    <p>Doğayla bütünleşik, ultra lüks, müstakil ve modern villa konsept projeleri.</p>
+                </div>
+                <!-- Card 4 -->
+                <div class="service-card">
+                    <i class="fa-solid fa-building service-icon"></i>
+                    <h3>Ticari Yapılar</h3>
+                    <p>Şirket prestijini artıran iş merkezleri, oteller, mağazalar ve ofis kompleksleri.</p>
+                </div>
+                <!-- Card 5 -->
+                <div class="service-card">
+                    <i class="fa-solid fa-cubes service-icon"></i>
+                    <h3>3D Görselleştirme</h3>
+                    <p>Projelerin henüz yapım aşamasına gelmeden önceki fotogerçekçi 3D modelleme sunumları.</p>
+                </div>
+                <!-- Card 6 -->
+                <div class="service-card">
+                    <i class="fa-solid fa-user-tie service-icon"></i>
+                    <h3>Proje Danışmanlığı</h3>
+                    <p>Süreç yönetimi, bütçelendirme ve ruhsat aşamalarında profesyonel rehberlik.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════
+       PORTFOLIO SECTION
+       ═══════════════════════════════════════════════ -->
+    <section id="portfolio" class="section-padding container reveal">
+        <div class="section-header">
+            <span class="section-label">Portfolyo</span>
+            <h2 class="section-title">Öne Çıkan Projelerimiz</h2>
+        </div>
+        
+        <div class="portfolio-filters">
+            <button class="filter-btn active">Tüm Projeler</button>
+        </div>
+
+        <div class="portfolio-grid">
+            <!-- Project 1 -->
+            <div class="project-card">
+                <img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=800&q=80" alt="Vadi Rezidans" class="project-img" />
+                <div class="project-overlay">
+                    <span class="project-category">Villa / Konut</span>
+                    <h3 class="project-title">Elysium Lüks Vadi Villası</h3>
+                </div>
+            </div>
+            <!-- Project 2 -->
+            <div class="project-card">
+                <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80" alt="Prism Ofis Kuleleri" class="project-img" />
+                <div class="project-overlay">
+                    <span class="project-category">Ticari Yapı</span>
+                    <h3 class="project-title">Prism İş Merkezi Kuleleri</h3>
+                </div>
+            </div>
+            <!-- Project 3 -->
+            <div class="project-card">
+                <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=800&q=80" alt="Art Penthouse" class="project-img" />
+                <div class="project-overlay">
+                    <span class="project-category">İç Mimari</span>
+                    <h3 class="project-title">Art Deco Penthouse Dairesi</h3>
+                </div>
+            </div>
+            <!-- Project 4 -->
+            <div class="project-card">
+                <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80" alt="Zen Evi" class="project-img" />
+                <div class="project-overlay">
+                    <span class="project-category">Minimalist Ev</span>
+                    <h3 class="project-title">Zen Bütünleşik Sahil Konutu</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════
+       WHY CHOOSE US & STATS SECTION
+       ═══════════════════════════════════════════════ -->
+    <section class="why-us section-padding">
+        <div class="container reveal">
+            <div class="why-us-grid">
+                <div>
+                    <span class="section-label">Neden Biz?</span>
+                    <h2 class="section-title">Bizi Farklı Kılan Mimari Yaklaşımımız</h2>
+                    <p style="color: #aaaaaa; margin-top: 20px;">Sadece trendleri takip etmiyor, zamanın ötesine geçen yapılar tasarlıyoruz. Müşterilerimizin her bir projesine benzersiz bir imza atmak için buradayız.</p>
+                </div>
+                <div class="why-us-features">
+                    <div class="feature-item">
+                        <h3>Yenilikçi Tasarımlar</h3>
+                        <p>Sınırları zorlayan, özgün çizgilerle hayata geçirilen lüks vizyon.</p>
+                    </div>
+                    <div class="feature-item">
+                        <h3>Uzman Kadro</h3>
+                        <p>Uluslararası deneyime sahip ödüllü mimar ve mühendis kadrosu.</p>
+                    </div>
+                    <div class="feature-item">
+                        <h3>Zamanında Teslim</h3>
+                        <p>Planlama sadakati ile bütçe ve zaman kayıplarını sıfıra indiren disiplin.</p>
+                    </div>
+                    <div class="feature-item">
+                        <h3>Müşteri Memnuniyeti</h3>
+                        <p>Tasarım aşamasından anahtar teslimine kadar şeffaf ve kusursuz süreç.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Statistics Bar -->
+    <div class="stats-bar">
+        <div class="container stats-grid">
+            <div>
+                <div class="stat-number">150+</div>
+                <div class="stat-label">Tamamlanan Proje</div>
+            </div>
+            <div>
+                <div class="stat-number">12</div>
+                <div class="stat-label">Yıllık Deneyim</div>
+            </div>
+            <div>
+                <div class="stat-number">95%</div>
+                <div class="stat-label">Müşteri Memnuniyeti</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════
+       TESTIMONIALS SECTION
+       ═══════════════════════════════════════════════ -->
+    <section class="section-padding container reveal">
+        <div class="testimonials-slider">
+            <span class="section-label" style="text-align: center;">Müşteri Yorumları</span>
+            <div class="testimonial-item" style="margin-top: 40px;">
+                <p>"Atlas Mimarlık ile villa projemiz için çalıştık. Hayallerimizin de ötesinde, her sabah içinde uyanmaktan büyük keyif aldığımız, adeta yaşayan bir sanat eseri inşa ettiler. Profesyonellikleri için teşekkür ederiz."</p>
+                <div class="client-info">
+                    <h4>Serkan & Aylin Yılmaz</h4>
+                    <span>Yılmaz Holding / Villa Sahipleri</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════
+       CONTACT SECTION
+       ═══════════════════════════════════════════════ -->
+    <section id="contact" class="section-padding container reveal">
+        <div class="contact-grid">
+            <div class="contact-info-box">
+                <div>
+                    <span class="section-label">İletişim</span>
+                    <h2 class="section-title">Bizimle İletişime Geçin</h2>
+                    <p class="section-subtitle">Yeni projenizi birlikte planlamak için ofisimize kahveye bekleriz.</p>
+                </div>
+                
+                <div class="info-item">
+                    <i class="fa-solid fa-phone"></i>
+                    <div>
+                        <h4>Telefon</h4>
+                        <p>+90 (212) 555 01 99</p>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <i class="fa-solid fa-envelope"></i>
+                    <div>
+                        <h4>E-posta</h4>
+                        <p>info@atlasmimarlik.com</p>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <div>
+                        <h4>Adres</h4>
+                        <p>Levent Loft No:42, Büyükdere Caddesi, Şişli / İstanbul</p>
+                    </div>
+                </div>
+
+                <!-- Google Maps (Placeholder) -->
+                <div class="map-wrapper">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3008.0374187219574!2d28.99182347654763!3d41.07802871501488!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14cab6be00000001%3A0x6bcfd3bd811ea54!2sLevent%20Loft!5e0!3m2!1str!2str!4v1710000000000!5m2!1str!2str" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+            </div>
+
+            <!-- Form -->
+            <div class="contact-form">
+                <h3 class="section-title" style="font-size: 2rem; margin-bottom: 30px;">Projenizi Anlatın</h3>
+                <form action="#" method="POST" onsubmit="event.preventDefault(); alert('Mesajınız başarıyla iletildi. En kısa sürede dönüş yapılacaktır.');">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Adınız Soyadınız" required />
+                    </div>
+                    <div class="form-group">
+                        <input type="email" class="form-control" placeholder="E-posta Adresiniz" required />
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Telefon Numaranız" />
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-control" placeholder="Proje Detayları ve Mesajınız" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Mesajı Gönder</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════
+       FOOTER SECTION
+       ═══════════════════════════════════════════════ -->
+    <footer class="footer">
+        <div class="container footer-grid">
+            <div class="footer-about">
+                <div class="footer-logo">ATLAS<span>.</span></div>
+                <p>Hayallerinizi zamansız ve modern mimari yaklaşımlarla inşa eden lüks tasarım stüdyosu.</p>
+            </div>
+            <div class="footer-links">
+                <h3>Hızlı Menü</h3>
+                <ul>
+                    <li><a href="#">Anasayfa</a></li>
+                    <li><a href="#about">Hakkımızda</a></li>
+                    <li><a href="#services">Hizmetler</a></li>
+                    <li><a href="#portfolio">Projelerimiz</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h3>Sosyal Medya</h3>
+                <p style="color: #888888; margin-bottom: 20px;">Bizi dijital mecralardan takip edip güncel projelerimizi inceleyebilirsiniz.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
+                    <a href="#"><i class="fa-brands fa-pinterest-p"></i></a>
+                    <a href="#"><i class="fa-brands fa-behance"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="container footer-bottom">
+            <p>&copy; 2026 Atlas Mimarlık. Tüm Hakları Saklıdır.</p>
+            <p>Designed with luxury standards.</p>
+        </div>
+    </footer>
+
+    <!-- ═══════════════════════════════════════════════
+       JAVASCRIPT FOR INTERACTIONS
+       ═══════════════════════════════════════════════ -->
+    <script>
+        // Navbar scroll effect
+        const navbar = document.querySelector('.navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile Menu toggle
+        const navToggle = document.getElementById('navToggle');
+        const navMenu = document.getElementById('navMenu');
+        
+        navToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            const icon = navToggle.querySelector('i');
+            if(navMenu.classList.contains('active')) {
+                icon.className = 'fa-solid fa-xmark';
+            } else {
+                icon.className = 'fa-solid fa-bars';
+            }
+        });
+
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+                document.getElementById('navToggle').querySelector('i').className = 'fa-solid fa-bars';
+            });
+        });
+
+        // Intersection Observer for modern reveal animations
+        const revealElements = document.querySelectorAll('.reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        revealElements.forEach(el => observer.observe(el));
+
+        //#################################
+        document.addEventListener("DOMContentLoaded", () => {
+            const popup = document.createElement("div");
+            popup.id = "lianchez-demo-popup";
+
+            popup.innerHTML = `
+                <div class="popup-header">
+                    <span>✨ Bu Tasarımı Beğendiniz mi?</span>
+                    <button id="popup-minimize">−</button>
+                </div>
+
+                <div class="popup-content">
+                    <p>
+                        Bu demo uygun maliyetle size özel hazırlanabilir.
+                    </p>
+
+                    <p>
+                        Diğer tasarımlarımızı inceleyin veya tamamen kendi hayalinize göre yeni bir tasarım oluşturun.
+                    </p>
+
+                    <a href="https://lianchez.com/demo/demo" target="_blank" class="popup-btn">
+                        Tüm Demoları Gör
+                    </a>
+                </div>
+            `;
+
+            const style = document.createElement("style");
+
+            style.textContent = `
+                #lianchez-demo-popup{
+                    position:fixed;
+                    right:20px;
+                    bottom:20px;
+                    width:320px;
+                    max-width:calc(100vw - 30px);
+                    background:#ffffff;
+                    border-radius:16px;
+                    box-shadow:0 10px 35px rgba(0,0,0,.15);
+                    z-index:99999;
+                    overflow:hidden;
+                    animation:popupSlide .5s ease;
+                    font-family:inherit;
+                }
+
+                @keyframes popupSlide{
+                    from{
+                        transform:translateY(30px);
+                        opacity:0;
+                    }
+                    to{
+                        transform:translateY(0);
+                        opacity:1;
+                    }
+                }
+
+                #lianchez-demo-popup .popup-header{
+                    display:flex;
+                    justify-content:space-between;
+                    align-items:center;
+                    padding:12px 16px;
+                    font-weight:600;
+                    border-bottom:1px solid rgba(0,0,0,.08);
+                }
+
+                #popup-minimize{
+                    border:none;
+                    background:none;
+                    cursor:pointer;
+                    font-size:22px;
+                    line-height:1;
+                }
+
+                #lianchez-demo-popup .popup-content{
+                    padding:14px 16px;
+                }
+
+                #lianchez-demo-popup p{
+                    margin:0 0 10px;
+                    font-size:13px;
+                    line-height:1.5;
+                    opacity:.85;
+                }
+
+                .popup-btn{
+                    display:block;
+                    text-align:center;
+                    text-decoration:none;
+                    padding:10px;
+                    border-radius:10px;
+                    font-size:14px;
+                    font-weight:600;
+                    margin-top:10px;
+                    background:#111;
+                    color:#fff;
+                    transition:.2s;
+                }
+
+                .popup-btn:hover{
+                    transform:translateY(-2px);
+                }
+
+                .popup-minimized{
+                    height:52px !important;
+                }
+
+                .popup-minimized .popup-content{
+                    display:none;
+                }
+
+                @media (max-width:768px){
+                    #lianchez-demo-popup{
+                        right:12px;
+                        left:12px;
+                        width:auto;
+                        bottom:12px;
+                    }
+                }
+            `;
+
+            document.head.appendChild(style);
+            document.body.appendChild(popup);
+
+            document.getElementById("popup-minimize").addEventListener("click", () => {
+                popup.classList.toggle("popup-minimized");
+            });
+
+            popup.querySelector(".popup-btn").addEventListener("click", () => {
+                window.open("https://lianchez.com/demo/demo", "_blank");
+            });
+        });
+        
+    </script>
+</body>
+</html>

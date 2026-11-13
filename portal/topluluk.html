@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Topluluklar - Üni Portal</title>
+    <link rel="icon" type="image/png" href="/portal/fav.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        input[type="text"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="password"], input[type="tel"], textarea, select {
+            font-size: 16px !important;
+            -webkit-text-size-adjust: 100%;
+        }
+        @media (min-width: 640px) {
+            input[type="text"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="password"], input[type="tel"], textarea, select {
+                font-size: 12px !important;
+            }
+        }
+        @keyframes assistantBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
+        @keyframes assistantPulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7), 0 8px 20px rgba(0,0,0,0.4); }
+            50% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0), 0 8px 24px rgba(0,0,0,0.5); }
+        }
+        .assistant-btn { animation: assistantPulse 2.5s ease-in-out infinite; }
+        .assistant-btn:hover .assistant-icon { animation: assistantBounce 0.6s ease infinite; }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col justify-between">
+
+    <header class="bg-slate-800 border-b border-slate-700 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <a href="/portal/index.html" class="text-sm sm:text-xl font-bold bg-gradient-to-r from-blue-400 to-indigo-500 bg-clip-text text-transparent flex items-center whitespace-nowrap">
+                    <i class="fa-solid fa-graduation-cap mr-1.5 sm:mr-2"></i>Üni Portal
+                </a>
+            </div>
+            
+            <nav class="hidden md:flex items-center space-x-6 text-sm font-medium">
+                <a href="/portal/index.html" class="text-slate-300 hover:text-white transition">Ana Sayfa</a>
+                <a href="/portal/forum.html" class="px-2.5 py-1 rounded-xl bg-purple-500/15 text-purple-300 border border-purple-500/30 font-semibold hover:bg-purple-500/25 transition flex items-center space-x-1.5"><i class="fa-solid fa-comments text-purple-400 text-xs"></i><span>Forum</span></a>
+                <a href="/portal/ilanlar.html" class="text-slate-300 hover:text-white transition">İlanlar</a>
+                <a href="/portal/ogrenciler.html" class="text-slate-300 hover:text-white transition">Öğrenciler</a>
+                <a href="/portal/topluluk.html" class="text-emerald-400 transition">Topluluklar</a>
+                <a href="/portal/iletisim.html" class="text-slate-300 hover:text-white transition">İletişim</a>
+            </nav>
+
+            <div class="flex items-center space-x-2 sm:space-x-4">
+                <div id="auth-section" class="flex items-center">
+                    <button id="login-btn" onclick="googleLogin()" class="hidden flex items-center space-x-1 sm:space-x-2 bg-white text-slate-900 px-2 sm:px-3 py-1.5 rounded-lg font-semibold hover:bg-slate-100 transition shadow-sm text-[10px] sm:text-sm whitespace-nowrap">
+                        <i class="fa-brands fa-google text-red-500 text-[10px] sm:text-sm"></i>
+                        <span>Giriş Yap</span>
+                    </button>
+
+                    <div id="user-profile" class="hidden flex items-center space-x-2 sm:space-x-3 relative">
+                        <div class="flex items-center bg-slate-700 px-2 sm:px-2.5 py-1 rounded-full border border-slate-600 shadow-inner">
+                            <i class="fa-solid fa-coins text-yellow-400 mr-1 sm:mr-1.5 text-[10px] sm:text-sm"></i>
+                            <span id="user-coins" class="font-bold text-yellow-400 text-[10px] sm:text-sm">0</span>
+                        </div>
+
+                        <div class="relative cursor-pointer" onclick="toggleUserDropdown(event)">
+                            <img id="user-avatar" src="" alt="Profil" class="w-8 h-8 sm:w-9 sm:h-9 rounded-full border-2 border-slate-600 hover:border-blue-400 transition object-cover">
+                            <span id="notification-badge" class="hidden absolute -bottom-0.5 -right-0.5 bg-red-500 text-white text-[10px] font-extrabold min-w-[16px] h-4 px-1 rounded-full flex items-center justify-center border-2 border-slate-800 animate-pulse">0</span>
+                        </div>
+
+                        <div id="user-dropdown" class="hidden absolute right-0 top-12 w-56 bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl py-2 z-50 transition-all duration-200">
+                            <div class="px-4 py-2 border-b border-slate-700">
+                                <p id="dropdown-user-name" class="text-xs font-bold text-white truncate">Kullanıcı Adı</p>
+                                <p id="dropdown-user-email" class="text-[11px] text-slate-400 truncate">email@domain.com</p>
+                            </div>
+
+                            <a href="/portal/profil.html" class="block w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center space-x-2 transition">
+                                <i class="fa-solid fa-user text-indigo-400"></i>
+                                <span>Profilim</span>
+                            </a>
+                            <a href="/portal/magaza.html" class="block w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center space-x-2 transition">
+                                <i class="fa-solid fa-store text-yellow-400"></i>
+                                <span>Mağaza</span>
+                            </a>
+                            <button onclick="openDailyStreakModal()" class="w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center justify-between transition">
+                                <span class="flex items-center space-x-2">
+                                    <i class="fa-solid fa-calendar-check text-amber-400"></i>
+                                    <span>Günlük Ödül</span>
+                                    <span id="streak-unclaimed-dot" class="hidden w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+                                </span>
+                                <span id="streak-dropdown-badge" class="bg-amber-500/20 text-amber-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-amber-500/30">0 Gün</span>
+                            </button>
+                            
+                            <button onclick="openNotificationsModal()" class="w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center justify-between transition">
+                                <span class="flex items-center space-x-2">
+                                    <i class="fa-solid fa-bell text-blue-400"></i>
+                                    <span>Bildirimler</span>
+                                </span>
+                                <span id="dropdown-notif-count" class="bg-slate-700 text-slate-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-slate-600">0</span>
+                            </button>
+
+                            <div class="border-t border-slate-700/80 my-1"></div>
+
+                            <button onclick="googleLogout()" class="w-full text-left px-4 py-2 text-xs text-red-400 hover:bg-red-500/10 flex items-center space-x-2 transition font-semibold">
+                                <i class="fa-solid fa-right-from-bracket"></i>
+                                <span>Çıkış Yap</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <button onclick="toggleMobileMenu()" class="md:hidden text-slate-300 hover:text-white focus:outline-none text-xl p-1.5">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="hidden md:hidden bg-slate-800 border-t border-slate-700 px-4 pt-3 pb-4 space-y-2">
+            <a href="/portal/index.html" class="block px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-700 transition">Ana Sayfa</a>
+            <a href="/portal/forum.html" class="block px-3 py-2 rounded-lg text-sm font-semibold text-purple-300 bg-purple-500/10 border border-purple-500/20 hover:bg-purple-500/20 transition flex items-center"><i class="fa-solid fa-comments text-purple-400 mr-2"></i>Forum</a>
+            <a href="/portal/ilanlar.html" class="block px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-700 transition">İlanlar</a>
+            <a href="/portal/ogrenciler.html" class="block px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-700 transition">Öğrenciler</a>
+            <a href="/portal/topluluk.html" class="block px-3 py-2 rounded-lg text-sm font-medium text-emerald-400 bg-slate-700/50">Topluluklar</a>
+            <a href="/portal/iletisim.html" class="block px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-700 transition">İletişim</a>
+        </div>
+    </header>
+
+    <div id="toast-container" class="fixed bottom-5 right-5 z-[200] space-y-2 max-w-sm"></div>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-grow w-full">
+        <!-- BAŞLIK & EYLEM BUTONLARI -->
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+            <div>
+                <h1 class="text-3xl font-extrabold tracking-tight flex items-center bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">
+                    <i class="fa-solid fa-users-rectangle text-emerald-400 mr-3"></i>Kulüpler & Etkinlik Vitrini
+                </h1>
+                <p class="text-slate-400 text-sm mt-1">Üniversitelerin aktif topluluklarını incele, yaklaşan etkinlikleri kaçırma!</p>
+            </div>
+            <div class="flex flex-wrap items-center gap-3">
+                <button onclick="openEventApplicationModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 hover:border-slate-600 px-4 py-2.5 rounded-xl font-bold text-xs flex items-center space-x-2 transition">
+                    <i class="fa-solid fa-calendar-plus text-purple-400"></i>
+                    <span>Etkinlik Bildir</span>
+                </button>
+                <button onclick="openClubApplicationModal()" class="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white px-5 py-2.5 rounded-xl font-bold shadow-lg shadow-emerald-500/20 text-xs flex items-center space-x-2 transition">
+                    <i class="fa-solid fa-plus-circle"></i>
+                    <span>Topluluğunu Ekle</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- YAKLAŞAN ETKİNLİKLER VİTRİNİ -->
+        <div class="mb-12">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg font-bold text-white flex items-center">
+                    <i class="fa-solid fa-calendar-days text-purple-400 mr-2"></i>Yaklaşan Kulüp Etkinlikleri
+                </h2>
+                <span id="events-count-badge" class="text-xs bg-purple-500/20 text-purple-300 font-bold px-2.5 py-0.5 rounded-full border border-purple-500/30">0 Etkinlik</span>
+            </div>
+            <div id="events-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="text-center py-6 text-slate-500 col-span-full">Etkinlikler yükleniyor...</div>
+            </div>
+        </div>
+
+        <!-- TOPLULUKLAR VİTRİNİ -->
+        <div>
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg font-bold text-white flex items-center">
+                    <i class="fa-solid fa-compass text-emerald-400 mr-2"></i>Tüm Topluluklar
+                </h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="communities-container">
+                <div class="text-center py-10 text-slate-500 col-span-full">Topluluklar yükleniyor...</div>
+            </div>
+        </div>
+    </main>
+
+    <!-- KULÜP DETAY & ETKİNLİKLER MODALI (Site İçi Vitrin) -->
+    <div id="club-detail-modal" class="fixed inset-0 bg-black/75 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div class="bg-slate-800 border border-slate-700 rounded-3xl max-w-lg w-full p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-4 border-b border-slate-700 pb-3">
+                <div class="flex items-center space-x-3">
+                    <div id="modal-club-logo" class="w-12 h-12 rounded-2xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center text-xl font-bold border border-emerald-500/30 overflow-hidden flex-shrink-0">
+                        <i class="fa-solid fa-users"></i>
+                    </div>
+                    <div>
+                        <h3 id="modal-club-name" class="text-base font-bold text-white">Topluluk Adı</h3>
+                        <p id="modal-club-uni" class="text-xs text-slate-400">Üniversite</p>
+                    </div>
+                </div>
+                <button onclick="closeClubDetailModal()" class="text-slate-400 hover:text-white p-1">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <div class="space-y-4">
+                <div>
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Topluluk Hakkında</h4>
+                    <p id="modal-club-desc" class="text-xs text-slate-300 leading-relaxed bg-slate-900/60 p-3.5 rounded-xl border border-slate-700/60"></p>
+                </div>
+
+                <div id="modal-club-goals-container">
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Hedeflerimiz & Faaliyetlerimiz</h4>
+                    <p id="modal-club-goals" class="text-xs text-slate-300 leading-relaxed bg-slate-900/60 p-3.5 rounded-xl border border-slate-700/60"></p>
+                </div>
+
+                <div>
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Etiketler</h4>
+                    <div id="modal-club-tags" class="flex flex-wrap gap-1.5"></div>
+                </div>
+
+                <div class="pt-3 border-t border-slate-700 flex items-center justify-between">
+                    <a id="modal-club-link" href="#" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-xl text-xs font-bold transition flex items-center space-x-2">
+                        <span>Topluluk Sayfasına Git</span>
+                        <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                    </a>
+                    <button onclick="closeClubDetailModal()" class="bg-slate-700 hover:bg-slate-600 text-slate-300 px-4 py-2.5 rounded-xl text-xs font-semibold transition">Kapat</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOPLULUK BAŞVURU MODALI -->
+    <div id="club-app-modal" class="fixed inset-0 bg-black/75 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div class="bg-slate-800 border border-slate-700 rounded-3xl max-w-lg w-full p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-4 border-b border-slate-700 pb-3">
+                <h3 class="text-lg font-bold text-white flex items-center">
+                    <i class="fa-solid fa-plus-circle text-emerald-400 mr-2"></i>Topluluk Başvuru Formu
+                </h3>
+                <button onclick="closeClubApplicationModal()" class="text-slate-400 hover:text-white p-1">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <form id="club-app-form" onsubmit="submitClubApplication(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Topluluk / Kulüp Adı</label>
+                    <input type="text" id="app-club-name" required maxlength="80" placeholder="Örn: Bilgisayar Mühendisliği Topluluğu" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Üniversite</label>
+                        <input type="text" id="app-club-uni" required autocomplete="off" maxlength="65" placeholder="Bağlı olduğu üniversite (Örn: Hacettepe Üniversitesi)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Kategori</label>
+                        <select id="app-club-cat" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+                            <option value="Teknoloji & Yazılım">Teknoloji & Yazılım</option>
+                            <option value="Kültür & Sanat">Kültür & Sanat</option>
+                            <option value="Spor & Macera">Spor & Macera</option>
+                            <option value="Girişimcilik & Kariyer">Girişimcilik & Kariyer</option>
+                            <option value="Sosyal Sorumluluk">Sosyal Sorumluluk</option>
+                            <option value="Diğer">Diğer</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Logo URL (İsteğe Bağlı)</label>
+                    <input type="url" id="app-club-logo" placeholder="https://... logo görseli bağlantısı" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Resmi Bağlantı / Instagram / Web Sitesi</label>
+                    <input type="url" id="app-club-link" required placeholder="https://instagram.com/kulup veya web adresi" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Kısa Açıklama</label>
+                    <textarea id="app-club-desc" rows="3" required maxlength="400" placeholder="Kulübün genel tanıtımı..." class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-emerald-500"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Hedefler & Faaliyetler (Detaylı)</label>
+                    <textarea id="app-club-goals" rows="3" maxlength="800" placeholder="Dönem boyunca planlanan faaliyetler ve amaçlar..." class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-emerald-500"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Etiketler (Virgülle ayırın)</label>
+                    <input type="text" id="app-club-tags" placeholder="Örn: Yazılım, Yapay Zeka, Hackathon" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+                </div>
+
+                <div class="p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-[11px] text-emerald-300">
+                    <i class="fa-solid fa-circle-check mr-1"></i>Başvurunuz incelendikten sonra onaylandığında topluluk vitrininde yerini alacaktır.
+                </div>
+
+                <div class="flex justify-end space-x-3 pt-2">
+                    <button type="button" onclick="closeClubApplicationModal()" class="bg-slate-700 hover:bg-slate-600 text-slate-300 px-4 py-2 rounded-xl text-xs font-semibold transition">İptal</button>
+                    <button type="submit" id="submit-club-btn" class="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2 rounded-xl text-xs font-bold transition flex items-center space-x-1.5">
+                        <i class="fa-solid fa-paper-plane"></i>
+                        <span>Başvuruyu Gönder</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ETKİNLİK ÖNER MODALI -->
+    <div id="event-app-modal" class="fixed inset-0 bg-black/75 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div class="bg-slate-800 border border-slate-700 rounded-3xl max-w-lg w-full p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-4 border-b border-slate-700 pb-3">
+                <h3 class="text-lg font-bold text-white flex items-center">
+                    <i class="fa-solid fa-calendar-plus text-purple-400 mr-2"></i>Etkinlik Bildir
+                </h3>
+                <button onclick="closeEventApplicationModal()" class="text-slate-400 hover:text-white p-1">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <form id="event-app-form" onsubmit="submitEventApplication(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">İlgili Topluluk / Düzenleyen</label>
+                    <select id="app-event-club" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-purple-500">
+                        <option value="">Topluluk seçiniz...</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Etkinlik Başlığı</label>
+                    <input type="text" id="app-event-title" required maxlength="80" placeholder="Örn: Yapay Zeka Zirvesi 2026" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-purple-500">
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Tarih ve Saat</label>
+                        <input type="datetime-local" id="app-event-date" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-purple-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Konum / Salon</label>
+                        <input type="text" id="app-event-location" required placeholder="Örn: Kültür Kongre Merkezi Salon A" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-purple-500">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Etkinlik Detayları & Açıklama</label>
+                    <textarea id="app-event-desc" rows="3" required maxlength="600" placeholder="Etkinlik programı, konuşmacılar veya katılım şartları..." class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-purple-500"></textarea>
+                </div>
+
+                <div class="flex justify-end space-x-3 pt-2">
+                    <button type="button" onclick="closeEventApplicationModal()" class="bg-slate-700 hover:bg-slate-600 text-slate-300 px-4 py-2 rounded-xl text-xs font-semibold transition">İptal</button>
+                    <button type="submit" id="submit-event-btn" class="bg-purple-600 hover:bg-purple-700 text-white px-5 py-2 rounded-xl text-xs font-bold transition flex items-center space-x-1.5">
+                        <i class="fa-solid fa-paper-plane"></i>
+                        <span>Etkinliği Gönder</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="notifications-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div class="bg-slate-800 border border-slate-700 rounded-2xl max-w-md w-full p-6 shadow-2xl relative">
+            <div class="flex justify-between items-center mb-4 border-b border-slate-700 pb-3">
+                <h3 class="text-lg font-bold text-white flex items-center">
+                    <i class="fa-solid fa-bell text-blue-400 mr-2"></i>Bildirimler
+                </h3>
+                <button onclick="closeNotificationsModal()" class="text-slate-400 hover:text-white p-1">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <div id="notifications-list" class="space-y-3 max-h-80 overflow-y-auto pr-1">
+                <div class="text-center py-8 text-slate-500 text-xs">Henüz bir bildiriminiz yok.</div>
+            </div>
+            <div class="mt-5 pt-3 border-t border-slate-700 flex justify-end">
+                <button onclick="closeNotificationsModal()" class="bg-slate-700 hover:bg-slate-600 text-slate-200 px-4 py-1.5 rounded-xl text-xs font-semibold transition">
+                    Kapat
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SABİT YÖNLENDİRME ASİSTANI (Topluluklar) -->
+    <div class="fixed bottom-4 right-4 z-[150]" id="assistant-widget">
+        <div class="relative">
+            <button onclick="closeAssistantWidget()" title="Kapat" class="absolute -top-2 -right-2 z-10 w-6 h-6 bg-slate-800 hover:bg-red-600 text-slate-300 hover:text-white rounded-full flex items-center justify-center text-[10px] border border-slate-600 hover:border-red-500 shadow-lg transition">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <a href="/portal/iletisim.html" class="assistant-btn group flex items-center gap-2 bg-gradient-to-r from-emerald-600 to-teal-600 text-white pl-3 pr-4 py-2.5 rounded-full shadow-2xl border border-emerald-400/40 hover:from-emerald-500 hover:to-teal-500 transition-all">
+                <span class="assistant-icon w-8 h-8 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
+                    <i class="fa-solid fa-users text-sm"></i>
+                </span>
+                <span class="text-left leading-tight">
+                    <span class="block text-[10px] font-extrabold tracking-wide">TOPLULUK MU EKLEMEK İSTİYORSUN?</span>
+                    <span class="block text-[9px] font-medium opacity-90">İletişim formundan bize ilet, hemen ekleyelim!</span>
+                </span>
+                <i class="fa-solid fa-arrow-right text-[10px] opacity-80 group-hover:translate-x-0.5 transition"></i>
+            </a>
+        </div>
+    </div>
+
+    <footer class="relative bg-gradient-to-b from-slate-800 to-slate-900 border-t border-slate-700 mt-auto z-10">
+        <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-purple-500/40 to-transparent"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-graduation-cap text-blue-400 text-lg"></i>
+                    <span class="text-sm font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">Üni Portal</span>
+                </div>
+                <p class="text-xs text-slate-500 text-center">
+                    &copy; <span class="current-year"></span> Üni Portal — Tüm hakları saklıdır.
+                </p>
+                <p class="text-xs text-slate-500">
+                    Powered by <a href="https://lianchez.com" target="_blank" class="text-blue-400 hover:text-blue-300 font-semibold transition">lianchez.com</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+    <script>
+        document.querySelectorAll('.current-year').forEach(el => el.innerText = new Date().getFullYear());
+        function closeAssistantWidget() {
+            const w = document.getElementById('assistant-widget');
+            if (w) w.style.display = 'none';
+        }
+    </script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, collection, getDocs, getCountFromServer, onSnapshot, deleteDoc, updateDoc, addDoc, query, where, orderBy, limit, arrayUnion, arrayRemove, increment } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getUniversities, validateAndFormatUniversity, escapeHtml, injectCoreStyles, initDailyStreak } from '/portal/portal-core.js';
+        injectCoreStyles();
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAYTaUdfhWAngCSZQjAyFtP_IRubX_Gw4c",
+            authDomain: "lianchezportal.firebaseapp.com",
+            projectId: "lianchezportal",
+            storageBucket: "lianchezportal.firebasestorage.app",
+            messagingSenderId: "283567832811",
+            appId: "1:283567832811:web:cff0981ba1fa305a0dc8ae",
+            measurementId: "G-8KPN5EG95S"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const provider = new GoogleAuthProvider();
+
+        let currentUser = null;
+        let notificationsUnsubscribe = null;
+                let communitiesLoadedOnce = false;
+        let allCommunitiesCache = [];
+        let allEventsCache = [];
+        let currentUserData = null;
+
+        function normalizeCommunitiesWithUser(list) {
+            const userComms = (currentUserData && Array.isArray(currentUserData.communities)) ? currentUserData.communities : [];
+            return (list || []).map(comm => {
+                let count = typeof comm.memberCount === 'number' && !isNaN(comm.memberCount)
+                    ? Math.max(0, comm.memberCount)
+                    : 0;
+                if (userComms.includes(comm.id) && count === 0) {
+                    count = 1;
+                }
+                comm.memberCount = count;
+                return comm;
+            });
+        }
+
+        function persistCommunitiesCache() {
+            try {
+                const payload = JSON.stringify({
+                    time: Date.now(),
+                    communities: allCommunitiesCache,
+                    events: allEventsCache
+                });
+                localStorage.setItem('up_communities_v1', payload);
+                localStorage.setItem('up_showcase_v1', payload);
+            } catch (e) {}
+        }
+
+        async function loadCommunities() {
+            const commContainer = document.getElementById('communities-container');
+            const eventsContainer = document.getElementById('events-container');
+            const eventsBadge = document.getElementById('events-count-badge');
+
+            // 10 dakikalık localStorage önbelleği (up_communities_v1 / up_showcase_v1)
+            const CACHE_KEY = 'up_communities_v1';
+            const CACHE_TTL = 10 * 60 * 1000;
+            let cachedEvents = null;
+            try {
+                const raw = localStorage.getItem(CACHE_KEY) || localStorage.getItem('up_showcase_v1');
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    if (parsed && (Date.now() - parsed.time < CACHE_TTL) && Array.isArray(parsed.communities) && parsed.communities.length > 0) {
+                        allCommunitiesCache = normalizeCommunitiesWithUser(parsed.communities).sort((a, b) => (b.memberCount || 0) - (a.memberCount || 0));
+                        allEventsCache = parsed.events || [];
+                        renderCommunities(allCommunitiesCache);
+                        renderEvents(allEventsCache);
+                        populateEventClubSelect(allCommunitiesCache);
+                        return;
+                    }
+                    if (parsed && Array.isArray(parsed.events) && (Date.now() - parsed.time < CACHE_TTL)) {
+                        cachedEvents = parsed.events;
+                    }
+                }
+            } catch(e){}
+
+            try {
+                // 1. Firestore communities koleksiyonundaki dokümanları oku
+                let commDocs = [];
+                try {
+                    const commSnap = await getDocs(query(collection(db, "communities"), limit(50)));
+                    commSnap.forEach(d => {
+                        const data = d.data() || {};
+                        const memberCount = (typeof data.memberCount === 'number' && !isNaN(data.memberCount))
+                            ? Math.max(0, data.memberCount)
+                            : 0;
+                        commDocs.push({
+                            id: d.id,
+                            ...data,
+                            memberCount
+                        });
+                    });
+                } catch (commErr) {
+                    console.warn("Topluluklar sorgulanırken hata:", commErr);
+                }
+
+                allCommunitiesCache = normalizeCommunitiesWithUser(commDocs).sort((a, b) => (b.memberCount || 0) - (a.memberCount || 0));
+
+                // 2. Onaylı etkinlikleri çek (where status == approved, limit 40)
+                if (cachedEvents) {
+                    allEventsCache = cachedEvents;
+                } else {
+                    let eventsData = [];
+                    try {
+                        const evSnap = await getDocs(query(collection(db, "events"), where("status", "==", "approved"), limit(40)));
+                        const now = Date.now();
+                        evSnap.forEach(d => {
+                            const ev = d.data();
+                            const timeMs = ev.date?.toDate ? ev.date.toDate().getTime() : (new Date(ev.date).getTime() || 0);
+                            // Sadece gelecek veya bugün gerçekleşecek etkinlikler
+                            if (timeMs >= now - 24 * 60 * 60 * 1000) {
+                                eventsData.push({ id: d.id, ...ev, timeMs });
+                            }
+                        });
+                        eventsData.sort((a, b) => a.timeMs - b.timeMs);
+                    } catch(evErr) {
+                        console.warn("Etkinlikler çekilemedi:", evErr);
+                    }
+                    allEventsCache = eventsData;
+                }
+
+                persistCommunitiesCache();
+
+                renderCommunities(allCommunitiesCache);
+                renderEvents(allEventsCache);
+                populateEventClubSelect(allCommunitiesCache);
+            } catch(e) {
+                console.error("Vitrin verisi yüklenemedi:", e);
+                commContainer.innerHTML = '<div class="text-center py-10 text-red-400 col-span-full">Topluluklar yüklenirken bir hata oluştu.</div>';
+            }
+        }
+        const loadShowcaseData = loadCommunities;
+        window.loadCommunities = loadCommunities;
+        window.loadShowcaseData = loadShowcaseData;
+
+        function renderCommunities(list) {
+            const container = document.getElementById('communities-container');
+            if (!container) return;
+
+            if (list.length === 0) {
+                container.innerHTML = '<div class="text-center py-10 text-slate-500 col-span-full">Şu anda kayıtlı topluluk bulunmuyor.</div>';
+                return;
+            }
+
+            const normalizedList = normalizeCommunitiesWithUser(list);
+            const sortedList = [...normalizedList].sort((a, b) => (b.memberCount || 0) - (a.memberCount || 0));
+            const userComms = (currentUserData && Array.isArray(currentUserData.communities)) ? currentUserData.communities : [];
+
+            container.innerHTML = sortedList.map(comm => {
+                const logoHtml = comm.logo ? `<img src="${escapeHtml(comm.logo)}" class="w-12 h-12 rounded-2xl object-cover border border-emerald-500/30 flex-shrink-0" onerror="this.onerror=null;this.parentElement.innerHTML='<div class=\\'w-12 h-12 bg-emerald-500/15 text-emerald-400 rounded-2xl flex items-center justify-center text-xl font-bold flex-shrink-0\\'><i class=\\'fa-solid fa-users\\'></i></div>'">` : `<div class="w-12 h-12 bg-emerald-500/15 text-emerald-400 rounded-2xl flex items-center justify-center text-xl font-bold flex-shrink-0"><i class="fa-solid fa-users"></i></div>`;
+                const tagsHtml = (comm.tags && Array.isArray(comm.tags)) ? comm.tags.slice(0, 3).map(t => `<span class="text-[9px] bg-slate-900 text-slate-300 px-2 py-0.5 rounded border border-slate-700/80">${escapeHtml(t)}</span>`).join('') : '';
+                const isMember = userComms.includes(comm.id);
+                const btnHtml = isMember
+                    ? `<button id="comm-join-btn-${comm.id}" onclick="toggleCommunityMembership('${comm.id}')" class="bg-slate-700 hover:bg-red-600/80 text-slate-200 hover:text-white border border-slate-600 hover:border-red-500/50 px-3.5 py-2 rounded-xl font-bold transition text-xs flex items-center space-x-1.5">
+                           <i class="fa-solid fa-user-check text-emerald-400"></i>
+                           <span>Üyesin (Ayrıl)</span>
+                       </button>`
+                    : `<button id="comm-join-btn-${comm.id}" onclick="toggleCommunityMembership('${comm.id}')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-xl font-bold transition text-xs flex items-center space-x-1.5 shadow-md shadow-emerald-600/20">
+                           <i class="fa-solid fa-user-plus"></i>
+                           <span>Katıl</span>
+                       </button>`;
+
+                return `
+                    <div class="bg-slate-800 border border-slate-700 p-6 rounded-2xl hover:border-emerald-500/50 transition flex flex-col justify-between group up-card-glow">
+                        <div>
+                            <div class="flex items-start space-x-3 mb-4">
+                                ${logoHtml}
+                                <div class="flex-1 min-w-0">
+                                    <span class="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">${escapeHtml(comm.category || 'Öğrenci Kulübü')}</span>
+                                    <h2 class="text-base font-bold text-white mt-1 group-hover:text-emerald-300 transition truncate">${escapeHtml(comm.name)}</h2>
+                                    <p class="text-[11px] text-slate-400"><i class="fa-solid fa-building-columns mr-1 text-slate-500"></i>${escapeHtml(comm.university || 'Üniversite Kulübü')}</p>
+                                </div>
+                            </div>
+                            <p class="text-xs text-slate-300 mb-4 leading-relaxed line-clamp-3">${escapeHtml(comm.description || '')}</p>
+                            <div class="flex flex-wrap gap-1 mb-4">${tagsHtml}</div>
+                        </div>
+
+                        <div class="flex items-center justify-between pt-4 border-t border-slate-700/60 gap-2">
+                            <span class="text-xs text-slate-400 font-semibold flex items-center"><i class="fa-solid fa-users text-emerald-400 mr-1.5 text-xs"></i><strong class="text-white mr-1" id="comm-count-${comm.id}">${Math.max(0, comm.memberCount || 0)}</strong> Üye</span>
+                            <div class="flex items-center space-x-2">
+                                <button onclick="openClubDetailModal('${comm.id}')" class="bg-slate-700/60 hover:bg-slate-700 text-slate-200 px-3.5 py-2 rounded-xl font-semibold transition text-xs flex items-center space-x-1.5 border border-slate-600/50">
+                                    <i class="fa-solid fa-circle-info text-emerald-400"></i>
+                                    <span>Detay</span>
+                                </button>
+                                ${btnHtml}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        const membershipPending = new Set();
+
+        window.toggleCommunityMembership = async (commId) => {
+            if (!currentUser) {
+                showToast("Topluluğa katılmak için lütfen önce giriş yapın.", "warning");
+                googleLogin();
+                return;
+            }
+            if (membershipPending.has(commId)) return;
+            membershipPending.add(commId);
+
+            if (!currentUserData) {
+                currentUserData = { communities: [] };
+            }
+            if (!Array.isArray(currentUserData.communities)) {
+                currentUserData.communities = [];
+            }
+
+            const comm = allCommunitiesCache.find(c => c.id === commId);
+            const wasMember = currentUserData.communities.includes(commId);
+            const delta = wasMember ? -1 : 1;
+
+            // Optimistic UI güncellemesi
+            if (wasMember) {
+                currentUserData.communities = currentUserData.communities.filter(id => id !== commId);
+            } else {
+                currentUserData.communities.push(commId);
+            }
+
+            if (comm) {
+                comm.memberCount = Math.max(0, (comm.memberCount || 0) + delta);
+            }
+
+            const countEl = document.getElementById(`comm-count-${commId}`);
+            if (countEl && comm) {
+                countEl.innerText = comm.memberCount;
+            }
+
+            const btnEl = document.getElementById(`comm-join-btn-${commId}`);
+            if (btnEl) {
+                if (!wasMember) {
+                    btnEl.className = "bg-slate-700 hover:bg-red-600/80 text-slate-200 hover:text-white border border-slate-600 hover:border-red-500/50 px-3.5 py-2 rounded-xl font-bold transition text-xs flex items-center space-x-1.5";
+                    btnEl.innerHTML = `<i class="fa-solid fa-user-check text-emerald-400"></i><span>Üyesin (Ayrıl)</span>`;
+                } else {
+                    btnEl.className = "bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-xl font-bold transition text-xs flex items-center space-x-1.5 shadow-md shadow-emerald-600/20";
+                    btnEl.innerHTML = `<i class="fa-solid fa-user-plus"></i><span>Katıl</span>`;
+                }
+            }
+
+            try {
+                const userRef = doc(db, "users", currentUser.uid);
+                const commRef = doc(db, "communities", commId);
+
+                await Promise.all([
+                    setDoc(userRef, {
+                        communities: wasMember ? arrayRemove(commId) : arrayUnion(commId)
+                    }, { merge: true }),
+                    setDoc(commRef, {
+                        memberCount: increment(delta)
+                    }, { merge: true })
+                ]);
+
+                try {
+                    localStorage.removeItem('up_communities_v1');
+                    localStorage.removeItem('up_showcase_v1');
+                } catch(e) {}
+                showToast(wasMember ? `${comm?.name || 'Topluluk'} üyeliğinden ayrıldınız.` : `${comm?.name || 'Topluluk'} ailesine katıldınız! 🎉`, wasMember ? "info" : "success");
+            } catch (err) {
+                console.error("Topluluk üyeliği güncellenemedi:", err);
+                // Rollback Optimistic UI
+                if (wasMember) {
+                    if (!currentUserData.communities.includes(commId)) currentUserData.communities.push(commId);
+                } else {
+                    currentUserData.communities = currentUserData.communities.filter(id => id !== commId);
+                }
+                if (comm) {
+                    comm.memberCount = Math.max(0, (comm.memberCount || 0) - delta);
+                    if (countEl) countEl.innerText = comm.memberCount;
+                }
+                renderCommunities(allCommunitiesCache);
+                showToast("İşlem sırasında bir hata oluştu, lütfen tekrar deneyin.", "error");
+            } finally {
+                membershipPending.delete(commId);
+            }
+        };
+
+        function renderEvents(list) {
+            const container = document.getElementById('events-container');
+            const badge = document.getElementById('events-count-badge');
+            if (badge) badge.innerText = `${list.length} Etkinlik`;
+            if (!container) return;
+
+            if (list.length === 0) {
+                container.innerHTML = '<div class="text-center py-6 text-slate-500 col-span-full bg-slate-800/40 border border-slate-700/50 rounded-2xl"><i class="fa-solid fa-calendar-xmark text-2xl text-slate-600 block mb-1"></i>Şu anda planlanmış aktif kulüp etkinliği bulunmuyor.</div>';
+                return;
+            }
+
+            const months = ['Oca', 'Şub', 'Mar', 'Nis', 'May', 'Haz', 'Tem', 'Ağu', 'Eyl', 'Eki', 'Kas', 'Ara'];
+
+            container.innerHTML = list.map(ev => {
+                const d = new Date(ev.timeMs);
+                const day = d.getDate();
+                const month = months[d.getMonth()] || '';
+                const timeStr = d.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
+
+                return `
+                    <div class="bg-slate-800 border border-slate-700/80 p-4 rounded-2xl hover:border-purple-500/50 transition flex items-center space-x-4 up-card-glow">
+                        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500/20 to-indigo-500/20 border border-purple-500/30 flex flex-col items-center justify-center flex-shrink-0 text-center">
+                            <span class="text-lg font-black text-purple-300 leading-none">${day}</span>
+                            <span class="text-[10px] font-bold uppercase text-purple-400 tracking-wider">${month}</span>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <span class="text-[10px] text-purple-400 font-bold uppercase tracking-wide truncate block">${escapeHtml(ev.communityName || 'Kulüp')}</span>
+                            <h3 class="text-xs font-bold text-white truncate">${escapeHtml(ev.title)}</h3>
+                            <div class="flex items-center space-x-3 text-[10px] text-slate-400 mt-1">
+                                <span><i class="fa-solid fa-clock mr-1 text-slate-500"></i>${timeStr}</span>
+                                <span class="truncate"><i class="fa-solid fa-location-dot mr-1 text-slate-500"></i>${escapeHtml(ev.location || 'Kampüs')}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        window.openClubDetailModal = (clubId) => {
+            const club = allCommunitiesCache.find(c => c.id === clubId);
+            if (!club) return;
+
+            document.getElementById('modal-club-name').innerText = club.name;
+            document.getElementById('modal-club-uni').innerText = club.university || 'Üniversite Kulübü';
+            document.getElementById('modal-club-desc').innerText = club.description || 'Açıklama belirtilmemiş.';
+            
+            const goalsBox = document.getElementById('modal-club-goals-container');
+            if (club.goals) {
+                goalsBox.classList.remove('hidden');
+                document.getElementById('modal-club-goals').innerText = club.goals;
+            } else {
+                goalsBox.classList.add('hidden');
+            }
+
+            const tagsContainer = document.getElementById('modal-club-tags');
+            if (club.tags && Array.isArray(club.tags) && club.tags.length > 0) {
+                tagsContainer.innerHTML = club.tags.map(t => `<span class="text-[10px] bg-slate-900 text-slate-300 px-2.5 py-1 rounded-lg border border-slate-700">${escapeHtml(t)}</span>`).join('');
+            } else {
+                tagsContainer.innerHTML = '<span class="text-[10px] text-slate-500 italic">Etiket yok</span>';
+            }
+
+            const linkBtn = document.getElementById('modal-club-link');
+            linkBtn.href = club.link || '#';
+
+            const logoContainer = document.getElementById('modal-club-logo');
+            if (club.logo) {
+                logoContainer.innerHTML = `<img src="${escapeHtml(club.logo)}" class="w-full h-full object-cover">`;
+            } else {
+                logoContainer.innerHTML = '<i class="fa-solid fa-users"></i>';
+            }
+
+            const modal = document.getElementById('club-detail-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        };
+
+        window.closeClubDetailModal = () => {
+            const modal = document.getElementById('club-detail-modal');
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+        };
+
+        window.openClubApplicationModal = async () => {
+            if (!currentUser) {
+                alert("Topluluk başvurusu yapabilmek için lütfen önce giriş yapın.");
+                googleLogin();
+                return;
+            }
+            if (currentUserData?.university) {
+                const uniInput = document.getElementById('app-club-uni');
+                if (uniInput && !uniInput.value) uniInput.value = currentUserData.university;
+            }
+
+            const modal = document.getElementById('club-app-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        };
+
+        window.closeClubApplicationModal = () => {
+            const modal = document.getElementById('club-app-modal');
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+        };
+
+        window.submitClubApplication = async (e) => {
+            e.preventDefault();
+            if (!currentUser) return;
+
+            const name = document.getElementById('app-club-name').value.trim();
+            const rawUniversity = document.getElementById('app-club-uni').value;
+            const category = document.getElementById('app-club-cat').value;
+            const logo = document.getElementById('app-club-logo').value.trim();
+            const link = document.getElementById('app-club-link').value.trim();
+            const description = document.getElementById('app-club-desc').value.trim();
+            const goals = document.getElementById('app-club-goals').value.trim();
+            const tagsRaw = document.getElementById('app-club-tags').value;
+            const tags = tagsRaw.split(',').map(t => t.trim()).filter(Boolean);
+
+            const result = validateAndFormatUniversity(rawUniversity);
+            if (!result.isValid) {
+                showToast(result.message, 'warning');
+                return;
+            }
+            const university = result.formatted;
+
+            const btn = document.getElementById('submit-club-btn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1.5"></i>Kontrol ediliyor...';
+
+            try {
+                const pendingSnap = await getDocs(query(
+                    collection(db, "communityApplications"),
+                    where("applicantUid", "==", currentUser.uid),
+                    where("status", "==", "pending")
+                ));
+                if (!pendingSnap.empty) {
+                    alert("İncelenmekte olan bir topluluk başvurunuz bulunmaktadır. Başvurunuz sonuçlanana kadar yeni bir başvuru gönderemezsiniz.");
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fa-solid fa-paper-plane mr-1.5"></i>Başvuruyu Gönder';
+                    return;
+                }
+            } catch(checkErr) {
+                console.warn("Bekleyen başvuru kontrolü:", checkErr);
+            }
+
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1.5"></i>İletiliyor...';
+
+            try {
+                await addDoc(collection(db, "communityApplications"), {
+                    name,
+                    university,
+                    category,
+                    logo,
+                    link,
+                    description,
+                    goals,
+                    tags,
+                    applicantUid: currentUser.uid,
+                    applicantName: currentUserData?.displayName || currentUserData?.name || currentUser.displayName || 'Öğrenci',
+                    status: 'pending',
+                    createdAt: new Date()
+                });
+
+                localStorage.setItem('up_last_club_app', Date.now().toString());
+                closeClubApplicationModal();
+                alert("Topluluk başvurunuz incelenmek üzere yönetime iletildi!");
+                document.getElementById('club-app-form').reset();
+            } catch(err) {
+                console.error("Başvuru gönderilemedi:", err);
+                alert("Başvuru gönderilirken bir hata oluştu.");
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-paper-plane mr-1.5"></i>Başvuruyu Gönder';
+            }
+        };
+
+        function populateEventClubSelect(clubs) {
+            const sel = document.getElementById('app-event-club');
+            if (!sel) return;
+            sel.innerHTML = '<option value="">Topluluk seçiniz...</option>' + clubs.map(c => `<option value="${c.id}" data-name="${escapeHtml(c.name)}">${escapeHtml(c.name)} (${escapeHtml(c.university || 'Genel')})</option>`).join('');
+        }
+
+        window.openEventApplicationModal = () => {
+            if (!currentUser) {
+                alert("Etkinlik bildirmek için lütfen önce giriş yapın.");
+                googleLogin();
+                return;
+            }
+            populateEventClubSelect(allCommunitiesCache);
+            const modal = document.getElementById('event-app-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        };
+
+        window.closeEventApplicationModal = () => {
+            const modal = document.getElementById('event-app-modal');
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+        };
+
+        window.submitEventApplication = async (e) => {
+            e.preventDefault();
+            if (!currentUser) return;
+
+            const btn = document.getElementById('submit-event-btn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1.5"></i>Kontrol ediliyor...';
+
+            try {
+                const pendingEvSnap = await getDocs(query(
+                    collection(db, "events"),
+                    where("submittedBy", "==", currentUser.uid),
+                    where("status", "==", "pending")
+                ));
+                if (!pendingEvSnap.empty) {
+                    alert("İncelenmekte olan bir etkinlik bildiriminiz bulunmaktadır. Sonuçlanana kadar yeni bir etkinlik bildiremezsiniz.");
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fa-solid fa-paper-plane mr-1.5"></i>Etkinliği Gönder';
+                    return;
+                }
+            } catch(checkErr) {
+                console.warn("Bekleyen etkinlik kontrolü:", checkErr);
+            }
+
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1.5"></i>İletiliyor...';
+
+            const clubSel = document.getElementById('app-event-club');
+            const communityId = clubSel.value;
+            const communityName = clubSel.options[clubSel.selectedIndex]?.dataset.name || '';
+            const title = document.getElementById('app-event-title').value.trim();
+            const dateVal = document.getElementById('app-event-date').value;
+            const location = document.getElementById('app-event-location').value.trim();
+            const description = document.getElementById('app-event-desc').value.trim();
+
+            try {
+                await addDoc(collection(db, "events"), {
+                    communityId,
+                    communityName,
+                    title,
+                    date: new Date(dateVal),
+                    location,
+                    description,
+                    submittedBy: currentUser.uid,
+                    submittedByName: currentUserData?.displayName || currentUserData?.name || currentUser.displayName || 'Öğrenci',
+                    status: 'pending',
+                    createdAt: new Date()
+                });
+
+                closeEventApplicationModal();
+                alert("Etkinlik öneriniz incelenmek üzere yönetime iletildi!");
+                document.getElementById('event-app-form').reset();
+            } catch(err) {
+                console.error("Etkinlik gönderilemedi:", err);
+                alert("Etkinlik gönderilirken bir hata oluştu.");
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-paper-plane mr-1.5"></i>Etkinliği Gönder';
+            }
+        };
+
+        window.googleLogin = () => signInWithPopup(auth, provider);
+        window.googleLogout = () => signOut(auth);
+        window.toggleMobileMenu = () => document.getElementById('mobile-menu').classList.toggle('hidden');
+        window.toggleUserDropdown = (e) => { e.stopPropagation(); document.getElementById('user-dropdown').classList.toggle('hidden'); };
+        document.addEventListener('click', () => { const d = document.getElementById('user-dropdown'); if(d) d.classList.add('hidden'); });
+
+        // ===== KOTA OPTİMİZASYONU: Liste sadece modal açılınca yüklensin =====
+        window.openNotificationsModal = async () => {
+            document.getElementById('user-dropdown').classList.add('hidden');
+            const modal = document.getElementById('notifications-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            
+            if (!currentUser) return;
+            const listContainer = document.getElementById('notifications-list');
+            listContainer.innerHTML = '<div class="text-center py-8 text-slate-500 text-xs">Yükleniyor...</div>';
+            
+            try {
+                // Sadece son 20 bildirimi çek (limit ile)
+                const snap = await getDocs(query(
+                    collection(db, "users", currentUser.uid, "notifications"),
+                    orderBy("createdAt", "desc"),
+                    limit(20)
+                ));
+                if (snap.empty) {
+                    listContainer.innerHTML = '<div class="text-center py-8 text-slate-500 text-xs">Henüz bir bildiriminiz yok.</div>';
+                    return;
+                }
+                let itemsHTML = "";
+                snap.forEach((docSnap) => {
+                    const notif = docSnap.data();
+                    const notifId = docSnap.id;
+                    const safeLink = (notif.link || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+                    itemsHTML += `
+                        <div class="notif-item p-3 bg-slate-900/60 hover:bg-slate-700/50 border border-slate-700/70 rounded-xl flex items-start justify-between gap-3 transition group">
+                            <div class="flex-1 cursor-pointer" onclick="handleNotificationClick('${notifId}', '${safeLink}')">
+                                <p class="text-xs text-slate-200 font-medium group-hover:text-blue-400 transition">${notif.message || 'Bildirim'}</p>
+                                ${notif.link ? `<span class="text-[10px] text-blue-400 underline mt-1 inline-block"><i class="fa-solid fa-arrow-up-right-from-square mr-1"></i>Bağlantıya Git</span>` : ''}
+                            </div>
+                            <button onclick="deleteNotification(event, '${notifId}')" title="Bildirimi Sil" class="text-slate-500 hover:text-red-400 p-1 text-xs transition flex-shrink-0">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        </div>
+                    `;
+                });
+                listContainer.innerHTML = itemsHTML;
+            } catch(e) {
+                console.error(e);
+                listContainer.innerHTML = '<div class="text-center py-8 text-red-400 text-xs">Bildirimler yüklenemedi.</div>';
+            }
+        };
+        window.closeNotificationsModal = () => { document.getElementById('notifications-modal').classList.remove('flex'); document.getElementById('notifications-modal').classList.add('hidden'); };
+
+        window.handleNotificationClick = async (notifId, link) => {
+            if (currentUser && notifId) {
+                try { await updateDoc(doc(db, "users", currentUser.uid, "notifications", notifId), { read: true }); } catch(e) {}
+            }
+            if (link) {
+                if (link.startsWith('http')) {
+                    window.open(link, '_blank');
+                } else {
+                    window.location.href = link;
+                }
+            }
+        };
+
+        window.deleteNotification = async (e, notifId) => {
+            e.stopPropagation();
+            if (!currentUser || !notifId) return;
+            
+            // 1. DOM'dan hemen kaldır (kullanıcı anında görsün)
+            const btn = e.currentTarget;
+            const notifItem = btn.closest('.notif-item');
+            if (notifItem) {
+                notifItem.style.transition = 'opacity 0.2s, transform 0.2s';
+                notifItem.style.opacity = '0';
+                notifItem.style.transform = 'translateX(20px)';
+                setTimeout(() => notifItem.remove(), 200);
+            }
+            
+            // 2. Firebase'den sil (arka planda)
+            try {
+                await deleteDoc(doc(db, "users", currentUser.uid, "notifications", notifId));
+            } catch (err) {
+                console.error("Bildirim silinirken hata:", err);
+                // Hata olursa element geri gelsin (opsiyonel)
+            }
+        };
+
+        // ===== KOTA OPTİMİZASYONU: onSnapshot yerine tek seferlik sayım =====
+        async function listenNotifications(uid) {
+            // Sadece okunmamış sayısını al (1 okuma, tüm dokümanları çekmez)
+            try {
+                const countSnap = await getCountFromServer(
+                    query(collection(db, "users", uid, "notifications"), where("read", "==", false))
+                );
+                const unreadCount = countSnap.data().count;
+                const badge = document.getElementById('notification-badge');
+                const dropdownCount = document.getElementById('dropdown-notif-count');
+                if (unreadCount > 0) {
+                    badge.innerText = unreadCount;
+                    badge.classList.remove('hidden');
+                } else {
+                    badge.classList.add('hidden');
+                }
+                if (dropdownCount) dropdownCount.innerText = unreadCount;
+            } catch(e) { console.error("Bildirim sayısı alınamadı:", e); }
+        }
+
+        onAuthStateChanged(auth, async (user) => {
+            currentUser = user;
+            const loginBtn = document.getElementById('login-btn');
+            const userProfile = document.getElementById('user-profile');
+            const userAvatar = document.getElementById('user-avatar');
+            const userCoins = document.getElementById('user-coins');
+            const dropdownName = document.getElementById('dropdown-user-name');
+            const dropdownEmail = document.getElementById('dropdown-user-email');
+
+            if (user) {
+                loginBtn.classList.add('hidden');
+                userProfile.classList.remove('hidden');
+                userAvatar.src = user.photoURL;
+                dropdownName.innerText = user.displayName || "Kullanıcı";
+                dropdownEmail.innerText = user.email || "";
+
+                const userRef = doc(db, "users", user.uid);
+                const userSnap = await getDoc(userRef);
+
+                if (!userSnap.exists()) {
+                    const newUserObj = {
+                        uid: user.uid,
+                        name: user.displayName || "Öğrenci",
+                        email: user.email || "",
+                        photoURL: user.photoURL || "",
+                        coins: 10,
+                        role: "user",
+                        communities: [],
+                        createdAt: new Date()
+                    };
+                    await setDoc(userRef, newUserObj);
+                    currentUserData = newUserObj;
+                    userCoins.innerText = "10";
+                    initDailyStreak(db, user.uid, currentUserData);
+
+                    try {
+                        await addDoc(collection(db, "users", user.uid, "notifications"), {
+                            message: `Hoş geldin ${user.displayName || 'öğrenci'}! 🎉 Üni Portal'a katıldığın için teşekkürler. Forumda konu açarak +5 Coin kazanabilirsin!`,
+                            link: "/portal/forum.html",
+                            read: false,
+                            createdAt: new Date()
+                        });
+                    } catch (notifErr) {
+                        console.error("Hoş geldin bildirimi gönderilemedi:", notifErr);
+                    }
+                } else {
+                    const userData = userSnap.data();
+                    currentUserData = userData;
+                    userCoins.innerText = userData.coins || 0;
+                    if (dropdownName) dropdownName.innerText = userData.displayName || userData.name || user.displayName || "Kullanıcı";
+                    initDailyStreak(db, user.uid, currentUserData);
+                }
+
+                listenNotifications(user.uid);
+            } else {
+                currentUserData = null;
+                loginBtn.classList.remove('hidden');
+                userProfile.classList.add('hidden');
+                if (notificationsUnsubscribe) notificationsUnsubscribe();
+                initDailyStreak(db, null, null);
+            }
+            if (!communitiesLoadedOnce) {
+                communitiesLoadedOnce = true;
+                loadCommunities();
+            } else if (allCommunitiesCache.length > 0) {
+                allCommunitiesCache = normalizeCommunitiesWithUser(allCommunitiesCache);
+                persistCommunitiesCache();
+                renderCommunities(allCommunitiesCache);
+            }
+        });
+
+        window.showToast = (message, type = 'info') => {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+            const colors = { success: 'bg-emerald-600 border-emerald-500', error: 'bg-red-600 border-red-500', warning: 'bg-red-600 border-red-500', info: 'bg-slate-700 border-slate-600' };
+            const icons = { success: 'fa-circle-check', error: 'fa-circle-exclamation', warning: 'fa-triangle-exclamation', info: 'fa-circle-info' };
+            const toast = document.createElement('div');
+            toast.className = `${colors[type] || colors.info} border text-white px-4 py-3 rounded-xl shadow-2xl flex items-center justify-between gap-3 text-xs font-semibold transition-all duration-300 opacity-0 translate-x-full min-w-[250px]`;
+            toast.innerHTML = `<span class="flex items-center space-x-2"><i class="fa-solid ${icons[type] || icons.info}"></i><span>${escapeHtml(message)}</span></span><button onclick="this.parentElement.remove()" class="text-white/70 hover:text-white transition"><i class="fa-solid fa-xmark"></i></button>`;
+            container.appendChild(toast);
+            requestAnimationFrame(() => toast.classList.remove('opacity-0', 'translate-x-full'));
+            setTimeout(() => { toast.classList.add('opacity-0', 'translate-x-full'); setTimeout(() => toast.remove(), 300); }, 3500);
+        };
+
+        async function loadPublicCommunities() {
+            const container = document.getElementById('communities-container');
+            try {
+                const snapshot = await getDocs(query(collection(db, "communities"), orderBy("createdAt", "desc"), limit(20)));
+                if (snapshot.empty) {
+                    container.innerHTML = '<div class="text-center py-10 text-slate-500 col-span-full">Şu anda kayıtlı topluluk bulunmuyor.</div>';
+                    return;
+                }
+
+                container.innerHTML = "";
+                snapshot.forEach(docSnap => {
+                    const comm = docSnap.data();
+                    let tagsHTML = "";
+                    if (comm.tags && Array.isArray(comm.tags)) {
+                        comm.tags.forEach(t => {
+                            tagsHTML += `<span class="text-xs bg-slate-900/60 text-slate-300 px-2.5 py-1 rounded-lg border border-slate-700">${t}</span>`;
+                        });
+                    }
+
+                    container.innerHTML += `
+                        <div class="bg-slate-800 border border-slate-700 rounded-2xl p-6 flex flex-col justify-between hover:border-emerald-500/50 transition shadow-lg group">
+                            <div>
+                                <div class="flex items-center justify-between mb-4">
+                                    <div class="w-12 h-12 bg-emerald-500/10 text-emerald-400 rounded-xl flex items-center justify-center text-xl font-bold group-hover:scale-110 transition">
+                                        <i class="fa-solid fa-users"></i>
+                                    </div>
+                                    <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Aktif Kulüp</span>
+                                </div>
+                                <h2 class="text-xl font-bold text-white mb-2">${comm.name}</h2>
+                                <p class="text-slate-300 text-sm mb-4 leading-relaxed">${comm.description}</p>
+                                <div class="flex flex-wrap gap-2 mb-6">${tagsHTML}</div>
+                            </div>
+                            <div class="pt-4 border-t border-slate-700/60">
+                                <a href="${comm.link || '#'}" target="_blank" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-2.5 rounded-xl font-semibold transition text-xs flex items-center justify-center space-x-1.5 shadow-md">
+                                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                    <span>Topluluğa Katıl / İlana Git</span>
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                });
+            } catch(e) {
+                console.error(e);
+                container.innerHTML = '<div class="text-center py-10 text-red-400 col-span-full">Topluluklar yüklenirken bir hata oluştu.</div>';
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,1569 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aura Beauty & Aesthetics | Güzelliğinize Profesyonel Dokunuş</title>
+    <meta name="description" content="Cilt bakımından lazer epilasyona, estetik uygulamalardan profesyonel güzellik hizmetlerine kadar kendinizi özel hissedin.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- ROOT & VARIABLES --- */
+        :root {
+            --bg-white: #FFFFFF;
+            --bg-beige: #FDFBF7;
+            --rose-gold: #D4A373; /* Luxury warm accent */
+            --rose-gold-light: #E9D8A6;
+            --text-dark: #1A1A1A;
+            --text-muted: #5A5A5A;
+            --gray-light: #F4F1EA;
+            --glass-bg: rgba(255, 255, 255, 0.75);
+            --glass-border: rgba(212, 163, 115, 0.2);
+            --font-serif: 'Cormorant Garamond', serif;
+            --font-sans: 'Montserrat', sans-serif;
+            --transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        /* --- BASE STYLES --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--bg-white);
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: var(--font-serif);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: var(--transition);
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        input, select, textarea {
+            font-family: var(--font-sans);
+            outline: none;
+        }
+
+        /* --- UTILITIES & LAYOUT --- */
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .section-padding {
+            padding: 80px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            color: var(--text-dark);
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .section-header h2::after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 1px;
+            background-color: var(--rose-gold);
+            margin: 15px auto 0;
+        }
+
+        .section-header p {
+            font-size: 1rem;
+            color: var(--text-muted);
+            font-weight: 300;
+        }
+
+        /* --- BUTTONS --- */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px 28px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border-radius: 0;
+            transition: var(--transition);
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+
+        .btn-primary {
+            background-color: var(--text-dark);
+            color: var(--bg-white);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--rose-gold);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--text-dark);
+            border-color: var(--rose-gold);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--rose-gold);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* --- NAVIGATION --- */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background-color: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--glass-border);
+            transition: var(--transition);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 80px;
+        }
+
+        .logo {
+            font-family: var(--font-serif);
+            font-size: 1.8rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            color: var(--text-dark);
+        }
+
+        .logo span {
+            color: var(--rose-gold);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-dark);
+        }
+
+        .nav-links a:hover {
+            color: var(--rose-gold);
+        }
+
+        .burger {
+            display: none;
+            cursor: pointer;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .burger div {
+            width: 25px;
+            height: 2px;
+            background-color: var(--text-dark);
+            transition: var(--transition);
+        }
+
+        /* --- HERO SECTION --- */
+        #hero {
+            min-height: 100vh;
+            background: linear-gradient(rgba(26, 26, 26, 0.3), rgba(26, 26, 26, 0.4)), 
+                        url('https://images.unsplash.com/photo-1560750588-73207b1ef5b8?auto=format&fit=crop&w=1920&q=80') no-repeat center center/cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding-top: 80px;
+            color: white;
+        }
+
+        .hero-content {
+            max-width: 850px;
+            padding: 0 20px;
+            animation: fadeIn 1.2s ease-out;
+        }
+
+        .hero-content h1 {
+            font-size: 4rem;
+            font-weight: 400;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            color: #FFFFFF;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            font-family: var(--font-sans);
+            font-weight: 300;
+            margin-bottom: 40px;
+            color: #F4F1EA;
+        }
+
+        .hero-btns {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .hero-btns .btn-secondary {
+            color: white;
+            border-color: white;
+        }
+
+        .hero-btns .btn-secondary:hover {
+            background-color: var(--rose-gold);
+            border-color: var(--rose-gold);
+        }
+
+        /* --- SERVICES SECTION --- */
+        #services {
+            background-color: var(--bg-beige);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .service-card {
+            background-color: var(--bg-white);
+            padding: 40px 30px;
+            border: 1px solid #EAE6DF;
+            text-align: center;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--rose-gold);
+            box-shadow: 0 10px 30px rgba(212, 163, 115, 0.1);
+        }
+
+        .service-icon {
+            font-size: 2.5rem;
+            color: var(--rose-gold);
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        .service-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--text-dark);
+        }
+
+        .service-card p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            font-weight: 300;
+        }
+
+        /* --- WHY CHOOSE US --- */
+        .why-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 30px;
+        }
+
+        .why-card {
+            padding: 30px;
+            background: var(--bg-beige);
+            border-left: 3px solid var(--rose-gold);
+        }
+
+        .why-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+        }
+
+        .why-card p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            font-weight: 300;
+        }
+
+        /* --- GALLERY (BEFORE & AFTER) --- */
+        #gallery {
+            background-color: var(--bg-beige);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+        }
+
+        .gallery-item {
+            background: var(--bg-white);
+            border: 1px solid #EAE6DF;
+            padding: 15px;
+        }
+
+        .ba-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        .ba-side {
+            flex: 1;
+            position: relative;
+        }
+
+        .ba-side img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .ba-label {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background-color: rgba(0,0,0,0.6);
+            color: white;
+            padding: 3px 8px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .gallery-item h4 {
+            margin-top: 15px;
+            text-align: center;
+            font-size: 1.2rem;
+        }
+
+        /* --- STATISTICS SECTION --- */
+        #stats {
+            background-color: var(--text-dark);
+            color: white;
+            text-align: center;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+        }
+
+        .stat-item h2 {
+            font-size: 3.5rem;
+            color: var(--rose-gold);
+            font-family: var(--font-sans);
+            font-weight: 300;
+            margin-bottom: 5px;
+        }
+
+        .stat-item p {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #C8C8C8;
+        }
+
+        /* --- TEAM SECTION --- */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 30px;
+        }
+
+        .team-card {
+            background: var(--bg-white);
+            border: 1px solid #EAE6DF;
+            overflow: hidden;
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .team-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .team-img {
+            height: 350px;
+            overflow: hidden;
+            background-color: var(--gray-light);
+        }
+
+        .team-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .team-card:hover .team-img img {
+            scale: 1.05;
+        }
+
+        .team-info {
+            padding: 25px 20px;
+        }
+
+        .team-info h3 {
+            font-size: 1.4rem;
+            margin-bottom: 5px;
+        }
+
+        .team-info p.role {
+            color: var(--rose-gold);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .team-info p.exp {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        /* --- PACKAGES SECTION --- */
+        #packages {
+            background-color: var(--bg-beige);
+        }
+
+        .packages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .package-card {
+            background: var(--bg-white);
+            border: 1px solid #EAE6DF;
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .package-card.vip {
+            border: 1px solid var(--rose-gold);
+            box-shadow: 0 10px 30px rgba(212, 163, 115, 0.05);
+        }
+
+        .package-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--rose-gold);
+            color: white;
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .package-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+
+        .package-features {
+            list-style: none;
+            margin: 30px 0;
+            text-align: left;
+        }
+
+        .package-features li {
+            font-size: 0.95rem;
+            padding: 10px 0;
+            border-bottom: 1px solid #F4F1EA;
+            color: var(--text-muted);
+        }
+
+        .package-features li::before {
+            content: '✓';
+            color: var(--rose-gold);
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        /* --- TESTIMONIALS --- */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .review-card {
+            background: var(--bg-white);
+            border: 1px solid #EAE6DF;
+            padding: 40px 30px;
+            position: relative;
+        }
+
+        .review-card::before {
+            content: '“';
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            font-family: var(--font-serif);
+            font-size: 5rem;
+            color: rgba(212, 163, 115, 0.15);
+            line-height: 1;
+        }
+
+        .stars {
+            color: var(--rose-gold);
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .review-card p {
+            font-size: 1rem;
+            font-style: italic;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+
+        .review-card h4 {
+            font-family: var(--font-sans);
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* --- FAQ SECTION --- */
+        #faq {
+            background-color: var(--bg-beige);
+        }
+
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            background: var(--bg-white);
+            border: 1px solid #EAE6DF;
+            margin-bottom: 15px;
+        }
+
+        .faq-trigger {
+            width: 100%;
+            padding: 22px 30px;
+            text-align: left;
+            background: none;
+            border: none;
+            font-family: var(--font-serif);
+            font-size: 1.3rem;
+            color: var(--text-dark);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-icon {
+            font-family: var(--font-sans);
+            font-size: 1.2rem;
+            font-weight: 300;
+            color: var(--rose-gold);
+            transition: var(--transition);
+        }
+
+        .faq-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            padding: 0 30px;
+        }
+
+        .faq-content p {
+            padding-bottom: 22px;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .faq-item.active .faq-content {
+            max-height: 200px;
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(45deg);
+        }
+
+        /* --- APPOINTMENT SECTION --- */
+        .booking-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            background: var(--bg-white);
+            border: 1px solid #EAE6DF;
+        }
+
+        .booking-info {
+            background: linear-gradient(rgba(26, 26, 26, 0.4), rgba(26, 26, 26, 0.6)), 
+                        url('https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?auto=format&fit=crop&w=1000&q=80') no-repeat center center/cover;
+            padding: 60px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .booking-info h3 {
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+        }
+
+        .booking-form {
+            padding: 60px;
+            background-color: var(--bg-white);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #EAE6DF;
+            background-color: var(--bg-beige);
+            font-size: 0.95rem;
+            color: var(--text-dark);
+            transition: var(--transition);
+            border-radius: 0;
+        }
+
+        .form-control:focus {
+            border-color: var(--rose-gold);
+            background-color: white;
+        }
+
+        /* --- CONTACT SECTION --- */
+        #contact {
+            background-color: var(--bg-beige);
+            padding-bottom: 120px;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 50px;
+        }
+
+        .contact-details {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .contact-item h4 {
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+            color: var(--text-dark);
+        }
+
+        .contact-item p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .contact-item a:hover {
+            color: var(--rose-gold);
+        }
+
+        .map-placeholder {
+            width: 100%;
+            height: 100%;
+            min-height: 350px;
+            background-color: var(--gray-light);
+            border: 1px solid #EAE6DF;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background-color: var(--text-dark);
+            color: white;
+            padding: 40px 0 110px 0; /* Extra bottom padding for mobile sticky elements */
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .footer-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .footer-logo {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            letter-spacing: 1px;
+        }
+
+        .footer-logo span {
+            color: var(--rose-gold);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 20px;
+            list-style: none;
+        }
+
+        .social-links a {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #C8C8C8;
+        }
+
+        .social-links a:hover {
+            color: var(--rose-gold);
+        }
+
+        .copyright-text {
+            font-size: 0.85rem;
+            color: #8A8A8A;
+            width: 100%;
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        /* Premium Studio Signature Styling */
+        .agency-signature {
+            display: inline-block;
+            color: #A0A0A0;
+            text-decoration: none;
+            font-weight: 400;
+            letter-spacing: 1.5px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            transition: var(--transition);
+            position: relative;
+            padding-bottom: 2px;
+            margin-top: 10px;
+        }
+
+        .agency-signature::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            transform: scaleX(0);
+            height: 1px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--rose-gold);
+            transform-origin: bottom right;
+            transition: transform 0.4s ease-out;
+        }
+
+        .agency-signature:hover {
+            color: var(--bg-white);
+        }
+
+        .agency-signature:hover::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+
+        /* --- MOBILE UTILITIES --- */
+        .floating-whatsapp {
+            position: fixed;
+            bottom: 85px;
+            right: 20px;
+            background-color: #25D366;
+            color: white;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 998;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .sticky-mobile-bar {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--bg-white);
+            border-top: 1px solid var(--glass-border);
+            z-index: 999;
+            box-shadow: 0 -4px 15px rgba(0,0,0,0.05);
+        }
+
+        .sticky-mobile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .sticky-btn {
+            text-align: center;
+            padding: 16px 0;
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .sticky-call {
+            background-color: var(--gray-light);
+            color: var(--text-dark);
+        }
+
+        .sticky-book {
+            background-color: var(--rose-gold);
+            color: white;
+        }
+
+        /* --- ANIMATIONS --- */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- RESPONSIVE MEDIA QUERIES --- */
+        @media (max-width: 992px) {
+            .hero-content h1 { font-size: 3rem; }
+            .booking-wrapper { grid-template-columns: 1fr; }
+            .booking-info { padding: 40px; }
+            .booking-form { padding: 40px; }
+            .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+        }
+
+        @media (max-width: 768px) {
+            .section-padding { padding: 60px 0; }
+            .section-header h2 { font-size: 2rem; }
+            .nav-links {
+                position: fixed;
+                top: 80px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 80px);
+                background-color: var(--bg-white);
+                flex-direction: column;
+                align-items: center;
+                padding-top: 50px;
+                transition: var(--transition);
+                z-index: 1000;
+            }
+            .nav-links.active { left: 0; }
+            .burger { display: flex; }
+            .burger.toggle .line1 { transform: rotate(-45deg) translate(-5px, 6px); }
+            .burger.toggle .line2 { opacity: 0; }
+            .burger.toggle .line3 { transform: rotate(45deg) translate(-5px, -6px); }
+            .hero-content h1 { font-size: 2.2rem; }
+            .hero-content p { font-size: 1rem; }
+            .hero-btns { flex-direction: column; gap: 10px; }
+            .sticky-mobile-bar { display: block; }
+            .footer-container { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sticky-mobile-bar">
+        <div class="sticky-mobile-grid">
+            <a href="tel:+902421234567" class="sticky-btn sticky-call">Hemen Ara</a>
+            <a href="#appointment" class="sticky-btn sticky-book">Randevu Al</a>
+        </div>
+    </div>
+
+    <a href="https://wa.me/905301234567" class="floating-whatsapp" target="_blank" aria-label="WhatsApp">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-top:4px"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+    </a>
+
+    <header>
+        <div class="container nav-container">
+            <a href="#" class="logo">AURA<span>.</span></a>
+            <ul class="nav-links">
+                <li><a href="#hero">Ana Sayfa</a></li>
+                <li><a href="#services">Hizmetlerimiz</a></li>
+                <li><a href="#why-choose">Neden Biz?</a></li>
+                <li><a href="#gallery">Değişim</a></li>
+                <li><a href="#packages">Paketler</a></li>
+                <li><a href="#faq">S.S.S.</a></li>
+                <li><a href="#contact">İletişim</a></li>
+            </ul>
+            <div class="burger">
+                <div class="line1"></div>
+                <div class="line2"></div>
+                <div class="line3"></div>
+            </div>
+        </div>
+    </header>
+
+    <section id="hero">
+        <div class="hero-content">
+            <h1>Güzelliğinize Profesyonel Dokunuş</h1>
+            <p>Cilt bakımından lazer epilasyona, estetik uygulamalardan profesyonel güzellik hizmetlerine kadar kendinizi özel hissedin.</p>
+            <div class="hero-btns">
+                <a href="#appointment" class="btn btn-primary">Ücretsiz Danışmanlık</a>
+                <a href="#appointment" class="btn btn-secondary">Randevu Oluştur</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="services" class="section-padding">
+        <div class="container">
+            <div class="section-header">
+                <h2>Özel Hizmetlerimiz</h2>
+                <p>En yüksek standartlarda, modern ekipmanlar ve uzman kadromuzla sunulan ayrıcalıklı çözümler.</p>
+            </div>
+            <div class="services-grid">
+                <div class="service-card">
+                    <span class="service-icon">✨</span>
+                    <h3>Lazer Epilasyon</h3>
+                    <p>Son teknoloji cihazlarla, her cilt tipine uygun kalıcı ve konforlu pürüzsüzlük çözümleri.</p>
+                </div>
+                <div class="service-card">
+                    <span class="service-icon">🌸</span>
+                    <h3>Cilt Bakımı</h3>
+                    <p>Cildinizin ihtiyacı olan nem, vitamin ve mineralleri geri kazandıran lüks bakım ritüelleri.</p>
+                </div>
+                <div class="service-card">
+                    <span class="service-icon">💧</span>
+                    <h3>Hydrafacial</h3>
+                    <p>Tek seansta derinlemesine temizlik, soyma, yenileme ve antioksidan koruma sağlayan ödüllü sistem.</p>
+                </div>
+                <div class="service-card">
+                    <span class="service-icon">💎</span>
+                    <h3>Bölgesel İncelme</h3>
+                    <p>Vücut hatlarınızı şekillendiren, selülit karşıtı gelişmiş zayıflama ve sıkılaşma teknolojileri.</p>
+                </div>
+                <div class="service-card">
+                    <span class="service-icon">👁️</span>
+                    <h3>Kaş & Kirpik Tasarımı</h3>
+                    <p>Bakışlarınıza derinlik ve anlam katan mikroblading, kaş laminasyonu ve ipek kirpik uygulamaları.</p>
+                </div>
+                <div class="service-card">
+                    <span class="service-icon">💄</span>
+                    <h3>Profesyonel Makyaj</h3>
+                    <p>Özel günlerinizde doğal güzelliğinizi ön plana çıkaran yüksek kaliteli kalıcı makyaj tasarımları.</p>
+                </div>
+                <div class="service-card">
+                    <span class="service-icon">🧪</span>
+                    <h3>Medikal Cilt Bakımı</h3>
+                    <p>Uzmanlar kontrolünde, tamamen cildinizin yapısına ve problemlerine yönelik klinik bakımlar.</p>
+                </div>
+                <div class="service-card">
+                    <span class="service-icon">⏳</span>
+                    <h3>Anti-Aging Uygulamaları</h3>
+                    <p>Zamana meydan okuyan, ince çizgileri hafifleten ve cildi gençleştiren premium terapiler.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="why-choose" class="section-padding">
+        <div class="container">
+            <div class="section-header">
+                <h2>Neden Aura Beauty?</h2>
+                <p>Bizim için her misafirimiz benzersizdir. Sizi en üst düzey memnuniyetle uğurlamak ana vizyonumuzdur.</p>
+            </div>
+            <div class="why-grid">
+                <div class="why-card">
+                    <h3>Uzman Kadro</h3>
+                    <p>Alanında sertifikalı, sektörü ve trendleri yakından takip eden uzman estetisyenler.</p>
+                </div>
+                <div class="why-card">
+                    <h3>Son Teknoloji Cihazlar</h3>
+                    <p>FDA onaylı, güvenilirliği ve etkisi klinik testlerle kanıtlanmış modern teknolojik altyapı.</p>
+                </div>
+                <div class="why-card">
+                    <h3>Hijyenik Ortam</h3>
+                    <p>Avrupa standartlarında sterilizasyon protokolleri uygulanan lüks ve temiz alanlar.</p>
+                </div>
+                <div class="why-card">
+                    <h3>Kişiye Özel Uygulamalar</h3>
+                    <p>Ezbere çözümler yerine, tamamen sizin analiz sonuçlarınıza göre kurgulanan özel kürler.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="gallery" class="section-padding">
+        <div class="container">
+            <div class="section-header">
+                <h2>Değişim Formülleri</h2>
+                <p>Merkezimizde gerçekleştirilen uygulamaların gerçek ve gözle görülür ilham verici sonuçları.</p>
+            </div>
+            <div class="gallery-grid">
+                <div class="gallery-item">
+                    <div class="ba-container">
+                        <div class="ba-side">
+                            <img src="https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?auto=format&fit=crop&w=400&q=80" alt="Önce">
+                            <span class="ba-label">Önce</span>
+                        </div>
+                        <div class="ba-side">
+                            <img src="https://images.unsplash.com/photo-1522337360788-8b13edd793be?auto=format&fit=crop&w=400&q=80" alt="Sonra">
+                            <span class="ba-label">Sonra</span>
+                        </div>
+                    </div>
+                    <h4>Lazer Epilasyon & Cilt Yenileme</h4>
+                </div>
+                <div class="gallery-item">
+                    <div class="ba-container">
+                        <div class="ba-side">
+                            <img src="https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=400&q=80" alt="Önce">
+                            <span class="ba-label">Önce</span>
+                        </div>
+                        <div class="ba-side">
+                            <img src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=400&q=80" alt="Sonra">
+                            <span class="ba-label">Sonra</span>
+                        </div>
+                    </div>
+                    <h4>Medikal Hydrafacial Bakımı</h4>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="stats" class="section-padding">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <h2 class="counter" data-target="12000">0</h2>
+                    <p>Mutlu Müşteri</p>
+                </div>
+                <div class="stat-item">
+                    <h2><span class="counter" data-target="8">0</span>+</h2>
+                    <p>Yıllık Deneyim</p>
+                </div>
+                <div class="stat-item">
+                    <h2 class="counter" data-target="25000">0</h2>
+                    <p>Uygulama</p>
+                </div>
+                <div class="stat-item">
+                    <h2>%<span class="counter" data-target="98">0</span></h2>
+                    <p>Memnuniyet Oranı</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="team" class="section-padding">
+        <div class="container">
+            <div class="section-header">
+                <h2>Uzman Kadromuz</h2>
+                <p>Güzelliğinizi ve sağlığınızı emanet ettiğiniz profesyonellerimiz ile tanışın.</p>
+            </div>
+            <div class="team-grid">
+                <div class="team-card">
+                    <div class="team-img">
+                        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=500&q=80" alt="Uzman">
+                    </div>
+                    <div class="team-info">
+                        <h3>Dr. Elif Yılmaz</h3>
+                        <p class="role">Medikal Estetik Hekimi</p>
+                        <p class="exp">10 Yıllık Deneyim</p>
+                    </div>
+                </div>
+                <div class="team-card">
+                    <div class="team-img">
+                        <img src="https://images.unsplash.com/photo-1594744803329-e58b31de215f?auto=format&fit=crop&w=500&q=80" alt="Uzman">
+                    </div>
+                    <div class="team-info">
+                        <h3>Ayla Çetin</h3>
+                        <p class="role">Usta Öğretici & Estetisyen</p>
+                        <p class="exp">7 Yıllık Deneyim</p>
+                    </div>
+                </div>
+                <div class="team-card">
+                    <div class="team-img">
+                        <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=500&q=80" alt="Uzman">
+                    </div>
+                    <div class="team-info">
+                        <h3>Merve Kaya</h3>
+                        <p class="role">Lazer & Vücut Şekillendirme Uzmanı</p>
+                        <p class="exp">6 Yıllık Deneyim</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="packages" class="section-padding">
+        <div class="container">
+            <div class="section-header">
+                <h2>Ayrıcalıklı Güzellik Paketleri</h2>
+                <p>İhtiyaçlarınıza özel olarak kombinlenmiş, avantajlı lüks bakım seansları.</p>
+            </div>
+            <div class="packages-grid">
+                <div class="package-card">
+                    <h3>Başlangıç Paketi</h3>
+                    <ul class="package-features">
+                        <li>Klasik Cilt Bakımı (1 Seans)</li>
+                        <li>Mini Hydrafacial Yenileme</li>
+                        <li>Kaş Tasarımı & Vitamin Kürü</li>
+                        <li>Uzman Cilt Analizi Danışmanlığı</li>
+                    </ul>
+                    <a href="#appointment" class="btn btn-secondary" style="width: 100%;">Detaylı Bilgi Al</a>
+                </div>
+                <div class="package-card vip">
+                    <span class="package-badge">En Çok Tercih Edilen</span>
+                    <h3>Premium Bakım Paketi</h3>
+                    <ul class="package-features">
+                        <li>Medikal Cilt Bakımı (2 Seans)</li>
+                        <li>Detaylı Hydrafacial Protokolü</li>
+                        <li>Bölgesel Sıkılaşma Desteği (3 Seans)</li>
+                        <li>Kirpik Lifting Uygulaması</li>
+                    </ul>
+                    <a href="#appointment" class="btn btn-primary" style="width: 100%;">Paketi Seç</a>
+                </div>
+                <div class="package-card">
+                    <h3>VIP Güzellik Paketi</h3>
+                    <ul class="package-features">
+                        <li>Kişiye Özel Anti-Aging Kür (4 Seans)</li>
+                        <li>Premium Hydrafacial & Altın Maske</li>
+                        <li>Tüm Vücut Sıkılaşma & Detoks Protokolü</li>
+                        <li>Kalıcı Makyaj & Bütünsel Bakış Tasarımı</li>
+                    </ul>
+                    <a href="#appointment" class="btn btn-secondary" style="width: 100%;">VIP Ayrıcalığı</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="testimonials" class="section-padding">
+        <div class="container">
+            <div class="section-header">
+                <h2>Misafirlerimizin Gözünden</h2>
+                <p>Gerçek deneyimler, benzersiz memnuniyet hikayeleri.</p>
+            </div>
+            <div class="testimonials-grid">
+                <div class="review-card">
+                    <div class="stars">★★★★★</div>
+                    <p>Lazer epilasyon hizmeti için geliyorum ve 4. seansta neredeyse tüm tüyler bitti. Çalışanların ilgi alakası ve salonun premium tasarımı kendinizi çok özel hissettiriyor.</p>
+                    <h4>Selin Demir</h4>
+                </div>
+                <div class="review-card">
+                    <div class="stars">★★★★★</div>
+                    <p>Hydrafacial uygulamasından sonra cildim adeta nefes aldı. Sürekli lekelerim için endişeleniyordum ancak uyguladıkları özel program harika sonuç verdi.</p>
+                    <h4>Buse Yılmaz</h4>
+                </div>
+                <div class="review-card">
+                    <div class="stars">★★★★★</div>
+                    <p>Erkekler için de oldukça konforlu ve profesyonel bir ortam. Medikal cilt bakımı aldım, kesinlikle periyodik olarak devam edeceğim.</p>
+                    <h4>Can Aksoy</h4>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="faq" class="section-padding">
+        <div class="container">
+            <div class="section-header">
+                <h2>Sıkça Sorulan Sorular</h2>
+                <p>Hizmetlerimiz ve süreçlerimiz hakkında merak ettiğiniz temel soruların yanıtları.</p>
+            </div>
+            <div class="faq-container">
+                <div class="faq-item">
+                    <button class="faq-trigger">
+                        <span>İlk görüşme ücretli mi?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-content">
+                        <p>Hayır, merkezimizde gerçekleştireceğiniz ilk profesyonel cilt analizi ve uzman ön görüşme randevusu tamamen ücretsizdir.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-trigger">
+                        <span>Kaç seansta sonuç alınır?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-content">
+                        <p>Sonuç süreleri kişiden kişiye, cilt ve kıl yapısına bağlı olarak değişir. Genellikle lazer epilasyonda 6-8 seans, bölgesel incelmede ise 4-6 seans içerisinde maksimum başarı sağlanır.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-trigger">
+                        <span>Randevu nasıl oluşturulur?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-content">
+                        <p>Web sitemizdeki online randevu formunu doldurarak, doğrudan telefon hattımızı arayarak ya da WhatsApp ikonuna tıklayarak hızlıca seans planlayabilirsiniz.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-trigger">
+                        <span>Erkek müşterilere hizmet veriyor musunuz?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-content">
+                        <p>Evet, merkezimizde cilt bakımı, medikal uygulamalar, lazer epilasyon ve bölgesel incelme dahil olmak üzere tüm hizmetlerimiz erkek misafirlerimize de profesyonelce sunulmaktadır.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="appointment" class="section-padding">
+        <div class="container">
+            <div class="booking-wrapper">
+                <div class="booking-info">
+                    <h3>Güzellik Rutininizi Bugün Başlatın</h3>
+                    <p>Kendinize bir ayrıcalık tanıyın. Bilgilerinizi bırakın, uzmanlarımız sizi en kısa sürede arayarak en ideal seans programını birlikte planlasın.</p>
+                </div>
+                <div class="booking-form">
+                    <form id="luxuryForm" onsubmit="handleFormSubmit(event)">
+                        <div class="form-group">
+                            <label for="fullName">Adınız Soyadınız</label>
+                            <input type="text" id="fullName" class="form-control" required placeholder="Örn. Eda Yılmaz">
+                        </div>
+                        <div class="form-group">
+                            <label for="phoneNumber">Telefon Numaranız</label>
+                            <input type="tel" id="phoneNumber" class="form-control" required placeholder="0500 000 00 00">
+                        </div>
+                        <div class="form-group">
+                            <label for="serviceSelect">İlgilendiğiniz Hizmet</label>
+                            <select id="serviceSelect" class="form-control" required>
+                                <option value="" disabled selected>Hizmet Seçiniz</option>
+                                <option value="lazer">Lazer Epilasyon</option>
+                                <option value="cilt">Cilt Bakımı / Medikal Bakım</option>
+                                <option value="hydrafacial">Hydrafacial</option>
+                                <option value="incelme">Bölgesel İncelme</option>
+                                <option value="tasarim">Kaş & Kirpik Tasarımı</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="bookDate">Tercih Edilen Tarih</label>
+                            <input type="date" id="bookDate" class="form-control" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">Randevu Talebi Gönder</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="section-padding">
+        <div class="container">
+            <div class="section-header">
+                <h2>İletişim & Lokasyon</h2>
+                <p>Merkezimize ulaşmak, harita konumunu görmek veya doğrudan bilgi almak için detaylar.</p>
+            </div>
+            <div class="contact-grid">
+                <div class="contact-details">
+                    <div class="contact-item">
+                        <h4>Telefon Detayları</h4>
+                        <p><a href="tel:+902421234567">+90 (242) 123 45 67</a></p>
+                    </div>
+                    <div class="contact-item">
+                        <h4>WhatsApp Danışma</h4>
+                        <p><a href="https://wa.me/905301234567" target="_blank">+90 (530) 123 45 67</a></p>
+                    </div>
+                    <div class="contact-item">
+                        <h4>E-Posta</h4>
+                        <p><a href="mailto:info@aurabeauty.com">info@aurabeauty.com</a></p>
+                    </div>
+                    <div class="contact-item">
+                        <h4>Adres Bilgisi</h4>
+                        <p>Işıklar Caddesi, Lüks Plaza No:45 Kat:2, Muratpaşa / Antalya</p>
+                    </div>
+                    <div class="contact-item">
+                        <h4>Çalışma Saatleri</h4>
+                        <p>Pazartesi - Cumartesi: 09:00 - 20:00<br>Pazar: Kapalı</p>
+                    </div>
+                </div>
+                <div class="contact-map">
+                    <div class="map-placeholder">
+                        <div style="position: absolute; top:50%; left:50%; transform:translate(-50%, -50%); text-align:center; width:80%;">
+                            <span style="font-size:2rem; color:var(--rose-gold)">📍</span>
+                            <h4 style="margin-top:10px; font-size:1.1rem; color:var(--text-dark)">Aura Beauty & Aesthetics</h4>
+                            <p style="font-size:0.85rem; color:var(--text-muted); margin-top:5px">Google Maps interaktif harita yükleme alanı.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container footer-container">
+            <div class="footer-logo">AURA<span>.</span> BEAUTY</div>
+            <ul class="social-links">
+                <li><a href="#" target="_blank">Instagram</a></li>
+                <li><a href="#" target="_blank">Facebook</a></li>
+                <li><a href="#" target="_blank">Pinterest</a></li>
+            </ul>
+            <div class="copyright-text">
+                &copy; 2026 Aura Beauty & Aesthetics. Tüm Hakları Saklıdır.<br>
+                <a href="https://lianchez.com" target="_blank" class="agency-signature">Designed & Developed by Lianchez Software</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Responsive Menu Toggle
+        const burger = document.querySelector('.burger');
+        const navLinks = document.querySelector('.nav-links');
+        
+        burger.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            burger.classList.toggle('toggle');
+        });
+
+        // Close menu on link click (mobile)
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                burger.classList.remove('toggle');
+            });
+        });
+
+        // Accordion functionality for FAQ
+        const faqItems = document.querySelectorAll('.faq-item');
+        faqItems.forEach(item => {
+            const trigger = item.querySelector('.faq-trigger');
+            trigger.addEventListener('click', () => {
+                const isActive = item.classList.contains('active');
+                faqItems.forEach(i => i.classList.remove('active'));
+                if (!isActive) {
+                    item.classList.add('active');
+                }
+            });
+        });
+
+        // Stats Animated Counter Implementation
+        const counters = document.querySelectorAll('.counter');
+        const speed = 60;
+
+        const startCounting = (entries, observer) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    const counter = entry.target;
+                    const updateCount = () => {
+                        const target = +counter.getAttribute('data-target');
+                        const count = +counter.innerText.replace(/[.%+]/g, '');
+                        const inc = target / speed;
+
+                        if (count < target) {
+                            counter.innerText = Math.ceil(count + inc).toLocaleString('tr-TR');
+                            setTimeout(updateCount, 25);
+                        } else {
+                            counter.innerText = target.toLocaleString('tr-TR');
+                        }
+                    };
+                    updateCount();
+                    observer.unobserve(counter);
+                }
+            });
+        };
+
+        const statsObserver = new IntersectionObserver(startCounting, { threshold: 0.5 });
+        counters.forEach(counter => statsObserver.observe(counter));
+
+        // Form Submission Logic
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            alert('Randevu talebiniz başarıyla alındı. Sizinle en kısa sürede iletişime geçeceğiz.');
+            document.getElementById('luxuryForm').reset();
+        }
+
+        //#################################
+        document.addEventListener("DOMContentLoaded", () => {
+            const popup = document.createElement("div");
+            popup.id = "lianchez-demo-popup";
+
+            popup.innerHTML = `
+                <div class="popup-header">
+                    <span>✨ Bu Tasarımı Beğendiniz mi?</span>
+                    <button id="popup-minimize">−</button>
+                </div>
+
+                <div class="popup-content">
+                    <p>
+                        Bu demo uygun maliyetle size özel hazırlanabilir.
+                    </p>
+
+                    <p>
+                        Diğer tasarımlarımızı inceleyin veya tamamen kendi hayalinize göre yeni bir tasarım oluşturun.
+                    </p>
+
+                    <a href="https://lianchez.com/demo/demo" target="_blank" class="popup-btn">
+                        Tüm Demoları Gör
+                    </a>
+                </div>
+            `;
+
+            const style = document.createElement("style");
+
+            style.textContent = `
+                #lianchez-demo-popup{
+                    position:fixed;
+                    right:20px;
+                    bottom:20px;
+                    width:320px;
+                    max-width:calc(100vw - 30px);
+                    background:#ffffff;
+                    border-radius:16px;
+                    box-shadow:0 10px 35px rgba(0,0,0,.15);
+                    z-index:99999;
+                    overflow:hidden;
+                    animation:popupSlide .5s ease;
+                    font-family:inherit;
+                }
+
+                @keyframes popupSlide{
+                    from{
+                        transform:translateY(30px);
+                        opacity:0;
+                    }
+                    to{
+                        transform:translateY(0);
+                        opacity:1;
+                    }
+                }
+
+                #lianchez-demo-popup .popup-header{
+                    display:flex;
+                    justify-content:space-between;
+                    align-items:center;
+                    padding:12px 16px;
+                    font-weight:600;
+                    border-bottom:1px solid rgba(0,0,0,.08);
+                }
+
+                #popup-minimize{
+                    border:none;
+                    background:none;
+                    cursor:pointer;
+                    font-size:22px;
+                    line-height:1;
+                }
+
+                #lianchez-demo-popup .popup-content{
+                    padding:14px 16px;
+                }
+
+                #lianchez-demo-popup p{
+                    margin:0 0 10px;
+                    font-size:13px;
+                    line-height:1.5;
+                    opacity:.85;
+                }
+
+                .popup-btn{
+                    display:block;
+                    text-align:center;
+                    text-decoration:none;
+                    padding:10px;
+                    border-radius:10px;
+                    font-size:14px;
+                    font-weight:600;
+                    margin-top:10px;
+                    background:#111;
+                    color:#fff;
+                    transition:.2s;
+                }
+
+                .popup-btn:hover{
+                    transform:translateY(-2px);
+                }
+
+                .popup-minimized{
+                    height:52px !important;
+                }
+
+                .popup-minimized .popup-content{
+                    display:none;
+                }
+
+                @media (max-width:768px){
+                    #lianchez-demo-popup{
+                        right:12px;
+                        left:12px;
+                        width:auto;
+                        bottom:12px;
+                    }
+                }
+            `;
+
+            document.head.appendChild(style);
+            document.body.appendChild(popup);
+
+            document.getElementById("popup-minimize").addEventListener("click", () => {
+                popup.classList.toggle("popup-minimized");
+            });
+
+            popup.querySelector(".popup-btn").addEventListener("click", () => {
+                window.open("https://lianchez.com/demo/demo", "_blank");
+            });
+        });
+    </script>
+</body>
+</html>

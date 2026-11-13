@@ -1,0 +1,1407 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yılmaz & Partners Hukuk Bürosu | Güvenilir Hukuki Çözümler</title>
+    <meta name="description" content="Yılmaz & Partners Hukuk Bürosu - Bireysel ve kurumsal müvekkillerimize profesyonel hukuki danışmanlık ve dava takibi hizmetleri sunuyoruz.">
+    <style>
+        /* --- ROOT & CORE STYLES --- */
+        :root {
+            --navy-dark: #0F172A;
+            --navy-light: #1E293B;
+            --gold: #D4AF37;
+            --gold-hover: #AA8C2C;
+            --white: #FFFFFF;
+            --gray-bg: #F8FAFC;
+            --gray-text: #475569;
+            --gray-light: #E2E8F0;
+            --transition: all 0.3s ease-in-out;
+            --max-width: 1200px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--white);
+            color: var(--navy-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        .container {
+            width: 100%;
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .section-padding {
+            padding: 80px 0;
+        }
+
+        @media (max-width: 768px) {
+            .section-padding {
+                padding: 60px 0;
+            }
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-header h2 {
+            font-size: 2rem;
+            color: var(--navy-dark);
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+            padding-bottom: 12px;
+        }
+
+        .section-header h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background-color: var(--gold);
+        }
+
+        .section-header p {
+            color: var(--gray-text);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* --- BUTTONS --- */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px 28px;
+            font-weight: 600;
+            border-radius: 4px;
+            transition: var(--transition);
+            cursor: pointer;
+            border: 2px solid transparent;
+            font-size: 0.95rem;
+            text-align: center;
+        }
+
+        .btn-gold {
+            background-color: var(--gold);
+            color: var(--navy-dark);
+        }
+
+        .btn-gold:hover {
+            background-color: var(--gold-hover);
+            color: var(--white);
+        }
+
+        .btn-outline {
+            border-color: var(--white);
+            color: var(--white);
+            background: transparent;
+        }
+
+        .btn-outline:hover {
+            background-color: var(--white);
+            color: var(--navy-dark);
+        }
+
+        /* --- STICKY HEADER --- */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+        }
+
+        .nav-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 80px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--white);
+        }
+
+        .logo span {
+            color: var(--gold);
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-link {
+            color: var(--white);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: var(--transition);
+            opacity: 0.85;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--gold);
+            opacity: 1;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .nav-cta {
+            padding: 8px 18px;
+            font-size: 0.85rem;
+        }
+
+        .hamburger {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 25px;
+            height: 2px;
+            background-color: var(--white);
+            transition: var(--transition);
+        }
+
+        @media (max-width: 992px) {
+            .nav-menu {
+                position: fixed;
+                top: 80px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 80px);
+                background-color: var(--navy-dark);
+                flex-direction: column;
+                align-items: center;
+                padding-top: 50px;
+                transition: var(--transition);
+                z-index: 999;
+            }
+
+            .nav-menu.active {
+                left: 0;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .hamburger.active span:nth-child(1) {
+                transform: translateY(8px) rotate(45deg);
+            }
+            .hamburger.active span:nth-child(2) {
+                opacity: 0;
+            }
+            .hamburger.active span:nth-child(3) {
+                transform: translateY(-8px) rotate(-45deg);
+            }
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            background: linear-gradient(rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.9)), 
+                        url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080"><rect width="1920" height="1080" fill="%230F172A"/><path d="M300,200 L1620,200 L1620,880 L300,880 Z" fill="none" stroke="%231E293B" stroke-width="2"/><circle cx="960" cy="540" r="300" fill="none" stroke="%231E293B" stroke-width="1"/></svg>') center/cover no-repeat;
+            display: flex;
+            align-items: center;
+            color: var(--white);
+            padding-top: 80px;
+        }
+
+        /* Ambient subtle backdrop mimicry */
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle at 80% 20%, rgba(212, 175, 55, 0.08) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .hero-content {
+            max-width: 700px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            line-height: 1.15;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 span {
+            color: var(--gold);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 35px;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.25rem; }
+            .hero p { font-size: 1rem; }
+            .hero-buttons .btn { width: 100%; }
+        }
+
+        /* --- ABOUT US --- */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+
+        .about-text h3 {
+            font-size: 1.75rem;
+            margin-bottom: 15px;
+            color: var(--navy-dark);
+        }
+
+        .about-text p {
+            color: var(--gray-text);
+            margin-bottom: 20px;
+        }
+
+        .about-features {
+            list-style: none;
+        }
+
+        .about-features li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        .about-features svg {
+            color: var(--gold);
+            flex-shrink: 0;
+        }
+
+        .about-visual {
+            background-color: var(--navy-dark);
+            border-radius: 8px;
+            padding: 40px;
+            color: var(--white);
+            border-left: 5px solid var(--gold);
+            box-shadow: 0 20px 40px rgba(15,23,42,0.08);
+        }
+
+        .about-visual blockquote {
+            font-style: italic;
+            font-size: 1.25rem;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .about-grid { grid-template-columns: 1fr; gap: 30px;}
+        }
+
+        /* --- PRACTICE AREAS --- */
+        .bg-light {
+            background-color: var(--gray-bg);
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+        }
+
+        .card {
+            background-color: var(--white);
+            padding: 40px 30px;
+            border-radius: 6px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
+            border: 1px solid var(--gray-light);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left:0; width: 100%; height: 3px;
+            background-color: var(--gold);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+        }
+
+        .card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            background-color: rgba(212, 175, 55, 0.1);
+            color: var(--gold);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+
+        .card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 12px;
+        }
+
+        .card p {
+            color: var(--gray-text);
+            font-size: 0.95rem;
+        }
+
+        /* --- WHY CHOOSE US --- */
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 25px;
+        }
+
+        .feature-box {
+            text-align: center;
+            padding: 30px 20px;
+        }
+
+        .feature-box .card-icon {
+            margin: 0 auto 20px auto;
+            border-radius: 50%;
+        }
+
+        /* --- STATISTICS --- */
+        .stats-section {
+            background-color: var(--navy-dark);
+            color: var(--white);
+            padding: 60px 0;
+            text-align: center;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+        }
+
+        .stat-item h3 {
+            font-size: 3rem;
+            color: var(--gold);
+            margin-bottom: 5px;
+        }
+
+        .stat-item p {
+            font-size: 0.95rem;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* --- LAWYER PROFILE --- */
+        .lawyer-card {
+            background: var(--white);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            max-width: 800px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            border: 1px solid var(--gray-light);
+        }
+
+        .lawyer-img {
+            background-color: var(--navy-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold);
+            min-height: 300px;
+        }
+
+        .lawyer-info {
+            padding: 40px;
+        }
+
+        .lawyer-info h3 {
+            font-size: 1.5rem;
+            color: var(--navy-dark);
+        }
+
+        .lawyer-title {
+            color: var(--gold);
+            font-weight: 600;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+        }
+
+        .lawyer-bio {
+            color: var(--gray-text);
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .lawyer-card { grid-template-columns: 1fr; }
+            .lawyer-img { min-height: 240px; }
+            .lawyer-info { padding: 25px; }
+        }
+
+        /* --- TESTIMONIALS --- */
+        .testimonial-slider {
+            max-width: 700px;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .testimonial-track {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .testimonial-slide {
+            min-width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .testimonial-slide p {
+            font-size: 1.15rem;
+            font-style: italic;
+            color: var(--navy-dark);
+            margin-bottom: 20px;
+        }
+
+        .testimonial-owner {
+            font-weight: 600;
+            color: var(--gold);
+        }
+
+        .slider-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 25px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            background-color: var(--gray-light);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .dot.active {
+            background-color: var(--gold);
+            width: 24px;
+            border-radius: 5px;
+        }
+
+        /* --- FAQ --- */
+        .faq-max {
+            max-width: 750px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            background-color: var(--white);
+            border: 1px solid var(--gray-light);
+            margin-bottom: 12px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .faq-trigger {
+            width: 100%;
+            padding: 20px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: none;
+            border: none;
+            text-align: left;
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--navy-dark);
+            cursor: pointer;
+        }
+
+        .faq-trigger svg {
+            transition: var(--transition);
+            flex-shrink: 0;
+            color: var(--gold);
+        }
+
+        .faq-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s cubic-bezier(0, 1, 0, 1);
+            background-color: var(--gray-bg);
+        }
+
+        .faq-content p {
+            padding: 20px 24px;
+            color: var(--gray-text);
+            font-size: 0.95rem;
+            border-top: 1px solid var(--gray-light);
+        }
+
+        .faq-item.active .faq-trigger svg {
+            transform: rotate(180deg);
+        }
+
+        .faq-item.active .faq-content {
+            max-height: 1000px;
+            transition: max-height 0.5s cubic-bezier(1, 0, 1, 0);
+        }
+
+        /* --- CONTACT --- */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.25fr;
+            gap: 40px;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .contact-item {
+            display: flex;
+            gap: 15px;
+        }
+
+        .contact-item h4 {
+            font-size: 1.1rem;
+            margin-bottom: 4px;
+        }
+
+        .contact-item p {
+            color: var(--gray-text);
+            font-size: 0.95rem;
+        }
+
+        .map-placeholder {
+            width: 100%;
+            height: 220px;
+            background-color: var(--gray-light);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray-text);
+            font-size: 0.9rem;
+            margin-top: 10px;
+            border: 1px dashed #CBD5E1;
+        }
+
+        .contact-form {
+            background-color: var(--gray-bg);
+            padding: 40px;
+            border-radius: 6px;
+            border: 1px solid var(--gray-light);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--gray-light);
+            background-color: var(--white);
+            border-radius: 4px;
+            outline: none;
+            font-size: 0.95rem;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        @media (max-width: 768px) {
+            .contact-grid { grid-template-columns: 1fr; }
+            .contact-form { padding: 25px; }
+        }
+
+        /* --- FLOATING BUTTONS --- */
+        .floating-actions {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 999;
+        }
+
+        .float-btn {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            transition: var(--transition);
+        }
+
+        .float-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .float-wp { background-color: #25D366; }
+        .float-call { background-color: var(--gold); display: none; }
+
+        @media (max-width: 768px) {
+            .float-call { display: flex; }
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background-color: var(--navy-dark);
+            color: var(--white);
+            padding: 40px 0 20px 0;
+            font-size: 0.9rem;
+            border-top: 3px solid var(--gold);
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .disclaimer {
+            font-size: 0.75rem;
+            opacity: 0.5;
+            text-align: justify;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 20px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- STICKY HEADER -->
+    <header id="header">
+        <div class="container nav-container">
+            <a href="#home" class="logo">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                YILMAZ <span>& PARTNERS</span>
+            </a>
+            
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#home" class="nav-link active">Anasayfa</a></li>
+                <li><a href="#about" class="nav-link">Hakkımızda</a></li>
+                <li><a href="#practice" class="nav-link">Çalışma Alanları</a></li>
+                <li><a href="#lawyer" class="nav-link">Ekibimiz</a></li>
+                <li><a href="#faq" class="nav-link">SSS</a></li>
+                <li><a href="#contact" class="nav-link">İletişim</a></li>
+            </ul>
+
+            <div class="header-actions">
+                <a href="tel:+902120000000" class="btn btn-gold nav-cta">Hemen Ara</a>
+                <button class="hamburger" id="hamburger" aria-label="Menü">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Haklarınızı <span>Güçlü Şekilde</span> Savunuyoruz</h1>
+                <p>Bireysel ve kurumsal müvekkillerimize profesyonel hukuki danışmanlık ve dava takibi hizmetleri sunuyoruz.</p>
+                <div class="hero-buttons">
+                    <a href="#contact" class="btn btn-gold">Ücretsiz Ön Görüşme</a>
+                    <a href="tel:+902120000000" class="btn btn-outline">Bizi Arayın</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ABOUT US -->
+    <section id="about" class="section-padding">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-text">
+                    <h3>Deneyim, Güven ve Çözüm Odaklı Yaklaşım</h3>
+                    <p>Yılmaz & Partners Hukuk Bürosu, kuruluşundan bu yana etik değerlere bağlı kalarak adaletin tecellisi için çalışmaktadır. Değişen hukuki dinamikleri yakından takip eden vizyonumuzla, karmaşık hukuki süreçleri net ve yönetilebilir çözümlere dönüştürüyoruz.</p>
+                    <p>Müvekkillerimizin hak ve menfaatlerini korumayı en üst sorumluluk kabul ederek, şeffaflık ilkemiz çerçevesinde her aşamada bilgilendirme sağlıyoruz.</p>
+                    <ul class="about-features">
+                        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> Yüksek Mesleki Etik ve Şeffaflık</li>
+                        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> Alanında Uzman ve Dinamik Kadro</li>
+                        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> Sonuç ve Müvekkil Odaklı Süreç Yönetimi</li>
+                    </ul>
+                </div>
+                <div class="about-visual">
+                    <blockquote id="quote">"Adalet, kutup yıldızı gibi yerinde durur ve geri kalan her şey onun etrafında döner."</blockquote>
+                    <p style="text-align: right; font-weight: 600; color: var(--gold);">- Konfüçyüs</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRACTICE AREAS -->
+    <section id="practice" class="section-padding bg-light">
+        <div class="container">
+            <div class="section-header">
+                <h2>Faaliyet Alanlarımız</h2>
+                <p>Geniş bir yelpazede, her biri uzmanlık gerektiren temel hukuk dallarında profesyonel avukatlık hizmeti sunmaktayız.</p>
+            </div>
+            
+            <div class="grid-3">
+                <!-- Card 1 -->
+                <div class="card">
+                    <div class="card-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                    </div>
+                    <h3>Ceza Hukuku</h3>
+                    <p>Soruşturma aşamasından infaz sürecine kadar, ağır ceza ve asliye ceza mahkemelerinde haklarınızın etkin savunulması.</p>
+                </div>
+                <!-- Card 2 -->
+                <div class="card">
+                    <div class="card-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    </div>
+                    <h3>Aile Hukuku</h3>
+                    <p>Boşanma, velayet, nafaka, mal rejimleri tasfiyesi ve soybağı davalarında hassas ve gizlilik esasına dayalı takip.</p>
+                </div>
+                <!-- Card 3 -->
+                <div class="card">
+                    <div class="card-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    </div>
+                    <h3>İş Hukuku</h3>
+                    <p>İşe iade, kıdem ve ihbar tazminatları, iş kazaları ve kurumsal sözleşmelerin iş mevzuatına uygun tanzimi.</p>
+                </div>
+                <!-- Card 4 -->
+                <div class="card">
+                    <div class="card-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                    </div>
+                    <h3>Gayrimenkul Hukuku</h3>
+                    <p>Tapu iptal tescil, kamulaştırma, ortaklığın giderilmesi (izale-i şüyu) ve kira uyuşmazlıkları yönetimi.</p>
+                </div>
+                <!-- Card 5 -->
+                <div class="card">
+                    <div class="card-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    </div>
+                    <h3>Ticaret Hukuku</h3>
+                    <p>Şirket danışmanlığı, sözleşmeler hukuku, uluslararası ticaret uyuşmazlıkları ve şirket birleşmeleri.</p>
+                </div>
+                <!-- Card 6 -->
+                <div class="card">
+                    <div class="card-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    </div>
+                    <h3>Miras Hukuku</h3>
+                    <p>Vasiyetname düzenleme, miras paylaşımı, tenkis ve muris muvazaası temelli davaların çözümlenmesi.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- WHY CHOOSE US -->
+    <section class="section-padding">
+        <div class="container">
+            <div class="section-header">
+                <h2>Neden Biz?</h2>
+                <p>Hukuki süreçlerinizde bizi tercih etmeniz için temel çalışma prensiplerimiz.</p>
+            </div>
+            
+            <div class="grid-4">
+                <div class="feature-box">
+                    <div class="card-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+                    <h3>Gizlilik ve Güven</h3>
+                    <p>Müvekkillerimize ait her türlü bilgi ve belge, avukatlık sırrı kapsamında mutlak koruma altındadır.</p>
+                </div>
+                <div class="feature-box">
+                    <div class="card-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+                    <h3>Uzman Kadro</h3>
+                    <p>Dinamik ve güncel mevzuata hakim uzman avukatlarımızla derinlemesine analiz sunuyoruz.</p>
+                </div>
+                <div class="feature-box">
+                    <div class="card-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div>
+                    <h3>Şeffaf Süreç</h3>
+                    <p>Dava ve danışmanlık adımlarını, gerçekçi risk analizleriyle birlikte açıkça paylaşıyoruz.</p>
+                </div>
+                <div class="feature-box">
+                    <div class="card-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></div>
+                    <h3>Hızlı İletişim</h3>
+                    <p>Süreç boyunca sorularınıza ve acil hukuki durumlarınıza hızla dönüş sağlıyoruz.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- STATISTICS SECTION -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <h3 class="counter" data-target="500">0</h3>
+                    <p>Dava</p>
+                </div>
+                <div class="stat-item">
+                    <h3 class="counter" data-target="15">0</h3>
+                    <p>Yıllık Deneyim</p>
+                </div>
+                <div class="stat-item">
+                    <h3 class="counter" data-target="98">0</h3>
+                    <p>Müvekkil Memnuniyeti (%)</p>
+                </div>
+                <div class="stat-item">
+                    <h3 class="counter" data-target="1000">0</h3>
+                    <p>Danışmanlık</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- LAWYER PROFILE SECTION -->
+    <section id="lawyer" class="section-padding bg-light">
+        <div class="container">
+            <div class="section-header">
+                <h2>Kurucu Avukatımız</h2>
+                <p>Nitelikli akademik geçmiş ve sektörel tecrübenin getirdiği profesyonellik.</p>
+            </div>
+            
+            <div class="lawyer-card">
+                <div class="lawyer-img">
+                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                </div>
+                <div class="lawyer-info">
+                    <h3>Av. Ahmet Yılmaz</h3>
+                    <div class="lawyer-title">Kurucu / Kıdemli Ortak</div>
+                    <p class="lawyer-bio">İstanbul Üniversitesi Hukuk Fakültesi'nden mezun olduktan sonra, özellikle Ceza ve Ticaret Hukuku alanlarında derinleşmiştir. 15 yılı aşkın süredir hem yerel hem uluslararası ölçekli ihtilafların çözümlenmesinde müvekkillerine liderlik etmektedir.</p>
+                    <p class="lawyer-bio" style="font-size: 0.9rem; font-style: italic;">"Hukuk, haklının güvencesidir."</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CLIENT TESTIMONIALS -->
+    <section class="section-padding">
+        <div class="container">
+            <div class="section-header">
+                <h2>Müvekkil Yorumları</h2>
+                <p>Birlikte başarıya ulaştığımız ve haklarını güvence altına aldığımız danışanlarımızın geri bildirimleri.</p>
+            </div>
+            
+            <div class="testimonial-slider">
+                <div class="testimonial-track" id="sliderTrack">
+                    <!-- Slide 1 -->
+                    <div class="testimonial-slide">
+                        <p>"Ticari sözleşmelerimiz ve şirket yapılandırma sürecimizde gösterdikleri profesyonellik takdire şayandı. Sürecin her anında bilgilendirildik."</p>
+                        <div class="testimonial-owner">Mehmet B. (Şirket Müdürü)</div>
+                    </div>
+                    <!-- Slide 2 -->
+                    <div class="testimonial-slide">
+                        <p>"Zorlu bir mülkiyet ve miras davasında haklarımızı titizlikle savunarak olumlu bir netice almamızı sağladılar. Sonsuz teşekkürler."</p>
+                        <div class="testimonial-owner">Ayşe K. (Müvekkil)</div>
+                    </div>
+                    <!-- Slide 3 -->
+                    <div class="testimonial-slide">
+                        <p>"İşçi hakları uyuşmazlığımızda, kriz anlarındaki sakin ve tecrübeli yaklaşımları sayesinde adil bir uzlaşmaya vardık. Güven veren bir ekip."</p>
+                        <div class="testimonial-owner">Can T. (Kurumsal Müvekkil)</div>
+                    </div>
+                </div>
+                <div class="slider-dots" id="sliderDots"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ SECTION -->
+    <section id="faq" class="section-padding bg-light">
+        <div class="container">
+            <div class="section-header">
+                <h2>Sıkça Sorulan Sorular</h2>
+                <p>Hukuki süreçler ve büromuzun çalışma düzeni hakkında merak edilenler.</p>
+            </div>
+            
+            <div class="faq-max">
+                <!-- Item 1 -->
+                <div class="faq-item">
+                    <button class="faq-trigger">
+                        İlk görüşme ücretli mi?
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                    </button>
+                    <div class="faq-content">
+                        <p>Web sitemiz üzerinden oluşturulan ücretsiz ön görüşme taleplerinde, davanızın veya hukuki sorununuzun genel hatları incelenerek süreç tespiti yapılır. Detaylı hukuki danışmanlıklar ise Avukatlık Asgari Ücret Tarifesi'ne tabidir.</p>
+                    </div>
+                </div>
+                <!-- Item 2 -->
+                <div class="faq-item">
+                    <button class="faq-trigger">
+                        Dava süreci ne kadar sürer?
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                    </button>
+                    <div class="faq-content">
+                        <p>Dava süreleri; uyuşmazlığın türüne, ilgili mahkemenin dosya yoğunluğuna ve delillerin toplanma aşamalarına göre değişkenlik gösterir. Ön analiz sonrası tahmini süre hakkında bilgi verilmektedir.</p>
+                    </div>
+                </div>
+                <!-- Item 3 -->
+                <div class="faq-item">
+                    <button class="faq-trigger">
+                        Online danışmanlık veriyor musunuz?
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                    </button>
+                    <div class="faq-content">
+                        <p>Evet, fiziki olarak ofisimize gelemeyecek durumda olan müvekkillerimiz için güvenli video konferans platformları üzerinden online hukuki danışmanlık hizmeti sağlamaktayız.</p>
+                    </div>
+                </div>
+                <!-- Item 4 -->
+                <div class="faq-item">
+                    <button class="faq-trigger">
+                        Hangi şehirlerde hizmet veriyorsunuz?
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                    </button>
+                    <div class="faq-content">
+                        <p>Büromuz merkez olarak İstanbul'da bulunmakla beraber, Türkiye genelindeki güçlü partner ağımız sayesinde Ankara, İzmir, Antalya başta olmak üzere tüm illerde dava takibi yapabilmektedir.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT SECTION -->
+    <section id="contact" class="section-padding">
+        <div class="container">
+            <div class="section-header">
+                <h2>İletişime Geçin</h2>
+                <p>Sorularınız ya da randevu talepleriniz için aşağıdaki formu doldurabilir veya telefon numaramızdan doğrudan ulaşabilirsiniz.</p>
+            </div>
+            
+            <div class="contact-grid">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <div style="color: var(--gold);"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+                        <div>
+                            <h4>Telefon</h4>
+                            <p>+90 (212) 000 00 00</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div style="color: var(--gold);"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+                        <div>
+                            <h4>E-Posta</h4>
+                            <p>info@yilmazpartnerslaw.com</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div style="color: var(--gold);"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+                        <div>
+                            <h4>Adres</h4>
+                            <p>Adalet Plaza, Kat:4 No:12, Çağlayan, Şişli / İstanbul</p>
+                        </div>
+                    </div>
+                    
+                    <div class="map-placeholder">
+                        <span style="text-align: center; padding: 20px;">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin: 0 auto 8px auto;"><polygon points="1 6 1 22 8 18 15 22 22 18 22 2V6 15 2 8 6"/></svg>
+                            Google Maps Harita Önizlemesi
+                        </span>
+                    </div>
+                </div>
+
+                <div class="contact-form">
+                    <form id="lawContactForm">
+                        <div class="form-group">
+                            <label for="fullName">Adınız Soyadınız</label>
+                            <input type="text" id="fullName" class="form-control" required placeholder="Örn. Ahmet Yılmaz">
+                        </div>
+                        <div class="form-group">
+                            <label for="emailAddr">E-Posta Adresiniz</label>
+                            <input type="email" id="emailAddr" class="form-control" required placeholder="isim@ornek.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="phoneNum">Telefon Numaranız</label>
+                            <input type="tel" id="phoneNum" class="form-control" required placeholder="0555 555 55 55">
+                        </div>
+                        <div class="form-group">
+                            <label for="msg">Kısa Mesajınız / Hukuki Konu</label>
+                            <textarea id="msg" class="form-control" required placeholder="Lütfen hukuki sorununuzu kısaca özetleyin..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-gold" style="width: 100%;">Başvuru Gönder</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FLOATING MOBILE BUTTONS -->
+    <div class="floating-actions">
+        <a href="tel:+902120000000" class="float-btn float-call" aria-label="Doğrudan Arayın">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        </a>
+        <a href="https://wa.me/902120000000" target="_blank" rel="noopener" class="float-btn float-wp" aria-label="WhatsApp İletişim">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+        </a>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <strong>Yılmaz & Partners Hukuk Bürosu</strong>
+                    <p style="opacity: 0.7; font-size: 0.85rem; margin-top: 5px;">© 2026 Tüm Hakları Saklıdır.</p>
+                </div>
+                <div style="font-size: 0.85rem; opacity: 0.8;">
+                    Güvenilirlik • Şeffaflık • Adalet
+                </div>
+            </div>
+            <div class="disclaimer">
+                UYARI: Bu sitede yer alan tüm bilgiler, yazılar ve hukuki makaleler yalnızca genel bilgilendirme amaçlı olup, Türkiye Barolar Birliği'nin ilgili reklam yasağı mevzuatı ve meslek kurallarına uygun olarak hazırlanmıştır. Sitede yer alan hiçbir veri, hukuki danışmanlık veya mütalaa teşkil etmez, büromuz ile ziyaretçi arasında bir vekalet ilişkisi kurmayı amaçlamaz.
+            </div>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        // Mobile Menu Toggle
+        const hamburger = document.getElementById('hamburger');
+        const navMenu = document.getElementById('navMenu');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('remove');
+            });
+        });
+
+        // FAQ Accordion
+        const faqItems = document.querySelectorAll('.faq-item');
+        faqItems.forEach(item => {
+            const trigger = item.querySelector('.faq-trigger');
+            trigger.addEventListener('click', () => {
+                const isActive = item.classList.contains('active');
+                faqItems.forEach(i => i.classList.remove('active'));
+                if (!isActive) {
+                    item.classList.add('active');
+                }
+            });
+        });
+
+        // Testimonial Slider
+        const track = document.getElementById('sliderTrack');
+        const slides = document.querySelectorAll('.testimonial-slide');
+        const dotsContainer = document.getElementById('sliderDots');
+        let currentSlide = 0;
+
+        slides.forEach((_, index) => {
+            const dot = document.createElement('div');
+            dot.classList.add('dot');
+            if (index === 0) dot.classList.add('active');
+            dot.addEventListener('click', () => goToSlide(index));
+            dotsContainer.appendChild(dot);
+        });
+
+        const dots = document.querySelectorAll('.dot');
+
+        function goToSlide(index) {
+            track.style.transform = `translateX(-${index * 100}%)`;
+            dots[currentSlide].classList.remove('active');
+            dots[index].classList.add('active');
+            currentSlide = index;
+        }
+
+        // Auto slide change
+        setInterval(() => {
+            let nextSlide = (currentSlide + 1) % slides.length;
+            goToSlide(nextSlide);
+        }, 5000);
+
+        // Counter Animation
+        const counters = document.querySelectorAll('.counter');
+        const speed = 150;
+
+        const startCounters = () => {
+            counters.forEach(counter => {
+                const updateCount = () => {
+                    const target = +counter.getAttribute('data-target');
+                    const count = +counter.innerText;
+                    const inc = Math.ceil(target / speed);
+
+                    if (count < target) {
+                        counter.innerText = count + inc > target ? target : count + inc;
+                        setTimeout(updateCount, 15);
+                    } else {
+                        counter.innerText = target + (target === 98 ? '%' : '+');
+                    }
+                };
+                updateCount();
+            });
+        };
+
+        // Scroll Tracking for Active Links and Counter Trigger
+        let countersTriggered = false;
+        window.addEventListener('scroll', () => {
+            let scrollPos = window.scrollY + 120;
+            
+            // Active link tracking
+            navLinks.forEach(link => {
+                const section = document.querySelector(link.getAttribute('href'));
+                if (section && section.offsetTop <= scrollPos && (section.offsetTop + section.offsetHeight) > scrollPos) {
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    link.classList.add('active');
+                }
+            });
+
+            // Trigger statistics counters when in view
+            const statsSection = document.querySelector('.stats-section');
+            if(statsSection) {
+                const topPos = statsSection.getBoundingClientRect().top;
+                const winHeight = window.innerHeight;
+                if(topPos < winHeight && !countersTriggered) {
+                    startCounters();
+                    countersTriggered = true;
+                }
+            }
+        });
+
+        // Form Submit Handler Mock
+        document.getElementById('lawContactForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Başvurunuz başarıyla ekibimize iletilmiştir. En kısa sürede sizinle iletişime geçilecektir.');
+            e.target.reset();
+        });
+
+        //#################################
+        document.addEventListener("DOMContentLoaded", () => {
+            const popup = document.createElement("div");
+            popup.id = "lianchez-demo-popup";
+
+            popup.innerHTML = `
+                <div class="popup-header">
+                    <span>✨ Bu Tasarımı Beğendiniz mi?</span>
+                    <button id="popup-minimize">−</button>
+                </div>
+
+                <div class="popup-content">
+                    <p>
+                        Bu demo uygun maliyetle size özel hazırlanabilir.
+                    </p>
+
+                    <p>
+                        Diğer tasarımlarımızı inceleyin veya tamamen kendi hayalinize göre yeni bir tasarım oluşturun.
+                    </p>
+
+                    <a href="https://lianchez.com/demo/demo" target="_blank" class="popup-btn">
+                        Tüm Demoları Gör
+                    </a>
+                </div>
+            `;
+
+            const style = document.createElement("style");
+
+            style.textContent = `
+                #lianchez-demo-popup{
+                    position:fixed;
+                    right:20px;
+                    bottom:20px;
+                    width:320px;
+                    max-width:calc(100vw - 30px);
+                    background:#ffffff;
+                    border-radius:16px;
+                    box-shadow:0 10px 35px rgba(0,0,0,.15);
+                    z-index:99999;
+                    overflow:hidden;
+                    animation:popupSlide .5s ease;
+                    font-family:inherit;
+                }
+
+                @keyframes popupSlide{
+                    from{
+                        transform:translateY(30px);
+                        opacity:0;
+                    }
+                    to{
+                        transform:translateY(0);
+                        opacity:1;
+                    }
+                }
+
+                #lianchez-demo-popup .popup-header{
+                    display:flex;
+                    justify-content:space-between;
+                    align-items:center;
+                    padding:12px 16px;
+                    font-weight:600;
+                    border-bottom:1px solid rgba(0,0,0,.08);
+                }
+
+                #popup-minimize{
+                    border:none;
+                    background:none;
+                    cursor:pointer;
+                    font-size:22px;
+                    line-height:1;
+                }
+
+                #lianchez-demo-popup .popup-content{
+                    padding:14px 16px;
+                }
+
+                #lianchez-demo-popup p{
+                    margin:0 0 10px;
+                    font-size:13px;
+                    line-height:1.5;
+                    opacity:.85;
+                }
+
+                .popup-btn{
+                    display:block;
+                    text-align:center;
+                    text-decoration:none;
+                    padding:10px;
+                    border-radius:10px;
+                    font-size:14px;
+                    font-weight:600;
+                    margin-top:10px;
+                    background:#111;
+                    color:#fff;
+                    transition:.2s;
+                }
+
+                .popup-btn:hover{
+                    transform:translateY(-2px);
+                }
+
+                .popup-minimized{
+                    height:52px !important;
+                }
+
+                .popup-minimized .popup-content{
+                    display:none;
+                }
+
+                @media (max-width:768px){
+                    #lianchez-demo-popup{
+                        right:12px;
+                        left:12px;
+                        width:auto;
+                        bottom:12px;
+                    }
+                }
+            `;
+
+            document.head.appendChild(style);
+            document.body.appendChild(popup);
+
+            document.getElementById("popup-minimize").addEventListener("click", () => {
+                popup.classList.toggle("popup-minimized");
+            });
+
+            popup.querySelector(".popup-btn").addEventListener("click", () => {
+                window.open("https://lianchez.com/demo/demo", "_blank");
+            });
+        });
+    </script>
+</body>
+</html>

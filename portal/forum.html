@@ -1,0 +1,2524 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Tartışma Forumu - Üni Portal</title>
+    <link rel="icon" type="image/png" href="/portal/fav.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        input[type="text"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="password"], input[type="tel"], textarea, select {
+            font-size: 16px !important;
+            -webkit-text-size-adjust: 100%;
+        }
+        @media (min-width: 640px) {
+            input[type="text"], input[type="number"], input[type="email"],
+            input[type="url"], input[type="search"], input[type="password"], input[type="tel"], textarea, select {
+                font-size: 12px !important;
+            }
+        }
+        @keyframes pulse-dot {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+            50% { box-shadow: 0 0 0 4px rgba(34, 197, 94, 0); }
+        }
+        .online-dot { animation: pulse-dot 2s infinite; }
+        @keyframes adminGlow {
+            0%, 100% { text-shadow: 0 0 4px rgba(239, 68, 68, 0.9), 0 0 8px rgba(239, 68, 68, 0.6), 0 0 12px rgba(239, 68, 68, 0.4); }
+            50% { text-shadow: 0 0 8px rgba(239, 68, 68, 1), 0 0 16px rgba(239, 68, 68, 0.8), 0 0 24px rgba(239, 68, 68, 0.5); }
+        }
+        @keyframes modGlow {
+            0%, 100% { text-shadow: 0 0 4px rgba(249, 115, 22, 0.9), 0 0 8px rgba(249, 115, 22, 0.6), 0 0 12px rgba(249, 115, 22, 0.4); }
+            50% { text-shadow: 0 0 8px rgba(249, 115, 22, 1), 0 0 16px rgba(249, 115, 22, 0.8), 0 0 24px rgba(249, 115, 22, 0.5); }
+        }
+        .name-admin { color: #fca5a5 !important; animation: adminGlow 2.5s ease-in-out infinite; font-weight: 800; letter-spacing: 0.3px; }
+        .name-mod { color: #fdba74 !important; animation: modGlow 2.5s ease-in-out infinite; font-weight: 800; letter-spacing: 0.3px; }
+        .name-admin:hover, .name-mod:hover { filter: brightness(1.3); }
+
+        @keyframes floatUp {
+            0% { opacity: 0; transform: translateY(0) scale(0.6); }
+            20% { opacity: 1; transform: translateY(-10px) scale(1.1); }
+            80% { opacity: 1; transform: translateY(-60px) scale(1); }
+            100% { opacity: 0; transform: translateY(-90px) scale(0.9); }
+        }
+        .reward-float {
+            position: fixed;
+            z-index: 9999;
+            pointer-events: none;
+            font-weight: 800;
+            font-size: 18px;
+            animation: floatUp 2s ease-out forwards;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+        }
+        @keyframes rewardPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1); }
+        }
+        .reward-pulse { animation: rewardPulse 0.6s ease; }
+
+        .liked {
+            background-color: rgba(147, 51, 234, 0.2);
+            border-color: #a855f7;
+            color: #c084fc;
+        }
+
+        .mention-suggestions {
+            position: absolute;
+            bottom: 100%;
+            left: 0;
+            right: 0;
+            max-height: 200px;
+            overflow-y: auto;
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 0.75rem;
+            margin-bottom: 0.5rem;
+            z-index: 100;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .mention-item {
+            padding: 8px 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid #334155;
+            transition: background 0.15s;
+        }
+        .mention-item:last-child { border-bottom: none; }
+        .mention-item:hover, .mention-item.active { background: #334155; }
+        .mention-text { color: #a5b4fc; font-weight: 700; }
+        .reply-input-wrapper { position: relative; }
+
+        @keyframes assistantBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
+        @keyframes assistantPulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(168, 85, 247, 0.7), 0 8px 20px rgba(0,0,0,0.4); }
+            50% { box-shadow: 0 0 0 8px rgba(168, 85, 247, 0), 0 8px 24px rgba(0,0,0,0.5); }
+        }
+        .assistant-btn { animation: assistantPulse 2.5s ease-in-out infinite; }
+        .assistant-btn:hover .assistant-icon { animation: assistantBounce 0.6s ease infinite; }
+
+        /* Message embed styles */
+        .msg-embed-img { max-width: 320px; max-height: 240px; border-radius: 0.75rem; border: 1px solid #334155; margin-top: 6px; cursor: pointer; transition: transform 0.2s; }
+        .msg-embed-img:hover { transform: scale(1.02); }
+        .msg-embed-link { color: #a5b4fc; text-decoration: underline; word-break: break-all; }
+        .msg-embed-link:hover { color: #c7d2fe; }
+
+        /* Format toolbar buttons */
+        .format-btn {
+            transition: all 0.15s ease;
+        }
+        .format-btn:hover {
+            background-color: #334155 !important;
+            border-color: #a855f7 !important;
+            color: #c084fc !important;
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col justify-between">
+
+    <header class="bg-slate-800 border-b border-slate-700 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <a href="/portal/index.html" class="text-sm sm:text-xl font-bold bg-gradient-to-r from-blue-400 to-indigo-500 bg-clip-text text-transparent flex items-center whitespace-nowrap">
+                    <i class="fa-solid fa-graduation-cap mr-1.5 sm:mr-2"></i>Üni Portal
+                </a>
+            </div>
+            
+            <nav class="hidden md:flex items-center space-x-6 text-sm font-medium">
+                <a href="/portal/index.html" class="text-slate-300 hover:text-white transition">Ana Sayfa</a>
+                <a href="/portal/forum.html" class="px-2.5 py-1 rounded-xl bg-purple-500/25 text-purple-200 border border-purple-400/50 font-bold hover:bg-purple-500/30 transition flex items-center space-x-1.5 shadow-sm shadow-purple-500/10"><i class="fa-solid fa-comments text-purple-300 text-xs"></i><span>Forum</span></a>
+                <a href="/portal/ilanlar.html" class="text-slate-300 hover:text-white transition">İlanlar</a>
+                <a href="/portal/ogrenciler.html" class="text-slate-300 hover:text-white transition">Öğrenciler</a>
+                <a href="/portal/topluluk.html" class="text-slate-300 hover:text-white transition">Topluluklar</a>
+                <a href="/portal/iletisim.html" class="text-slate-300 hover:text-white transition">İletişim</a>
+            </nav>
+
+            <div class="flex items-center space-x-2 sm:space-x-4">
+                <div id="auth-section" class="flex items-center">
+                    <button id="login-btn" onclick="googleLogin()" class="hidden flex items-center space-x-1 sm:space-x-2 bg-white text-slate-900 px-2 sm:px-3 py-1.5 rounded-lg font-semibold hover:bg-slate-100 transition shadow-sm text-[10px] sm:text-sm whitespace-nowrap">
+                        <i class="fa-brands fa-google text-red-500 text-[10px] sm:text-sm"></i>
+                        <span>Giriş Yap</span>
+                    </button>
+
+                    <div id="user-profile" class="hidden flex items-center space-x-2 sm:space-x-3 relative">
+                        <div id="user-coins-box" class="flex items-center bg-slate-700 px-2 sm:px-2.5 py-1 rounded-full border border-slate-600 shadow-inner">
+                            <i class="fa-solid fa-coins text-yellow-400 mr-1 sm:mr-1.5 text-[10px] sm:text-sm"></i>
+                            <span id="user-coins" class="font-bold text-yellow-400 text-[10px] sm:text-sm">0</span>
+                        </div>
+
+                        <div class="relative cursor-pointer" onclick="toggleUserDropdown(event)">
+                            <img id="user-avatar" src="" alt="Profil" class="w-8 h-8 sm:w-9 sm:h-9 rounded-full border-2 border-slate-600 hover:border-blue-400 transition object-cover">
+                            <span id="notification-badge" class="hidden absolute -bottom-0.5 -right-0.5 bg-red-500 text-white text-[10px] font-extrabold min-w-[16px] h-4 px-1 rounded-full flex items-center justify-center border-2 border-slate-800 animate-pulse">0</span>
+                        </div>
+
+                        <div id="user-dropdown" class="hidden absolute right-0 top-12 w-56 bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl py-2 z-50 transition-all duration-200">
+                            <div class="px-4 py-2 border-b border-slate-700">
+                                <p id="dropdown-user-name" class="text-xs font-bold text-white truncate">Kullanıcı Adı</p>
+                                <p id="dropdown-user-email" class="text-[11px] text-slate-400 truncate">email@domain.com</p>
+                            </div>
+
+                            <a href="/portal/profil.html" class="block w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center space-x-2 transition">
+                                <i class="fa-solid fa-user text-indigo-400"></i>
+                                <span>Profilim</span>
+                            </a>
+                            <a href="/portal/magaza.html" class="block w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center space-x-2 transition">
+                                <i class="fa-solid fa-store text-yellow-400"></i>
+                                <span>Mağaza</span>
+                            </a>
+
+                            <button onclick="openDailyStreakModal()" class="w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center justify-between transition">
+                                <span class="flex items-center space-x-2">
+                                    <i class="fa-solid fa-calendar-check text-amber-400"></i>
+                                    <span>Günlük Ödül</span>
+                                    <span id="streak-unclaimed-dot" class="hidden w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+                                </span>
+                                <span id="streak-dropdown-badge" class="bg-amber-500/20 text-amber-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-amber-500/30">0 Gün</span>
+                            </button>
+                            
+                            <button onclick="openNotificationsModal()" class="w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center justify-between transition">
+                                <span class="flex items-center space-x-2">
+                                    <i class="fa-solid fa-bell text-blue-400"></i>
+                                    <span>Bildirimler</span>
+                                </span>
+                                <span id="dropdown-notif-count" class="bg-slate-700 text-slate-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-slate-600">0</span>
+                            </button>
+
+                            <div class="border-t border-slate-700/80 my-1"></div>
+
+                            <button onclick="googleLogout()" class="w-full text-left px-4 py-2 text-xs text-red-400 hover:bg-red-500/10 flex items-center space-x-2 transition font-semibold">
+                                <i class="fa-solid fa-right-from-bracket"></i>
+                                <span>Çıkış Yap</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <button onclick="toggleMobileMenu()" class="md:hidden text-slate-300 hover:text-white focus:outline-none text-xl p-1.5">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="hidden md:hidden bg-slate-800 border-t border-slate-700 px-4 pt-3 pb-4 space-y-2">
+            <a href="/portal/index.html" class="block px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-700 transition">Ana Sayfa</a>
+            <a href="/portal/forum.html" class="block px-3 py-2 rounded-lg text-sm font-bold text-purple-300 bg-purple-500/20 border border-purple-500/30 flex items-center"><i class="fa-solid fa-comments text-purple-400 mr-2"></i>Forum</a>
+            <a href="/portal/ilanlar.html" class="block px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-700 transition">İlanlar</a>
+            <a href="/portal/ogrenciler.html" class="block px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-700 transition">Öğrenciler</a>
+            <a href="/portal/topluluk.html" class="block px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-700 transition">Topluluklar</a>
+            <a href="/portal/iletisim.html" class="block px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-700 transition">İletişim</a>
+        </div>
+    </header>
+
+    <div id="toast-container" class="fixed bottom-5 right-5 z-[200] space-y-2 max-w-sm"></div>
+
+    <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-grow w-full">
+        <div id="main-forum-view">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+                <div>
+                    <h1 class="text-3xl font-extrabold tracking-tight">Tartışma Forumu</h1>
+                    <p class="text-slate-400 text-sm mt-1">Konu açarak <strong>+5–8 Coin & +15–22 XP</strong>, yanıt yazarak <strong>+2–5 Coin & +8–15 XP</strong> kazan! <span class="text-purple-300 text-xs">(İçerik derinliğine göre ekstra bonus!)</span></p>
+                </div>
+                <div class="flex items-center gap-4 w-full md:w-auto justify-between md:justify-end">
+                    <button onclick="openTopicModal()" class="bg-purple-600 hover:bg-purple-700 text-white px-5 py-2.5 rounded-xl font-semibold transition shadow-lg flex items-center space-x-2 text-sm">
+                        <i class="fa-solid fa-plus"></i>
+                        <span>Yeni Konu Aç</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-slate-800 border border-slate-700 rounded-2xl mb-4 shadow-lg overflow-hidden">
+                <div onclick="toggleOnlineUsers()" class="bg-gradient-to-r from-emerald-600/20 to-teal-600/20 px-5 py-3 flex items-center justify-between cursor-pointer hover:from-emerald-600/30 hover:to-teal-600/30 transition">
+                    <div class="flex items-center space-x-2">
+                        <span class="relative flex h-2.5 w-2.5">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                        </span>
+                        <h2 class="text-sm font-bold text-white">Son 10 Dakikada Aktif Olanlar</h2>
+                        <span id="online-count-badge" class="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full font-bold border border-emerald-500/30 hidden">-</span>
+                    </div>
+                    <button class="text-slate-400 hover:text-white text-xs p-1 transition flex items-center space-x-1">
+                        <span id="online-toggle-label" class="text-[10px] font-semibold">Göster</span>
+                        <i class="fa-solid fa-chevron-down" id="online-toggle-icon"></i>
+                    </button>
+                </div>
+                <div id="online-users-body" class="hidden px-4 py-3">
+                    <div id="online-users-list" class="flex items-center gap-3 overflow-x-auto no-scrollbar pb-1">
+                        <div class="text-center py-3 text-slate-500 text-xs w-full">Yükleniyor...</div>
+                    </div>
+                </div>
+            </div>
+
+            <div onclick="openPinnedRulesTopic()" class="bg-gradient-to-br from-amber-900/40 via-amber-800/30 to-red-900/30 border-2 border-amber-500/50 rounded-2xl px-5 py-4 mb-6 shadow-lg hover:border-amber-400/80 transition cursor-pointer group">
+                <div class="flex items-center justify-between gap-3">
+                    <div class="flex items-center space-x-3 flex-1 min-w-0">
+                        <img src="https://i.imgur.com/1oBP7O9.jpeg" class="w-11 h-11 rounded-full border-2 border-amber-500/50 object-cover flex-shrink-0">
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center space-x-2 mb-1 flex-wrap">
+                                <span class="text-[10px] bg-amber-500/30 text-amber-200 px-2 py-0.5 rounded font-bold flex items-center"><i class="fa-solid fa-thumbtack mr-1"></i>SABİT KONU</span>
+                                <span class="text-xs name-admin">Lianchez</span>
+                                <span class="text-[10px] text-slate-400">• Her zaman en üstte</span>
+                            </div>
+                            <h2 class="text-sm sm:text-base font-extrabold text-amber-100 group-hover:text-amber-300 transition truncate">📌 Forum ve Kurallar Hakkında, Okuyunuz! 📌</h2>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-amber-400 group-hover:translate-x-1 transition flex-shrink-0"></i>
+                </div>
+            </div>
+
+            <div class="bg-slate-800 border border-slate-700 p-4 rounded-2xl mb-4 shadow-md">
+                <div class="relative">
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-500"></i>
+                    <input type="text" id="forum-search-input" oninput="handleForumSearch()" placeholder="Konu başlığı, içerik veya yazar ara..." class="w-full bg-slate-900 border border-slate-700 rounded-xl pl-11 pr-4 py-2.5 text-xs text-white focus:outline-none focus:border-purple-500">
+                </div>
+            </div>
+
+            <div class="bg-slate-800 border border-slate-700 p-4 rounded-2xl mb-4 shadow-md space-y-3">
+                <div>
+                    <p class="text-[10px] text-slate-500 uppercase tracking-wider font-semibold mb-2 ml-1">Kategoriler</p>
+                    <div class="flex flex-wrap gap-2" id="category-filters">
+                        <button onclick="filterCategory('Son Yazılanlar')" data-cat="Son Yazılanlar" class="cat-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-700 text-slate-300 hover:bg-slate-600 transition whitespace-nowrap flex items-center space-x-1.5">
+                            <i class="fa-solid fa-clock-rotate-left text-slate-400"></i><span>Son Yazılanlar</span>
+                        </button>
+                        <button onclick="filterCategory('Genel')" data-cat="Genel" class="cat-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-700 text-slate-300 hover:bg-slate-600 transition whitespace-nowrap flex items-center space-x-1.5">
+                            <i class="fa-solid fa-comments text-blue-400"></i><span>Genel</span>
+                        </button>
+                        <button onclick="filterCategory('Soru & Cevap')" data-cat="Soru & Cevap" class="cat-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-700 text-slate-300 hover:bg-slate-600 transition whitespace-nowrap flex items-center space-x-1.5">
+                            <i class="fa-solid fa-circle-question text-yellow-400"></i><span>Soru & Cevap</span>
+                        </button>
+                        <button onclick="filterCategory('Yazılım')" data-cat="Yazılım" class="cat-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-700 text-slate-300 hover:bg-slate-600 transition whitespace-nowrap flex items-center space-x-1.5">
+                            <i class="fa-solid fa-code text-emerald-400"></i><span>Yazılım</span>
+                        </button>
+                        <button onclick="filterCategory('Üniversite')" data-cat="Üniversite" class="cat-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-700 text-slate-300 hover:bg-slate-600 transition whitespace-nowrap flex items-center space-x-1.5">
+                            <i class="fa-solid fa-graduation-cap text-indigo-400"></i><span>Üniversite</span>
+                        </button>
+                        <button onclick="filterCategory('Etkinlik')" data-cat="Etkinlik" class="cat-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-700 text-slate-300 hover:bg-slate-600 transition whitespace-nowrap flex items-center space-x-1.5">
+                            <i class="fa-solid fa-calendar-check text-pink-400"></i><span>Etkinlik</span>
+                        </button>
+                        <button onclick="filterCategory('Hakkında')" data-cat="Hakkında" class="cat-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-700 text-slate-300 hover:bg-slate-600 transition whitespace-nowrap flex items-center space-x-1.5">
+                            <i class="fa-solid fa-circle-info text-pink-400"></i><span>Hakkında</span>
+                        </button>
+                        <button onclick="filterCategory('Yardım')" data-cat="Yardım" class="cat-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-700 text-slate-300 hover:bg-slate-600 transition whitespace-nowrap flex items-center space-x-1.5">
+                            <i class="fa-solid fa-life-ring text-orange-400"></i><span>Yardım</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 pt-2 border-t border-slate-700/60">
+                    <p id="active-category-info" class="text-[11px] text-slate-400">
+                        <i class="fa-solid fa-circle-info mr-1"></i><span id="active-category-label">Son yazılan konular</span>
+                        <span id="active-category-count" class="text-purple-400 font-semibold ml-1"></span>
+                    </p>
+                    <div class="flex items-center space-x-2 w-full sm:w-auto justify-end">
+                        <span class="text-xs text-slate-400 mr-1"><i class="fa-solid fa-sort mr-1"></i>Sırala:</span>
+                        <button onclick="changeSort('recent')" id="sort-recent" class="sort-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-700 text-purple-400 transition">Güncel</button>
+                        <button onclick="changeSort('popular')" id="sort-popular" class="sort-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-700 text-slate-400 hover:text-white transition">Popüler</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="topics-container" class="space-y-3">
+                <div class="text-center py-10 text-slate-500">Konular yükleniyor...</div>
+            </div>
+
+            <div id="load-more-topics-forum" class="text-center mt-6 hidden">
+                <button onclick="loadMoreForumTopics()" class="bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs font-semibold px-5 py-2.5 rounded-xl transition">
+                    <i class="fa-solid fa-arrow-down mr-1.5"></i>Daha Fazla Konu Göster
+                </button>
+            </div>
+        </div>
+
+        <div id="topic-detail-view" class="hidden space-y-6">
+            <button onclick="backToForumList()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-2 rounded-xl text-xs font-semibold transition flex items-center space-x-2 border border-slate-700">
+                <i class="fa-solid fa-arrow-left"></i>
+                <span>Tüm Konulara Dön</span>
+            </button>
+
+            <div id="detail-topic-card" class="bg-slate-800 border border-slate-700 p-6 rounded-2xl shadow-xl"></div>
+
+            <div class="space-y-4">
+                <h3 class="text-lg font-bold text-white mt-6">Yanıtlar ve Tartışmalar</h3>
+                <div id="replies-container" class="space-y-3"></div>
+            </div>
+
+            <div id="reply-form-container" class="bg-slate-800 border border-slate-700 p-6 rounded-2xl shadow-xl mt-6">
+                <div id="active-quote-banner" class="hidden mb-3 bg-purple-950/40 border border-purple-500/40 p-3 rounded-xl flex items-center justify-between text-xs">
+                    <div class="flex items-center space-x-2 truncate">
+                        <i class="fa-solid fa-quote-left text-purple-400"></i>
+                        <span id="active-quote-text" class="text-slate-300 truncate"></span>
+                    </div>
+                    <button onclick="cancelQuote()" class="text-slate-400 hover:text-white ml-2"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+
+                <h3 class="text-base font-bold text-white mb-3 flex items-center flex-wrap gap-y-1">
+                    <i class="fa-solid fa-reply text-purple-400 mr-2"></i>Tartışmaya Katıl <span class="text-xs text-purple-300 font-normal ml-2">(İçerik derinliğine göre ekstra bonus!)</span>
+                </h3>
+                <form id="reply-form" onsubmit="prepareReply(event)" class="space-y-3">
+                    <div class="reply-input-wrapper">
+                        <div id="mention-suggestions-reply" class="mention-suggestions hidden"></div>
+                        <textarea id="reply-content" rows="3" required oninput="updateDepthPreview('reply')" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-purple-500 text-white" placeholder="Fikrini veya cevabını paylaş... (@ ile etiketle)"></textarea>
+                    </div>
+                    <!-- Canlı Kelime Sayacı & Rozet Önizleme Çubuğu (Yanıt) -->
+                    <div id="reply-depth-preview" class="bg-slate-900/70 border border-slate-700/80 rounded-xl px-3.5 py-2.5 space-y-1.5">
+                        <div class="flex items-center justify-between gap-2 flex-wrap text-[11px]">
+                            <div class="flex items-center gap-2">
+                                <span id="reply-depth-badge"><span class="inline-flex items-center gap-1 text-[9px] px-2 py-0.5 rounded-full bg-slate-700/60 text-slate-300 border border-slate-600/70"><i class="fa-solid fa-comment-dots text-[8px] text-slate-400"></i>Öz Görüş</span></span>
+                                <span class="text-slate-400 font-medium"><strong id="reply-word-count" class="text-slate-200">0</strong> kelime</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span id="reply-depth-hint" class="text-[10px] text-slate-400">Detaylı Yorum (+1 Coin & +3 XP) için 25 kelimeye ulaş</span>
+                                <span id="reply-depth-reward" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-yellow-500/15 text-yellow-300 border border-yellow-500/30">+2 Coin & +8 XP</span>
+                            </div>
+                        </div>
+                        <div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                            <div id="reply-depth-bar" class="h-full bg-slate-500 transition-all duration-300 rounded-full" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <!-- Format toolbar -->
+                    <div class="flex items-center gap-1.5 flex-wrap">
+                        <button type="button" onclick="openEmbedModal('reply')" class="format-btn flex items-center gap-1.5 bg-slate-900 border border-slate-700 text-slate-300 px-3 py-1.5 rounded-lg text-xs font-semibold">
+                            <i class="fa-solid fa-image text-emerald-400"></i>
+                            <span>Görsel Ekle</span>
+                        </button>
+                        <button type="button" onclick="openEmbedModal('reply', 'link')" class="format-btn flex items-center gap-1.5 bg-slate-900 border border-slate-700 text-slate-300 px-3 py-1.5 rounded-lg text-xs font-semibold">
+                            <i class="fa-solid fa-link text-blue-400"></i>
+                            <span>Link Ekle</span>
+                        </button>
+                        <span class="text-[10px] text-slate-500 ml-auto hidden sm:inline"><i class="fa-solid fa-at mr-1"></i>@ ile etiketle</span>
+                    </div>
+                    <div class="flex justify-end">
+                        <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white px-5 py-2 rounded-xl text-xs font-semibold transition shadow-md">
+                            Yanıtı Gönder
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <div id="locked-notice" class="hidden max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-6">
+        <div class="bg-amber-500/10 border-2 border-amber-500/40 rounded-2xl p-5 text-center">
+            <div class="w-14 h-14 bg-amber-500/20 text-amber-400 rounded-full flex items-center justify-center text-2xl mx-auto mb-3 border border-amber-500/30">
+                <i class="fa-solid fa-lock"></i>
+            </div>
+            <h3 class="text-base font-bold text-amber-200 mb-1">🔒 Bu Konu Kilitlendi</h3>
+            <p class="text-xs text-slate-300 max-w-md mx-auto">Bu konuya yorum/yanıt yazma yetkisi adminler tarafından kapatılmıştır. Mevcut yanıtları okuyabilirsiniz ancak yeni yanıt ekleyemezsiniz.</p>
+        </div>
+    </div>
+
+    <div id="topic-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div class="bg-slate-800 border border-slate-700 rounded-2xl max-w-lg w-full p-6 shadow-2xl">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold">Yeni Tartışma Konusu Aç</h2>
+                <button onclick="closeTopicModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form id="topic-form" onsubmit="prepareTopic(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Kategori Seçin</label>
+                    <select id="topic-category" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-purple-500 text-white">
+                        <option value="Genel">Genel</option>
+                        <option value="Soru & Cevap">Soru & Cevap</option>
+                        <option value="Yazılım">Yazılım</option>
+                        <option value="Üniversite">Üniversite</option>
+                        <option value="Etkinlik">Etkinlik</option>
+                        <option value="Hakkında">Hakkında</option>
+                        <option value="Yardım">Yardım</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Konu Başlığı</label>
+                    <input type="text" id="topic-title" required minlength="3" maxlength="100" oninput="updateTitleCounter()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-purple-500 text-white" placeholder="Konu başlığı (max 100 karakter)...">
+                    <div class="flex justify-end mt-1">
+                        <span id="title-char-counter" class="text-[10px] text-slate-500 font-semibold"><span id="title-char-current">0</span>/100 karakter</span>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">İçerik / Soru</label>
+                    <textarea id="topic-content" rows="4" required oninput="updateDepthPreview('topic')" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-purple-500 text-white" placeholder="Detaylar..."></textarea>
+                    <!-- Canlı Kelime Sayacı & Rozet Önizleme Çubuğu (Konu) -->
+                    <div id="topic-depth-preview" class="bg-slate-900/70 border border-slate-700/80 rounded-xl px-3.5 py-2.5 mt-2 space-y-1.5">
+                        <div class="flex items-center justify-between gap-2 flex-wrap text-[11px]">
+                            <div class="flex items-center gap-2">
+                                <span id="topic-depth-badge"><span class="inline-flex items-center gap-1 text-[9px] px-2 py-0.5 rounded-full bg-slate-700/60 text-slate-300 border border-slate-600/70"><i class="fa-solid fa-comment-dots text-[8px] text-slate-400"></i>Öz Görüş</span></span>
+                                <span class="text-slate-400 font-medium"><strong id="topic-word-count" class="text-slate-200">0</strong> kelime</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span id="topic-depth-hint" class="text-[10px] text-slate-400">Detaylı Yorum (+1 Coin & +3 XP) için 25 kelimeye ulaş</span>
+                                <span id="topic-depth-reward" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-yellow-500/15 text-yellow-300 border border-yellow-500/30">+5 Coin & +15 XP</span>
+                            </div>
+                        </div>
+                        <div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                            <div id="topic-depth-bar" class="h-full bg-slate-500 transition-all duration-300 rounded-full" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <!-- Format toolbar -->
+                    <div class="flex items-center gap-1.5 flex-wrap mt-2">
+                        <button type="button" onclick="openEmbedModal('topic')" class="format-btn flex items-center gap-1.5 bg-slate-900 border border-slate-700 text-slate-300 px-3 py-1.5 rounded-lg text-xs font-semibold">
+                            <i class="fa-solid fa-image text-emerald-400"></i>
+                            <span>Görsel Ekle</span>
+                        </button>
+                        <button type="button" onclick="openEmbedModal('topic', 'link')" class="format-btn flex items-center gap-1.5 bg-slate-900 border border-slate-700 text-slate-300 px-3 py-1.5 rounded-lg text-xs font-semibold">
+                            <i class="fa-solid fa-link text-blue-400"></i>
+                            <span>Link Ekle</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="flex justify-end space-x-3 pt-2">
+                    <button type="button" onclick="closeTopicModal()" class="bg-slate-700 hover:bg-slate-600 text-slate-300 px-4 py-2 rounded-xl text-sm font-medium transition">İptal</button>
+                    <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white px-5 py-2 rounded-xl text-sm font-semibold transition">İlerle</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- GÖRSEL/LİNK EKLEME MODALI -->
+    <div id="embed-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden items-center justify-center z-[60] p-4">
+        <div class="bg-slate-800 border border-slate-700 rounded-2xl max-w-md w-full p-6 shadow-2xl">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold text-white flex items-center">
+                    <i id="embed-modal-icon" class="fa-solid fa-image text-emerald-400 mr-2"></i>
+                    <span id="embed-modal-title">Görsel Ekle</span>
+                </h3>
+                <button onclick="closeEmbedModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2" id="embed-url-label">Görsel URL</label>
+                    <input type="url" id="embed-url-input" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-purple-500 text-white" placeholder="https://...">
+                    <p class="text-[10px] text-slate-500 mt-1"><i class="fa-solid fa-circle-info mr-1"></i>Güvenli (https) adresler kullanın.</p>
+                </div>
+                <div id="embed-text-field">
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Görünen Metin (opsiyonel)</label>
+                    <input type="text" id="embed-text-input" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-purple-500 text-white" placeholder="Boş bırakılırsa URL görünür">
+                </div>
+                <div class="flex justify-end space-x-3 pt-2">
+                    <button type="button" onclick="closeEmbedModal()" class="bg-slate-700 hover:bg-slate-600 text-slate-300 px-4 py-2 rounded-xl text-sm font-medium transition">İptal</button>
+                    <button type="button" onclick="insertEmbed()" id="embed-insert-btn" class="bg-purple-600 hover:bg-purple-700 text-white px-5 py-2 rounded-xl text-sm font-semibold transition">Ekle</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="math-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div class="bg-slate-800 border border-purple-500/50 rounded-2xl max-w-sm w-full p-6 shadow-2xl text-center space-y-4">
+            <div class="w-14 h-14 bg-purple-500/20 text-purple-400 rounded-full flex items-center justify-center text-2xl mx-auto border border-purple-500/30">
+                <i class="fa-solid fa-robot"></i>
+            </div>
+            <h3 class="text-lg font-bold text-white">Bot Doğrulaması</h3>
+            <p class="text-xs text-slate-300">Lütfen aşağıdaki işlemi çözün:</p>
+            <div id="math-question-box" class="text-base font-extrabold text-yellow-400 bg-slate-900 py-3 rounded-xl border border-slate-700">? + ? = ?</div>
+            <input type="number" id="math-answer-input" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-center text-sm text-white focus:outline-none focus:border-purple-500" placeholder="Sonucu yazın">
+            <div class="flex space-x-2 pt-2">
+                <button type="button" onclick="closeMathModal()" class="w-1/2 bg-slate-700 hover:bg-slate-600 text-white py-2.5 rounded-xl text-xs font-semibold transition">İptal</button>
+                <button type="button" onclick="verifyAndSubmit()" class="w-1/2 bg-purple-600 hover:bg-purple-700 text-white py-2.5 rounded-xl text-xs font-semibold transition">Doğrula</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="cooldown-popup" class="fixed inset-0 bg-black/75 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div class="bg-slate-800 border border-amber-500/50 rounded-2xl max-w-sm w-full p-6 text-center shadow-2xl space-y-4">
+            <div class="w-14 h-14 bg-amber-500/20 text-amber-400 rounded-full flex items-center justify-center text-2xl mx-auto border border-amber-500/30">
+                <i class="fa-solid fa-hourglass-half animate-spin"></i>
+            </div>
+            <h3 class="text-lg font-bold text-white">Lütfen Bekleyin</h3>
+            <p id="cooldown-msg" class="text-xs text-slate-300">Beklemeniz gerekiyor.</p>
+            <button onclick="closeCooldownPopup()" class="w-full bg-slate-700 hover:bg-slate-600 text-white py-2.5 rounded-xl text-xs font-semibold transition">Anladım</button>
+        </div>
+    </div>
+
+    <div id="notifications-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div class="bg-slate-800 border border-slate-700 rounded-2xl max-w-md w-full p-6 shadow-2xl relative">
+            <div class="flex justify-between items-center mb-4 border-b border-slate-700 pb-3">
+                <h3 class="text-lg font-bold text-white flex items-center">
+                    <i class="fa-solid fa-bell text-blue-400 mr-2"></i>Bildirimler
+                </h3>
+                <div class="flex items-center space-x-2">
+                    <button onclick="markAllNotificationsRead()" title="Tümünü Okundu İşaretle" class="text-[10px] bg-blue-500/20 hover:bg-blue-600 text-blue-300 hover:text-white px-2.5 py-1.5 rounded-lg font-semibold transition border border-blue-500/30 flex items-center space-x-1">
+                        <i class="fa-solid fa-check-double"></i>
+                        <span>Tümünü Okundu İşaretle</span>
+                    </button>
+                    <button onclick="closeNotificationsModal()" class="text-slate-400 hover:text-white p-1">
+                        <i class="fa-solid fa-xmark text-lg"></i>
+                    </button>
+                </div>
+            </div>
+            <div id="notifications-list" class="space-y-3 max-h-80 overflow-y-auto pr-1">
+                <div class="text-center py-8 text-slate-500 text-xs">Henüz bir bildiriminiz yok.</div>
+            </div>
+            <div class="mt-5 pt-3 border-t border-slate-700 flex justify-end">
+                <button onclick="closeNotificationsModal()" class="bg-slate-700 hover:bg-slate-600 text-slate-200 px-4 py-1.5 rounded-xl text-xs font-semibold transition">Kapat</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="report-modal" class="fixed inset-0 bg-black/75 backdrop-blur-sm hidden items-center justify-center z-[100] p-4">
+        <div class="bg-slate-800 border border-red-500/40 rounded-2xl max-w-md w-full p-6 shadow-2xl">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold text-white flex items-center">
+                    <i class="fa-solid fa-flag text-red-400 mr-2"></i>İçeriği Raporla
+                </h3>
+                <button onclick="closeReportModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <p class="text-xs text-slate-400 mb-4">Rapor sebebini seçin veya yazın.</p>
+            <div class="space-y-2 mb-4">
+                <label class="flex items-center space-x-2 cursor-pointer text-xs text-slate-300"><input type="radio" name="report-reason" value="Küfür / Hakaret" class="accent-red-500"><span>Küfür / Hakaret</span></label>
+                <label class="flex items-center space-x-2 cursor-pointer text-xs text-slate-300"><input type="radio" name="report-reason" value="Spam / Reklam" class="accent-red-500"><span>Spam / Reklam</span></label>
+                <label class="flex items-center space-x-2 cursor-pointer text-xs text-slate-300"><input type="radio" name="report-reason" value="Uygunsuz İçerik" class="accent-red-500"><span>Uygunsuz İçerik</span></label>
+                <label class="flex items-center space-x-2 cursor-pointer text-xs text-slate-300"><input type="radio" name="report-reason" value="Yanıltıcı Bilgi" class="accent-red-500"><span>Yanıltıcı Bilgi</span></label>
+                <label class="flex items-center space-x-2 cursor-pointer text-xs text-slate-300"><input type="radio" name="report-reason" value="Diğer" class="accent-red-500"><span>Diğer</span></label>
+            </div>
+            <textarea id="report-custom-reason" rows="2" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-red-500 mb-4" placeholder="Ek açıklama (opsiyonel)"></textarea>
+            <div class="flex justify-end space-x-2">
+                <button type="button" onclick="closeReportModal()" class="bg-slate-700 hover:bg-slate-600 text-slate-300 px-4 py-2 rounded-xl text-xs font-semibold transition">İptal</button>
+                <button type="button" onclick="submitReport()" class="bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-xl text-xs font-semibold transition">Raporla</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="user-edit-reply-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div class="bg-slate-800 border border-slate-700 rounded-2xl max-w-lg w-full p-6 shadow-2xl">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold text-white"><i class="fa-solid fa-pen text-amber-400 mr-2"></i>Yanıtı Düzenle</h3>
+                <button onclick="closeUserEditReplyModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <p class="text-[11px] text-slate-400 mb-3"><i class="fa-solid fa-clock mr-1"></i>Yanıtlar sadece ilk <strong>10 dakika</strong> içinde düzenlenebilir.</p>
+            <form id="user-edit-reply-form" onsubmit="saveUserEditedReply(event)" class="space-y-4">
+                <input type="hidden" id="user-edit-reply-topic-id">
+                <input type="hidden" id="user-edit-reply-id">
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Yanıt İçeriği</label>
+                    <textarea id="user-edit-reply-content" rows="4" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-amber-500"></textarea>
+                </div>
+                <div class="flex justify-end space-x-3 pt-2">
+                    <button type="button" onclick="closeUserEditReplyModal()" class="bg-slate-700 hover:bg-slate-600 text-slate-300 px-4 py-2 rounded-xl text-xs font-semibold transition">İptal</button>
+                    <button type="submit" class="bg-amber-600 hover:bg-amber-700 text-white px-5 py-2 rounded-xl text-xs font-semibold transition">Güncelle</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="banned-popup" class="fixed inset-0 bg-black/75 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div class="bg-slate-800 border border-red-500/50 rounded-2xl max-w-sm w-full p-6 text-center shadow-2xl space-y-4">
+            <div class="w-14 h-14 bg-red-500/20 text-red-400 rounded-full flex items-center justify-center text-2xl mx-auto border border-red-500/30">
+                <i class="fa-solid fa-ban"></i>
+            </div>
+            <h3 class="text-lg font-bold text-white">İşlem Engellendi</h3>
+            <p class="text-xs text-slate-300">Hesabınız engellenmiştir.</p>
+            <button onclick="closeBannedPopup()" class="w-full bg-slate-700 hover:bg-slate-600 text-white py-2.5 rounded-xl text-xs font-semibold transition">Anladım</button>
+        </div>
+    </div>
+
+    <div class="fixed bottom-4 right-4 z-[150]" id="assistant-widget">
+        <div class="relative">
+            <button onclick="closeAssistantWidget()" title="Kapat" class="absolute -top-2 -right-2 z-10 w-6 h-6 bg-slate-800 hover:bg-red-600 text-slate-300 hover:text-white rounded-full flex items-center justify-center text-[10px] border border-slate-600 hover:border-red-500 shadow-lg transition">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <a href="/portal/iletisim.html" class="assistant-btn group flex items-center gap-2 bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white pl-3 pr-4 py-2.5 rounded-full shadow-2xl border border-purple-400/40 hover:from-purple-500 hover:to-fuchsia-500 transition-all">
+                <span class="assistant-icon w-8 h-8 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
+                    <i class="fa-solid fa-comment-dots text-sm"></i>
+                </span>
+                <span class="text-left leading-tight">
+                    <span class="block text-[10px] font-extrabold tracking-wide">İSTEK / ÖNERİ Mİ VAR?</span>
+                    <span class="block text-[9px] font-medium opacity-90">Forum için fikirlerini bize ilet!</span>
+                </span>
+                <i class="fa-solid fa-arrow-right text-[10px] opacity-80 group-hover:translate-x-0.5 transition"></i>
+            </a>
+        </div>
+    </div>
+
+    <footer class="relative bg-gradient-to-b from-slate-800 to-slate-900 border-t border-slate-700 mt-auto">
+        <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-purple-500/40 to-transparent"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-graduation-cap text-blue-400 text-lg"></i>
+                    <span class="text-sm font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">Üni Portal</span>
+                </div>
+                <p class="text-xs text-slate-500 text-center">
+                    &copy; <span class="current-year"></span> Üni Portal — Tüm hakları saklıdır.
+                </p>
+                <p class="text-xs text-slate-500">
+                    Powered by <a href="https://lianchez.com" target="_blank" class="text-blue-400 hover:text-blue-300 font-semibold transition">lianchez.com</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+    <script>
+        document.querySelectorAll('.current-year').forEach(el => el.innerText = new Date().getFullYear());
+        function closeAssistantWidget() {
+            const w = document.getElementById('assistant-widget');
+            if (w) w.style.display = 'none';
+        }
+    </script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, collection, addDoc, setDoc, getDocs, doc, updateDoc, increment, getDoc, query, orderBy, serverTimestamp, deleteDoc, arrayUnion, arrayRemove, limit, startAfter, writeBatch, where, getCountFromServer } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { markdownToHtml, stripMarkdown, readingMinutes, formatCount, attachMarkdownToolbar, getNameEffectClass, getAvatarFrameClass, renderTitleBadge, renderKunyeLine, primeAuthor, resolveAuthors, mergeAuthor, hydrateAuthorElements, injectCoreStyles, initDailyStreak, getContentDepthInfo } from '/portal/portal-core.js';
+        const DEPTH_LABELS = { short: 'Öz Görüş', medium: 'Detaylı Yorum', deep: 'Usta Analiz' };
+        injectCoreStyles();
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAYTaUdfhWAngCSZQjAyFtP_IRubX_Gw4c",
+            authDomain: "lianchezportal.firebaseapp.com",
+            projectId: "lianchezportal",
+            storageBucket: "lianchezportal.firebasestorage.app",
+            messagingSenderId: "283567832811",
+            appId: "1:283567832811:web:cff0981ba1fa305a0dc8ae",
+            measurementId: "G-8KPN5EG95S"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const provider = new GoogleAuthProvider();
+
+        let currentUser = null;
+        let isUserBanned = false;
+        let notificationsUnsubscribe = null;
+        let repliesUnsubscribe = null;
+let activeTopicId = null;
+        let activeTopicData = null;
+        let selectedCategory = "Son Yazılanlar";
+        let currentSortBy = "recent";
+        let pendingActionType = null;
+        let correctMathAnswer = 0;
+        let activeQuote = null;
+        let reportContext = null;
+let forumLastVisible = null;
+        let forumHasMore = false;
+        const forumPageSize = 10;
+        let allLoadedTopics = [];
+        let currentSearchKeyword = "";
+        let currentUserData = null;
+        let onlineLoadedOnce = false;
+
+        // Embed modal state
+        let embedTargetField = null; // 'reply' or 'topic'
+        let embedType = 'image'; // 'image' or 'link'
+
+        const BAD_WORDS_CACHE_KEY = 'lianchez_badwords_v2';
+        const BAD_WORDS_CACHE_TTL = 24 * 60 * 60 * 1000;
+        let badWordsList = [];
+        let badWordsRegex = null;
+
+        const DEFAULT_BAD_WORDS = ["amk","aq","amq","orospu","oç","piç","sik","siktir","yarrak","göt","şerefsiz","pezevenk","gavat","kahpe","kaltak","sürtük","ibne","puşt","yavşak","salak","aptal","gerizekalı","beyinsiz","ahmak","fuck","shit","bitch","asshole","bastard","nigga","nigger"];
+
+        function buildBadWordsRegex(words) {
+            if (!words || words.length === 0) return null;
+            const sorted = [...words].sort((a, b) => b.length - a.length);
+            const escaped = sorted.map(w => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+            return new RegExp(`(?<![\\p{L}\\p{N}])(?:${escaped.join('|')})(?![\\p{L}\\p{N}])`, 'giu');
+        }
+
+        function parseBadWordsString(rawStr) {
+            if (!rawStr || typeof rawStr !== 'string') return [];
+            return rawStr
+                .split(',')
+                .map(w => w.trim().toLowerCase())
+                .filter(w => w.length > 0);
+        }
+
+        async function loadBadWordsFromFirebase() {
+            try {
+                const cached = localStorage.getItem(BAD_WORDS_CACHE_KEY);
+                if (cached) {
+                    const parsed = JSON.parse(cached);
+                    if (parsed && parsed.timestamp && (Date.now() - parsed.timestamp < BAD_WORDS_CACHE_TTL) && Array.isArray(parsed.words)) {
+                        badWordsList = parsed.words;
+                        badWordsRegex = buildBadWordsRegex(badWordsList);
+                        return;
+                    }
+                }
+            } catch(e) { console.warn('Bad words cache okunamadı', e); }
+
+            try {
+                const docRef = doc(db, "settings", "badwords");
+                const docSnap = await getDoc(docRef);
+                let words = [];
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    words = parseBadWordsString(data.list || "");
+                }
+                if (words.length === 0) words = [...DEFAULT_BAD_WORDS];
+                badWordsList = words;
+                badWordsRegex = buildBadWordsRegex(badWordsList);
+                try {
+                    localStorage.setItem(BAD_WORDS_CACHE_KEY, JSON.stringify({ timestamp: Date.now(), words }));
+                } catch(e) {}
+            } catch(e) {
+                console.warn('Bad words Firebase\'den okunamadı, fallback kullanılıyor', e);
+                badWordsList = DEFAULT_BAD_WORDS;
+                badWordsRegex = buildBadWordsRegex(badWordsList);
+            }
+        }
+
+        function filterBadWords(text) {
+            if (!text) return "";
+            if (!badWordsRegex) return text;
+            return text.replace(badWordsRegex, "***");
+        }
+
+        function escapeHtml(text) {
+            if (text === null || text === undefined) return "";
+            return String(text)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        function safeUrl(url) {
+            if (!url) return null;
+            try {
+                const trimmed = String(url).trim();
+                if (/^javascript:/i.test(trimmed) || /^data:/i.test(trimmed) && !/^data:image\//i.test(trimmed)) return null;
+                if (/^(https?:\/\/)/i.test(trimmed)) return trimmed;
+                if (/^\/portal\//i.test(trimmed)) return trimmed;
+                return null;
+            } catch(e) { return null; }
+        }
+
+        function renderRichContent(text) {
+            if (!text) return "";
+            return markdownToHtml(escapeHtml(text), (escaped) => {
+                let html = escaped;
+                html = html.replace(/\[resim\]\((https?:\/\/[^\s)]+)\)/gi, (match, url) => {
+                    const safe = safeUrl(url);
+                    if (!safe) return match;
+                    return `<img src="${safe}" class="msg-embed-img" alt="Görsel" loading="lazy" onerror="this.style.display='none'">`;
+                });
+                html = html.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/gi, (match, label, url) => {
+                    const safe = safeUrl(url);
+                    if (!safe) return match;
+                    return `<a href="${safe}" target="_blank" rel="noopener noreferrer" class="msg-embed-link">${label}</a>`;
+                });
+                html = html.replace(/(^|[\s(])((https?:\/\/)[^\s<)]+)/gi, (match, prefix, url) => {
+                    const safe = safeUrl(url);
+                    if (!safe) return match;
+                    return `${prefix}<a href="${safe}" target="_blank" rel="noopener noreferrer" class="msg-embed-link">${safe}</a>`;
+                });
+                html = html.replace(/@([A-Za-zÇĞİÖŞÜçğıöşü0-9_]+(?:\s+[A-Za-zÇĞİÖŞÜçğıöşü0-9_]+)?)/g, (m, name) => {
+                    return `<span class="text-purple-300 font-bold bg-purple-500/10 px-1 rounded">@${name}</span>`;
+                });
+                return html;
+            });
+        }
+
+        const selectedMentionsMap = new Map();
+        let mentionSelectedIndex = -1;
+        let mentionActiveField = null;
+        let mentionSearchTimeout = null;
+        let mentionSearchSeq = 0;
+
+        const LEVELS = [
+            { name: "Yeni Üye", minXP: 0, maxXP: 49, icon: "fa-seedling", 
+              color: "text-emerald-300", bg: "bg-emerald-500/15", border: "border-emerald-500/30",
+              barFrom: "from-emerald-500", barTo: "to-emerald-400" },
+            { name: "Aktif Üye", minXP: 50, maxXP: 149, icon: "fa-leaf",
+              color: "text-lime-300", bg: "bg-lime-500/15", border: "border-lime-500/30",
+              barFrom: "from-lime-500", barTo: "to-lime-400" },
+            { name: "Deneyimli Üye", minXP: 150, maxXP: 349, icon: "fa-tree",
+              color: "text-teal-300", bg: "bg-teal-500/15", border: "border-teal-500/30",
+              barFrom: "from-teal-500", barTo: "to-teal-400" },
+            { name: "Uzman Üye", minXP: 350, maxXP: 699, icon: "fa-star",
+              color: "text-yellow-300", bg: "bg-yellow-500/15", border: "border-yellow-500/30",
+              barFrom: "from-yellow-500", barTo: "to-yellow-400" },
+            { name: "Emektar Üye", minXP: 700, maxXP: 1499, icon: "fa-gem",
+              color: "text-cyan-300", bg: "bg-cyan-500/15", border: "border-cyan-500/30",
+              barFrom: "from-cyan-500", barTo: "to-cyan-400" },
+            { name: "Efsane Üye", minXP: 1500, maxXP: Infinity, icon: "fa-crown",
+              color: "text-amber-300", bg: "bg-amber-500/15", border: "border-amber-500/30",
+              barFrom: "from-amber-500", barTo: "to-yellow-300" }
+        ];
+
+        function getLevelInfo(xp) {
+            const xpVal = xp || 0;
+            for (let i = LEVELS.length - 1; i >= 0; i--) {
+                if (xpVal >= LEVELS[i].minXP) return { ...LEVELS[i], level: i + 1, xp: xpVal };
+            }
+            return { ...LEVELS[0], level: 1, xp: xpVal };
+        }
+
+        function getRoleBadge(role, xp) {
+            if (role === 'admin') return `<span class="text-[9px] bg-red-500/25 text-red-300 px-1.5 py-0.5 rounded font-bold border border-red-500/40 inline-flex items-center shadow-md" style="box-shadow:0 0 8px rgba(239,68,68,0.4)"><i class="fa-solid fa-shield-halved mr-1"></i>ADMİN</span>`;
+            if (role === 'moderator') return `<span class="text-[9px] bg-orange-500/25 text-orange-300 px-1.5 py-0.5 rounded font-bold border border-orange-500/40 inline-flex items-center shadow-md" style="box-shadow:0 0 8px rgba(249,115,22,0.4)"><i class="fa-solid fa-user-shield mr-1"></i>MOD</span>`;
+            const lvl = getLevelInfo(xp);
+            return `<span class="text-[9px] ${lvl.bg} ${lvl.color} px-1.5 py-0.5 rounded font-bold border ${lvl.border} inline-flex items-center"><i class="fa-solid ${lvl.icon} mr-1"></i>${lvl.name}</span>`;
+        }
+
+        function getNameClass(role) {
+            if (role === 'admin') return 'name-admin';
+            if (role === 'moderator') return 'name-mod';
+            return '';
+        }
+
+        function formatRelativeTime(date) {
+            if (!date) return "Bilinmiyor";
+            const now = new Date();
+            const diffMs = now - date;
+            const diffSec = Math.floor(diffMs / 1000);
+            if (diffSec < 60) return "Az önce";
+            const diffMin = Math.floor(diffSec / 60);
+            if (diffMin < 60) return `${diffMin} dk önce`;
+            const diffHour = Math.floor(diffMin / 60);
+            if (diffHour < 24) return `${diffHour} sa önce`;
+            const diffDay = Math.floor(diffHour / 24);
+            if (diffDay < 7) return `${diffDay} gün önce`;
+            return date.toLocaleDateString('tr-TR');
+        }
+
+        function formatTimestamp(timestamp) {
+            if (!timestamp) return "Şimdi";
+            const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+            return date.toLocaleString('tr-TR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+        }
+
+        // ===== EMBED MODAL FONKSİYONLARI =====
+        window.openEmbedModal = (target, type = 'image') => {
+            embedTargetField = target;
+            embedType = type;
+            const modal = document.getElementById('embed-modal');
+            const title = document.getElementById('embed-modal-title');
+            const icon = document.getElementById('embed-modal-icon');
+            const urlLabel = document.getElementById('embed-url-label');
+            const textField = document.getElementById('embed-text-field');
+            const insertBtn = document.getElementById('embed-insert-btn');
+            const urlInput = document.getElementById('embed-url-input');
+            const textInput = document.getElementById('embed-text-input');
+
+            urlInput.value = '';
+            textInput.value = '';
+            urlInput.placeholder = 'https://...';
+
+            if (type === 'image') {
+                title.innerText = 'Görsel Ekle';
+                icon.className = 'fa-solid fa-image text-emerald-400 mr-2';
+                urlLabel.innerText = 'Görsel URL';
+                textField.style.display = 'none';
+                insertBtn.innerText = 'Görseli Ekle';
+                insertBtn.className = 'bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2 rounded-xl text-sm font-semibold transition';
+                urlInput.placeholder = 'https://ornek.com/resim.jpg';
+            } else {
+                title.innerText = 'Link Ekle';
+                icon.className = 'fa-solid fa-link text-blue-400 mr-2';
+                urlLabel.innerText = 'Link URL';
+                textField.style.display = 'block';
+                insertBtn.innerText = 'Linki Ekle';
+                insertBtn.className = 'bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-xl text-sm font-semibold transition';
+                urlInput.placeholder = 'https://ornek.com';
+            }
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            setTimeout(() => urlInput.focus(), 100);
+        };
+
+        window.closeEmbedModal = () => {
+            const modal = document.getElementById('embed-modal');
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+            embedTargetField = null;
+        };
+
+        window.insertEmbed = () => {
+            const urlInput = document.getElementById('embed-url-input');
+            const textInput = document.getElementById('embed-text-input');
+            const rawUrl = urlInput.value.trim();
+            const text = textInput.value.trim();
+
+            if (!rawUrl) {
+                showToast("Lütfen bir URL girin", "warning");
+                return;
+            }
+
+            const safe = safeUrl(rawUrl);
+            if (!safe) {
+                showToast("Geçersiz veya güvenli olmayan URL. Sadece https:// adresleri kullanın.", "error");
+                return;
+            }
+
+            let markdown = '';
+            if (embedType === 'image') {
+                markdown = `[resim](${safe})`;
+            } else {
+                const label = text || safe;
+                markdown = `[${label}](${safe})`;
+            }
+
+            const textareaId = embedTargetField === 'reply' ? 'reply-content' : 'topic-content';
+            const textarea = document.getElementById(textareaId);
+            if (textarea) {
+                const start = textarea.selectionStart;
+                const end = textarea.selectionEnd;
+                const value = textarea.value;
+                const before = value.substring(0, start);
+                const after = value.substring(end);
+                const needsNewline = before.length > 0 && !before.endsWith('\n') && !before.endsWith(' ');
+                const prefix = needsNewline ? '\n' : '';
+                textarea.value = before + prefix + markdown + after;
+                const newCursor = start + prefix.length + markdown.length;
+                textarea.setSelectionRange(newCursor, newCursor);
+                textarea.focus();
+                textarea.dispatchEvent(new Event('input'));
+            }
+
+            closeEmbedModal();
+            showToast(embedType === 'image' ? "Görsel eklendi" : "Link eklendi", "success");
+        };
+
+        // ===== DİĞER FONKSİYONLAR =====
+
+        window.showRewardAnimation = (text, color = 'text-yellow-400', icon = 'fa-coins') => {
+            const el = document.createElement('div');
+            el.className = `reward-float ${color}`;
+            el.innerHTML = `<i class="fa-solid ${icon} mr-1"></i>${text}`;
+            const coinsBox = document.getElementById('user-coins-box');
+            if (coinsBox) {
+                const rect = coinsBox.getBoundingClientRect();
+                el.style.left = (rect.left + rect.width / 2 - 30) + 'px';
+                el.style.top = (rect.top - 10) + 'px';
+            } else {
+                el.style.left = '80%';
+                el.style.top = '80px';
+            }
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 2000);
+            if (coinsBox) {
+                coinsBox.classList.add('reward-pulse');
+                setTimeout(() => coinsBox.classList.remove('reward-pulse'), 600);
+            }
+        };
+
+        window.toggleOnlineUsers = () => {
+            const body = document.getElementById('online-users-body');
+            const label = document.getElementById('online-toggle-label');
+            const icon = document.getElementById('online-toggle-icon');
+            if (body.classList.contains('hidden')) {
+                body.classList.remove('hidden');
+                label.innerText = 'Gizle';
+                icon.className = 'fa-solid fa-chevron-up';
+                if (!onlineLoadedOnce) {
+                    loadOnlineUsers();
+                    onlineLoadedOnce = true;
+                }
+            } else {
+                body.classList.add('hidden');
+                label.innerText = 'Göster';
+                icon.className = 'fa-solid fa-chevron-down';
+            }
+        };
+
+        async function loadOnlineUsers() {
+            const container = document.getElementById('online-users-list');
+            try {
+                const tenMinutesAgo = new Date(Date.now() - 10 * 60 * 1000);
+                const q = query(collection(db, "users"), where("lastSeen", ">=", tenMinutesAgo), orderBy("lastSeen", "desc"), limit(20));
+                let snap;
+                try { snap = await getDocs(q); }
+                catch(err) { snap = await getDocs(query(collection(db, "users"), orderBy("lastSeen", "desc"), limit(20))); }
+                const onlineUsers = [];
+                const now = new Date();
+                snap.forEach(d => {
+                    const data = d.data();
+                    const lastSeen = data.lastSeen?.toDate?.() || (data.lastSeen ? new Date(data.lastSeen) : null);
+                    if (lastSeen && (now - lastSeen) / 1000 < 600) onlineUsers.push({ id: d.id, ...data, _lastSeenDate: lastSeen });
+                });
+                onlineUsers.sort((a, b) => b._lastSeenDate - a._lastSeenDate);
+
+                const badge = document.getElementById('online-count-badge');
+                if (badge) { badge.innerText = `${onlineUsers.length} kişi`; badge.classList.remove('hidden'); }
+
+                if (onlineUsers.length === 0) {
+                    container.innerHTML = '<div class="text-center py-3 text-slate-500 text-xs w-full">Son 10 dakikada aktif olan kimse yok.</div>';
+                    return;
+                }
+
+                container.innerHTML = "";
+                onlineUsers.forEach(u => {
+                    const displayName = u.displayName || u.name || "Kullanıcı";
+                    const role = u.role || 'user';
+                    const xp = u.xp || 0;
+                    const lastSeenText = formatRelativeTime(u._lastSeenDate);
+                    const nameClass = getNameClass(role);
+                    container.innerHTML += `
+                        <a href="/portal/profil.html?id=${u.id}" class="flex flex-col items-center space-y-1 group flex-shrink-0" title="${escapeHtml(displayName)} — Son görülme: ${lastSeenText}">
+                            <div class="relative">
+                                <img src="${u.photoURL || 'https://via.placeholder.com/40'}" class="w-11 h-11 rounded-full border-2 border-emerald-500/60 object-cover group-hover:border-emerald-400 transition shadow-lg">
+                                <span class="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 rounded-full border-2 border-slate-800 online-dot"></span>
+                            </div>
+                            <span class="text-[10px] ${nameClass || 'text-slate-300'} group-hover:text-white font-semibold truncate max-w-[64px]">${escapeHtml(displayName.split(' ')[0])}</span>
+                            ${getRoleBadge(role, xp)}
+                            <span class="text-[9px] text-slate-500">${lastSeenText}</span>
+                        </a>
+                    `;
+                });
+            } catch(e) {
+                console.error(e);
+                container.innerHTML = '<div class="text-center py-3 text-red-400 text-xs w-full">Çevrimiçi kullanıcılar yüklenemedi.</div>';
+            }
+        }
+
+        document.querySelectorAll('.current-year').forEach(el => el.innerText = new Date().getFullYear());
+window.showToast = (message, type = 'info') => {
+            const container = document.getElementById('toast-container');
+            const colors = { success: 'bg-emerald-600 border-emerald-500', error: 'bg-red-600 border-red-500', warning: 'bg-amber-600 border-amber-500', info: 'bg-slate-700 border-slate-600' };
+            const icons = { success: 'fa-circle-check', error: 'fa-circle-exclamation', warning: 'fa-triangle-exclamation', info: 'fa-circle-info' };
+            const toast = document.createElement('div');
+            toast.className = `${colors[type]} border text-white px-4 py-3 rounded-xl shadow-2xl flex items-center justify-between gap-3 text-xs font-semibold transition-all duration-300 opacity-0 translate-x-full min-w-[250px]`;
+            toast.innerHTML = `<span class="flex items-center space-x-2"><i class="fa-solid ${icons[type]}"></i><span>${message}</span></span><button onclick="this.parentElement.remove()" class="text-white/70 hover:text-white transition"><i class="fa-solid fa-xmark"></i></button>`;
+            container.appendChild(toast);
+            requestAnimationFrame(() => toast.classList.remove('opacity-0', 'translate-x-full'));
+            setTimeout(() => { toast.classList.add('opacity-0', 'translate-x-full'); setTimeout(() => toast.remove(), 300); }, 3500);
+        };
+
+        window.markAllNotificationsRead = async () => {
+            if (!currentUser) return;
+            try {
+                const notifSnap = await getDocs(query(collection(db, "users", currentUser.uid, "notifications"), where("read", "==", false), limit(50)));
+                if (notifSnap.empty) { showToast("Okunmamış bildirim yok", "info"); return; }
+                const batch = writeBatch(db);
+                notifSnap.forEach(d => { batch.update(doc(db, "users", currentUser.uid, "notifications", d.id), { read: true }); });
+                await batch.commit();
+                showToast("Tüm bildirimler okundu olarak işaretlendi", "success");
+                listenNotifications(currentUser.uid);
+            } catch(e) { console.error(e); showToast("İşlem başarısız", "error"); }
+        };
+
+        async function sendNotificationToUser(uid, message, link) {
+            if (!uid || uid === "admin-bot" || uid === currentUser?.uid) return;
+            try {
+                await addDoc(collection(db, "users", uid, "notifications"), {
+                    message, link: link || null, read: false, createdAt: serverTimestamp()
+                });
+            } catch(e) { console.error("Bildirim gönderilemedi:", e); }
+        }
+
+        window.googleLogin = () => signInWithPopup(auth, provider);
+        window.googleLogout = () => signOut(auth);
+        window.toggleMobileMenu = () => document.getElementById('mobile-menu').classList.toggle('hidden');
+        window.toggleUserDropdown = (e) => { e.stopPropagation(); document.getElementById('user-dropdown').classList.toggle('hidden'); };
+        document.addEventListener('click', () => { const d = document.getElementById('user-dropdown'); if (d) d.classList.add('hidden'); });
+
+        window.openNotificationsModal = async () => {
+            document.getElementById('user-dropdown').classList.add('hidden');
+            const modal = document.getElementById('notifications-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            if (!currentUser) return;
+            const listContainer = document.getElementById('notifications-list');
+            listContainer.innerHTML = '<div class="text-center py-8 text-slate-500 text-xs">Yükleniyor...</div>';
+            try {
+                const snap = await getDocs(query(collection(db, "users", currentUser.uid, "notifications"), orderBy("createdAt", "desc"), limit(20)));
+                if (snap.empty) { listContainer.innerHTML = '<div class="text-center py-8 text-slate-500 text-xs">Henüz bir bildiriminiz yok.</div>'; return; }
+                let itemsHTML = "";
+                snap.forEach((docSnap) => {
+                    const notif = docSnap.data();
+                    const notifId = docSnap.id;
+                    const safeLink = (notif.link || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+                    itemsHTML += `
+                        <div class="notif-item p-3 bg-slate-900/60 hover:bg-slate-700/50 border border-slate-700/70 rounded-xl flex items-start justify-between gap-3 transition group">
+                            <div class="flex-1 cursor-pointer" onclick="handleNotificationClick('${notifId}', '${safeLink}')">
+                                <p class="text-xs text-slate-200 font-medium group-hover:text-blue-400 transition">${escapeHtml(notif.message || 'Bildirim')}</p>
+                                ${notif.link ? `<span class="text-[10px] text-blue-400 underline mt-1 inline-block"><i class="fa-solid fa-arrow-up-right-from-square mr-1"></i>Bağlantıya Git</span>` : ''}
+                            </div>
+                            <button onclick="deleteNotification(event, '${notifId}')" title="Bildirimi Sil" class="text-slate-500 hover:text-red-400 p-1 text-xs transition flex-shrink-0"><i class="fa-solid fa-trash-can"></i></button>
+                        </div>
+                    `;
+                });
+                listContainer.innerHTML = itemsHTML;
+            } catch(e) {
+                console.error(e);
+                listContainer.innerHTML = '<div class="text-center py-8 text-red-400 text-xs">Bildirimler yüklenemedi.</div>';
+            }
+        };
+        window.closeNotificationsModal = () => { document.getElementById('notifications-modal').classList.remove('flex'); document.getElementById('notifications-modal').classList.add('hidden'); };
+        window.showBannedPopup = () => { document.getElementById('banned-popup').classList.remove('hidden'); document.getElementById('banned-popup').classList.add('flex'); };
+        window.closeBannedPopup = () => { document.getElementById('banned-popup').classList.remove('flex'); document.getElementById('banned-popup').classList.add('hidden'); };
+        window.closeCooldownPopup = () => { document.getElementById('cooldown-popup').classList.remove('flex'); document.getElementById('cooldown-popup').classList.add('hidden'); };
+        window.closeMathModal = () => { document.getElementById('math-modal').classList.remove('flex'); document.getElementById('math-modal').classList.add('hidden'); };
+
+        window.updateTitleCounter = () => {
+            const input = document.getElementById('topic-title');
+            const current = document.getElementById('title-char-current');
+            if (input && current) {
+                const len = input.value.length;
+                current.innerText = len;
+                if (len > 85) current.parentElement.className = 'text-[10px] text-amber-400 font-semibold';
+                else if (len >= 100) current.parentElement.className = 'text-[10px] text-red-400 font-semibold';
+                else current.parentElement.className = 'text-[10px] text-slate-500 font-semibold';
+            }
+        };
+
+        window.updateDepthPreview = (type) => {
+            const isTopic = type === 'topic';
+            const textarea = document.getElementById(isTopic ? 'topic-content' : 'reply-content');
+            if (!textarea) return;
+
+            const info = getContentDepthInfo(textarea.value || '');
+            const baseCoin = isTopic ? 5 : 2;
+            const baseXp = isTopic ? 15 : 8;
+            const totalCoin = baseCoin + info.bonusCoin;
+            const totalXp = baseXp + info.bonusXp;
+
+            const badgeEl = document.getElementById(`${type}-depth-badge`);
+            const countEl = document.getElementById(`${type}-word-count`);
+            const hintEl = document.getElementById(`${type}-depth-hint`);
+            const rewardEl = document.getElementById(`${type}-depth-reward`);
+            const barEl = document.getElementById(`${type}-depth-bar`);
+
+            if (badgeEl) badgeEl.innerHTML = info.badgeHtml;
+            if (countEl) countEl.textContent = info.words;
+            if (rewardEl) {
+                rewardEl.textContent = `+${totalCoin} Coin & +${totalXp} XP`;
+                if (info.tier === 'deep') {
+                    rewardEl.className = 'text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-gradient-to-r from-amber-500/25 to-purple-500/25 text-amber-300 border border-amber-400/50 shadow-sm';
+                } else if (info.tier === 'medium') {
+                    rewardEl.className = 'text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-300 border border-blue-500/40';
+                } else {
+                    rewardEl.className = 'text-[10px] font-bold px-2 py-0.5 rounded-full bg-yellow-500/15 text-yellow-300 border border-yellow-500/30';
+                }
+            }
+
+            if (hintEl) {
+                if (info.words < 25) {
+                    const rem = 25 - info.words;
+                    hintEl.innerHTML = `<span class="text-slate-400">Detaylı Yorum (+1 Coin & +3 XP) için <strong class="text-blue-300">${rem}</strong> kelime kaldı</span>`;
+                } else if (info.words < 80) {
+                    const rem = 80 - info.words;
+                    hintEl.innerHTML = `<span class="text-blue-300">Usta Analiz (+3 Coin & +7 XP) için <strong class="text-amber-300">${rem}</strong> kelime kaldı</span>`;
+                } else {
+                    hintEl.innerHTML = `<span class="text-amber-300 font-semibold"><i class="fa-solid fa-wand-magic-sparkles mr-1"></i>Maksimum derinlik bonusu aktif!</span>`;
+                }
+            }
+
+            if (barEl) {
+                const pct = Math.min(100, Math.round((info.words / 80) * 100));
+                barEl.style.width = `${pct}%`;
+                if (info.tier === 'deep') {
+                    barEl.className = 'h-full bg-gradient-to-r from-amber-400 via-yellow-400 to-purple-500 transition-all duration-300 rounded-full';
+                } else if (info.tier === 'medium') {
+                    barEl.className = 'h-full bg-gradient-to-r from-blue-500 to-cyan-400 transition-all duration-300 rounded-full';
+                } else {
+                    barEl.className = 'h-full bg-slate-500 transition-all duration-300 rounded-full';
+                }
+            }
+        };
+
+        window.openTopicModal = () => {
+            if (!currentUser) { showToast("Konu açabilmek için giriş yapmalısın", "warning"); googleLogin(); return; }
+            if (isUserBanned) { showBannedPopup(); return; }
+            document.getElementById('topic-modal').classList.remove('hidden');
+            document.getElementById('topic-modal').classList.add('flex');
+            setTimeout(() => { updateTitleCounter(); updateDepthPreview('topic'); }, 50);
+        };
+        window.closeTopicModal = () => { document.getElementById('topic-modal').classList.remove('flex'); document.getElementById('topic-modal').classList.add('hidden'); };
+
+        window.openReportModal = (type, topicId, replyId, contentAuthor, contentPreview) => {
+            if (!currentUser) { showToast("Raporlamak için giriş yapmalısın", "warning"); return; }
+            reportContext = { type, topicId, replyId, contentAuthor, contentPreview };
+            document.querySelectorAll('input[name="report-reason"]').forEach(r => r.checked = false);
+            document.getElementById('report-custom-reason').value = '';
+            document.getElementById('report-modal').classList.remove('hidden');
+            document.getElementById('report-modal').classList.add('flex');
+        };
+        window.closeReportModal = () => { document.getElementById('report-modal').classList.remove('flex'); document.getElementById('report-modal').classList.add('hidden'); reportContext = null; };
+
+        window.submitReport = async () => {
+            if (!reportContext || !currentUser) return;
+            const selected = document.querySelector('input[name="report-reason"]:checked');
+            const customText = document.getElementById('report-custom-reason').value.trim();
+            const reason = selected ? selected.value : (customText || 'Belirtilmemiş');
+            const fullReason = customText && selected ? `${reason} - ${customText}` : reason;
+            try {
+                await addDoc(collection(db, "reports"), {
+                    type: reportContext.type, topicId: reportContext.topicId, replyId: reportContext.replyId || null,
+                    reason: fullReason, reporterUid: currentUser.uid, reporterName: currentUser.displayName,
+                    contentAuthor: reportContext.contentAuthor, contentPreview: (reportContext.contentPreview || '').substring(0, 300),
+                    status: 'pending', createdAt: serverTimestamp()
+                });
+                closeReportModal();
+                showToast("Raporunuz iletildi. Teşekkürler!", "success");
+            } catch(e) { console.error(e); showToast("Rapor gönderilemedi", "error"); }
+        };
+
+                setTimeout(() => {
+            attachMarkdownToolbar('topic-content');
+            attachMarkdownToolbar('reply-content');
+        }, 500);
+
+        onAuthStateChanged(auth, async (user) => {
+            currentUser = user;
+            const loginBtn = document.getElementById('login-btn');
+            const userProfile = document.getElementById('user-profile');
+            const userAvatar = document.getElementById('user-avatar');
+            const userCoins = document.getElementById('user-coins');
+            const dropdownName = document.getElementById('dropdown-user-name');
+            const dropdownEmail = document.getElementById('dropdown-user-email');
+
+            if (user) {
+                loginBtn.classList.add('hidden');
+                userProfile.classList.remove('hidden');
+                userAvatar.src = user.photoURL || 'https://via.placeholder.com/40';
+                dropdownName.innerText = user.displayName || "Kullanıcı";
+                dropdownEmail.innerText = user.email || "";
+
+                const userRef = doc(db, "users", user.uid);
+                const userSnap = await getDoc(userRef);
+
+                if (!userSnap.exists()) {
+                    await setDoc(userRef, {
+                        uid: user.uid,
+                        name: user.displayName || "Öğrenci",
+                        displayName: user.displayName || "Öğrenci",
+                        email: user.email || "",
+                        photoURL: user.photoURL || "",
+                        coins: 10, xp: 0, role: "user",
+                        createdAt: new Date(), lastSeen: new Date()
+                    });
+                    userCoins.innerText = "10";
+                    isUserBanned = false;
+                    currentUserData = { displayName: user.displayName || "Öğrenci", name: user.displayName || "Öğrenci", coins: 10, xp: 0, role: "user" };
+                    try {
+                        await addDoc(collection(db, "users", user.uid, "notifications"), {
+                            message: `Hoş geldin ${user.displayName || 'öğrenci'}! 🎉 Üni Portal'a katıldığın için teşekkürler. Forumda konu açarak +5 Coin & +15 XP kazanabilirsin!`,
+                            link: "/portal/forum.html", read: false, createdAt: new Date()
+                        });
+                    } catch (notifErr) { console.error("Hoş geldin bildirimi gönderilemedi:", notifErr); }
+                } else {
+                    const userData = userSnap.data();
+                    primeAuthor(user.uid, userData);
+                    currentUserData = userData;
+                    userCoins.innerText = userData.coins || 0;
+                    isUserBanned = userData.isBanned || false;
+                    if (dropdownName) dropdownName.innerText = userData.displayName || userData.name || user.displayName || "Kullanıcı";
+                }
+                initDailyStreak(db, user.uid, currentUserData);
+                listenNotifications(user.uid);
+            } else {
+                loginBtn.classList.remove('hidden');
+                userProfile.classList.add('hidden');
+                isUserBanned = false;
+                currentUserData = null;
+                initDailyStreak(db, null, null);
+                if (notificationsUnsubscribe) { notificationsUnsubscribe(); notificationsUnsubscribe = null; }
+                const notifList = document.getElementById('notifications-list');
+                if (notifList) notifList.innerHTML = '<div class="text-center py-8 text-slate-500 text-xs">Henüz bir bildiriminiz yok.</div>';
+                const badge = document.getElementById('notification-badge');
+                if (badge) badge.classList.add('hidden');
+                const dropdownCount = document.getElementById('dropdown-notif-count');
+                if (dropdownCount) dropdownCount.innerText = "0";
+            }
+        });
+
+        function parseSafeDate(raw) {
+            if (!raw) return null;
+            if (typeof raw.toDate === 'function') return raw.toDate();
+            if (raw instanceof Date) return raw;
+            if (typeof raw === 'number' || typeof raw === 'string') return new Date(raw);
+            if (raw.seconds) return new Date(raw.seconds * 1000);
+            return null;
+        }
+
+        async function checkCooldownAndOpenMath(type) {
+            if (!currentUser) return false;
+            const userRef = doc(db, "users", currentUser.uid);
+            const userSnap = await getDoc(userRef);
+            if (!userSnap.exists()) return false;
+            const userData = userSnap.data();
+            primeAuthor(currentUser.uid, userData);
+            const lastTimeField = type === 'topic' ? 'lastTopicTime' : 'lastReplyTime';
+            const lastTime = parseSafeDate(userData[lastTimeField]);
+            if (lastTime) {
+                const diffSec = Math.floor((new Date() - lastTime) / 1000);
+                const cooldownLimit = type === 'topic' ? 300 : 60;
+                if (diffSec < cooldownLimit) {
+                    const remainingSec = cooldownLimit - diffSec;
+                    const mins = Math.floor(remainingSec / 60);
+                    const secs = remainingSec % 60;
+                    document.getElementById('cooldown-msg').innerText = `Yeni bir ${type === 'topic' ? 'konu açabilmek' : 'yanıt yazabilmek'} için ${mins > 0 ? mins + ' dakika ' : ''}${secs} saniye daha beklemelisiniz.`;
+                    document.getElementById('cooldown-popup').classList.remove('hidden');
+                    document.getElementById('cooldown-popup').classList.add('flex');
+                    return false;
+                }
+            }
+            pendingActionType = type;
+            const num1 = Math.floor(Math.random() * 20) + 1;
+            const num2 = Math.floor(Math.random() * 20) + 1;
+            correctMathAnswer = num1 + num2;
+            document.getElementById('math-question-box').innerText = `${num1} + ${num2} = ?`;
+            document.getElementById('math-answer-input').value = "";
+            document.getElementById('math-modal').classList.remove('hidden');
+            document.getElementById('math-modal').classList.add('flex');
+            return true;
+        }
+
+        window.prepareTopic = async (e) => {
+            if (e) e.preventDefault();
+            if (!currentUser) {
+                closeTopicModal();
+                showToast("Konu açabilmek için giriş yapmalısın", "warning");
+                googleLogin();
+                return;
+            }
+            if (isUserBanned) { closeTopicModal(); showBannedPopup(); return; }
+            const opened = await checkCooldownAndOpenMath('topic');
+            if (opened) closeTopicModal();
+        };
+
+        window.prepareReply = async (e) => {
+            if (e) e.preventDefault();
+            if (!currentUser) {
+                showToast("Yanıt gönderebilmek için giriş yapmalısın", "warning");
+                googleLogin();
+                return;
+            }
+            if (!activeTopicId) return;
+            if (isUserBanned) { showBannedPopup(); return; }
+            if (activeTopicData && activeTopicData.isLocked) { showToast("Bu konu kilitli, yanıt yazılamaz", "warning"); return; }
+            await checkCooldownAndOpenMath('reply');
+        };
+
+        window.verifyAndSubmit = async () => {
+            const userAnswer = parseInt(document.getElementById('math-answer-input').value);
+            if (isNaN(userAnswer) || userAnswer !== correctMathAnswer) { showToast("Matematik işlemi yanlış. Tekrar deneyin", "error"); return; }
+            closeMathModal();
+            if (pendingActionType === 'topic') await executeCreateTopic();
+            else if (pendingActionType === 'reply') await executeCreateReply();
+        };
+
+        async function executeCreateTopic() {
+            const category = document.getElementById('topic-category').value;
+            const title = filterBadWords(document.getElementById('topic-title').value);
+            const content = filterBadWords(document.getElementById('topic-content').value);
+            const now = serverTimestamp();
+            const mentionedUids = await extractMentionedUids(content);
+            const topicDepth = getContentDepthInfo(content);
+            const topicCoin = 5 + topicDepth.bonusCoin;
+            const topicXp = 15 + topicDepth.bonusXp;
+            try {
+                const docRef = await addDoc(collection(db, "topics"), {
+                    depthTier: topicDepth.tier, wordCount: topicDepth.words,
+                    category, title, content,
+                    authorName: (currentUserData?.displayName || currentUserData?.name || currentUser.displayName),
+                    authorPhoto: currentUser.photoURL,
+                    authorUid: currentUser.uid,
+                    authorRole: currentUserData?.role || 'user',
+                    authorXP: currentUserData?.xp || 0,
+                    mentions: mentionedUids,
+                    createdAt: now, lastActivityAt: now, likes: 0, likedBy: [], replyCount: 0, isPinned: false, isLocked: false
+                });
+                await updateDoc(doc(db, "users", currentUser.uid), {
+                    coins: increment(topicCoin), xp: increment(topicXp), totalTopics: increment(1), lastTopicTime: new Date(), lastSeen: new Date()
+                });
+                if (currentUserData) {
+                    currentUserData.coins = (currentUserData.coins || 0) + topicCoin;
+                    currentUserData.xp = (currentUserData.xp || 0) + topicXp;
+                    document.getElementById('user-coins').innerText = currentUserData.coins;
+                }
+                for (const uid of mentionedUids) {
+                    if (uid !== currentUser.uid) {
+                        await sendNotificationToUser(uid, `${(currentUserData?.displayName || currentUserData?.name || currentUser.displayName)} sizi bir konuda etiketledi!`, `/portal/forum.html?topic=${docRef.id}`);
+                    }
+                }
+                selectedMentionsMap.clear();
+                showRewardAnimation(`+${topicCoin} Coin`, "text-yellow-400", "fa-coins");
+                setTimeout(() => showRewardAnimation(`+${topicXp} XP`, "text-purple-400", "fa-bolt"), 250);
+                document.getElementById('topic-form').reset();
+                closeTopicModal();
+                updateTitleCounter();
+                updateDepthPreview('topic');
+                showToast(`Konu açıldı! +${topicCoin} Coin & +${topicXp} XP kazandın${topicDepth.bonusCoin ? ' (' + DEPTH_LABELS[topicDepth.tier] + ' bonusu dahil)' : ''}`, "success");
+                loadTopics(true);
+            } catch (error) { console.error(error); showToast("Konu açılamadı", "error"); }
+        }
+
+        async function extractMentionedUids(text) {
+            const uids = new Set();
+            if (!text || !text.includes('@')) return [];
+            const matches = text.match(/@([A-Za-zÇĞİÖŞÜçğıöşü0-9_]+(?:\s+[A-Za-zÇĞİÖŞÜçğıöşü0-9_]+)?)/g);
+            if (!matches) return [];
+            const uniqueNames = new Set();
+            for (const match of matches) {
+                const name = match.substring(1).trim();
+                if (name) uniqueNames.add(name);
+            }
+            const namesArr = Array.from(uniqueNames).slice(0, 10);
+            if (namesArr.length === 0) return [];
+            for (const name of namesArr) {
+                for (const [uid, data] of selectedMentionsMap.entries()) {
+                    if (data.name && data.name.toLowerCase() === name.toLowerCase() && uid !== currentUser?.uid) uids.add(uid);
+                }
+            }
+            const remainingNames = namesArr.filter(name => {
+                for (const [uid, data] of selectedMentionsMap.entries()) if (data.name && data.name.toLowerCase() === name.toLowerCase()) return false;
+                return true;
+            });
+            if (remainingNames.length > 0) {
+                try {
+                    const q = query(collection(db, "users"), where("displayName", "in", remainingNames), limit(10));
+                    const snap = await getDocs(q);
+                    snap.forEach(d => { if (d.id !== currentUser?.uid) uids.add(d.id); });
+                } catch(e) {
+                    for (const name of remainingNames) {
+                        try {
+                            const q2 = query(collection(db, "users"), where("displayName", "==", name), limit(1));
+                            const s2 = await getDocs(q2);
+                            if (!s2.empty && s2.docs[0].id !== currentUser?.uid) uids.add(s2.docs[0].id);
+                        } catch(e2) {}
+                    }
+                }
+            }
+            return Array.from(uids);
+        }
+
+        async function executeCreateReply() {
+            const replyInputEl = document.getElementById('reply-content');
+            if (!replyInputEl) return;
+            const rawContent = replyInputEl.value;
+            const content = filterBadWords(rawContent);
+            if (!content.trim()) return;
+            const now = serverTimestamp();
+            const quotedInfo = activeQuote ? { author: activeQuote.author, text: activeQuote.text, authorUid: activeQuote.authorUid } : null;
+            const mentionedUids = await extractMentionedUids(content);
+            const localDate = new Date();
+            const replyDepth = getContentDepthInfo(content);
+            const replyCoin = 2 + replyDepth.bonusCoin;
+            const replyXp = 8 + replyDepth.bonusXp;
+
+            // ==================== OPTIMISTIC UI: ANINDA DOM'A BAS ====================
+            const tempReplyId = 'temp_' + Date.now();
+            const repliesContainer = document.getElementById('replies-container');
+            if (repliesContainer) {
+                const placeholder = repliesContainer.querySelector('.text-slate-500, .text-red-400');
+                if (placeholder && (placeholder.textContent.includes('henüz yanıt') || placeholder.textContent.includes('Henüz'))) {
+                    repliesContainer.innerHTML = "";
+                }
+                const tempReplyObj = {
+                    id: tempReplyId,
+                    content,
+                    authorName: (currentUserData?.displayName || currentUserData?.name || currentUser.displayName),
+                    authorPhoto: currentUser.photoURL,
+                    authorUid: currentUser.uid,
+                    authorRole: currentUserData?.role || 'user',
+                    authorXP: currentUserData?.xp || 0,
+                    createdAt: localDate,
+                    likes: 0,
+                    likedBy: [],
+                    quoted: quotedInfo
+                };
+                appendReplyDOM(tempReplyObj);
+                const tempCard = document.getElementById(`reply-card-${tempReplyId}`);
+                if (tempCard) {
+                    tempCard.classList.add('up-pending', 'up-fade-in');
+                    const headerEl = tempCard.querySelector('.flex.items-center.justify-between');
+                    if (headerEl) {
+                        const iconSpan = document.createElement('span');
+                        iconSpan.className = 'up-pending-icon optimistic-badge text-[10px] text-slate-400 bg-slate-900/60 px-2 py-0.5 rounded-full border border-slate-700/60';
+                        iconSpan.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin mr-1"></i>İletiliyor...';
+                        iconSpan.id = `pending-icon-${tempReplyId}`;
+                        headerEl.appendChild(iconSpan);
+                    }
+                }
+            }
+            replyInputEl.value = "";
+            updateDepthPreview('reply');
+            window.cancelQuote();
+            selectedMentionsMap.clear();
+
+            try {
+                const replyData = {
+                    content,
+                    authorName: (currentUserData?.displayName || currentUserData?.name || currentUser.displayName),
+                    authorPhoto: currentUser.photoURL,
+                    authorUid: currentUser.uid,
+                    authorRole: currentUserData?.role || 'user',
+                    authorXP: currentUserData?.xp || 0,
+                    createdAt: now,
+                    likes: 0,
+                    likedBy: [],
+                    quoted: quotedInfo ? { author: quotedInfo.author, text: quotedInfo.text, authorUid: quotedInfo.authorUid } : null,
+                    mentions: mentionedUids
+                };
+                const docRef = await addDoc(collection(db, "topics", activeTopicId, "replies"), replyData);
+                
+                // Temp kartı gerçek docRef id'sine dönüştür ve iletiliyor rozetini kaldır
+                const tempCard = document.getElementById(`reply-card-${tempReplyId}`);
+                if (tempCard) {
+                    tempCard.id = `reply-card-${docRef.id}`;
+                    tempCard.setAttribute('data-reply-id', docRef.id);
+                    tempCard.classList.remove('up-pending');
+                    tempCard.querySelector('.optimistic-badge')?.remove();
+                    document.getElementById(`pending-icon-${tempReplyId}`)?.remove();
+                    const likeBtn = tempCard.querySelector(`[data-like-reply-id="${tempReplyId}"]`);
+                    if (likeBtn) {
+                        likeBtn.setAttribute('data-like-reply-id', docRef.id);
+                        likeBtn.setAttribute('onclick', `likeReply('${activeTopicId}', '${docRef.id}')`);
+                    }
+                }
+
+                await updateDoc(doc(db, "topics", activeTopicId), { lastActivityAt: now, replyCount: increment(1) });
+                await updateDoc(doc(db, "users", currentUser.uid), {
+                    coins: increment(replyCoin), xp: increment(replyXp), lastReplyTime: new Date(), replyCount: increment(1), lastSeen: new Date()
+                });
+                if (currentUserData) {
+                    currentUserData.coins = (currentUserData.coins || 0) + replyCoin;
+                    currentUserData.xp = (currentUserData.xp || 0) + replyXp;
+                    const coinEl = document.getElementById('user-coins');
+                    if (coinEl) coinEl.innerText = currentUserData.coins;
+                }
+
+                showRewardAnimation(`+${replyCoin} Coin`, "text-yellow-400", "fa-coins");
+                setTimeout(() => showRewardAnimation(`+${replyXp} XP`, "text-purple-400", "fa-bolt"), 250);
+
+                for (const uid of mentionedUids) {
+                    if (uid !== currentUser.uid) {
+                        await sendNotificationToUser(uid, `${(currentUserData?.displayName || currentUserData?.name || currentUser.displayName)} sizi bir yanıtta etiketledi!`, `/portal/forum.html?topic=${activeTopicId}`);
+                    }
+                }
+
+                if (activeTopicData && activeTopicData.authorUid && activeTopicData.authorUid !== currentUser.uid && activeTopicData.authorUid !== "admin-bot") {
+                    await sendNotificationToUser(activeTopicData.authorUid, `${(currentUserData?.displayName || currentUserData?.name || currentUser.displayName)} konunuza yanıt verdi: "${activeTopicData.title}"`, `/portal/forum.html?topic=${activeTopicId}`);
+                }
+                if (quotedInfo && quotedInfo.authorUid && quotedInfo.authorUid !== currentUser.uid && quotedInfo.authorUid !== "admin-bot") {
+                    await sendNotificationToUser(quotedInfo.authorUid, `${(currentUserData?.displayName || currentUserData?.name || currentUser.displayName)} mesajınızı alıntıladı: "${content.substring(0, 80)}${content.length > 80 ? '...' : ''}"`, `/portal/forum.html?topic=${activeTopicId}`);
+                }
+
+                showToast(`Yanıt gönderildi! +${replyCoin} Coin & +${replyXp} XP kazandın${replyDepth.bonusCoin ? ' (' + DEPTH_LABELS[replyDepth.tier] + ' bonusu dahil)' : ''}`, "success");
+            } catch (error) {
+                console.error("Yanıt gönderim hatası:", error);
+                const tempCard = document.getElementById(`reply-card-${tempReplyId}`);
+                if (tempCard) {
+                    tempCard.classList.remove('up-pending');
+                    tempCard.classList.add('up-failed');
+                    const pendingIcon = tempCard.querySelector('.optimistic-badge') || document.getElementById(`pending-icon-${tempReplyId}`);
+                    if (pendingIcon) {
+                        pendingIcon.className = 'optimistic-badge text-[10px] text-red-400 bg-red-500/10 px-2 py-0.5 rounded-full border border-red-500/30';
+                        pendingIcon.innerHTML = '<i class="fa-solid fa-triangle-exclamation mr-1"></i>Gönderilemedi';
+                    }
+                }
+                replyInputEl.value = rawContent;
+                showToast("Yanıt gönderilemedi. Lütfen tekrar deneyin.", "error");
+            }
+        }
+
+        function appendReplyDOM(reply) {
+            const repliesContainer = document.getElementById('replies-container');
+            if (!repliesContainer) return;
+            const topicId = activeTopicId;
+            const replyId = reply.id;
+            const merged = mergeAuthor(reply);
+            const rXP = merged.xp || 0;
+            const rRole = merged.role || 'user';
+            const rNameClass = getNameEffectClass(rRole, rXP);
+            const rAvatarFrame = getAvatarFrameClass(merged);
+            const rTitleBadge = renderTitleBadge(merged);
+            const rKunyeLine = renderKunyeLine(merged);
+            let quoteBoxHtml = "";
+            if (reply.quoted && reply.quoted.text) {
+                const qCached = reply.quoted.authorUid ? mergeAuthor({ authorUid: reply.quoted.authorUid, authorName: reply.quoted.author }) : null;
+                const qAuthorName = (qCached && qCached.displayName) || reply.quoted.author || 'Öğrenci';
+                quoteBoxHtml = `<div class="border-l-4 border-purple-500 bg-slate-900/60 p-3 rounded-r-xl mb-3 text-xs text-slate-300" data-quoted-uid="${escapeHtml(reply.quoted.authorUid || '')}"><strong data-quoted-author-name>${escapeHtml(qAuthorName)} şunları yazdı:</strong><br>"${escapeHtml(reply.quoted.text)}"</div>`;
+            }
+            const safeAuthor = (merged.displayName || "").replace(/'/g, "\\'");
+            const safeContent = (reply.content || "").replace(/'/g, "\\'").replace(/\n/g, " ");
+            const html = `
+                <div id="reply-card-${replyId}" class="bg-slate-800/90 border border-slate-700/80 p-5 rounded-2xl shadow-md space-y-3" data-reply-id="${replyId}" data-author-uid="${escapeHtml(reply.authorUid || '')}">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <img src="${escapeHtml(merged.photoURL || 'https://via.placeholder.com/35')}" class="w-9 h-9 rounded-full border border-slate-600 object-cover ${rAvatarFrame}" data-author-avatar>
+                            <div>
+                                <div class="flex items-center space-x-2 flex-wrap">
+                                    <a href="/portal/profil.html?id=${escapeHtml(reply.authorUid || '')}" class="font-bold text-xs ${rNameClass || 'text-white'} hover:opacity-80 transition" data-author-name>${escapeHtml(merged.displayName)}</a>
+                                    <span data-author-title>${rTitleBadge}</span>
+                                    <span data-author-badge>${getRoleBadge(rRole, rXP)}</span>
+                                    <span class="text-[9px] bg-emerald-500/20 text-emerald-300 px-1.5 py-0.5 rounded font-bold">YENİ</span>
+                                    ${getContentDepthInfo(reply.content).badgeHtml}
+                                </div>
+                                <div class="flex items-center space-x-2 text-[10px] text-slate-400">
+                                    <span>${formatTimestamp(reply.createdAt)}</span>
+                                    <span data-author-kunye>${rKunyeLine}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        ${quoteBoxHtml}
+                        <div class="text-slate-200 text-sm whitespace-pre-line">${renderRichContent(reply.content)}</div>
+                    </div>
+                    <div class="flex items-center justify-end space-x-3 pt-3 border-t border-slate-700/60 text-xs">
+                        ${!activeTopicData?.isLocked ? `
+                        <button data-quote-btn data-quote-author="${escapeHtml(merged.displayName)}" onclick="quoteReply(this.getAttribute('data-quote-author') || '${safeAuthor}', '${safeContent}', '${escapeHtml(reply.authorUid || '')}')" class="text-slate-300 hover:text-white flex items-center space-x-1 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700 transition">
+                            <i class="fa-solid fa-quote-left text-purple-400"></i>
+                            <span>Yanıtla</span>
+                        </button>
+                        ` : ''}
+                        <button onclick="likeReply('${topicId}', '${replyId}')" data-like-reply-id="${replyId}" class="flex items-center space-x-1 px-3.5 py-1.5 rounded-xl border bg-slate-900 border-slate-700 text-slate-300">
+                            <i class="fa-solid fa-heart text-purple-400"></i>
+                            <span>Beğen (0)</span>
+                        </button>
+                    </div>
+                </div>
+            `;
+            repliesContainer.insertAdjacentHTML('beforeend', html);
+            repliesContainer.lastElementChild?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        }
+
+        window.filterCategory = (cat) => {
+            selectedCategory = cat;
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                btn.classList.remove('bg-purple-600', 'text-white', 'shadow-lg', 'ring-2', 'ring-purple-400/50');
+                btn.classList.add('bg-slate-700', 'text-slate-300');
+            });
+            const activeBtn = document.querySelector(`.cat-btn[data-cat="${cat}"]`);
+            if (activeBtn) {
+                activeBtn.classList.remove('bg-slate-700', 'text-slate-300');
+                activeBtn.classList.add('bg-purple-600', 'text-white', 'shadow-lg', 'ring-2', 'ring-purple-400/50');
+            }
+            renderTopicsWithFilter();
+        };
+
+        window.changeSort = (sortType) => {
+            currentSortBy = sortType;
+            document.querySelectorAll('.sort-btn').forEach(btn => { btn.classList.remove('text-purple-400'); btn.classList.add('text-slate-400'); });
+            document.getElementById(`sort-${sortType}`).classList.remove('text-slate-400');
+            document.getElementById(`sort-${sortType}`).classList.add('text-purple-400');
+            loadTopics(true);
+        };
+
+        window.likeTopic = async (topicId) => {
+            if (!currentUser) { showToast("Beğenmek için giriş yapmalısın", "warning"); return; }
+            const selector = `button[data-like-topic-id="${topicId}"]`;
+            const btn = document.querySelector(selector);
+            if (!btn) return;
+
+            const wasLiked = btn.classList.contains('liked') || btn.textContent.includes('Beğenildi');
+            const currentCountMatch = btn.textContent.match(/\((\d+)\)/);
+            let currentCount = currentCountMatch ? parseInt(currentCountMatch[1]) : 0;
+            const newIsLiked = !wasLiked;
+            const newCount = Math.max(0, currentCount + (newIsLiked ? 1 : -1));
+
+            if (newIsLiked) {
+                btn.classList.add('liked', 'bg-purple-600/20', 'border-purple-500', 'text-purple-400', 'reward-pulse');
+                btn.classList.remove('bg-slate-900', 'border-slate-700', 'text-slate-300');
+            } else {
+                btn.classList.remove('liked', 'bg-purple-600/20', 'border-purple-500', 'text-purple-400');
+                btn.classList.add('bg-slate-900', 'border-slate-700', 'text-slate-300');
+            }
+            btn.innerHTML = `<i class="fa-solid fa-heart text-purple-400"></i><span>${newIsLiked ? 'Beğenildi' : 'Beğen'} (${newCount})</span>`;
+            setTimeout(() => btn.classList.remove('reward-pulse'), 600);
+
+            try {
+                const topicRef = doc(db, "topics", topicId);
+                const userRef = doc(db, "users", currentUser.uid);
+                const topicSnap = await getDoc(topicRef);
+                if (!topicSnap.exists()) return;
+                const topicData = topicSnap.data();
+                const likedBy = topicData.likedBy || [];
+                const isLiking = !likedBy.includes(currentUser.uid);
+
+                if (!isLiking) {
+                    await updateDoc(topicRef, { likes: Math.max(0, (topicData.likes || 1) - 1), likedBy: arrayRemove(currentUser.uid) });
+                    await updateDoc(userRef, { coins: increment(-1), xp: increment(-2), lastSeen: new Date() });
+                    if (topicData.authorUid && topicData.authorUid !== currentUser.uid && topicData.authorUid !== "admin-bot") {
+                        try { await updateDoc(doc(db, "users", topicData.authorUid), { xp: increment(-5), totalLikes: increment(-1) }); } catch(e) {}
+                    }
+                } else {
+                    await updateDoc(topicRef, { likes: (topicData.likes || 0) + 1, likedBy: arrayUnion(currentUser.uid) });
+                    await updateDoc(userRef, { coins: increment(1), xp: increment(2), lastSeen: new Date() });
+                    if (topicData.authorUid && topicData.authorUid !== currentUser.uid && topicData.authorUid !== "admin-bot") {
+                        try { await updateDoc(doc(db, "users", topicData.authorUid), { xp: increment(5), totalLikes: increment(1) }); } catch(e) {}
+                        sendNotificationToUser(topicData.authorUid, `${(currentUserData?.displayName || currentUserData?.name || currentUser.displayName)} konunuzu beğendi: "${topicData.title}"`, `/portal/forum.html?topic=${topicId}`);
+                    }
+                }
+                if (currentUserData) {
+                    currentUserData.coins = Math.max(0, (currentUserData.coins || 0) + (isLiking ? 1 : -1));
+                    currentUserData.xp = Math.max(0, (currentUserData.xp || 0) + (isLiking ? 2 : -2));
+                    document.getElementById('user-coins').innerText = currentUserData.coins;
+                }
+            } catch(e) {
+                console.error(e);
+                if (wasLiked) {
+                    btn.classList.add('liked', 'bg-purple-600/20', 'border-purple-500', 'text-purple-400');
+                    btn.classList.remove('bg-slate-900', 'border-slate-700', 'text-slate-300');
+                } else {
+                    btn.classList.remove('liked', 'bg-purple-600/20', 'border-purple-500', 'text-purple-400');
+                    btn.classList.add('bg-slate-900', 'border-slate-700', 'text-slate-300');
+                }
+                btn.innerHTML = `<i class="fa-solid fa-heart text-purple-400"></i><span>${wasLiked ? 'Beğenildi' : 'Beğen'} (${currentCount})</span>`;
+                showToast("Beğeni kaydedilemedi, tekrar deneyin", "error");
+            }
+        };
+
+        window.likeReply = async (topicId, replyId) => {
+            if (!currentUser) { showToast("Beğenmek için giriş yapmalısın", "warning"); return; }
+            const selector = `button[data-like-reply-id="${replyId}"]`;
+            const btn = document.querySelector(selector);
+            if (!btn) return;
+
+            const wasLiked = btn.classList.contains('liked') || btn.textContent.includes('Beğenildi');
+            const currentCountMatch = btn.textContent.match(/\((\d+)\)/);
+            let currentCount = currentCountMatch ? parseInt(currentCountMatch[1]) : 0;
+            const newIsLiked = !wasLiked;
+            const newCount = Math.max(0, currentCount + (newIsLiked ? 1 : -1));
+
+            if (newIsLiked) {
+                btn.classList.add('liked', 'bg-purple-600/20', 'border-purple-500', 'text-purple-400', 'reward-pulse');
+                btn.classList.remove('bg-slate-900', 'border-slate-700', 'text-slate-300');
+            } else {
+                btn.classList.remove('liked', 'bg-purple-600/20', 'border-purple-500', 'text-purple-400');
+                btn.classList.add('bg-slate-900', 'border-slate-700', 'text-slate-300');
+            }
+            btn.innerHTML = `<i class="fa-solid fa-heart text-purple-400"></i><span>${newIsLiked ? 'Beğenildi' : 'Beğen'} (${newCount})</span>`;
+            setTimeout(() => btn.classList.remove('reward-pulse'), 600);
+
+            try {
+                const replyRef = doc(db, "topics", topicId, "replies", replyId);
+                const userRef = doc(db, "users", currentUser.uid);
+                const replySnap = await getDoc(replyRef);
+                if (!replySnap.exists()) return;
+                const replyData = replySnap.data();
+                const likedBy = replyData.likedBy || [];
+                const isLiking = !likedBy.includes(currentUser.uid);
+
+                if (!isLiking) {
+                    await updateDoc(replyRef, { likes: Math.max(0, (replyData.likes || 1) - 1), likedBy: arrayRemove(currentUser.uid) });
+                    await updateDoc(userRef, { coins: increment(-1), xp: increment(-2), lastSeen: new Date() });
+                    if (replyData.authorUid && replyData.authorUid !== currentUser.uid && replyData.authorUid !== "admin-bot") {
+                        try { await updateDoc(doc(db, "users", replyData.authorUid), { xp: increment(-5), totalLikes: increment(-1) }); } catch(e) {}
+                    }
+                } else {
+                    await updateDoc(replyRef, { likes: (replyData.likes || 0) + 1, likedBy: arrayUnion(currentUser.uid) });
+                    await updateDoc(userRef, { coins: increment(1), xp: increment(2), lastSeen: new Date() });
+                    if (replyData.authorUid && replyData.authorUid !== currentUser.uid && replyData.authorUid !== "admin-bot") {
+                        try { await updateDoc(doc(db, "users", replyData.authorUid), { xp: increment(5), totalLikes: increment(1) }); } catch(e) {}
+                        sendNotificationToUser(replyData.authorUid, `${(currentUserData?.displayName || currentUserData?.name || currentUser.displayName)} yanıtınızı beğendi: "${(replyData.content || '').substring(0, 60)}${(replyData.content || '').length > 60 ? '...' : ''}"`, `/portal/forum.html?topic=${topicId}`);
+                    }
+                }
+                if (currentUserData) {
+                    currentUserData.coins = Math.max(0, (currentUserData.coins || 0) + (isLiking ? 1 : -1));
+                    currentUserData.xp = Math.max(0, (currentUserData.xp || 0) + (isLiking ? 2 : -2));
+                    document.getElementById('user-coins').innerText = currentUserData.coins;
+                }
+            } catch(e) {
+                console.error(e);
+                if (wasLiked) {
+                    btn.classList.add('liked', 'bg-purple-600/20', 'border-purple-500', 'text-purple-400');
+                    btn.classList.remove('bg-slate-900', 'border-slate-700', 'text-slate-300');
+                } else {
+                    btn.classList.remove('liked', 'bg-purple-600/20', 'border-purple-500', 'text-purple-400');
+                    btn.classList.add('bg-slate-900', 'border-slate-700', 'text-slate-300');
+                }
+                btn.innerHTML = `<i class="fa-solid fa-heart text-purple-400"></i><span>${wasLiked ? 'Beğenildi' : 'Beğen'} (${currentCount})</span>`;
+                showToast("Beğeni kaydedilemedi, tekrar deneyin", "error");
+            }
+        };
+
+        window.quoteReply = (authorName, rawContent, authorUid) => {
+            if (!currentUser) { showToast("Yanıtlamak için giriş yapmalısın", "warning"); return; }
+            if (activeTopicData && activeTopicData.isLocked) { showToast("Bu konu kilitli", "warning"); return; }
+            activeQuote = { author: authorName, text: rawContent, authorUid: authorUid || null };
+            const banner = document.getElementById('active-quote-banner');
+            document.getElementById('active-quote-text').innerText = `${authorName}: "${rawContent}"`;
+            banner.classList.remove('hidden');
+            banner.classList.add('flex');
+            document.getElementById('reply-content').focus();
+        };
+
+        window.cancelQuote = () => {
+            activeQuote = null;
+            const banner = document.getElementById('active-quote-banner');
+            banner.classList.remove('flex');
+            banner.classList.add('hidden');
+        };
+
+        window.openEditReplyUser = async (topicId, replyId) => {
+            if (!currentUser) { showToast("Düzenlemek için giriş yapmalısın", "warning"); return; }
+            try {
+                const repRef = doc(db, "topics", topicId, "replies", replyId);
+                const repSnap = await getDoc(repRef);
+                if (!repSnap.exists()) { showToast("Yanıt bulunamadı", "error"); return; }
+                const replyData = repSnap.data();
+                if (replyData.authorUid !== currentUser.uid) { showToast("Bu yanıtı düzenleme yetkiniz yok", "error"); return; }
+                const replyTime = replyData.createdAt?.toDate?.() || new Date(0);
+                const diffMin = (new Date() - replyTime) / 1000 / 60;
+                if (diffMin > 10) { showToast("Yanıtlar sadece ilk 10 dakika içinde düzenlenebilir", "warning"); return; }
+                document.getElementById('user-edit-reply-topic-id').value = topicId;
+                document.getElementById('user-edit-reply-id').value = replyId;
+                document.getElementById('user-edit-reply-content').value = replyData.content || '';
+                document.getElementById('user-edit-reply-modal').classList.remove('hidden');
+                document.getElementById('user-edit-reply-modal').classList.add('flex');
+            } catch(e) { console.error(e); showToast("Yanıt yüklenemedi", "error"); }
+        };
+
+        window.closeUserEditReplyModal = () => {
+            document.getElementById('user-edit-reply-modal').classList.remove('flex');
+            document.getElementById('user-edit-reply-modal').classList.add('hidden');
+        };
+
+        window.saveUserEditedReply = async (e) => {
+            e.preventDefault();
+            if (!currentUser) return;
+            const topicId = document.getElementById('user-edit-reply-topic-id').value;
+            const replyId = document.getElementById('user-edit-reply-id').value;
+            const newContent = filterBadWords(document.getElementById('user-edit-reply-content').value);
+            try {
+                const repRef = doc(db, "topics", topicId, "replies", replyId);
+                const repSnap = await getDoc(repRef);
+                if (!repSnap.exists()) { showToast("Yanıt bulunamadı", "error"); return; }
+                const replyData = repSnap.data();
+                if (replyData.authorUid !== currentUser.uid) { showToast("Yetkiniz yok", "error"); return; }
+                const replyTime = replyData.createdAt?.toDate?.() || new Date(0);
+                const diffMin = (new Date() - replyTime) / 1000 / 60;
+                if (diffMin > 10) { showToast("10 dakika geçti, düzenlenemez", "warning"); return; }
+                await updateDoc(repRef, { content: newContent, editedAt: serverTimestamp(), isEdited: true });
+
+                const replyEl = document.querySelector(`[data-reply-id="${replyId}"]`);
+                if (replyEl) {
+                    const contentDiv = replyEl.querySelector('.text-slate-200.text-sm');
+                    if (contentDiv) {
+                        contentDiv.innerHTML = renderRichContent(newContent) + `<p class="text-[10px] text-slate-500 italic mt-1"><i class="fa-solid fa-pen mr-1"></i>Düzenlendi</p>`;
+                    }
+                }
+
+                closeUserEditReplyModal();
+                showToast("Yanıt güncellendi", "success");
+            } catch(e) { console.error(e); showToast("Güncellenemedi", "error"); }
+        };
+
+        window.openPinnedRulesTopic = () => {
+            const rulesContent = `🎓 **Üni Portal Forum Kuralları** 🎓
+
+Merhaba değerli öğrenci arkadaşım! 👋
+
+Forumumuzun herkes için keyifli, güvenli ve verimli bir ortam olması adına aşağıdaki kurallara uymanı rica ediyoruz. Kısa ama önemli maddeler:
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+✨ **1. SAYGI HER ŞEYDEN ÖNCE GELİR**
+• Herkesin fikri değerlidir. Farklı görüşlere saygı gösterelim.
+• Hakaret, küfür, aşağılama yasaktır. 🤝
+• Kişisel saldırılardan uzak duralım.
+
+📚 **2. KONU BAŞLIĞI VE KATEGORİ UYUMU**
+• Konu başlığı içeriği yansıtmalı: "Yardım!" yerine "Python'da hata alıyorum, çözüm var mı?" 🎯
+• Konuyu doğru kategoriye açın: Genel, Soru & Cevap, Yazılım, Üniversite, Etkinlik, Hakkında, Yardım.
+
+🚫 **3. SPAM VE REKLAM YASAK**
+• Aynı mesajı tekrar tekrar atmayın.
+• İzinsiz reklam, tanıtım, link paylaşımı yasaktır. ⚠️
+• Kişisel iletişim bilgileri (telefon, adres) paylaşmayın.
+
+🔒 **4. GİZLİLİK**
+• Başkalarının özel bilgilerini izinsiz paylaşmayın.
+• Kendi kişisel bilgilerinizi de dikkatli paylaşın. 🛡️
+
+📝 **5. İÇERİK KALİTESİ**
+• Anlaşılır Türkçe kullanmaya özen gösterin.
+• "Okudum, anladım" yerine fikrinizi yazın.
+• Faydalı olmaya çalışın, sadece konuşmak için yazmayın. 💡
+
+🎯 **6. YASAL VE ETİK SINIRLAR**
+• Siyasi propaganda, dini tartışma kışkırtıcılığı yasaktır.
+• Korsan yazılım, telif hakkı ihlali içeren içerik paylaşmayın.
+• Yasadışı faaliyetleri teşvik eden içerik yasaktır. ⚖️
+
+🖼️ **7. GÖRSEL VE LİNK PAYLAŞIMI**
+• Görsel için: [resim](https://ornek.com/resim.jpg)
+• Link için: [metin](https://ornek.com)
+• Sadece güvenli (https) kaynaklar kullanın.
+
+🏆 **8. COIN & XP SİSTEMİ (İÇERİK DERİNLİĞİ BONUSLU)**
+• Konu açma: **+5 Coin & +15 XP** (Detaylı Yorum: **+6 Coin & +18 XP** / Usta Analiz: **+8 Coin & +22 XP**) 💰
+• Yanıt yazma: **+2 Coin & +8 XP** (Detaylı Yorum: **+3 Coin & +11 XP** / Usta Analiz: **+5 Coin & +15 XP**) 💰
+• Beğeni verme: **+1 Coin & +2 XP** 💰
+• Beğeni alma: **+5 XP** 💰
+
+🚨 **9. MODERASYON**
+• Kurallara uymayan içerikler uyarı verilmeden kaldırılabilir.
+• Her konu ve yanıtta "⚑ Raporla" butonu ile bildirim yapabilirsiniz.
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+Keyifli forumlar! 🎉
+— **Admin** 🛡️`;
+
+            activeTopicId = "pinned-rules";
+            activeTopicData = { isLocked: true };
+            document.getElementById('main-forum-view').classList.add('hidden');
+            document.getElementById('topic-detail-view').classList.remove('hidden');
+            document.getElementById('locked-notice').classList.add('hidden');
+
+            const detailCard = document.getElementById('detail-topic-card');
+            detailCard.innerHTML = `
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center space-x-3">
+                        <img src="https://i.imgur.com/1oBP7O9.jpeg" class="w-11 h-11 rounded-full border-2 border-amber-500/50 object-cover">
+                        <div>
+                            <h3 class="font-bold text-sm name-admin">Admin <span class="text-[10px] bg-red-500/25 text-red-300 px-1.5 py-0.5 rounded font-bold ml-1 border border-red-500/40">ADMİN</span></h3>
+                            <p class="text-xs text-slate-400">Sabit Konu • Her Zaman Üstte</p>
+                        </div>
+                    </div>
+                    <span class="text-xs bg-amber-500/20 text-amber-300 px-3 py-1 rounded-full font-semibold flex items-center"><i class="fa-solid fa-thumbtack mr-1"></i>SABİT</span>
+                </div>
+                <h2 class="text-xl font-extrabold text-white mb-3">📌 Forum ve Kurallar Hakkında, Okuyunuz! 📌</h2>
+                <div class="text-slate-200 text-sm mb-6 whitespace-pre-line leading-relaxed">${escapeHtml(rulesContent).replace(/\*\*(.+?)\*\*/g, '<strong class="text-amber-300 font-bold">$1</strong>')}</div>
+                <div class="flex justify-end pt-4 border-t border-slate-700/60">
+                    <div class="flex items-center space-x-1.5 px-3.5 py-2 rounded-xl border bg-slate-900 border-slate-700 text-slate-300 text-xs">
+                        <i class="fa-solid fa-heart text-amber-400"></i>
+                        <span>Sabit Konu</span>
+                    </div>
+                </div>
+            `;
+
+            if (repliesUnsubscribe) { repliesUnsubscribe(); repliesUnsubscribe = null; }
+            document.getElementById('replies-container').innerHTML = '<div class="text-center py-6 text-slate-500 bg-slate-800/40 rounded-xl text-xs">Bu sabit konuya yanıt yazılamaz. Kurallara uyduğunuz için teşekkürler! 🎉</div>';
+
+            const replyFormContainer = document.getElementById('reply-form-container');
+            if (replyFormContainer) replyFormContainer.style.display = 'none';
+        };
+
+        window.openTopicDetail = async (topicId) => {
+            if (topicId === 'pinned-rules') { openPinnedRulesTopic(); return; }
+            activeTopicId = topicId;
+            document.getElementById('main-forum-view').classList.add('hidden');
+            document.getElementById('topic-detail-view').classList.remove('hidden');
+            document.getElementById('locked-notice').classList.add('hidden');
+            await loadTopicDetail(topicId);
+        };
+
+        window.backToForumList = () => {
+            activeTopicId = null;
+            activeTopicData = null;
+            window.cancelQuote();
+            selectedMentionsMap.clear();
+            if (repliesUnsubscribe) { repliesUnsubscribe(); repliesUnsubscribe = null; }
+            document.getElementById('topic-detail-view').classList.add('hidden');
+            document.getElementById('main-forum-view').classList.remove('hidden');
+            document.getElementById('locked-notice').classList.add('hidden');
+            const replyFormContainer = document.getElementById('reply-form-container');
+            if (replyFormContainer) replyFormContainer.style.display = 'block';
+            loadTopics(true);
+        };
+
+        async function loadRepliesForTopic(topicId) {
+            const repliesContainer = document.getElementById('replies-container');
+            repliesContainer.innerHTML = '<div class="text-center py-6 text-slate-500 text-xs">Yanıtlar yükleniyor...</div>';
+            try {
+                const snap = await getDocs(query(collection(db, "topics", topicId, "replies"), orderBy("createdAt", "asc"), limit(50)));
+                if (snap.empty) {
+                    repliesContainer.innerHTML = '<div class="text-center py-6 text-slate-500 bg-slate-800/40 rounded-xl text-xs">Bu konuya henüz yanıt yazılmamış.</div>';
+                    return;
+                }
+                repliesContainer.innerHTML = "";
+                const replyAuthorUids = [];
+                snap.forEach(repDoc => {
+                    const reply = repDoc.data();
+                    const replyId = repDoc.id;
+                    if (reply.authorUid) replyAuthorUids.push(reply.authorUid);
+                    if (reply.quoted && reply.quoted.authorUid) replyAuthorUids.push(reply.quoted.authorUid);
+                    const isReplyLiked = currentUser && (reply.likedBy || []).includes(currentUser.uid);
+                    const isReplyOwner = currentUser && reply.authorUid === currentUser.uid;
+                    const merged = mergeAuthor(reply);
+                    const rXP = merged.xp || 0;
+                    const rRole = merged.role || 'user';
+                    const rNameClass = getNameEffectClass(rRole, rXP);
+                    const rAvatarFrame = getAvatarFrameClass(merged);
+                    const rTitleBadge = renderTitleBadge(merged);
+                    const rKunyeLine = renderKunyeLine(merged);
+                    let canEditReply = false;
+                    if (isReplyOwner && reply.createdAt) {
+                        try {
+                            const replyTime = reply.createdAt.toDate ? reply.createdAt.toDate() : new Date(reply.createdAt);
+                            const diffMin = (new Date() - replyTime) / 1000 / 60;
+                            canEditReply = diffMin <= 10;
+                        } catch(e) { canEditReply = false; }
+                    }
+                    let quoteBoxHtml = "";
+                    if (reply.quoted && reply.quoted.text) {
+                        const qCached = reply.quoted.authorUid ? mergeAuthor({ authorUid: reply.quoted.authorUid, authorName: reply.quoted.author }) : null;
+                        const qAuthorName = (qCached && qCached.displayName) || reply.quoted.author || 'Öğrenci';
+                        quoteBoxHtml = `<div class="border-l-4 border-purple-500 bg-slate-900/60 p-3 rounded-r-xl mb-3 text-xs text-slate-300" data-quoted-uid="${escapeHtml(reply.quoted.authorUid || '')}"><strong data-quoted-author-name>${escapeHtml(qAuthorName)} şunları yazdı:</strong><br>"${escapeHtml(reply.quoted.text)}"</div>`;
+                    }
+                    const safeAuthor = (merged.displayName || "").replace(/'/g, "\\'");
+                    const safeContent = (reply.content || "").replace(/'/g, "\\'").replace(/\n/g, " ");
+                    repliesContainer.innerHTML += `
+                        <div class="bg-slate-800/90 border border-slate-700/80 p-5 rounded-2xl shadow-md space-y-3" data-reply-id="${replyId}" data-author-uid="${escapeHtml(reply.authorUid || '')}">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <img src="${escapeHtml(merged.photoURL || 'https://via.placeholder.com/35')}" class="w-9 h-9 rounded-full border border-slate-600 object-cover ${rAvatarFrame}" data-author-avatar>
+                                    <div>
+                                        <div class="flex items-center space-x-2 flex-wrap">
+                                            <a href="/portal/profil.html?id=${escapeHtml(reply.authorUid || '')}" class="font-bold text-xs ${rNameClass || 'text-white'} hover:opacity-80 transition" data-author-name>${escapeHtml(merged.displayName)}</a>
+                                            <span data-author-title>${rTitleBadge}</span>
+                                            <span data-author-badge>${getRoleBadge(rRole, rXP)}</span>
+                                            ${getContentDepthInfo(reply.content).badgeHtml}
+                                        </div>
+                                        <div class="flex items-center space-x-2 text-[10px] text-slate-400">
+                                            <span>${formatTimestamp(reply.createdAt)}</span>
+                                            <span data-author-kunye>${rKunyeLine}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                ${!isReplyOwner ? `<button onclick="openReportModal('reply', '${topicId}', '${replyId}', '${safeAuthor}', '${safeContent.substring(0, 200)}')" title="Raporla" class="text-slate-500 hover:text-red-400 transition p-1"><i class="fa-solid fa-flag text-xs"></i></button>` : ''}
+                            </div>
+                            <div>
+                                ${quoteBoxHtml}
+                                <div class="text-slate-200 text-sm whitespace-pre-line">${renderRichContent(reply.content)}</div>
+                                ${reply.isEdited ? `<p class="text-[10px] text-slate-500 italic mt-1"><i class="fa-solid fa-pen mr-1"></i>Düzenlendi${reply.editedAt ? ' • ' + formatTimestamp(reply.editedAt) : ''}</p>` : ''}
+                            </div>
+                            <div class="flex items-center justify-end space-x-3 pt-3 border-t border-slate-700/60 text-xs">
+                                ${canEditReply ? `
+                                    <button onclick="openEditReplyUser('${topicId}', '${replyId}')" class="text-slate-300 hover:text-white flex items-center space-x-1 px-3 py-1.5 rounded-lg bg-slate-900 border border-amber-500/30 hover:border-amber-500 transition">
+                                        <i class="fa-solid fa-pen text-amber-400"></i>
+                                        <span>Düzenle</span>
+                                    </button>
+                                ` : ''}
+                                ${!activeTopicData?.isLocked ? `
+                                <button data-quote-btn data-quote-author="${escapeHtml(merged.displayName)}" onclick="quoteReply(this.getAttribute('data-quote-author') || '${safeAuthor}', '${safeContent}', '${escapeHtml(reply.authorUid || '')}')" class="text-slate-300 hover:text-white flex items-center space-x-1 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700 transition">
+                                    <i class="fa-solid fa-quote-left text-purple-400"></i>
+                                    <span>Yanıtla</span>
+                                </button>
+                                ` : ''}
+                                <button onclick="likeReply('${topicId}', '${replyId}')" data-like-reply-id="${replyId}" class="flex items-center space-x-1 px-3.5 py-1.5 rounded-xl border ${isReplyLiked ? 'liked bg-purple-600/20 border-purple-500 text-purple-400' : 'bg-slate-900 border-slate-700 text-slate-300'}">
+                                    <i class="fa-solid fa-heart text-purple-400"></i>
+                                    <span>${isReplyLiked ? 'Beğenildi' : 'Beğen'} (${reply.likes || 0})</span>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                });
+                if (replyAuthorUids.length > 0) {
+                    resolveAuthors(db, replyAuthorUids).then(() => {
+                        hydrateAuthorElements(repliesContainer);
+                    }).catch(() => {});
+                }
+            } catch(e) {
+                console.error(e);
+                repliesContainer.innerHTML = '<div class="text-center py-6 text-red-400 text-xs">Yanıtlar yüklenemedi.</div>';
+            }
+        }
+
+        async function loadTopicDetail(topicId) {
+            setTimeout(() => attachMarkdownToolbar('reply-content'), 100);
+            const detailCard = document.getElementById('detail-topic-card');
+            const topicRef = doc(db, "topics", topicId);
+            const topicSnap = await getDoc(topicRef);
+            if (!topicSnap.exists()) return;
+
+            const topic = topicSnap.data();
+
+            // Görüntülenme Sayacı (Kota Dostu: Tarayıcı başına 24 saatte 1 kez)
+            const VIEW_CACHE_KEY = 'up_viewed_topics';
+            try {
+                let viewedMap = JSON.parse(localStorage.getItem(VIEW_CACHE_KEY) || '{}');
+                const now = Date.now();
+                if (!viewedMap[topicId] || (now - viewedMap[topicId] > 24 * 60 * 60 * 1000)) {
+                    viewedMap[topicId] = now;
+                    localStorage.setItem(VIEW_CACHE_KEY, JSON.stringify(viewedMap));
+                    topic.views = (topic.views || 0) + 1;
+                    updateDoc(topicRef, { views: increment(1) }).catch(()=>{});
+                }
+            } catch(e){}
+            activeTopicData = topic;
+            const isLiked = currentUser && (topic.likedBy || []).includes(currentUser.uid);
+            const isOwner = currentUser && topic.authorUid === currentUser.uid;
+            const isPinned = topic.isPinned || false;
+            const isLocked = topic.isLocked || false;
+
+            const mergedTopic = mergeAuthor(topic);
+            const authorXP = mergedTopic.xp || 0;
+            const authorRole = mergedTopic.role || 'user';
+            const nameClass = getNameEffectClass(authorRole, authorXP);
+            const tAvatarFrame = getAvatarFrameClass(mergedTopic);
+            const tTitleBadge = renderTitleBadge(mergedTopic);
+            const tKunyeLine = renderKunyeLine(mergedTopic);
+
+            const replyFormContainer = document.getElementById('reply-form-container');
+            const lockedNotice = document.getElementById('locked-notice');
+            if (isLocked) {
+                if (replyFormContainer) replyFormContainer.style.display = 'none';
+                lockedNotice.classList.remove('hidden');
+            } else {
+                if (replyFormContainer) replyFormContainer.style.display = 'block';
+                lockedNotice.classList.add('hidden');
+            }
+
+            detailCard.setAttribute('data-author-uid', topic.authorUid || '');
+            detailCard.innerHTML = `
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center space-x-3">
+                        <img src="${escapeHtml(mergedTopic.photoURL || 'https://via.placeholder.com/40')}" class="w-11 h-11 rounded-full border border-slate-600 object-cover ${tAvatarFrame}" data-author-avatar>
+                        <div>
+                            <div class="flex items-center space-x-2 flex-wrap">
+                                <a href="/portal/profil.html?id=${escapeHtml(topic.authorUid || '')}" class="font-bold text-sm ${nameClass || 'text-white'} hover:opacity-80 transition" data-author-name>${escapeHtml(mergedTopic.displayName)}</a>
+                                <span data-author-title>${tTitleBadge}</span>
+                                <span data-author-badge>${getRoleBadge(authorRole, authorXP)}</span>
+                                ${getContentDepthInfo(topic.content).badgeHtml}
+                            </div>
+                            <div class="flex items-center space-x-2 text-xs text-slate-400">
+                                <span>${formatTimestamp(topic.createdAt)}</span>
+                                <span data-author-kunye>${tKunyeLine}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-2 flex-wrap gap-1 justify-end">
+                        ${isPinned ? '<span class="text-xs bg-amber-500/20 text-amber-300 px-2.5 py-1 rounded-full font-semibold flex items-center"><i class="fa-solid fa-thumbtack mr-1"></i>SABİT</span>' : ''}
+                        ${isLocked ? '<span class="text-xs bg-red-500/20 text-red-300 px-2.5 py-1 rounded-full font-semibold flex items-center"><i class="fa-solid fa-lock mr-1"></i>KİLİTLİ</span>' : ''}
+                        <span class="text-xs bg-purple-500/20 text-purple-300 px-3 py-1 rounded-full font-semibold">${escapeHtml(topic.category || 'Genel')}</span>
+                        ${!isOwner ? `<button onclick="openReportModal('topic', '${topicId}', null, '${escapeHtml(mergedTopic.displayName || '').replace(/'/g, "\\'")}', '${escapeHtml((topic.content || '').substring(0, 200)).replace(/'/g, "\\'")}')" title="Raporla" class="text-slate-400 hover:text-red-400 transition p-1.5"><i class="fa-solid fa-flag"></i></button>` : ''}
+                    </div>
+                </div>
+                <h2 class="text-xl font-extrabold text-white mb-3">${escapeHtml(topic.title)}</h2>
+                <div class="text-slate-200 text-sm mb-6 whitespace-pre-line">${renderRichContent(topic.content)}</div>
+                <div class="flex items-center justify-end gap-2 pt-4 border-t border-slate-700/60">
+                    <button onclick="shareTopic(event, '${topicId}', '${escapeHtml(topic.title).replace(/'/g, "\\'")}')" class="text-slate-400 hover:text-cyan-400 flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700 hover:border-cyan-500/50 transition text-xs">
+                        <i class="fa-solid fa-share-nodes"></i>
+                        <span class="hidden sm:inline">Paylaş</span>
+                    </button>
+                    <button onclick="likeTopic('${topicId}')" data-like-topic-id="${topicId}" class="flex items-center space-x-1.5 px-3.5 py-2 rounded-xl border text-xs ${isLiked ? 'liked bg-purple-600/20 border-purple-500 text-purple-400' : 'bg-slate-900 border-slate-700 text-slate-300'}">
+                        <i class="fa-solid fa-heart text-purple-400"></i>
+                        <span>${isLiked ? 'Beğenildi' : 'Beğen'} (${topic.likes || 0})</span>
+                    </button>
+                </div>
+            `;
+            if (topic.authorUid) {
+                resolveAuthors(db, [topic.authorUid]).then(() => {
+                    hydrateAuthorElements(detailCard);
+                }).catch(() => {});
+            }
+
+            if (repliesUnsubscribe) { repliesUnsubscribe(); repliesUnsubscribe = null; }
+            await loadRepliesForTopic(topicId);
+        }
+
+        async function loadTopics(reset = false) {
+            const container = document.getElementById('topics-container');
+            if (reset) {
+                forumLastVisible = null;
+                forumHasMore = false;
+                allLoadedTopics = [];
+                container.innerHTML = '<div class="text-center py-10 text-slate-500">Yükleniyor...</div>';
+            }
+            try {
+                let baseQuery;
+                if (currentSortBy === 'popular') baseQuery = query(collection(db, "topics"), orderBy("likes", "desc"), limit(forumPageSize));
+                else baseQuery = query(collection(db, "topics"), orderBy("lastActivityAt", "desc"), limit(forumPageSize));
+                if (forumLastVisible && !reset) baseQuery = query(baseQuery, startAfter(forumLastVisible));
+
+                const querySnapshot = await getDocs(baseQuery);
+                forumLastVisible = querySnapshot.docs[querySnapshot.docs.length - 1] || null;
+                forumHasMore = querySnapshot.docs.length === forumPageSize;
+
+                let list = [];
+                querySnapshot.forEach(docSnap => list.push({ id: docSnap.id, ...docSnap.data() }));
+
+                allLoadedTopics = reset ? [...list] : [...allLoadedTopics, ...list];
+                renderTopicsWithFilter();
+            } catch (err) { console.error(err); }
+        }
+
+        function renderTopicsWithFilter() {
+            const container = document.getElementById('topics-container');
+            const loadMoreBtn = document.getElementById('load-more-topics-forum');
+            const categoryLabel = document.getElementById('active-category-label');
+            const categoryCount = document.getElementById('active-category-count');
+
+            let list = [...allLoadedTopics];
+
+            if (selectedCategory !== "Son Yazılanlar") list = list.filter(t => t.category === selectedCategory);
+            if (currentSearchKeyword && currentSearchKeyword.length >= 2) {
+                const kw = currentSearchKeyword.toLowerCase();
+                list = list.filter(t =>
+                    (t.title || '').toLowerCase().includes(kw) ||
+                    (t.content || '').toLowerCase().includes(kw) ||
+                    (t.authorName || '').toLowerCase().includes(kw)
+                );
+            }
+            if (selectedCategory !== "Son Yazılanlar") {
+                list.sort((a, b) => {
+                    if (a.isPinned && !b.isPinned) return -1;
+                    if (!a.isPinned && b.isPinned) return 1;
+                    return 0;
+                });
+            }
+
+            if (categoryLabel) categoryLabel.innerText = selectedCategory === "Son Yazılanlar" ? "Son yazılan konular" : `"${selectedCategory}" kategorisindeki konular`;
+            if (categoryCount) categoryCount.innerText = `(${list.length} konu)`;
+
+            if (list.length === 0) {
+                if (currentSearchKeyword) container.innerHTML = '<div class="text-center py-10 text-slate-500 bg-slate-800/50 rounded-xl">Aramanızla eşleşen konu bulunamadı.</div>';
+                else if (selectedCategory === "Son Yazılanlar") container.innerHTML = '<div class="text-center py-10 text-slate-500 bg-slate-800/50 rounded-xl">Henüz hiç konu açılmamış.</div>';
+                else container.innerHTML = `<div class="text-center py-10 text-slate-500 bg-slate-800/50 rounded-xl">"${selectedCategory}" kategorisinde henüz konu yok.</div>`;
+                loadMoreBtn.classList.add('hidden');
+                return;
+            }
+
+            container.innerHTML = "";
+            list.forEach(topic => {
+                const isPinned = topic.isPinned || false;
+                const isLocked = topic.isLocked || false;
+                const merged = mergeAuthor(topic);
+                const tRole = merged.role;
+                const tXP = merged.xp;
+                const tNameClass = getNameEffectClass(tRole, tXP);
+                const tAvatarFrame = getAvatarFrameClass(merged);
+                const tTitleBadge = renderTitleBadge(merged);
+                const tKunyeLine = renderKunyeLine(merged);
+                const readTime = readingMinutes(topic.content || '');
+                const viewsFormatted = formatCount(topic.views || 0);
+
+                container.innerHTML += `
+                    <div class="bg-slate-800 border ${isPinned ? 'border-amber-500/40' : 'border-slate-700'} px-5 py-4 rounded-2xl hover:border-purple-500/50 transition cursor-pointer group shadow-sm flex flex-col gap-3 up-card-glow" onclick="openTopicDetail('${topic.id}')" data-author-uid="${topic.authorUid || ''}">
+                        <div class="flex items-center justify-between gap-2 flex-wrap">
+                            <div class="flex items-center gap-1.5 flex-wrap">
+                                ${isPinned ? '<div class="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded font-bold inline-flex items-center w-fit"><i class="fa-solid fa-thumbtack mr-1"></i>SABİT</div>' : ''}
+                                ${isLocked ? '<div class="text-[10px] bg-red-500/20 text-red-300 px-2 py-0.5 rounded font-bold inline-flex items-center w-fit"><i class="fa-solid fa-lock mr-1"></i>KİLİTLİ</div>' : ''}
+                                <span class="text-[10px] text-slate-400 bg-slate-900/60 border border-slate-700/60 px-2 py-0.5 rounded-full inline-flex items-center"><i class="fa-solid fa-book-open mr-1 text-slate-500"></i>${readTime} dk okuma</span>
+                            </div>
+                            <span class="text-[11px] bg-purple-500/20 text-purple-300 px-2.5 py-1 rounded-full font-semibold">${escapeHtml(topic.category || 'Genel')}</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <img src="${escapeHtml(merged.photoURL || 'https://via.placeholder.com/40')}" class="w-9 h-9 rounded-full border border-slate-600 object-cover ${tAvatarFrame}" data-author-avatar>
+                                <div class="flex flex-col">
+                                    <div class="flex items-center space-x-2 flex-wrap">
+                                        <a href="/portal/profil.html?id=${escapeHtml(topic.authorUid || '')}" onclick="event.stopPropagation()" class="text-xs font-bold hover:opacity-80 transition ${tNameClass}" data-author-name>${escapeHtml(merged.displayName)}</a>
+                                        <span data-author-title>${tTitleBadge}</span>
+                                        <span data-author-badge>${getRoleBadge(tRole, tXP)}</span>
+                                        ${getContentDepthInfo(topic.content).badgeHtml}
+                                    </div>
+                                    <div class="flex items-center space-x-2 text-[10px] text-slate-400">
+                                        <span>${formatTimestamp(topic.createdAt)}</span>
+                                        <span data-author-kunye>${tKunyeLine}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <h2 class="text-sm sm:text-base font-bold text-slate-100 group-hover:text-purple-400 transition">${escapeHtml(topic.title)}</h2>
+                        <div class="flex items-center justify-between pt-2 border-t border-slate-700/60 text-xs text-slate-400">
+                            <div class="flex items-center space-x-3">
+                                <span class="text-pink-400 font-semibold"><i class="fa-solid fa-heart mr-1"></i>${topic.likes || 0}</span>
+                                <span class="text-indigo-400 font-semibold"><i class="fa-solid fa-comment mr-1"></i>${topic.replyCount || 0}</span>
+                                <span class="text-slate-400"><i class="fa-solid fa-eye mr-1"></i>${viewsFormatted}</span>
+                            </div>
+                            <div class="flex items-center space-x-2.5">
+                                <button onclick="shareTopic(event, '${topic.id}', '${escapeHtml(topic.title).replace(/'/g, "\\'")}')" class="text-slate-400 hover:text-cyan-400 flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700 hover:border-cyan-500/50 transition text-xs">
+                                    <i class="fa-solid fa-share-nodes"></i>
+                                    <span class="hidden sm:inline">Paylaş</span>
+                                </button>
+                                <span class="text-purple-400 font-semibold group-hover:translate-x-1 transition">İncele <i class="fa-solid fa-arrow-right ml-1"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            // Kota dostu yazar çözümleme & yerinde DOM güncelleme
+            const uids = list.map(t => t.authorUid).filter(Boolean);
+            resolveAuthors(db, uids).then(() => {
+                hydrateAuthorElements(container);
+            }).catch(()=>{});
+
+            if (forumHasMore && !currentSearchKeyword && selectedCategory === "Son Yazılanlar") loadMoreBtn.classList.remove('hidden');
+            else loadMoreBtn.classList.add('hidden');
+        }
+
+        window.shareTopic = async (event, topicId, topicTitle) => {
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            const shareUrl = `${window.location.origin}/portal/forum.html?topic=${topicId}`;
+            if (navigator.share) {
+                try {
+                    await navigator.share({
+                        title: `${topicTitle} - Üni Portal Forum`,
+                        text: `Üni Portal forumundaki bu konuya göz at: "${topicTitle}"`,
+                        url: shareUrl
+                    });
+                    return;
+                } catch (err) {
+                    if (err && err.name === 'AbortError') return;
+                }
+            }
+            try {
+                await navigator.clipboard.writeText(shareUrl);
+                showToast("Konu bağlantısı panoya kopyalandı! 📋", "success");
+            } catch (clipErr) {
+                const ta = document.createElement('textarea');
+                ta.value = shareUrl;
+                ta.style.position = 'fixed';
+                ta.style.opacity = '0';
+                document.body.appendChild(ta);
+                ta.select();
+                try { document.execCommand('copy'); } catch (e) {}
+                ta.remove();
+                showToast("Konu bağlantısı panoya kopyalandı! 📋", "success");
+            }
+        };
+
+        window.handleForumSearch = () => {
+            currentSearchKeyword = document.getElementById('forum-search-input').value.trim();
+            renderTopicsWithFilter();
+        };
+
+        window.loadMoreForumTopics = () => loadTopics(false);
+
+        async function listenNotifications(uid) {
+            try {
+                const countSnap = await getCountFromServer(query(collection(db, "users", uid, "notifications"), where("read", "==", false)));
+                const unreadCount = countSnap.data().count;
+                const badge = document.getElementById('notification-badge');
+                const dropdownCount = document.getElementById('dropdown-notif-count');
+                if (unreadCount > 0) { badge.innerText = unreadCount; badge.classList.remove('hidden'); }
+                else badge.classList.add('hidden');
+                if (dropdownCount) dropdownCount.innerText = unreadCount;
+            } catch(e) { console.error("Bildirim sayısı alınamadı:", e); }
+        }
+
+        window.handleNotificationClick = async (notifId, link) => {
+            if (currentUser && notifId) {
+                try { await updateDoc(doc(db, "users", currentUser.uid, "notifications", notifId), { read: true }); } catch(e) {}
+            }
+            if (link) {
+                if (link.startsWith('http')) window.open(link, '_blank');
+                else window.location.href = link;
+            }
+        };
+
+        window.deleteNotification = async (e, notifId) => {
+            e.stopPropagation();
+            if (!currentUser || !notifId) return;
+            const btn = e.currentTarget;
+            const notifItem = btn.closest('.notif-item');
+            if (notifItem) {
+                notifItem.style.transition = 'opacity 0.2s, transform 0.2s';
+                notifItem.style.opacity = '0';
+                notifItem.style.transform = 'translateX(20px)';
+                setTimeout(() => notifItem.remove(), 200);
+            }
+            try { await deleteDoc(doc(db, "users", currentUser.uid, "notifications", notifId)); } catch (err) { console.error(err); }
+        };
+
+        window.handleMentionInput = (textarea, suggestionsBox) => {
+            const value = textarea.value;
+            const cursorPos = textarea.selectionStart;
+            const textBeforeCursor = value.substring(0, cursorPos);
+            const lastAtPos = textBeforeCursor.lastIndexOf('@');
+            if (lastAtPos === -1) { suggestionsBox.classList.add('hidden'); mentionActiveField = null; return; }
+            const textAfterAt = textBeforeCursor.substring(lastAtPos + 1);
+            if (textAfterAt.includes(' ') && !textAfterAt.match(/^[^\s]+\s+[^\s]*$/)) { suggestionsBox.classList.add('hidden'); return; }
+            const queryText = textAfterAt.trim();
+            if (queryText.length === 0 && textAfterAt.length > 0) { suggestionsBox.classList.add('hidden'); return; }
+            mentionActiveField = { textarea, suggestionsBox, atPos: lastAtPos };
+            if (mentionSearchTimeout) clearTimeout(mentionSearchTimeout);
+            const mySeq = ++mentionSearchSeq;
+            mentionSearchTimeout = setTimeout(async () => {
+                try {
+                    const q = query(collection(db, "users"), orderBy("displayName"), where("displayName", ">=", queryText), where("displayName", "<=", queryText + "\uf8ff"), limit(6));
+                    const snap = await getDocs(q);
+                    if (mySeq !== mentionSearchSeq) return;
+                    const matches = [];
+                    snap.forEach(d => { if (d.id === currentUser?.uid) return; matches.push({ id: d.id, ...d.data() }); });
+                    if (matches.length === 0) { suggestionsBox.classList.add('hidden'); return; }
+                    mentionSelectedIndex = 0;
+                    suggestionsBox.innerHTML = matches.map((u, i) => {
+                        const name = u.displayName || u.name || 'Kullanıcı';
+                        const role = u.role || 'user';
+                        const xp = u.xp || 0;
+                        return `
+                            <div class="mention-item ${i === 0 ? 'active' : ''}" data-uid="${u.id}" data-name="${escapeHtml(name)}" data-photo="${u.photoURL || ''}" data-role="${role}" data-xp="${xp}" onclick="selectMention('${u.id}', '${escapeHtml(name).replace(/'/g, "\\'")}')">
+                                <img src="${escapeHtml(u.photoURL || 'https://via.placeholder.com/24')}" class="w-6 h-6 rounded-full border border-slate-600 object-cover">
+                                <span class="mention-text text-xs">${escapeHtml(name)}</span>
+                                ${getRoleBadge(role, xp)}
+                            </div>
+                        `;
+                    }).join('');
+                    suggestionsBox.classList.remove('hidden');
+                } catch(err) { console.error("Mention arama hatası:", err); suggestionsBox.classList.add('hidden'); }
+            }, 300);
+        };
+
+        window.selectMention = (uid, name) => {
+            if (!mentionActiveField) return;
+            const { textarea, suggestionsBox, atPos } = mentionActiveField;
+            const value = textarea.value;
+            const cursorPos = textarea.selectionStart;
+            const before = value.substring(0, atPos);
+            const after = value.substring(cursorPos);
+            const newValue = before + '@' + name + ' ' + after;
+            textarea.value = newValue;
+            const newCursorPos = atPos + name.length + 2;
+            textarea.setSelectionRange(newCursorPos, newCursorPos);
+            textarea.focus();
+            suggestionsBox.classList.add('hidden');
+            mentionActiveField = null;
+            if (uid && name) selectedMentionsMap.set(uid, { name });
+        };
+
+        window.handleMentionKeydown = (e) => {
+            if (!mentionActiveField) return;
+            const items = mentionActiveField.suggestionsBox.querySelectorAll('.mention-item');
+            if (items.length === 0) return;
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                mentionSelectedIndex = (mentionSelectedIndex + 1) % items.length;
+                items.forEach((it, i) => it.classList.toggle('active', i === mentionSelectedIndex));
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                mentionSelectedIndex = (mentionSelectedIndex - 1 + items.length) % items.length;
+                items.forEach((it, i) => it.classList.toggle('active', i === mentionSelectedIndex));
+            } else if (e.key === 'Enter' || e.key === 'Tab') {
+                e.preventDefault();
+                const activeItem = items[mentionSelectedIndex];
+                if (activeItem) selectMention(activeItem.dataset.uid, activeItem.dataset.name);
+            } else if (e.key === 'Escape') {
+                mentionActiveField.suggestionsBox.classList.add('hidden');
+                mentionActiveField = null;
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadBadWordsFromFirebase();
+
+            const defaultBtn = document.querySelector(`.cat-btn[data-cat="Son Yazılanlar"]`);
+            if (defaultBtn) {
+                defaultBtn.classList.remove('bg-slate-700', 'text-slate-300');
+                defaultBtn.classList.add('bg-purple-600', 'text-white', 'shadow-lg', 'ring-2', 'ring-purple-400/50');
+            }
+
+            const replyTextarea = document.getElementById('reply-content');
+            const replySuggestions = document.getElementById('mention-suggestions-reply');
+            if (replyTextarea) {
+                replyTextarea.addEventListener('input', () => {
+                    handleMentionInput(replyTextarea, replySuggestions);
+                    updateDepthPreview('reply');
+                });
+                replyTextarea.addEventListener('keydown', handleMentionKeydown);
+                attachMarkdownToolbar(replyTextarea);
+            }
+            const topicTextarea = document.getElementById('topic-content');
+            if (topicTextarea) {
+                topicTextarea.addEventListener('input', () => updateDepthPreview('topic'));
+                attachMarkdownToolbar(topicTextarea);
+            }
+            updateDepthPreview('reply');
+            updateDepthPreview('topic');
+        });
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const topicFromUrl = urlParams.get('topic');
+        if (topicFromUrl) setTimeout(() => openTopicDetail(topicFromUrl), 500);
+        else loadTopics(true);
+    </script>
+</body>
+</html>

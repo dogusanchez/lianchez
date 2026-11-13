@@ -1,0 +1,15 @@
+﻿{
+  "name": "Lianchez",
+  "short_name": "Lianchez",
+  "description": "Kurumsal web tasarım, mobil uygulama ve sosyal medya ajansı.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#090808",
+  "theme_color": "#090808",
+  "lang": "tr",
+  "icons": [
+    { "src": "/favicon.png", "sizes": "any", "type": "image/png", "purpose": "any" },
+    { "src": "/logo.png", "sizes": "any", "type": "image/png", "purpose": "any" }
+  ]
+}

@@ -4,399 +4,335 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Demo Projeler | Lianchez Dijital Çözümler</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-    
-    <link rel="stylesheet" href="/style.css">
-    <link rel="stylesheet" href="/demo/demo.css">
-    
-    <link rel="icon" type="image/png" href="/favicon.png">
+    <meta name="description" content="Lianchez demo laboratuvarı: kurumsal, sağlık, güzellik ve emlak otomasyonu için çalışan web sitesi örnekleri.">
+    <meta name="theme-color" content="#090808">
+    <meta name="color-scheme" content="dark light">
+    <link rel="canonical" href="https://www.lianchez.com/demo/demo.html">
+
+    <link rel="icon" href="../favicon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="../favicon.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100..900;1,100..900&family=Inter:wght@300..800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../modern.css">
+    <link rel="stylesheet" href="demo.css">
 </head>
+
 <body>
-    <header>
-        <div class="container">
-            <div class="logo">
-                <a href="/index.html">
-                    <img src="/logo.png" alt="Lianchez" style="width: 240px; height: auto; display: block;" loading="lazy">
-                </a>
+    <main id="main-content">
+        <header>
+            <div class="container">
+                <div class="logo">
+                    <img src="../logo.png" alt="Lianchez" class="header-logo" width="240" height="60">
+                </div>
+                <button class="menu-toggle" type="button" aria-label="Menüyü Aç/Kapat" aria-expanded="false" aria-controls="main-nav-list">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </button>
+
+                <nav id="main-nav">
+                    <ul id="main-nav-list">
+                        <li><a href="../blog/index.html">Blog</a></li> 
+                        <li><a href="../portal/index.html" class="nav-link">Portal</a></li>
+                        <li><a href="demo.html" class="nav-link active" aria-current="page">Demolar</a></li>
+                        <li><a href="../index.html#contact" class="nav-link">İletişim</a></li>
+                    </ul>
+                </nav>
             </div>
-            <button class="menu-toggle" aria-label="Menüyü Aç/Kapat">
-                <span class="bar"></span>
-                <span class="bar"></span>
-                <span class="bar"></span>
-            </button>
+        </header>
 
-            <nav id="main-nav">
-                <ul>
-                    <li><a href="/index.html">Anasayfa</a></li>
-                    <li><a href="/blog/index.html">Blog</a></li> 
-                    <li><a href="/chat.html" class="nav-link">Lianchez.AI</a></li>
-                    <li><a href="/index.html#contact" class="nav-link">İletişim</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
-
-    <main>
         <section id="demo-hero">
             <div class="container">
-                <h1 class="hero-title">Demo <span style="color: #fd0606;">Laboratuvarı</span></h1>
+                <h1 class="hero-title">Demo <span class="accent">Laboratuvarı</span></h1>
                 <p class="hero-slogan">Dijital dünyada fark yaratan projelerimizin çalışan örnekleri.</p>
             </div>
         </section>
 
         <section id="demo-gallery">
             <div class="container">
-                <div class="demo-grid">
-                    
-
-                    <div class="demo-card">
-                        <div class="demo-image">
-                            <img src="https://i.imgur.com/8GCCaQD.png" alt="Mimarlık Sitesi Projemiz" loading="lazy">
-                            <span class="demo-tag">Web Yazılım</span>
-                        </div>
-                        <div class="demo-info">
-                            <h3>Mimarlık Sitesi-1 Projemiz</h3>
-                            <p>Firebase tabanlı, anlık veri senkronizasyonlu profesyonel Mimarlık yönetim sistemi.</p>
-                            <div class="demo-actions">
-                                <a href="https://lianchez.com/demolar/demo-1" class="button demo-btn">Projeyi İncele</a>
-                                <span class="tech-stack">HTML, CSS, JS, Firebase</span>
-                            </div>
-                        </div>
+                <div class="demo-toolbar">
+                    <div class="demo-filters" role="group" aria-label="Kategori filtresi">
+                        <button type="button" class="filter-btn is-active" data-filter="all">Tümü</button>
+                        <button type="button" class="filter-btn" data-filter="kurumsal">Kurumsal</button>
+                        <button type="button" class="filter-btn" data-filter="saglik">Sağlık &amp; Güzellik</button>
+                        <button type="button" class="filter-btn" data-filter="otomasyon">Otomasyon</button>
                     </div>
-
-                    <div class="demo-card">
-                        <div class="demo-image">
-                            <img src="https://i.imgur.com/m5okuXF.png" alt="Mimarlık Sitesi Projemiz" loading="lazy">
-                            <span class="demo-tag">Web Yazılım</span>
-                        </div>
-                        <div class="demo-info">
-                            <h3>Mimarlık Sitesi-2 Projemiz</h3>
-                            <p>Firebase tabanlı, anlık veri senkronizasyonlu profesyonel Mimarlık yönetim sistemi.</p>
-                            <div class="demo-actions">
-                                <a href="https://lianchez.com/demolar/demo-2" class="button demo-btn">Projeyi İncele</a>
-                                <span class="tech-stack">HTML, CSS, JS, Firebase</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="demo-card">
-                        <div class="demo-image">
-                            <img src="https://i.imgur.com/tysQnsf.png" alt="Avukatlık Sitesi Projemiz" loading="lazy">
-                            <span class="demo-tag">Web Yazılım</span>
-                        </div>
-                        <div class="demo-info">
-                            <h3>Hukuk Bürosu Sitesi-1 Projemiz</h3>
-                            <p>Firebase tabanlı, anlık veri senkronizasyonlu profesyonel Hukuk bürosu sistemi.</p>
-                            <div class="demo-actions">
-                                <a href="https://lianchez.com/demolar/demo-3" class="button demo-btn">Projeyi İncele</a>
-                                <span class="tech-stack">HTML, CSS, JS, Firebase</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="demo-card">
-                        <div class="demo-image">
-                            <img src="https://i.imgur.com/Or4EwXE.png" alt="Avukatlık Sitesi Projemiz" loading="lazy">
-                            <span class="demo-tag">Web Yazılım</span>
-                        </div>
-                        <div class="demo-info">
-                            <h3>Hukuk Bürosu Sitesi-2 Projemiz</h3>
-                            <p>Firebase tabanlı, anlık veri senkronizasyonlu profesyonel Hukuk bürosu sistemi.</p>
-                            <div class="demo-actions">
-                                <a href="https://lianchez.com/demolar/demo-4" class="button demo-btn">Projeyi İncele</a>
-                                <span class="tech-stack">HTML, CSS, JS, Firebase</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="demo-card">
-                        <div class="demo-image">
-                            <img src="https://i.imgur.com/jQrfWRN.png" alt="Diş Sağlığı Sitesi Projemiz" loading="lazy">
-                            <span class="demo-tag">Web Yazılım</span>
-                        </div>
-                        <div class="demo-info">
-                            <h3>Diş Sağlığı Merkezi Sitesi-1 Projemiz</h3>
-                            <p>Firebase tabanlı, anlık veri senkronizasyonlu profesyonel Diş Sağlığı Merkezi Sitesi.</p>
-                            <div class="demo-actions">
-                                <a href="https://lianchez.com/demolar/demo-5" class="button demo-btn">Projeyi İncele</a>
-                                <span class="tech-stack">HTML, CSS, JS, Firebase</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="demo-card">
-                        <div class="demo-image">
-                            <img src="https://i.imgur.com/VZdoN7S.png" alt="Diş Sağlığı Sitesi Projemiz" loading="lazy">
-                            <span class="demo-tag">Web Yazılım</span>
-                        </div>
-                        <div class="demo-info">
-                            <h3>Diş Sağlığı Merkezi Sitesi-2 Projemiz</h3>
-                            <p>Firebase tabanlı, anlık veri senkronizasyonlu profesyonel Diş Sağlığı Merkezi Sitesi.</p>
-                            <div class="demo-actions">
-                                <a href="https://lianchez.com/demolar/demo-6" class="button demo-btn">Projeyi İncele</a>
-                                <span class="tech-stack">HTML, CSS, JS, Firebase</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="demo-card">
-                        <div class="demo-image">
-                            <img src="https://i.imgur.com/yfW2euz.png" alt="Güzellik Merkezi Sitesi Projemiz" loading="lazy">
-                            <span class="demo-tag">Web Yazılım</span>
-                        </div>
-                        <div class="demo-info">
-                            <h3>Güzellik Merkezi Sitesi-1 Projemiz</h3>
-                            <p>Firebase tabanlı, anlık veri senkronizasyonlu profesyonel Güzellik Merkezi Sitesi.</p>
-                            <div class="demo-actions">
-                                <a href="https://lianchez.com/demolar/demo-7" class="button demo-btn">Projeyi İncele</a>
-                                <span class="tech-stack">HTML, CSS, JS, Firebase</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="demo-card">
-                        <div class="demo-image">
-                            <img src="https://i.imgur.com/TLfaPYM.png" alt="Güzellik Merkezi Sitesi Projemiz" loading="lazy">
-                            <span class="demo-tag">Web Yazılım</span>
-                        </div>
-                        <div class="demo-info">
-                            <h3>Güzellik Merkezi Sitesi-2 Projemiz</h3>
-                            <p>Firebase tabanlı, anlık veri senkronizasyonlu profesyonel Güzellik Merkezi Sitesi.</p>
-                            <div class="demo-actions">
-                                <a href="https://lianchez.com/demolar/demo-8" class="button demo-btn">Projeyi İncele</a>
-                                <span class="tech-stack">HTML, CSS, JS, Firebase</span>
-                            </div>
-                        </div>
-                    </div>
-
-
-
-
-                    <div class="demo-card">
-                        <div class="demo-image">
-                            <img src="https://i.imgur.com/hCNoqCd.png" alt="Emlak Otomasyonu" loading="lazy">
-                            <span class="demo-tag">Web Yazılım</span>
-                        </div>
-                        <div class="demo-info">
-                            <h3>Gayrimenkul Sitesi-1 Projemiz</h3>
-                            <p>Firebase tabanlı, anlık veri senkronizasyonlu profesyonel emlak yönetim sistemi.</p>
-                            <div class="demo-actions">
-                                <a href="https://euphonious-bavarois-5d889a.netlify.app/" class="button demo-btn">Projeyi İncele</a>
-                                <span class="tech-stack">HTML, CSS, JS, Firebase</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="demo-card">
-                        <div class="demo-image">
-                            <img src="https://i.imgur.com/KSqvzfG.png" alt="Emlak Otomasyonu" loading="lazy">
-                            <span class="demo-tag">Web Yazılım</span>
-                        </div>
-                        <div class="demo-info">
-                            <h3>Realcool Gayrimenkul Projemiz</h3>
-                            <p>Firebase tabanlı, anlık veri senkronizasyonlu profesyonel emlak yönetim sistemi.</p>
-                            <div class="demo-actions">
-                                <a href="https://realcool.com.tr" class="button demo-btn">Projeyi İncele</a>
-                                <span class="tech-stack">HTML, CSS, JS, Firebase</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="demo-card">
-                        <div class="demo-image">
-                            <img src="https://i.imgur.com/U09mNii.png" alt="Emlak Otomasyonu" loading="lazy">
-                            <span class="demo-tag">Web Yazılım</span>
-                        </div>
-                        <div class="demo-info">
-                            <h3>Gayrimenkul Sitesi-2 Projemiz</h3>
-                            <p>Firebase tabanlı, anlık veri senkronizasyonlu profesyonel emlak yönetim sistemi.</p>
-                            <div class="demo-actions">
-                                <a href="https://v0-gayrimenkul-demo-lianchez.vercel.app/" class="button demo-btn">Projeyi İncele</a>
-                                <span class="tech-stack">HTML, CSS, JS, Firebase</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="demo-card">
-                        <div class="demo-image">
-                            <img src="https://i.imgur.com/V9CerO3.png" alt="Emlak Otomasyonu" loading="lazy">
-                            <span class="demo-tag">Web Yazılım</span>
-                        </div>
-                        <div class="demo-info">
-                            <h3>Gayrimenkul Sitesi-3 Projemiz</h3>
-                            <p>Firebase tabanlı, anlık veri senkronizasyonlu profesyonel emlak yönetim sistemi.</p>
-                            <div class="demo-actions">
-                                <a href="https://incredible-fudge-b8a874.netlify.app/" class="button demo-btn">Projeyi İncele</a>
-                                <span class="tech-stack">HTML, CSS, JS, Firebase</span>
-                            </div>
-                        </div>
-                    </div>
-
+                    <label class="demo-search">
+                        <span class="sr-only">Demo ara</span>
+                        <input type="search" id="demo-search" placeholder="Demo ara..." autocomplete="off">
+                    </label>
                 </div>
+                <p class="demo-count" id="demo-count" aria-live="polite"></p>
+
+                <div class="demo-grid" id="demo-grid">
+                    <article class="demo-card" data-category="kurumsal" data-title="mimarlık sitesi-1">
+                        <div class="demo-image">
+                            <img src="https://i.imgur.com/8GCCaQD.png" alt="Mimarlık Sitesi-1 önizleme" width="640" height="400" loading="lazy">
+                            <span class="demo-tag">Kurumsal</span>
+                        </div>
+                        <div class="demo-info">
+                            <h3>Mimarlık Sitesi-1</h3>
+                            <p>Firebase tabanlı, anlık veri senkronizasyonlu profesyonel mimarlık yönetim sistemi.</p>
+                            <ul class="tech-list"><li>HTML</li><li>CSS</li><li>JS</li><li>Firebase</li></ul>
+                            <a href="../demolar/demo-1.html" class="button demo-btn">Demoyu İncele</a>
+                        </div>
+                    </article>
+                    <article class="demo-card" data-category="kurumsal" data-title="mimarlık sitesi-2">
+                        <div class="demo-image">
+                            <img src="https://i.imgur.com/m5okuXF.png" alt="Mimarlık Sitesi-2 önizleme" width="640" height="400" loading="lazy">
+                            <span class="demo-tag">Kurumsal</span>
+                        </div>
+                        <div class="demo-info">
+                            <h3>Mimarlık Sitesi-2</h3>
+                            <p>Firebase tabanlı, anlık veri senkronizasyonlu profesyonel mimarlık yönetim sistemi.</p>
+                            <ul class="tech-list"><li>HTML</li><li>CSS</li><li>JS</li><li>Firebase</li></ul>
+                            <a href="../demolar/demo-2.html" class="button demo-btn">Demoyu İncele</a>
+                        </div>
+                    </article>
+                    <article class="demo-card" data-category="kurumsal" data-title="hukuk bürosu sitesi-1">
+                        <div class="demo-image">
+                            <img src="https://i.imgur.com/tysQnsf.png" alt="Hukuk Bürosu Sitesi-1 önizleme" width="640" height="400" loading="lazy">
+                            <span class="demo-tag">Kurumsal</span>
+                        </div>
+                        <div class="demo-info">
+                            <h3>Hukuk Bürosu Sitesi-1</h3>
+                            <p>Firebase tabanlı, anlık veri senkronizasyonlu profesyonel hukuk bürosu sistemi.</p>
+                            <ul class="tech-list"><li>HTML</li><li>CSS</li><li>JS</li><li>Firebase</li></ul>
+                            <a href="../demolar/demo-3.html" class="button demo-btn">Demoyu İncele</a>
+                        </div>
+                    </article>
+                    <article class="demo-card" data-category="kurumsal" data-title="hukuk bürosu sitesi-2">
+                        <div class="demo-image">
+                            <img src="https://i.imgur.com/Or4EwXE.png" alt="Hukuk Bürosu Sitesi-2 önizleme" width="640" height="400" loading="lazy">
+                            <span class="demo-tag">Kurumsal</span>
+                        </div>
+                        <div class="demo-info">
+                            <h3>Hukuk Bürosu Sitesi-2</h3>
+                            <p>Firebase tabanlı, anlık veri senkronizasyonlu profesyonel hukuk bürosu sistemi.</p>
+                            <ul class="tech-list"><li>HTML</li><li>CSS</li><li>JS</li><li>Firebase</li></ul>
+                            <a href="../demolar/demo-4.html" class="button demo-btn">Demoyu İncele</a>
+                        </div>
+                    </article>
+                    <article class="demo-card" data-category="saglik" data-title="diş sağlığı merkezi sitesi-1">
+                        <div class="demo-image">
+                            <img src="https://i.imgur.com/jQrfWRN.png" alt="Diş Sağlığı Merkezi Sitesi-1 önizleme" width="640" height="400" loading="lazy">
+                            <span class="demo-tag">Sağlık & Güzellik</span>
+                        </div>
+                        <div class="demo-info">
+                            <h3>Diş Sağlığı Merkezi Sitesi-1</h3>
+                            <p>Firebase tabanlı, anlık veri senkronizasyonlu profesyonel diş sağlığı merkezi sitesi.</p>
+                            <ul class="tech-list"><li>HTML</li><li>CSS</li><li>JS</li><li>Firebase</li></ul>
+                            <a href="../demolar/demo-5.html" class="button demo-btn">Demoyu İncele</a>
+                        </div>
+                    </article>
+                    <article class="demo-card" data-category="saglik" data-title="diş sağlığı merkezi sitesi-2">
+                        <div class="demo-image">
+                            <img src="https://i.imgur.com/VZdoN7S.png" alt="Diş Sağlığı Merkezi Sitesi-2 önizleme" width="640" height="400" loading="lazy">
+                            <span class="demo-tag">Sağlık & Güzellik</span>
+                        </div>
+                        <div class="demo-info">
+                            <h3>Diş Sağlığı Merkezi Sitesi-2</h3>
+                            <p>Firebase tabanlı, anlık veri senkronizasyonlu profesyonel diş sağlığı merkezi sitesi.</p>
+                            <ul class="tech-list"><li>HTML</li><li>CSS</li><li>JS</li><li>Firebase</li></ul>
+                            <a href="../demolar/demo-6.html" class="button demo-btn">Demoyu İncele</a>
+                        </div>
+                    </article>
+                    <article class="demo-card" data-category="saglik" data-title="güzellik merkezi sitesi-1">
+                        <div class="demo-image">
+                            <img src="https://i.imgur.com/yfW2euz.png" alt="Güzellik Merkezi Sitesi-1 önizleme" width="640" height="400" loading="lazy">
+                            <span class="demo-tag">Sağlık & Güzellik</span>
+                        </div>
+                        <div class="demo-info">
+                            <h3>Güzellik Merkezi Sitesi-1</h3>
+                            <p>Firebase tabanlı, anlık veri senkronizasyonlu profesyonel güzellik merkezi sitesi.</p>
+                            <ul class="tech-list"><li>HTML</li><li>CSS</li><li>JS</li><li>Firebase</li></ul>
+                            <a href="../demolar/demo-7.html" class="button demo-btn">Demoyu İncele</a>
+                        </div>
+                    </article>
+                    <article class="demo-card" data-category="saglik" data-title="güzellik merkezi sitesi-2">
+                        <div class="demo-image">
+                            <img src="https://i.imgur.com/TLfaPYM.png" alt="Güzellik Merkezi Sitesi-2 önizleme" width="640" height="400" loading="lazy">
+                            <span class="demo-tag">Sağlık & Güzellik</span>
+                        </div>
+                        <div class="demo-info">
+                            <h3>Güzellik Merkezi Sitesi-2</h3>
+                            <p>Firebase tabanlı, anlık veri senkronizasyonlu profesyonel güzellik merkezi sitesi.</p>
+                            <ul class="tech-list"><li>HTML</li><li>CSS</li><li>JS</li><li>Firebase</li></ul>
+                            <a href="../demolar/demo-8.html" class="button demo-btn">Demoyu İncele</a>
+                        </div>
+                    </article>
+                    <article class="demo-card" data-category="otomasyon" data-title="gayrimenkul sitesi-1">
+                        <div class="demo-image">
+                            <img src="https://i.imgur.com/hCNoqCd.png" alt="Gayrimenkul Sitesi-1 önizleme" width="640" height="400" loading="lazy">
+                            <span class="demo-tag">Emlak Otomasyonu</span>
+                        </div>
+                        <div class="demo-info">
+                            <h3>Gayrimenkul Sitesi-1</h3>
+                            <p>Firebase tabanlı, anlık veri senkronizasyonlu profesyonel emlak yönetim sistemi.</p>
+                            <ul class="tech-list"><li>HTML</li><li>CSS</li><li>JS</li><li>Firebase</li></ul>
+                            <span class="button demo-btn is-disabled" aria-disabled="true">Yakında</span>
+                        </div>
+                    </article>
+                    <article class="demo-card" data-category="otomasyon" data-title="realcool gayrimenkul">
+                        <div class="demo-image">
+                            <img src="https://i.imgur.com/KSqvzfG.png" alt="Realcool Gayrimenkul önizleme" width="640" height="400" loading="lazy">
+                            <span class="demo-tag">Emlak Otomasyonu</span>
+                        </div>
+                        <div class="demo-info">
+                            <h3>Realcool Gayrimenkul</h3>
+                            <p>Firebase tabanlı, anlık veri senkronizasyonlu profesyonel emlak yönetim sistemi.</p>
+                            <ul class="tech-list"><li>HTML</li><li>CSS</li><li>JS</li><li>Firebase</li></ul>
+                            <a href="https://realcool.com.tr" class="button demo-btn" target="_blank" rel="noopener noreferrer">Demoyu İncele</a>
+                        </div>
+                    </article>
+                    <article class="demo-card" data-category="otomasyon" data-title="gayrimenkul sitesi-2">
+                        <div class="demo-image">
+                            <img src="https://i.imgur.com/U09mNii.png" alt="Gayrimenkul Sitesi-2 önizleme" width="640" height="400" loading="lazy">
+                            <span class="demo-tag">Emlak Otomasyonu</span>
+                        </div>
+                        <div class="demo-info">
+                            <h3>Gayrimenkul Sitesi-2</h3>
+                            <p>Firebase tabanlı, anlık veri senkronizasyonlu profesyonel emlak yönetim sistemi.</p>
+                            <ul class="tech-list"><li>HTML</li><li>CSS</li><li>JS</li><li>Firebase</li></ul>
+                            <a href="https://v0-gayrimenkul-demo-lianchez.vercel.app/" class="button demo-btn" target="_blank" rel="noopener noreferrer">Demoyu İncele</a>
+                        </div>
+                    </article>
+                    <article class="demo-card" data-category="otomasyon" data-title="gayrimenkul sitesi-3">
+                        <div class="demo-image">
+                            <img src="https://i.imgur.com/V9CerO3.png" alt="Gayrimenkul Sitesi-3 önizleme" width="640" height="400" loading="lazy">
+                            <span class="demo-tag">Emlak Otomasyonu</span>
+                        </div>
+                        <div class="demo-info">
+                            <h3>Gayrimenkul Sitesi-3</h3>
+                            <p>Firebase tabanlı, anlık veri senkronizasyonlu profesyonel emlak yönetim sistemi.</p>
+                            <ul class="tech-list"><li>HTML</li><li>CSS</li><li>JS</li><li>Firebase</li></ul>
+                            <span class="button demo-btn is-disabled" aria-disabled="true">Yakında</span>
+                        </div>
+                    </article>
+                </div>
+                <p class="demo-empty" id="demo-empty" hidden>Aramanıza uygun demo bulunamadı.</p>
             </div>
         </section>
 
         <section id="demo-cta">
             <div class="container">
                 <div class="cta-box">
-                    <h2>Sizin İçin Ne Yapabiliriz?</h2>
-                    <p>Bu örnekler vizyonumuzun sadece bir parçası. Hayalinizdeki yazılımı birlikte kodlayalım.</p>
-                    <a href="/index.html#contact" class="button">Ücretsiz Teklif Alın</a>
+                    <h2>Hayalinizdeki yazılımı birlikte kodlayalım</h2>
+                    <p>Bu örnekler vizyonumuzun sadece bir parçası. Beğendiğiniz demo markanıza özel uyarlanabilir.</p>
+                    <a href="../index.html#contact" class="button">Ücretsiz Teklif Alın</a>
                 </div>
             </div>
         </section>
+
+        <footer class="site-footer">
+            <div class="container">
+                <div class="footer-top">
+                    
+                    <div class="footer-col brand-col">
+                        <img src="../logo.png" alt="Lianchez Logo" class="footer-logo">
+                        <p class="footer-desc">
+                            Lianchez ile işletmenizi dijitale taşıyın. Modern web tasarımı, profesyonel sosyal medya yönetimi ve kurumsal dijital kimlik çözümleri sunuyoruz. Firmanız için profesyonel web sitesi yaptırın.
+                        </p>
+                        <div class="footer-contact-item">
+                            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                            <a href="mailto:info@lianchez.com">info@lianchez.com</a>
+                        </div>
+                        <div class="footer-contact-item">
+                            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                            <a href="tel:+905322879237">+90 532 287 9237</a>
+                        </div>
+                    </div>
+
+                    <div class="footer-col">
+                        <h4 class="footer-heading">Hızlı Erişim</h4>
+                        <ul class="footer-links">
+                            <li><a href="../index.html#hero">Ana Sayfa</a></li>
+                            <li><a href="../index.html#services">Hizmetlerimiz</a></li>
+                            <li><a href="../demo/demo.html">Portfolyo</a></li>
+                            <li><a href="../blog/index.html">Blog & Haberler</a></li>
+                            <li><a href="../index.html#contact">Fiyat Teklifi Al</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-col">
+                        <h4 class="footer-heading">Kurumsal & Partnerlik</h4>
+                        <ul class="footer-links">
+                            <li><a href="../index.html#contact">Reklam Verin</a></li>
+                            <li><a href="../index.html#contact">Sponsorluklar</a></li>
+                            <li><a href="../index.html#contact">Çözüm Ortaklığı</a></li>
+                            <li><a href="../index.html#contact">Kariyer (Bize Katılın)</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-col">
+                        <h4 class="footer-heading">Lianchez Social</h4>
+                        <div class="social-buttons">
+                            <a href="https://instagram.com/lianchez.tr" target="_blank" class="social-btn instagram" aria-label="Instagram">
+                                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                            </a>
+                            <a href="https://x.com/LianchezTr" target="_blank" class="social-btn twitter" aria-label="Twitter">
+                                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+                            </a>
+                            <a href="https://wa.me/905322879237" target="_blank" class="social-btn whatsapp" aria-label="WhatsApp">
+                                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                            </a>
+                            <a href="https://www.youtube.com/@Lianchez" class="social-btn youtube" aria-label="YouTube">
+                                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.33 29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg>
+                            </a>
+                        </div>
+
+                        <h4 class="footer-heading" style="margin-top: 25px;">Yasal</h4>
+                        <ul class="footer-links small-links">
+                            <li><a href="../gizlilik.html">Gizlilik Politikası</a></li>
+                            <li><a href="../kullanimkosullari.html">Kullanım Şartları</a></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="footer-bottom">
+                    <p>&copy; 2026 Lianchez. Tüm hakları saklıdır.</p>
+                    <p class="made-with">Antalya'da ❤️ ile tasarlandı.</p>
+                </div>
+            </div>
+        </footer>
     </main>
 
-    <footer class="site-footer">
-        <div class="container">
-            <div class="footer-bottom" style="border-top: none; padding-top: 0;">
-                <p>&copy; 2026 Lianchez. Tüm hakları saklıdır.</p>
-                <p class="made-with">Antalya'da ❤️ ile tasarlandı.</p>
-            </div>
-        </div>
-    </footer>
-
-    <script type="module" src="/script.js" defer></script>
-
+    <script type="module" src="../script.js" defer></script>
+    <script src="../ui-enhance.js" defer></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-
-        const popup = document.createElement("div");
-        popup.id = "lianchez-contact-popup";
-
-        popup.innerHTML = `
-            <div class="popup-header">
-                <span>💡 Size Özel Bir Tasarım İster misiniz?</span>
-                <button id="popup-minimize">-</button>
-            </div>
-
-            <div class="popup-content">
-                <p>
-                    Beğendiğiniz herhangi bir demo tamamen markanıza özel olarak düzenlenebilir.
-                </p>
-
-                <p>
-                    Renkler, içerikler ve özellikler isteğinize göre yeniden tasarlanabilir.
-                </p>
-
-                <a href="https://lianchez.com/#contact-form" target="_blank" class="popup-btn">
-                    Ücretsiz Teklif Al
-                </a>
-            </div>
-        `;
-
-        const style = document.createElement("style");
-
-        style.innerHTML = `
-            #lianchez-contact-popup{
-                position:fixed;
-                right:20px;
-                bottom:20px;
-                width:320px;
-                max-width:calc(100vw - 30px);
-                background:#fff;
-                border-radius:16px;
-                box-shadow:0 10px 35px rgba(0,0,0,.15);
-                z-index:99999;
-                overflow:hidden;
-                animation:lianchezPopupSlide .5s ease;
-                font-family:inherit;
-            }
-
-            #lianchez-contact-popup,
-            #lianchez-contact-popup *,
-            #lianchez-contact-popup p,
-            #lianchez-contact-popup span,
-            #lianchez-contact-popup div{
-                color:#111 !important;
-            }
-
-            @keyframes lianchezPopupSlide{
-                from{
-                    transform:translateY(30px);
-                    opacity:0;
-                }
-                to{
-                    transform:translateY(0);
-                    opacity:1;
-                }
-            }
-
-            #lianchez-contact-popup .popup-header{
-                display:flex;
-                justify-content:space-between;
-                align-items:center;
-                padding:12px 16px;
-                font-weight:600;
-                border-bottom:1px solid rgba(0,0,0,.08);
-            }
-
-            #popup-minimize{
-                border:none;
-                background:none;
-                cursor:pointer;
-                font-size:22px;
-                line-height:1;
-                color:#111 !important;
-            }
-
-            #lianchez-contact-popup .popup-content{
-                padding:14px 16px;
-            }
-
-            #lianchez-contact-popup .popup-content p{
-                margin:0 0 10px;
-                font-size:13px;
-                line-height:1.5;
-                opacity:.85;
-            }
-
-            #lianchez-contact-popup .popup-btn{
-                display:block;
-                text-align:center;
-                text-decoration:none;
-                padding:10px;
-                border-radius:10px;
-                font-size:14px;
-                font-weight:600;
-                margin-top:10px;
-                background:#111;
-                color:#fff !important;
-                transition:.2s;
-            }
-
-            #lianchez-contact-popup .popup-btn:hover{
-                transform:translateY(-2px);
-            }
-
-            #lianchez-contact-popup.popup-minimized{
-                height:52px;
-            }
-
-            #lianchez-contact-popup.popup-minimized .popup-content{
-                display:none;
-            }
-
-            @media (max-width:768px){
-                #lianchez-contact-popup{
-                    left:12px;
-                    right:12px;
-                    width:auto;
-                    bottom:12px;
-                }
-            }
-        `;
-
-        document.head.appendChild(style);
-        document.body.appendChild(popup);
-
-        document
-            .getElementById("popup-minimize")
-            .addEventListener("click", function () {
-                popup.classList.toggle("popup-minimized");
+    (function () {
+        var cards = Array.prototype.slice.call(document.querySelectorAll('.demo-card'));
+        var buttons = document.querySelectorAll('.filter-btn');
+        var search = document.getElementById('demo-search');
+        var count = document.getElementById('demo-count');
+        var empty = document.getElementById('demo-empty');
+        var active = 'all';
+        function apply() {
+            var q = search.value.trim().toLocaleLowerCase('tr');
+            var shown = 0;
+            cards.forEach(function (c) {
+                var okCat = active === 'all' || c.dataset.category === active;
+                var okQ = !q || c.textContent.toLocaleLowerCase('tr').indexOf(q) !== -1;
+                c.hidden = !(okCat && okQ);
+                if (!c.hidden) shown++;
             });
-    });
+            count.textContent = shown + ' demo gösteriliyor';
+            empty.hidden = shown !== 0;
+        }
+        buttons.forEach(function (b) {
+            b.addEventListener('click', function () {
+                active = b.dataset.filter;
+                buttons.forEach(function (x) { x.classList.toggle('is-active', x === b); });
+                apply();
+            });
+        });
+        search.addEventListener('input', apply);
+        apply();
+    })();
     </script>
 </body>
 </html>

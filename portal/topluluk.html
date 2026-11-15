@@ -414,7 +414,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc, collection, getDocs, getCountFromServer, onSnapshot, deleteDoc, updateDoc, addDoc, query, where, orderBy, limit, arrayUnion, arrayRemove, increment } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-        import { getUniversities, validateAndFormatUniversity, escapeHtml, injectCoreStyles, initDailyStreak } from '/portal/portal-core.js';
+        import { getUniversities, validateAndFormatUniversity, escapeHtml, safeUrl, injectCoreStyles, initDailyStreak } from '/portal/portal-core.js';
         injectCoreStyles();
 
         const firebaseConfig = {
@@ -756,7 +756,7 @@
             }
 
             const linkBtn = document.getElementById('modal-club-link');
-            linkBtn.href = club.link || '#';
+            linkBtn.href = safeUrl(club.link) || '#';
 
             const logoContainer = document.getElementById('modal-club-logo');
             if (club.logo) {
@@ -990,7 +990,7 @@
                     itemsHTML += `
                         <div class="notif-item p-3 bg-slate-900/60 hover:bg-slate-700/50 border border-slate-700/70 rounded-xl flex items-start justify-between gap-3 transition group">
                             <div class="flex-1 cursor-pointer" onclick="handleNotificationClick('${notifId}', '${safeLink}')">
-                                <p class="text-xs text-slate-200 font-medium group-hover:text-blue-400 transition">${notif.message || 'Bildirim'}</p>
+                                <p class="text-xs text-slate-200 font-medium group-hover:text-blue-400 transition">${escapeHtml(notif.message || 'Bildirim')}</p>
                                 ${notif.link ? `<span class="text-[10px] text-blue-400 underline mt-1 inline-block"><i class="fa-solid fa-arrow-up-right-from-square mr-1"></i>Bağlantıya Git</span>` : ''}
                             </div>
                             <button onclick="deleteNotification(event, '${notifId}')" title="Bildirimi Sil" class="text-slate-500 hover:text-red-400 p-1 text-xs transition flex-shrink-0">
@@ -1146,53 +1146,6 @@
             requestAnimationFrame(() => toast.classList.remove('opacity-0', 'translate-x-full'));
             setTimeout(() => { toast.classList.add('opacity-0', 'translate-x-full'); setTimeout(() => toast.remove(), 300); }, 3500);
         };
-
-        async function loadPublicCommunities() {
-            const container = document.getElementById('communities-container');
-            try {
-                const snapshot = await getDocs(query(collection(db, "communities"), orderBy("createdAt", "desc"), limit(20)));
-                if (snapshot.empty) {
-                    container.innerHTML = '<div class="text-center py-10 text-slate-500 col-span-full">Şu anda kayıtlı topluluk bulunmuyor.</div>';
-                    return;
-                }
-
-                container.innerHTML = "";
-                snapshot.forEach(docSnap => {
-                    const comm = docSnap.data();
-                    let tagsHTML = "";
-                    if (comm.tags && Array.isArray(comm.tags)) {
-                        comm.tags.forEach(t => {
-                            tagsHTML += `<span class="text-xs bg-slate-900/60 text-slate-300 px-2.5 py-1 rounded-lg border border-slate-700">${t}</span>`;
-                        });
-                    }
-
-                    container.innerHTML += `
-                        <div class="bg-slate-800 border border-slate-700 rounded-2xl p-6 flex flex-col justify-between hover:border-emerald-500/50 transition shadow-lg group">
-                            <div>
-                                <div class="flex items-center justify-between mb-4">
-                                    <div class="w-12 h-12 bg-emerald-500/10 text-emerald-400 rounded-xl flex items-center justify-center text-xl font-bold group-hover:scale-110 transition">
-                                        <i class="fa-solid fa-users"></i>
-                                    </div>
-                                    <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Aktif Kulüp</span>
-                                </div>
-                                <h2 class="text-xl font-bold text-white mb-2">${comm.name}</h2>
-                                <p class="text-slate-300 text-sm mb-4 leading-relaxed">${comm.description}</p>
-                                <div class="flex flex-wrap gap-2 mb-6">${tagsHTML}</div>
-                            </div>
-                            <div class="pt-4 border-t border-slate-700/60">
-                                <a href="${comm.link || '#'}" target="_blank" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-2.5 rounded-xl font-semibold transition text-xs flex items-center justify-center space-x-1.5 shadow-md">
-                                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                                    <span>Topluluğa Katıl / İlana Git</span>
-                                </a>
-                            </div>
-                        </div>
-                    `;
-                });
-            } catch(e) {
-                console.error(e);
-                container.innerHTML = '<div class="text-center py-10 text-red-400 col-span-full">Topluluklar yüklenirken bir hata oluştu.</div>';
-            }
-        }
     </script>
 </body>
 </html>

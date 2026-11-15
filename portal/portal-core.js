@@ -28,6 +28,14 @@ export function escapeHtml(text) {
         .replace(/'/g, "&#039;");
 }
 
+export function safeUrl(url) {
+    if (typeof url !== 'string') return "";
+    const u = url.trim();
+    if (!u) return "";
+    if (/^https?:\/\//i.test(u) || u.startsWith('/portal/')) return u;
+    return "";
+}
+
 export function formatRelativeTime(date) {
     if (!date) return "Bilinmiyor";
     const d = date instanceof Date ? date : (typeof date.toDate === 'function' ? date.toDate() : new Date(date));

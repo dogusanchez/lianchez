@@ -1,0 +1,135 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ---------- Yardımcı fonksiyonlar ----------
+    function signedIn() { return request.auth != null; }
+    function isOwner(uid) { return signedIn() && request.auth.uid == uid; }
+    function myRole() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('role', 'user');
+    }
+    function isAdmin() { return signedIn() && myRole() == 'admin'; }
+    function isStaff() { return signedIn() && (myRole() == 'admin' || myRole() == 'moderator'); }
+    function isBanned() {
+      return signedIn() && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('isBanned', false) == true;
+    }
+    function changedKeys() { return request.resource.data.diff(resource.data).affectedKeys(); }
+    function numDelta(field) {
+      return request.resource.data.get(field, 0) - resource.data.get(field, 0);
+    }
+
+    // ---------- users ----------
+    match /users/{uid} {
+      allow read: if true;
+
+      // Kendi dokümanını oluşturabilir; yetkili alanlar varsayılan değerlerle başlamak zorunda
+      allow create: if isOwner(uid)
+        && request.resource.data.get('role', 'user') == 'user'
+        && request.resource.data.get('isBanned', false) == false
+        && request.resource.data.get('coins', 0) <= 10
+        && request.resource.data.get('xp', 0) <= 0;
+
+      allow update: if
+        // Admin: her şeyi güncelleyebilir
+        isAdmin()
+        // Kullanıcı kendi dokümanı: kritik alanlar değişmez, artışlar sınırlı
+        || (isOwner(uid)
+            && !changedKeys().hasAny(['role', 'isBanned'])
+            && (!changedKeys().hasAny(['coins']) || numDelta('coins') <= 25)
+            && (!changedKeys().hasAny(['xp']) || numDelta('xp') <= 100))
+        // Başkası: yalnızca beğeni/etkileşim kaynaklı xp & totalLikes değişimi (küçük)
+        || (signedIn() && !isBanned()
+            && changedKeys().hasOnly(['xp', 'totalLikes'])
+            && numDelta('xp') >= -10 && numDelta('xp') <= 10
+            && numDelta('totalLikes') >= -1 && numDelta('totalLikes') <= 1);
+
+      allow delete: if isAdmin();
+
+      match /notifications/{nid} {
+        allow read, update, delete: if isOwner(uid) || isAdmin();
+        allow create: if signedIn();
+      }
+    }
+
+    // ---------- topics & replies ----------
+    match /topics/{topicId} {
+      allow read: if true;
+      allow create: if signedIn() && !isBanned()
+        && request.resource.data.authorUid == request.auth.uid;
+      allow update: if isStaff()
+        || (isOwner(resource.data.authorUid) && !changedKeys().hasAny(['authorUid', 'isPinned', 'isLocked']))
+        // Beğeni, yanıt sayacı, aktivite ve görüntülenme güncellemeleri
+        || (signedIn() && changedKeys().hasOnly(['likes', 'likedBy', 'replyCount', 'lastActivityAt', 'views']));
+      allow delete: if isStaff() || isOwner(resource.data.authorUid);
+
+      match /replies/{replyId} {
+        allow read: if true;
+        allow create: if signedIn() && !isBanned()
+          && request.resource.data.authorUid == request.auth.uid;
+        allow update: if isStaff()
+          || (isOwner(resource.data.authorUid) && !changedKeys().hasAny(['authorUid']))
+          || (signedIn() && changedKeys().hasOnly(['likes', 'likedBy']));
+        allow delete: if isStaff() || isOwner(resource.data.authorUid);
+      }
+    }
+
+    // ---------- listings / jobs / events / communities ----------
+    match /listings/{id} {
+      allow read: if true;
+      allow create: if signedIn() && !isBanned()
+        && request.resource.data.authorUid == request.auth.uid
+        && request.resource.data.status == 'pending';
+      allow update, delete: if isStaff() || isOwner(resource.data.authorUid);
+    }
+    match /jobs/{id} {
+      allow read: if true;
+      allow write: if isStaff();
+    }
+    match /events/{id} {
+      allow read: if true;
+      allow write: if isStaff();
+    }
+    match /communities/{id} {
+      allow read: if true;
+      allow write: if isStaff();
+    }
+
+    // ---------- Herkese açık oluşturma, yalnızca yetkili okuma/yönetim ----------
+    match /communityApplications/{id} {
+      allow create: if true;
+      allow read, update, delete: if isStaff();
+    }
+    match /contactRequests/{id} {
+      allow create: if true;
+      allow read, update, delete: if isStaff();
+    }
+    match /reports/{id} {
+      allow create: if signedIn();
+      allow read, update, delete: if isStaff();
+    }
+
+    // ---------- settings ----------
+    match /settings/store {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    match /settings/badwords {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    match /settings/{other} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // ---------- notificationHistory ----------
+    match /notificationHistory/{id} {
+      allow read, write: if isStaff();
+    }
+
+    // Diğer her şey kapalı
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

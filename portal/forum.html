@@ -298,24 +298,21 @@
                         <button onclick="filterCategory('Genel')" data-cat="Genel" class="cat-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-700 text-slate-300 hover:bg-slate-600 transition whitespace-nowrap flex items-center space-x-1.5">
                             <i class="fa-solid fa-comments text-blue-400"></i><span>Genel</span>
                         </button>
+                        <button onclick="filterCategory('Yardım')" data-cat="Yardım" class="cat-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-700 text-slate-300 hover:bg-slate-600 transition whitespace-nowrap flex items-center space-x-1.5">
+                            <i class="fa-solid fa-life-ring text-orange-400"></i><span>Yardım</span>
+                        </button>
+                        <button onclick="filterCategory('Ders Notları')" data-cat="Ders Notları" class="cat-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-700 text-slate-300 hover:bg-slate-600 transition whitespace-nowrap flex items-center space-x-1.5"><i class="fa-solid fa-book-open text-amber-400"></i><span>Ders Notları</span></button>
                         <button onclick="filterCategory('Soru & Cevap')" data-cat="Soru & Cevap" class="cat-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-700 text-slate-300 hover:bg-slate-600 transition whitespace-nowrap flex items-center space-x-1.5">
                             <i class="fa-solid fa-circle-question text-yellow-400"></i><span>Soru & Cevap</span>
                         </button>
-                        <button onclick="filterCategory('Yazılım')" data-cat="Yazılım" class="cat-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-700 text-slate-300 hover:bg-slate-600 transition whitespace-nowrap flex items-center space-x-1.5">
-                            <i class="fa-solid fa-code text-emerald-400"></i><span>Yazılım</span>
-                        </button>
-                        <button onclick="filterCategory('Üniversite')" data-cat="Üniversite" class="cat-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-700 text-slate-300 hover:bg-slate-600 transition whitespace-nowrap flex items-center space-x-1.5">
-                            <i class="fa-solid fa-graduation-cap text-indigo-400"></i><span>Üniversite</span>
-                        </button>
-                        <button onclick="filterCategory('Ders Notları')" data-cat="Ders Notları" class="cat-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-700 text-slate-300 hover:bg-slate-600 transition whitespace-nowrap flex items-center space-x-1.5"><i class="fa-solid fa-book-open text-amber-400"></i><span>Ders Notları</span></button>
                         <button onclick="filterCategory('Etkinlik')" data-cat="Etkinlik" class="cat-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-700 text-slate-300 hover:bg-slate-600 transition whitespace-nowrap flex items-center space-x-1.5">
                             <i class="fa-solid fa-calendar-check text-pink-400"></i><span>Etkinlik</span>
                         </button>
                         <button onclick="filterCategory('Hakkında')" data-cat="Hakkında" class="cat-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-700 text-slate-300 hover:bg-slate-600 transition whitespace-nowrap flex items-center space-x-1.5">
                             <i class="fa-solid fa-circle-info text-pink-400"></i><span>Hakkında</span>
                         </button>
-                        <button onclick="filterCategory('Yardım')" data-cat="Yardım" class="cat-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-700 text-slate-300 hover:bg-slate-600 transition whitespace-nowrap flex items-center space-x-1.5">
-                            <i class="fa-solid fa-life-ring text-orange-400"></i><span>Yardım</span>
+                        <button onclick="filterCategory('Üniversite')" data-cat="Üniversite" class="cat-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-700 text-slate-300 hover:bg-slate-600 transition whitespace-nowrap flex items-center space-x-1.5">
+                            <i class="fa-solid fa-graduation-cap text-indigo-400"></i><span>Üniversite</span>
                         </button>
                     </div>
                 </div>
@@ -433,13 +430,12 @@
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Kategori Seçin</label>
                     <select id="topic-category" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-purple-500 text-white">
                         <option value="Genel">Genel</option>
-                        <option value="Soru & Cevap">Soru & Cevap</option>
-                        <option value="Yazılım">Yazılım</option>
-                        <option value="Üniversite">Üniversite</option>
+                        <option value="Yardım">Yardım</option>
                         <option value="Ders Notları">Ders Notları</option>
+                        <option value="Soru & Cevap">Soru & Cevap</option>
                         <option value="Etkinlik">Etkinlik</option>
                         <option value="Hakkında">Hakkında</option>
-                        <option value="Yardım">Yardım</option>
+                        <option value="Üniversite">Üniversite</option>
                     </select>
                 </div>
                 <div>
@@ -1683,13 +1679,14 @@ window.showToast = (message, type = 'info') => {
             repliesContainer.lastElementChild?.scrollIntoView({ behavior: 'smooth', block: 'end' });
         }
 
+        const VALID_FORUM_CATEGORIES = new Set(["Son Yazılanlar", "Genel", "Yardım", "Ders Notları", "Soru & Cevap", "Etkinlik", "Hakkında", "Üniversite"]);
         window.filterCategory = (cat) => {
-            selectedCategory = cat;
+            selectedCategory = VALID_FORUM_CATEGORIES.has(cat) ? cat : "Son Yazılanlar";
             document.querySelectorAll('.cat-btn').forEach(btn => {
                 btn.classList.remove('bg-purple-600', 'text-white', 'shadow-lg', 'ring-2', 'ring-purple-400/50');
                 btn.classList.add('bg-slate-700', 'text-slate-300');
             });
-            const activeBtn = document.querySelector(`.cat-btn[data-cat="${cat}"]`);
+            const activeBtn = document.querySelector(`.cat-btn[data-cat="${selectedCategory}"]`);
             if (activeBtn) {
                 activeBtn.classList.remove('bg-slate-700', 'text-slate-300');
                 activeBtn.classList.add('bg-purple-600', 'text-white', 'shadow-lg', 'ring-2', 'ring-purple-400/50');
@@ -1833,6 +1830,23 @@ window.showToast = (message, type = 'info') => {
             }
         };
 
+        // Hızlı ardışık beğeni tıklamalarını (çift coin/XP) engelleyen kilit
+        const inFlightLikes = new Set();
+        const _likeTopicOrig = window.likeTopic;
+        window.likeTopic = async (topicId, ...rest) => {
+            const key = 'topic:' + topicId;
+            if (inFlightLikes.has(key)) return;
+            inFlightLikes.add(key);
+            try { return await _likeTopicOrig(topicId, ...rest); } finally { inFlightLikes.delete(key); }
+        };
+        const _likeReplyOrig = window.likeReply;
+        window.likeReply = async (topicId, replyId, ...rest) => {
+            const key = 'reply:' + topicId + ':' + replyId;
+            if (inFlightLikes.has(key)) return;
+            inFlightLikes.add(key);
+            try { return await _likeReplyOrig(topicId, replyId, ...rest); } finally { inFlightLikes.delete(key); }
+        };
+
         window.quoteReply = (authorName, rawContent, authorUid) => {
             if (!currentUser) { showToast("Yanıtlamak için giriş yapmalısın", "warning"); return; }
             if (activeTopicData && activeTopicData.isLocked) { showToast("Bu konu kilitli", "warning"); return; }
@@ -1945,7 +1959,7 @@ Forumumuzun herkes için keyifli, güvenli ve verimli bir ortam olması adına a
 
 📚 **2. KONU BAŞLIĞI VE KATEGORİ UYUMU**
 • Konu başlığı içeriği yansıtmalı: "Yardım!" yerine "Python'da hata alıyorum, çözüm var mı?" 🎯
-• Konuyu doğru kategoriye açın: Genel, Soru & Cevap, Yazılım, Üniversite, Ders Notları, Etkinlik, Hakkında, Yardım.
+• Konuyu doğru kategoriye açın: Genel, Yardım, Ders Notları, Soru & Cevap, Etkinlik, Hakkında, Üniversite.
 
 🚫 **3. SPAM VE REKLAM YASAK**
 • Aynı mesajı tekrar tekrar atmayın.
@@ -2436,7 +2450,7 @@ Keyifli forumlar! 🎉
             const itemCls = 'flex items-center gap-2 px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 hover:border-cyan-500/50 text-slate-200 text-xs transition';
             const pop = document.createElement('div');
             pop.id = 'share-popover';
-            pop.className = 'fixed bottom-4 right-4 z-[9999] w-64 bg-slate-800 border border-slate-600 rounded-2xl shadow-2xl p-4 space-y-2';
+            pop.className = 'fixed bottom-20 right-4 z-[9999] w-64 bg-slate-800 border border-slate-600 rounded-2xl shadow-2xl p-4 space-y-2';
             pop.innerHTML = `
                 <div class="flex items-center justify-between mb-1">
                     <span class="text-sm font-bold text-white"><i class="fa-solid fa-share-nodes text-cyan-400 mr-1.5"></i>Konuyu Paylaş</span>

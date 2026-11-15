@@ -332,7 +332,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc, collection, getDocs, getCountFromServer, onSnapshot, deleteDoc, updateDoc, addDoc, query, where, orderBy, limit, deleteField } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-        import { getUniversities, formatRelativeTime as coreFormatRelativeTime, escapeHtml as coreEscapeHtml, renderKunyeLine, getNameEffectClass, getAvatarFrameClass, validateAndFormatUniversity, injectCoreStyles, initDailyStreak } from '/portal/portal-core.js';
+        import { getUniversities, formatRelativeTime as coreFormatRelativeTime, escapeHtml as coreEscapeHtml, safeUrl, renderKunyeLine, getNameEffectClass, getAvatarFrameClass, validateAndFormatUniversity, injectCoreStyles, initDailyStreak } from '/portal/portal-core.js';
         injectCoreStyles();
 
         window.showToast = (message, type = 'info') => {
@@ -505,7 +505,7 @@
         window.revealContact = (id, contact) => {
             const btn = document.getElementById(`contact-btn-${id}`);
             if (btn) {
-                btn.innerHTML = `<i class="fa-solid fa-check text-emerald-400 mr-1 flex-shrink-0"></i><span class="select-all truncate">${contact}</span>`;
+                btn.innerHTML = `<i class="fa-solid fa-check text-emerald-400 mr-1 flex-shrink-0"></i><span class="select-all truncate">${escapeHtml(contact)}</span>`;
                 btn.className = 'bg-slate-900 border border-slate-700 text-white px-2.5 py-1.5 rounded-xl text-[11px] font-mono font-bold select-all flex items-center max-w-[65%] overflow-hidden';
             }
         };
@@ -768,7 +768,7 @@
                     itemsHTML += `
                         <div class="notif-item p-3 bg-slate-900/60 hover:bg-slate-700/50 border border-slate-700/70 rounded-xl flex items-start justify-between gap-3 transition group">
                             <div class="flex-1 cursor-pointer" onclick="handleNotificationClick('${notifId}', '${safeLink}')">
-                                <p class="text-xs text-slate-200 font-medium group-hover:text-blue-400 transition">${notif.message || 'Bildirim'}</p>
+                                <p class="text-xs text-slate-200 font-medium group-hover:text-blue-400 transition">${escapeHtml(notif.message || 'Bildirim')}</p>
                                 ${notif.link ? `<span class="text-[10px] text-blue-400 underline mt-1 inline-block"><i class="fa-solid fa-arrow-up-right-from-square mr-1"></i>Bağlantıya Git</span>` : ''}
                             </div>
                             <button onclick="deleteNotification(event, '${notifId}')" title="Bildirimi Sil" class="text-slate-500 hover:text-red-400 p-1 text-xs transition flex-shrink-0">
@@ -945,7 +945,7 @@
                                 <p class="text-slate-300 text-xs sm:text-sm mb-4 leading-relaxed line-clamp-3 break-words">${escapeHtml(job.description)}</p>
                             </div>
                             <div class="flex items-center justify-end pt-3 border-t border-slate-700/60">
-                                <a href="${escapeHtml(job.link || '#')}" target="_blank" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl font-semibold transition text-xs flex items-center space-x-1.5">
+                                <a href="${safeUrl(job.link) || '#'}" target="_blank" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl font-semibold transition text-xs flex items-center space-x-1.5">
                                     <span>Detayları Gör</span>
                                     <i class="fa-solid fa-arrow-up-right-from-square"></i>
                                 </a>

@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Profil - Üni Portal</title>
     <link rel="icon" type="image/png" href="/portal/fav.png">
+    <link rel="manifest" href="/portal/manifest.json">
+    <meta name="theme-color" content="#0f172a">
+    <link rel="apple-touch-icon" href="/portal/fav.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -148,7 +151,21 @@
 
     <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-grow w-full space-y-6">
         <div id="profile-content">
-            <div class="text-center py-20 text-slate-500">Profil yükleniyor...</div>
+            <div class="skeleton-card space-y-4">
+                <div class="flex items-center space-x-4">
+                    <div class="skeleton skeleton-avatar w-16 h-16"></div>
+                    <div class="flex-1 space-y-2">
+                        <div class="skeleton skeleton-text w-1/3"></div>
+                        <div class="skeleton skeleton-text w-1/4"></div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+                    <div class="skeleton skeleton-text h-12"></div>
+                    <div class="skeleton skeleton-text h-12"></div>
+                    <div class="skeleton skeleton-text h-12"></div>
+                    <div class="skeleton skeleton-text h-12"></div>
+                </div>
+            </div>
         </div>
     </main>
 
@@ -221,7 +238,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, collection, getDocs, getCountFromServer, doc, getDoc, setDoc, query, orderBy, limit, startAfter, onSnapshot, deleteDoc, updateDoc, addDoc, writeBatch, where, deleteField } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-        import { getNameEffectClass, getRankBadge, getAvatarFrameClass, renderTitleBadge, renderKunyeChips, getUniversities, GRADES, primeAuthor, getStoreItems, validateAndFormatUniversity, escapeHtml as coreEscape, safeUrl, injectCoreStyles, initDailyStreak } from '/portal/portal-core.js';
+        import { getNameEffectClass, getRankBadge, getAvatarFrameClass, renderTitleBadge, renderKunyeChips, getUniversities, GRADES, primeAuthor, getStoreItems, validateAndFormatUniversity, escapeHtml, safeUrl, injectCoreStyles, initDailyStreak, registerServiceWorker, requestNotificationPermission, cacheGet, cacheSet, cacheInvalidate } from '/portal/portal-core.js';
         injectCoreStyles();
 
         const firebaseConfig = {
@@ -540,15 +557,27 @@
                 userAvatar.src = user.photoURL || 'https://via.placeholder.com/40';
 
                 const userRef = doc(db, "users", user.uid);
-                const userSnap = await getDoc(userRef);
-                if (userSnap.exists()) {
-                    const userData = userSnap.data();
+                let userData = cacheGet(`user_profile_${user.uid}`);
+                if (!userData) {
+                    const userSnap = await getDoc(userRef);
+                    if (userSnap.exists()) {
+                        userData = userSnap.data();
+                        cacheSet(`user_profile_${user.uid}`, userData, 5 * 60 * 1000);
+                    }
+                } else {
+                    getDoc(userRef).then(s => { if (s.exists()) cacheSet(`user_profile_${user.uid}`, s.data(), 5 * 60 * 1000); }).catch(() => {});
+                }
+                if (userData) {
                     userCoins.innerText = userData.coins || 0;
                     dropdownName.innerText = userData.displayName || user.displayName || "Kullanıcı";
                     dropdownEmail.innerText = userData.email || user.email || "";
                     initDailyStreak(db, user.uid, userData);
                 } else {
                     initDailyStreak(db, user.uid, { uid: user.uid, coins: 0 });
+                }
+                registerServiceWorker();
+                if ('Notification' in window && Notification.permission === 'granted') {
+                    requestNotificationPermission(user.uid, db);
                 }
                 listenNotifications(user.uid);
             } else {
@@ -581,17 +610,44 @@
 
         async function loadProfile(uid) {
             const container = document.getElementById('profile-content');
-            container.innerHTML = '<div class="text-center py-20 text-slate-500">Profil yükleniyor...</div>';
+            container.innerHTML = `
+                <div class="skeleton-card space-y-4">
+                    <div class="flex items-center space-x-4">
+                        <div class="skeleton skeleton-avatar w-16 h-16"></div>
+                        <div class="flex-1 space-y-2">
+                            <div class="skeleton skeleton-text w-1/3"></div>
+                            <div class="skeleton skeleton-text w-1/4"></div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+                        <div class="skeleton skeleton-text h-12"></div>
+                        <div class="skeleton skeleton-text h-12"></div>
+                        <div class="skeleton skeleton-text h-12"></div>
+                        <div class="skeleton skeleton-text h-12"></div>
+                    </div>
+                </div>
+            `;
 
             try {
+                const profileCacheKey = `user_profile_${uid}`;
+                const cachedProfile = cacheGet(profileCacheKey);
                 const userRef = doc(db, "users", uid);
-                const userSnap = await getDoc(userRef);
-                if (!userSnap.exists()) {
-                    container.innerHTML = '<div class="text-center py-20 text-red-400">Kullanıcı bulunamadı.</div>';
-                    return;
+                if (cachedProfile) {
+                    viewedUserData = cachedProfile;
+                    getDoc(userRef).then(snap => {
+                        if (snap.exists()) {
+                            cacheSet(profileCacheKey, snap.data(), 5 * 60 * 1000);
+                        }
+                    }).catch(() => {});
+                } else {
+                    const userSnap = await getDoc(userRef);
+                    if (!userSnap.exists()) {
+                        container.innerHTML = '<div class="text-center py-20 text-red-400">Kullanıcı bulunamadı.</div>';
+                        return;
+                    }
+                    viewedUserData = userSnap.data();
+                    cacheSet(profileCacheKey, viewedUserData, 5 * 60 * 1000);
                 }
-
-                viewedUserData = userSnap.data();
                 isOwnProfile = currentUser && currentUser.uid === uid;
 
                 // ===== KOTA OPTİMİZASYONU: İlk 5 konu, sayfalama =====
@@ -619,7 +675,7 @@
                 const online = isUserOnline(lastSeenDate);
                 const lastSeenText = formatRelativeTime(lastSeenDate);
 
-                // ===== KOTA OPTİMİZASYONU: Sadece kullanıcının topluluklarını çek =====
+                // ===== KOTA OPTİMİZASYONU: Sadece kullanıcının topluluklarını çek (Önce Cache) =====
                 const userCommunityIds = viewedUserData.communities || [];
                 let userCommunities = [];
                 let uniList = [];
@@ -629,21 +685,30 @@
                     try { storeItemsList = await getStoreItems(db); } catch(e){}
                 }
                 if (userCommunityIds.length > 0) {
-                    try {
-                        // Firestore "in" max 10 eleman destekler, 10'luk parçalara böl
-                        const chunks = [];
-                        for (let i = 0; i < userCommunityIds.length; i += 10) {
-                            chunks.push(userCommunityIds.slice(i, i + 10));
-                        }
-                        for (const chunk of chunks) {
-                            const commSnap = await getDocs(query(
-                                collection(db, "communities"),
-                                where("__name__", "in", chunk)
-                            ));
-                            commSnap.forEach(d => userCommunities.push({ id: d.id, ...d.data() }));
-                        }
-                        userCommunities.sort((a, b) => (b.memberCount || 0) - (a.memberCount || 0));
-                    } catch(e) { console.error("Topluluklar yüklenemedi:", e); }
+                    const cachedCommPayload = cacheGet("communities_list");
+                    const cachedCommArray = Array.isArray(cachedCommPayload) ? cachedCommPayload : (cachedCommPayload && Array.isArray(cachedCommPayload.communities) ? cachedCommPayload.communities : null);
+                    if (cachedCommArray && cachedCommArray.length > 0) {
+                        userCommunities = cachedCommArray
+                            .filter(c => c && userCommunityIds.includes(c.id))
+                            .sort((a, b) => (b.memberCount || 0) - (a.memberCount || 0));
+                    }
+                    if (userCommunities.length === 0) {
+                        try {
+                            // Firestore "in" max 10 eleman destekler, 10'luk parçalara böl
+                            const chunks = [];
+                            for (let i = 0; i < userCommunityIds.length; i += 10) {
+                                chunks.push(userCommunityIds.slice(i, i + 10));
+                            }
+                            for (const chunk of chunks) {
+                                const commSnap = await getDocs(query(
+                                    collection(db, "communities"),
+                                    where("__name__", "in", chunk)
+                                ));
+                                commSnap.forEach(d => userCommunities.push({ id: d.id, ...d.data() }));
+                            }
+                            userCommunities.sort((a, b) => (b.memberCount || 0) - (a.memberCount || 0));
+                        } catch(e) { console.error("Topluluklar yüklenemedi:", e); }
+                    }
                 }
 
                 const hasPendingRequest = viewedUserData.pendingNameChange && viewedUserData.pendingNameChange.status === 'pending';
@@ -961,6 +1026,55 @@
                             `;
                         })()}
                     </div>
+
+                    ${(() => {
+                        const prefs = viewedUserData.notificationPrefs || {};
+                        const prefItems = [
+                            { key: 'replies', label: 'Konularıma gelen yanıtlar', icon: 'fa-comments text-purple-400' },
+                            { key: 'likes', label: 'Beğeni bildirimleri', icon: 'fa-heart text-pink-400' },
+                            { key: 'follows', label: 'Takip ve etiketlenme (@mention)', icon: 'fa-at text-blue-400' },
+                            { key: 'badges', label: 'Rozet, seviye ve ödül bildirimleri', icon: 'fa-award text-amber-400' },
+                            { key: 'listingApproved', label: 'İlan ve etkinlik onay bildirimleri', icon: 'fa-circle-check text-emerald-400' }
+                        ];
+                        const hasNotifSupport = typeof window !== 'undefined' && 'Notification' in window;
+                        const permGranted = hasNotifSupport && Notification.permission === 'granted';
+                        return `
+                            <div class="bg-slate-800 border border-slate-700 rounded-2xl p-6 shadow-lg mb-6">
+                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+                                    <div>
+                                        <h2 class="text-lg font-bold text-white flex items-center">
+                                            <i class="fa-solid fa-bell text-blue-400 mr-2"></i>Bildirim Tercihleri
+                                        </h2>
+                                        <p class="text-[11px] text-slate-400 mt-0.5">Hangi durumlarda bildirim almak istediğinizi seçebilirsiniz.</p>
+                                    </div>
+                                    ${hasNotifSupport && !permGranted ? `
+                                        <button type="button" id="enable-push-btn" onclick="enablePushNotificationsFromProfile()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-xs font-semibold transition flex items-center space-x-1.5 w-fit">
+                                            <i class="fa-solid fa-bell-concierge"></i>
+                                            <span>Bildirimleri Aç</span>
+                                        </button>
+                                    ` : (permGranted ? `
+                                        <span class="text-[11px] bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 px-3 py-1 rounded-full font-semibold w-fit">
+                                            <i class="fa-solid fa-check mr-1"></i>Anlık Bildirimler Aktif
+                                        </span>
+                                    ` : '')}
+                                </div>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    ${prefItems.map(item => {
+                                        const checked = prefs[item.key] !== false;
+                                        return `
+                                            <label class="flex items-center justify-between bg-slate-900/70 border border-slate-700/80 rounded-xl px-4 py-3 cursor-pointer hover:border-slate-600 transition">
+                                                <span class="flex items-center space-x-2.5 text-xs text-slate-200 font-medium">
+                                                    <i class="fa-solid ${item.icon}"></i>
+                                                    <span>${item.label}</span>
+                                                </span>
+                                                <input type="checkbox" ${checked ? 'checked' : ''} onchange="toggleNotificationPref('${item.key}', this.checked)" class="accent-blue-500 w-4 h-4 rounded cursor-pointer">
+                                            </label>
+                                        `;
+                                    }).join('')}
+                                </div>
+                            </div>
+                        `;
+                    })()}
                     ` : ''}
 
                     <div class="bg-slate-800 border border-slate-700 rounded-2xl p-6 shadow-lg">
@@ -1072,6 +1186,7 @@
                 await updateDoc(doc(db, "users", currentUser.uid), { activeListing: deleteField() });
                 localStorage.removeItem('up_listings_v1');
                 localStorage.removeItem('up_student_listings_v1');
+                cacheInvalidate(`user_profile_${currentUser.uid}`);
 
                 delete viewedUserData.activeListing;
                 showToast("İlanınız başarıyla silindi.", "success");
@@ -1092,6 +1207,7 @@
             }
             try {
                 await updateDoc(doc(db, "users", currentUser.uid), { socials });
+                cacheInvalidate(`user_profile_${currentUser.uid}`);
                 showToast("Sosyal medya hesaplarınız kaydedildi", "success");
                 await loadProfile(currentUser.uid);
             } catch(err) {
@@ -1120,6 +1236,7 @@
                     department,
                     grade
                 });
+                cacheInvalidate(`user_profile_${currentUser.uid}`);
                 viewedUserData.university = university;
                 viewedUserData.department = department;
                 viewedUserData.grade = grade;
@@ -1141,6 +1258,7 @@
 
             // Optimistic update
             viewedUserData[field] = newVal;
+            cacheSet(`user_profile_${currentUser.uid}`, viewedUserData, 5 * 60 * 1000);
             primeAuthor(currentUser.uid, viewedUserData);
             await loadProfile(currentUser.uid);
 
@@ -1148,10 +1266,12 @@
                 await updateDoc(doc(db, "users", currentUser.uid), {
                     [field]: newVal
                 });
+                cacheInvalidate(`user_profile_${currentUser.uid}`);
                 showToast(newVal ? `${name} kuşandı!` : "Eşya çıkarıldı.", "success");
             } catch(err) {
                 console.error("Eşya güncellenemedi:", err);
                 viewedUserData[field] = prev;
+                cacheInvalidate(`user_profile_${currentUser.uid}`);
                 primeAuthor(currentUser.uid, viewedUserData);
                 await loadProfile(currentUser.uid);
                 showToast("Eşya güncellenirken bir hata oluştu.", "error");
@@ -1166,6 +1286,45 @@
             }).catch(() => {
                 showToast("Kopyalanamadı.", "warning");
             });
+        };
+
+        window.enablePushNotificationsFromProfile = async () => {
+            if (!currentUser) return;
+            if (!('Notification' in window)) {
+                showToast("Tarayıcınız bildirimleri desteklemiyor", "warning");
+                return;
+            }
+            await requestNotificationPermission(currentUser.uid, db);
+            if (Notification.permission === 'granted') {
+                showToast("Bildirim izni verildi!", "success");
+                await loadProfile(currentUser.uid);
+            } else {
+                showToast("Bildirim izni verilmedi", "warning");
+            }
+        };
+
+        window.toggleNotificationPref = async (key, isEnabled) => {
+            if (!currentUser || !isOwnProfile) return;
+            const currentPrefs = {
+                replies: true,
+                likes: true,
+                follows: true,
+                badges: true,
+                listingApproved: true,
+                ...(viewedUserData?.notificationPrefs || {})
+            };
+            currentPrefs[key] = !!isEnabled;
+            try {
+                await updateDoc(doc(db, "users", currentUser.uid), {
+                    notificationPrefs: currentPrefs
+                });
+                cacheInvalidate(`user_profile_${currentUser.uid}`);
+                if (viewedUserData) viewedUserData.notificationPrefs = currentPrefs;
+                showToast("Bildirim tercihi güncellendi", "success");
+            } catch (err) {
+                console.error("Bildirim tercihi kaydedilemedi:", err);
+                showToast("Tercih kaydedilemedi", "error");
+            }
         };
 
         window.submitNameChange = async (e) => {
@@ -1193,6 +1352,7 @@
                         requestedAt: new Date()
                     }
                 });
+                cacheInvalidate(`user_profile_${currentUser.uid}`);
 
                 await addDoc(collection(db, "users", currentUser.uid, "notifications"), {
                     message: `Kullanıcı adı değişiklik talebiniz admin onayına gönderildi. En geç 6-7 saat içinde kontrol edilip onaylanacaktır. Yeni ad: "${newName}"`,
@@ -1208,11 +1368,6 @@
                 showToast("Talep gönderilemedi", "error");
             }
         };
-
-        function escapeHtml(text) {
-            if (!text) return "";
-            return String(text).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
-        }
 
         window.showToast = (message, type = 'info') => {
             const container = document.getElementById('toast-container');

@@ -1,0 +1,48 @@
+{
+  "name": "Üni Portal",
+  "short_name": "Üni Portal",
+  "description": "Üniversite öğrencileri için forum, ilanlar, topluluklar ve etkinlik portalı.",
+  "start_url": "/portal/index.html",
+  "scope": "/portal/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/portal/fav.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/portal/fav.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Forum",
+      "short_name": "Forum",
+      "description": "Öğrenci forumu ve tartışmalar",
+      "url": "/portal/forum.html",
+      "icons": [{ "src": "/portal/fav.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "İlanlar",
+      "short_name": "İlanlar",
+      "description": "Staj, iş ve öğrenci ilanları",
+      "url": "/portal/ilanlar.html",
+      "icons": [{ "src": "/portal/fav.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Mağaza",
+      "short_name": "Mağaza",
+      "description": "Coin mağazası ve ödüller",
+      "url": "/portal/magaza.html",
+      "icons": [{ "src": "/portal/fav.png", "sizes": "192x192" }]
+    }
+  ]
+}

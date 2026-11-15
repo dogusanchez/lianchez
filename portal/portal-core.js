@@ -12,7 +12,7 @@
 //  kendi `db` örneği bu modüldeki fonksiyonlara parametre olarak verilir.
 // =====================================================================
 import {
-    doc, getDoc, getDocs, collection, query, where, documentId, updateDoc, increment, serverTimestamp
+    doc, getDoc, getDocs, collection, query, where, documentId, updateDoc, increment, serverTimestamp, arrayUnion
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 // ---------------------------------------------------------------------
@@ -441,6 +441,8 @@ const STORE_CACHE_TTL = 60 * 60 * 1000;
 
 export async function getStoreItems(db, { force = false } = {}) {
     if (!force) {
+        const cmCached = cacheGet('store_items');
+        if (Array.isArray(cmCached)) return cmCached;
         const cached = lsGet(STORE_CACHE_KEY);
         if (cached && Array.isArray(cached.items) && (Date.now() - cached.t < STORE_CACHE_TTL)) return cached.items;
     }
@@ -451,10 +453,17 @@ export async function getStoreItems(db, { force = false } = {}) {
     } catch (e) { console.warn('Mağaza kataloğu okunamadı', e); }
     if (!items) items = [...DEFAULT_STORE_ITEMS];
     lsSet(STORE_CACHE_KEY, { t: Date.now(), items });
+    cacheSet('store_items', items, 30 * 60 * 1000);
     return items;
 }
-export function setStoreCache(items) { lsSet(STORE_CACHE_KEY, { t: Date.now(), items }); }
-export function invalidateStoreCache() { try { localStorage.removeItem(STORE_CACHE_KEY); } catch (e) {} }
+export function setStoreCache(items) {
+    lsSet(STORE_CACHE_KEY, { t: Date.now(), items });
+    cacheSet('store_items', items, 30 * 60 * 1000);
+}
+export function invalidateStoreCache() {
+    try { localStorage.removeItem(STORE_CACHE_KEY); } catch (e) {}
+    cacheInvalidate('store_items');
+}
 
 // ---------------------------------------------------------------------
 // 6) YAZAR ÖNBELLEĞİ — Dinamik isim & rütbe senkronizasyonu
@@ -926,6 +935,21 @@ input[type="text"], input[type="number"], input[type="email"], input[type="url"]
     }
 }
 
+/* ---------- Skeleton Loading & Shimmer ---------- */
+.skeleton {
+    background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 0.5rem;
+}
+@keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+.skeleton-text { height: 0.75rem; border-radius: 0.375rem; }
+.skeleton-avatar { width: 2.5rem; height: 2.5rem; border-radius: 9999px; flex-shrink: 0; }
+.skeleton-card { background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(51, 65, 85, 0.7); border-radius: 1rem; padding: 1.25rem; }
+
 /* ---------- Günlük Ödül (Daily Streak) & Konfeti Efektleri ---------- */
 @keyframes upRewardFloat {
     0% { opacity: 0; transform: translateY(0) scale(0.6); }
@@ -1259,6 +1283,10 @@ export function initDailyStreak(db, uid, userData, onClaim) {
     if (typeof onClaim === 'function') streakCtx.onClaim = onClaim;
     ensureDailyStreakModal();
     syncDailyStreakUI();
+    registerServiceWorker();
+    if (uid && typeof window !== 'undefined' && 'Notification' in window && Notification.permission === 'granted') {
+        requestNotificationPermission(uid, streakCtx.db);
+    }
 }
 
 export function openDailyStreakModal() {
@@ -1360,4 +1388,328 @@ if (typeof window !== 'undefined') {
     if (typeof window.burstConfetti !== 'function') window.burstConfetti = burstConfetti;
     if (typeof window.showRewardAnimation !== 'function') window.showRewardAnimation = showRewardAnimation;
 }
+
+// ---------------------------------------------------------------------
+// 10) PWA Service Worker + FCM Push Bildirim Yardımcıları (Özellik 2)
+// ---------------------------------------------------------------------
+// VAPID Key: Firebase Console -> Proje Ayarları -> Cloud Messaging -> Web Push Sertifikaları (Key pair) kısmından alınır.
+const FCM_VAPID_KEY = "BURAYA_DOLDUR";
+let _swRegistrationPromise = null;
+let _foregroundNotifBound = false;
+
+export async function registerServiceWorker() {
+    if (typeof window === 'undefined' || !('serviceWorker' in navigator)) return null;
+    if (_swRegistrationPromise) return _swRegistrationPromise;
+    _swRegistrationPromise = navigator.serviceWorker
+        .register('/portal/sw.js', { scope: '/portal/' })
+        .catch(() => null);
+    return _swRegistrationPromise;
+}
+
+export async function saveFcmToken(uid, token, dbInstance = null) {
+    const targetDb = dbInstance || streakCtx.db;
+    if (!uid || !token || !targetDb) return false;
+    try {
+        await updateDoc(doc(targetDb, "users", uid), {
+            fcmTokens: arrayUnion(token)
+        });
+        return true;
+    } catch (e) {
+        return false;
+    }
+}
+
+export async function requestNotificationPermission(uid = null, dbInstance = null) {
+    if (typeof window === 'undefined' || !('Notification' in window) || !('serviceWorker' in navigator)) {
+        return null;
+    }
+    try {
+        const permission = await Notification.requestPermission();
+        if (permission !== 'granted') return null;
+
+        const swReg = await registerServiceWorker();
+        if (!swReg || !FCM_VAPID_KEY || FCM_VAPID_KEY === "BURAYA_DOLDUR") {
+            return null;
+        }
+
+        const { getMessaging, getToken, isSupported } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging.js");
+        if (!(await isSupported())) return null;
+
+        const messaging = getMessaging();
+        const token = await getToken(messaging, {
+            vapidKey: FCM_VAPID_KEY,
+            serviceWorkerRegistration: swReg
+        });
+
+        const targetUid = uid || streakCtx.uid;
+        if (token && targetUid) {
+            await saveFcmToken(targetUid, token, dbInstance);
+        }
+        await setupForegroundNotifications();
+        return token || null;
+    } catch (e) {
+        return null;
+    }
+}
+
+export async function setupForegroundNotifications() {
+    if (typeof window === 'undefined' || !('Notification' in window) || !('serviceWorker' in navigator)) return;
+    if (_foregroundNotifBound) return;
+    try {
+        const { getMessaging, onMessage, isSupported } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging.js");
+        if (!(await isSupported())) return;
+        const messaging = getMessaging();
+        onMessage(messaging, (payload) => {
+            const title = payload?.notification?.title || payload?.data?.title || 'Yeni Bildirim';
+            const body = payload?.notification?.body || payload?.data?.body || '';
+            const msg = body ? `${title}: ${body}` : title;
+            if (typeof window.showToast === 'function') {
+                window.showToast(escapeHtml(msg), 'info');
+            }
+        });
+        _foregroundNotifBound = true;
+    } catch (e) {}
+}
+
+if (typeof window !== 'undefined') {
+    window.escapeHtml = escapeHtml;
+    window.safeUrl = safeUrl;
+    window.registerServiceWorker = registerServiceWorker;
+    window.requestNotificationPermission = requestNotificationPermission;
+    window.saveFcmToken = saveFcmToken;
+    window.setupForegroundNotifications = setupForegroundNotifications;
+}
+
+// ---------------------------------------------------------------------
+// 11) SKELETON LOADING STİLLERİ VE YARDIMCILARI (Özellik 3)
+// ---------------------------------------------------------------------
+const SKELETON_CSS = `
+@keyframes upSkeletonShimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+.skeleton {
+    background: linear-gradient(90deg, rgba(30, 41, 59, 0.75) 25%, rgba(51, 65, 85, 0.9) 50%, rgba(30, 41, 59, 0.75) 75%);
+    background-size: 200% 100%;
+    animation: upSkeletonShimmer 1.6s ease-in-out infinite;
+    border-radius: 0.5rem;
+}
+@media (prefers-color-scheme: light) {
+    .skeleton-light-auto {
+        background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
+        background-size: 200% 100%;
+    }
+}
+.skeleton-text {
+    height: 0.75rem;
+    width: 100%;
+    border-radius: 0.375rem;
+}
+.skeleton-avatar {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 9999px;
+    flex-shrink: 0;
+}
+.skeleton-card {
+    background-color: rgba(30, 41, 59, 0.65);
+    border: 1px solid rgba(51, 65, 85, 0.7);
+    border-radius: 1rem;
+    padding: 1rem;
+}
+`;
+
+export function injectSkeletonStyles() {
+    if (typeof document === 'undefined' || document.getElementById('portal-skeleton-styles')) return;
+    const style = document.createElement('style');
+    style.id = 'portal-skeleton-styles';
+    style.textContent = SKELETON_CSS;
+    document.head.appendChild(style);
+}
+injectSkeletonStyles();
+
+export function skeletonCard() {
+    return `
+        <div class="skeleton-card space-y-3">
+            <div class="flex items-center space-x-3">
+                <div class="skeleton skeleton-avatar"></div>
+                <div class="flex-1 space-y-2">
+                    <div class="skeleton skeleton-text w-1/3"></div>
+                    <div class="skeleton skeleton-text w-1/4" style="height:0.55rem"></div>
+                </div>
+            </div>
+            <div class="space-y-2">
+                <div class="skeleton skeleton-text w-3/4"></div>
+                <div class="skeleton skeleton-text w-full"></div>
+            </div>
+        </div>
+    `;
+}
+
+export function skeletonList(n = 3) {
+    const count = Math.max(1, Number(n) || 3);
+    return Array.from({ length: count }, () => skeletonCard()).join('');
+}
+
+export function skeletonGrid(n = 3) {
+    const count = Math.max(1, Number(n) || 3);
+    return `<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 col-span-full">${Array.from({ length: count }, () => skeletonCard()).join('')}</div>`;
+}
+
+if (typeof window !== 'undefined') {
+    window.injectSkeletonStyles = injectSkeletonStyles;
+    window.skeletonCard = skeletonCard;
+    window.skeletonList = skeletonList;
+    window.skeletonGrid = skeletonGrid;
+}
+
+// ---------------------------------------------------------------------
+// 12) LOCALSTORAGE CACHE MANAGER (5 DK VARSAYILAN TTL) (Özellik 4)
+// ---------------------------------------------------------------------
+const CACHE_PREFIX = 'uniportal_cache_';
+const DEFAULT_CACHE_TTL = 5 * 60 * 1000; // 5 dk
+
+export function cacheGet(key) {
+    if (typeof localStorage === 'undefined' || !key) return null;
+    try {
+        const raw = localStorage.getItem(CACHE_PREFIX + key);
+        if (!raw) return null;
+        const parsed = JSON.parse(raw);
+        if (!parsed || typeof parsed.ts !== 'number' || typeof parsed.ttl !== 'number') {
+            localStorage.removeItem(CACHE_PREFIX + key);
+            return null;
+        }
+        if (Date.now() - parsed.ts > parsed.ttl) {
+            localStorage.removeItem(CACHE_PREFIX + key);
+            return null;
+        }
+        return parsed.data !== undefined ? parsed.data : null;
+    } catch (e) {
+        try { localStorage.removeItem(CACHE_PREFIX + key); } catch (_) {}
+        return null;
+    }
+}
+
+export function cacheSet(key, data, ttlMs = DEFAULT_CACHE_TTL) {
+    if (typeof localStorage === 'undefined' || !key) return false;
+    const payload = JSON.stringify({
+        data,
+        ts: Date.now(),
+        ttl: Number(ttlMs) > 0 ? Number(ttlMs) : DEFAULT_CACHE_TTL
+    });
+    try {
+        localStorage.setItem(CACHE_PREFIX + key, payload);
+        return true;
+    } catch (e) {
+        // QuotaExceededError durumunda süresi geçmiş veya mevcut önbellekleri temizleyip tekrar dene
+        try {
+            cacheCleanup(true);
+            localStorage.setItem(CACHE_PREFIX + key, payload);
+            return true;
+        } catch (_) {
+            return false;
+        }
+    }
+}
+
+export function cacheInvalidate(key) {
+    if (typeof localStorage === 'undefined' || !key) return;
+    try { localStorage.removeItem(CACHE_PREFIX + key); } catch (e) {}
+}
+
+export function cacheInvalidatePrefix(prefix = '') {
+    if (typeof localStorage === 'undefined') return 0;
+    let removed = 0;
+    try {
+        const targetPrefix = CACHE_PREFIX + prefix;
+        const keysToRemove = [];
+        for (let i = 0; i < localStorage.length; i++) {
+            const k = localStorage.key(i);
+            if (k && k.startsWith(targetPrefix)) keysToRemove.push(k);
+        }
+        keysToRemove.forEach(k => {
+            localStorage.removeItem(k);
+            removed++;
+        });
+    } catch (e) {}
+    return removed;
+}
+
+export function cacheCleanup(forceRemoveOldest = false) {
+    if (typeof localStorage === 'undefined') return 0;
+    let cleaned = 0;
+    try {
+        const now = Date.now();
+        const entries = [];
+        for (let i = 0; i < localStorage.length; i++) {
+            const k = localStorage.key(i);
+            if (!k || !k.startsWith(CACHE_PREFIX)) continue;
+            try {
+                const raw = localStorage.getItem(k);
+                const parsed = JSON.parse(raw);
+                if (!parsed || typeof parsed.ts !== 'number' || typeof parsed.ttl !== 'number' || (now - parsed.ts > parsed.ttl)) {
+                    entries.push({ key: k, expired: true, ts: 0 });
+                } else {
+                    entries.push({ key: k, expired: false, ts: parsed.ts });
+                }
+            } catch (_) {
+                entries.push({ key: k, expired: true, ts: 0 });
+            }
+        }
+        entries.filter(e => e.expired).forEach(e => {
+            localStorage.removeItem(e.key);
+            cleaned++;
+        });
+        if (forceRemoveOldest && cleaned === 0 && entries.length > 0) {
+            entries.sort((a, b) => a.ts - b.ts);
+            const half = Math.max(1, Math.ceil(entries.length / 2));
+            for (let i = 0; i < half; i++) {
+                localStorage.removeItem(entries[i].key);
+                cleaned++;
+            }
+        }
+    } catch (e) {}
+    return cleaned;
+}
+
+export function getCacheStats() {
+    if (typeof localStorage === 'undefined') return { count: 0, bytes: 0 };
+    let count = 0;
+    let bytes = 0;
+    try {
+        for (let i = 0; i < localStorage.length; i++) {
+            const k = localStorage.key(i);
+            if (k && k.startsWith(CACHE_PREFIX)) {
+                count++;
+                const val = localStorage.getItem(k) || '';
+                bytes += (k.length + val.length) * 2;
+            }
+        }
+    } catch (e) {}
+    return { count, bytes };
+}
+
+export const CacheManager = {
+    get: cacheGet,
+    set: cacheSet,
+    invalidate: cacheInvalidate,
+    invalidatePrefix: cacheInvalidatePrefix,
+    cleanup: cacheCleanup,
+    stats: getCacheStats
+};
+
+cacheCleanup();
+
+if (typeof window !== 'undefined') {
+    window.CacheManager = CacheManager;
+    window.cacheGet = cacheGet;
+    window.cacheSet = cacheSet;
+    window.cacheInvalidate = cacheInvalidate;
+    window.cacheInvalidatePrefix = cacheInvalidatePrefix;
+    window.cacheCleanup = cacheCleanup;
+    window.getCacheStats = getCacheStats;
+}
+
+
+
 

@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Coin Mağazası - Üni Portal</title>
     <link rel="icon" type="image/png" href="/portal/fav.png">
+    <link rel="manifest" href="/portal/manifest.json">
+    <meta name="theme-color" content="#0f172a">
+    <link rel="apple-touch-icon" href="/portal/fav.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -333,7 +336,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc, collection, getDocs, getCountFromServer, deleteDoc, updateDoc, addDoc, query, where, orderBy, limit, runTransaction, arrayUnion } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-        import { getStoreItems, getAvatarFrameClass, renderTitleBadge, getNameEffectClass, primeAuthor, escapeHtml, injectCoreStyles, initDailyStreak } from '/portal/portal-core.js';
+        import { getStoreItems, getAvatarFrameClass, renderTitleBadge, getNameEffectClass, primeAuthor, escapeHtml, injectCoreStyles, initDailyStreak, cacheGet, cacheSet, cacheInvalidate } from '/portal/portal-core.js';
         injectCoreStyles();
 
         const firebaseConfig = {
@@ -507,38 +510,49 @@
                 dropdownEmail.innerText = user.email || "";
 
                 const userRef = doc(db, "users", user.uid);
-                const userSnap = await getDoc(userRef);
+                const cachedUser = cacheGet(`user_profile_${user.uid}`);
+                if (cachedUser) {
+                    userData = cachedUser;
+                    userCoins.innerText = cachedUser.coins || 0;
+                    if (dropdownName) dropdownName.innerText = cachedUser.displayName || cachedUser.name || user.displayName || "Kullanıcı";
+                    if (cachedUser.photoURL) userAvatar.src = cachedUser.photoURL;
+                    getDoc(userRef).then(s => { if (s.exists()) cacheSet(`user_profile_${user.uid}`, s.data(), 5 * 60 * 1000); }).catch(() => {});
+                } else {
+                    const userSnap = await getDoc(userRef);
 
-                if (!userSnap.exists()) {
-                    await setDoc(userRef, {
-                        uid: user.uid,
-                        name: user.displayName || "Öğrenci",
-                        email: user.email || "",
-                        photoURL: user.photoURL || "",
-                        coins: 10,
-                        role: "user",
-                        createdAt: new Date()
-                    });
-                    userCoins.innerText = "10";
-                    // Mağaza: yeni oluşturulan dokümanın yerel kopyası (ekstra okuma yok)
-                    userData = { uid: user.uid, name: user.displayName || "Öğrenci", email: user.email || "", photoURL: user.photoURL || "", coins: 10, role: "user" };
-
-                    try {
-                        await addDoc(collection(db, "users", user.uid, "notifications"), {
-                            message: `Hoş geldin ${user.displayName || 'öğrenci'}! 🎉 Üni Portal'a katıldığın için teşekkürler. Forumda konu açarak +5 Coin kazanabilirsin!`,
-                            link: "/portal/forum.html",
-                            read: false,
+                    if (!userSnap.exists()) {
+                        await setDoc(userRef, {
+                            uid: user.uid,
+                            name: user.displayName || "Öğrenci",
+                            email: user.email || "",
+                            photoURL: user.photoURL || "",
+                            coins: 10,
+                            role: "user",
                             createdAt: new Date()
                         });
-                    } catch (notifErr) {
-                        console.error("Hoş geldin bildirimi gönderilemedi:", notifErr);
+                        userCoins.innerText = "10";
+                        // Mağaza: yeni oluşturulan dokümanın yerel kopyası (ekstra okuma yok)
+                        userData = { uid: user.uid, name: user.displayName || "Öğrenci", email: user.email || "", photoURL: user.photoURL || "", coins: 10, role: "user" };
+                        cacheSet(`user_profile_${user.uid}`, userData, 5 * 60 * 1000);
+
+                        try {
+                            await addDoc(collection(db, "users", user.uid, "notifications"), {
+                                message: `Hoş geldin ${user.displayName || 'öğrenci'}! 🎉 Üni Portal'a katıldığın için teşekkürler. Forumda konu açarak +5 Coin kazanabilirsin!`,
+                                link: "/portal/forum.html",
+                                read: false,
+                                createdAt: new Date()
+                            });
+                        } catch (notifErr) {
+                            console.error("Hoş geldin bildirimi gönderilemedi:", notifErr);
+                        }
+                    } else {
+                        const userDataSnap = userSnap.data();
+                        userData = userDataSnap;
+                        cacheSet(`user_profile_${user.uid}`, userDataSnap, 5 * 60 * 1000);
+                        userCoins.innerText = userDataSnap.coins || 0;
+                        if (dropdownName) dropdownName.innerText = userDataSnap.displayName || userDataSnap.name || user.displayName || "Kullanıcı";
+                        if (userDataSnap.photoURL) userAvatar.src = userDataSnap.photoURL;
                     }
-                } else {
-                    const userDataSnap = userSnap.data();
-                    userData = userDataSnap;
-                    userCoins.innerText = userDataSnap.coins || 0;
-                    if (dropdownName) dropdownName.innerText = userDataSnap.displayName || userDataSnap.name || user.displayName || "Kullanıcı";
-                    if (userDataSnap.photoURL) userAvatar.src = userDataSnap.photoURL;
                 }
 
                 // Kendi profilimizi yazar önbelleğine yaz (0 okuma)

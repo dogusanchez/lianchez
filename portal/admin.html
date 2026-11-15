@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Yönetim Paneli - Üni Portal</title>
     <link rel="icon" type="image/png" href="/portal/fav.png">
+    <link rel="manifest" href="/portal/manifest.json">
+    <meta name="theme-color" content="#0f172a">
+    <link rel="apple-touch-icon" href="/portal/fav.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -133,7 +136,8 @@
                     </div>
                 </div>
                 <div id="admin-topics-list" class="space-y-4">
-                    <div class="text-center py-8 text-slate-500 text-xs">Konular yükleniyor...</div>
+                    <div class="skeleton-card space-y-3"><div class="flex items-center space-x-3"><div class="skeleton skeleton-avatar"></div><div class="flex-1 space-y-2"><div class="skeleton skeleton-text w-1/3"></div><div class="skeleton skeleton-text w-1/4"></div></div></div><div class="skeleton skeleton-text w-3/4"></div></div>
+                    <div class="skeleton-card space-y-3"><div class="flex items-center space-x-3"><div class="skeleton skeleton-avatar"></div><div class="flex-1 space-y-2"><div class="skeleton skeleton-text w-1/3"></div><div class="skeleton skeleton-text w-1/4"></div></div></div><div class="skeleton skeleton-text w-3/4"></div></div>
                 </div>
                 <div id="load-more-topics-container" class="text-center pt-4 hidden">
                     <button onclick="loadMoreTopics()" id="load-more-topics-btn" class="bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs font-semibold px-4 py-2 rounded-xl transition">
@@ -176,7 +180,7 @@
                     </div>
                 </div>
                 <div id="admin-reports-list" class="space-y-4">
-                    <div class="text-center py-8 text-slate-500 text-xs">Raporlar yükleniyor...</div>
+                    <div class="skeleton-card space-y-3"><div class="skeleton skeleton-text w-1/3"></div><div class="skeleton skeleton-text w-full"></div></div>
                 </div>
             </div>
 
@@ -186,7 +190,7 @@
                     <i class="fa-solid fa-id-card text-indigo-400 mr-2"></i>Kullanıcı Adı Değişiklik Talepleri
                 </h2>
                 <div id="admin-namechange-list" class="space-y-4">
-                    <div class="text-center py-8 text-slate-500 text-xs">Talepler yükleniyor...</div>
+                    <div class="skeleton-card space-y-3"><div class="skeleton skeleton-text w-1/3"></div><div class="skeleton skeleton-text w-2/3"></div></div>
                 </div>
             </div>
 
@@ -205,7 +209,7 @@
                     </div>
                 </div>
                 <div id="admin-contact-list" class="space-y-4">
-                    <div class="text-center py-8 text-slate-500 text-xs">Talepler yükleniyor...</div>
+                    <div class="skeleton-card space-y-3"><div class="skeleton skeleton-text w-1/3"></div><div class="skeleton skeleton-text w-full"></div></div>
                 </div>
             </div>
         </div>
@@ -232,7 +236,11 @@
                         <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Tıklanınca Açılacak URL (Opsiyonel)</label>
                         <input type="url" id="notif-link" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-amber-500" placeholder="/portal/ilanlar.html veya https://...">
                     </div>
-                    <div class="flex justify-end">
+                    <div class="flex items-center justify-between flex-wrap gap-3 pt-1">
+                        <label class="flex items-center space-x-2 text-xs text-slate-300 cursor-pointer select-none">
+                            <input type="checkbox" id="notif-send-push" class="accent-amber-500 w-4 h-4 rounded">
+                            <span><i class="fa-solid fa-mobile-screen-button text-amber-400 mr-1"></i>Push olarak da gönder (FCM)</span>
+                        </label>
                         <button type="submit" class="bg-amber-600 hover:bg-amber-700 text-white px-6 py-2.5 rounded-xl text-xs font-semibold transition flex items-center space-x-1.5">
                             <i class="fa-solid fa-paper-plane"></i>
                             <span>Bildirimi Gönder</span>
@@ -246,7 +254,7 @@
                     <i class="fa-solid fa-history text-slate-400 mr-2"></i>Gönderilen Bildirimler
                 </h2>
                 <div id="admin-notif-history" class="space-y-3">
-                    <div class="text-center py-6 text-slate-500 text-xs">Yükleniyor...</div>
+                    <div class="skeleton-card space-y-2"><div class="skeleton skeleton-text w-1/2"></div><div class="skeleton skeleton-text w-1/4"></div></div>
                 </div>
             </div>
         </div>
@@ -284,7 +292,7 @@
                     </div>
                 </div>
                 <div id="admin-student-listings-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="text-center py-8 text-slate-500 text-xs col-span-full">İlanlar yükleniyor...</div>
+                    <div class="skeleton-card space-y-3 col-span-full"><div class="skeleton skeleton-text w-1/3"></div><div class="skeleton skeleton-text w-full"></div></div>
                 </div>
             </div>
 
@@ -303,7 +311,7 @@
                     </button>
                 </div>
                 <div id="admin-jobs-list" class="space-y-4">
-                    <div class="text-center py-8 text-slate-500 text-xs">Duyurular yükleniyor...</div>
+                    <div class="skeleton-card space-y-3"><div class="skeleton skeleton-text w-1/3"></div><div class="skeleton skeleton-text w-2/3"></div></div>
                 </div>
             </div>
         </div>
@@ -320,7 +328,7 @@
                     </button>
                 </div>
                 <div id="admin-communities-list" class="space-y-4">
-                    <div class="text-center py-8 text-slate-500 text-xs">Topluluklar yükleniyor...</div>
+                    <div class="skeleton-card space-y-3"><div class="skeleton skeleton-text w-1/3"></div><div class="skeleton skeleton-text w-2/3"></div></div>
                 </div>
             </div>
         </div>
@@ -336,7 +344,7 @@
                     </div>
                 </div>
                 <div id="admin-users-list" class="space-y-3">
-                    <div class="text-center py-8 text-slate-500 text-xs">Kullanıcılar yükleniyor...</div>
+                    <div class="skeleton-card space-y-3"><div class="flex items-center space-x-3"><div class="skeleton skeleton-avatar"></div><div class="flex-1 space-y-2"><div class="skeleton skeleton-text w-1/3"></div><div class="skeleton skeleton-text w-1/4"></div></div></div></div>
                 </div>
                 <div id="load-more-users-container" class="text-center pt-4 hidden">
                     <button onclick="loadMoreUsers()" id="load-more-users-btn" class="bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs font-semibold px-4 py-2 rounded-xl transition">
@@ -359,7 +367,7 @@
                     </div>
                 </div>
                 <div id="admin-club-apps-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="text-center py-6 text-slate-500 text-xs col-span-full">Başvurular yükleniyor...</div>
+                    <div class="skeleton-card space-y-3 col-span-full"><div class="skeleton skeleton-text w-1/3"></div><div class="skeleton skeleton-text w-2/3"></div></div>
                 </div>
             </div>
 
@@ -374,7 +382,7 @@
                     </div>
                 </div>
                 <div id="admin-events-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="text-center py-6 text-slate-500 text-xs col-span-full">Etkinlikler yükleniyor...</div>
+                    <div class="skeleton-card space-y-3 col-span-full"><div class="skeleton skeleton-text w-1/3"></div><div class="skeleton skeleton-text w-2/3"></div></div>
                 </div>
             </div>
 
@@ -393,7 +401,7 @@
                     </button>
                 </div>
                 <div id="admin-approved-events-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="text-center py-6 text-slate-500 text-xs col-span-full">Onaylanmış etkinlikler yükleniyor...</div>
+                    <div class="skeleton-card space-y-3 col-span-full"><div class="skeleton skeleton-text w-1/3"></div><div class="skeleton skeleton-text w-2/3"></div></div>
                 </div>
             </div>
         </div>
@@ -477,7 +485,7 @@
 
                 <!-- Mevcut Eşyalar Listesi -->
                 <div id="admin-store-items-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <div class="text-center py-6 text-slate-500 text-xs col-span-full">Mağaza ürünleri yükleniyor...</div>
+                    <div class="skeleton-card space-y-3 col-span-full"><div class="skeleton skeleton-text w-1/3"></div><div class="skeleton skeleton-text w-2/3"></div></div>
                 </div>
             </div>
         </div>
@@ -501,6 +509,35 @@
                         <i class="fa-solid fa-floppy-disk"></i>
                         <span>Kaydet</span>
                     </button>
+                </div>
+            </div>
+
+            <!-- Cache Yönetimi Kartı (Özellik 4.5) -->
+            <div class="bg-slate-800 border border-slate-700 p-6 rounded-2xl shadow-lg">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-lg font-bold text-white flex items-center mb-1">
+                            <i class="fa-solid fa-database text-cyan-400 mr-2"></i>Cache Yönetimi (LocalStorage)
+                        </h2>
+                        <p id="cache-stats" class="text-[11px] text-slate-400">Tarayıcıda tutulan <code class="text-cyan-300">uniportal_cache_</code> anahtarlarının durumu.</p>
+                        <div class="flex items-center gap-4 mt-3 text-xs">
+                            <span class="bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-slate-300">
+                                Anahtar Sayısı: <strong id="admin-cache-key-count" class="text-cyan-400">0</strong>
+                            </span>
+                            <span class="bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-xl text-slate-300">
+                                Toplam Boyut: <strong id="admin-cache-byte-size" class="text-emerald-400">0 KB</strong>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button type="button" onclick="updateCacheStats()" class="bg-slate-700 hover:bg-slate-600 text-slate-200 px-4 py-2.5 rounded-xl text-xs font-semibold transition">
+                            <i class="fa-solid fa-rotate mr-1"></i>Yenile
+                        </button>
+                        <button type="button" onclick="clearAllCache()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2.5 rounded-xl text-xs font-semibold transition flex items-center space-x-1.5">
+                            <i class="fa-solid fa-broom"></i>
+                            <span>Tüm Cache'i Temizle</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -909,6 +946,23 @@
         </div>
     </div>
 
+    <!-- ANKET DAĞILIM MODALI -->
+    <div id="poll-distribution-modal" class="fixed inset-0 bg-black/75 backdrop-blur-sm hidden items-center justify-center z-50 p-4" onclick="if(event.target===this) closePollDistributionModal()">
+        <div class="bg-slate-800 border border-slate-700 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+            <div class="flex justify-between items-center border-b border-slate-700 pb-3">
+                <h3 class="text-base font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-chart-pie text-indigo-400"></i>
+                    <span>Anket Oy Dağılımı</span>
+                </h3>
+                <button type="button" onclick="closePollDistributionModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div id="poll-distribution-body" class="space-y-3"></div>
+            <div class="flex justify-end pt-2 border-t border-slate-700">
+                <button type="button" onclick="closePollDistributionModal()" class="bg-slate-700 hover:bg-slate-600 text-slate-200 px-4 py-2 rounded-xl text-xs font-semibold transition">Kapat</button>
+            </div>
+        </div>
+    </div>
+
     <footer class="relative bg-gradient-to-b from-slate-800 to-slate-900 border-t border-slate-700 mt-auto">
         <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-purple-500/40 to-transparent"></div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -932,7 +986,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, collection, collectionGroup, getDocs, getCountFromServer, doc, getDoc, setDoc, addDoc, updateDoc, deleteDoc, query, orderBy, where, limit, startAfter, serverTimestamp, increment, writeBatch, deleteField } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-        import { getStoreItems, setStoreCache, DEFAULT_STORE_ITEMS, FRAME_STYLES, TITLE_STYLES, validateAndFormatUniversity, primeAuthor, invalidateAuthorCache, escapeHtml as coreEscapeHtml, safeUrl, injectCoreStyles } from '/portal/portal-core.js';
+        import { getStoreItems, setStoreCache, DEFAULT_STORE_ITEMS, FRAME_STYLES, TITLE_STYLES, validateAndFormatUniversity, primeAuthor, invalidateAuthorCache, escapeHtml as coreEscapeHtml, safeUrl, injectCoreStyles, cacheGet, cacheSet, cacheInvalidate, cacheInvalidatePrefix, getCacheStats, skeletonCard, skeletonList, skeletonGrid } from '/portal/portal-core.js';
         injectCoreStyles();
 
         function escapeHtml(text) {
@@ -1071,7 +1125,10 @@
                 loadedTabs.add('topluluktayfa');
             }
             else if (tabName === 'magaza' && !loadedTabs.has('magaza')) { loadAdminStoreCatalog(); loadedTabs.add('magaza'); }
-            else if (tabName === 'badwords' && !loadedTabs.has('badwords')) { loadBadWordsAdmin(); loadedTabs.add('badwords'); }
+            else if (tabName === 'badwords') {
+                if (!loadedTabs.has('badwords')) { loadBadWordsAdmin(); loadedTabs.add('badwords'); }
+                refreshAdminCacheStats();
+            }
         };
 
         window.switchRequestsSubTab = (subName) => {
@@ -1164,7 +1221,16 @@
             window.location.replace('/portal/index.html');
         }
 
-        async function loadDashboardStats() {
+        async function loadDashboardStats(forceRefresh = false) {
+            if (forceRefresh) cacheInvalidate('stats_global');
+            const cachedStats = !forceRefresh ? cacheGet('stats_global') : null;
+            if (cachedStats) {
+                document.getElementById('stat-users').innerText = cachedStats.users ?? 0;
+                document.getElementById('stat-topics').innerText = cachedStats.topics ?? 0;
+                document.getElementById('stat-jobs').innerText = cachedStats.jobs ?? 0;
+                document.getElementById('stat-communities').innerText = cachedStats.communities ?? 0;
+                document.getElementById('stat-reports').innerText = cachedStats.reports ?? 0;
+            }
             try {
                 const [usersCount, topicsCount, jobsCount, commCount, reportsCount] = await Promise.all([
                     getCountFromServer(collection(db, "users")),
@@ -1173,11 +1239,19 @@
                     getCountFromServer(collection(db, "communities")),
                     getCountFromServer(collection(db, "reports"))
                 ]);
-                document.getElementById('stat-users').innerText = usersCount.data().count;
-                document.getElementById('stat-topics').innerText = topicsCount.data().count;
-                document.getElementById('stat-jobs').innerText = jobsCount.data().count;
-                document.getElementById('stat-communities').innerText = commCount.data().count;
-                document.getElementById('stat-reports').innerText = reportsCount.data().count;
+                const freshStats = {
+                    users: usersCount.data().count,
+                    topics: topicsCount.data().count,
+                    jobs: jobsCount.data().count,
+                    communities: commCount.data().count,
+                    reports: reportsCount.data().count
+                };
+                document.getElementById('stat-users').innerText = freshStats.users;
+                document.getElementById('stat-topics').innerText = freshStats.topics;
+                document.getElementById('stat-jobs').innerText = freshStats.jobs;
+                document.getElementById('stat-communities').innerText = freshStats.communities;
+                document.getElementById('stat-reports').innerText = freshStats.reports;
+                cacheSet('stats_global', freshStats, 5 * 60 * 1000);
                 statsLoadedOnce = true;
             } catch (e) { console.error(e); }
         }
@@ -1208,15 +1282,25 @@
             const loadMoreBtn = document.getElementById('load-more-topics-btn');
 
             if (reset) {
+                if (allTopicsCache.length > 0) {
+                    cacheInvalidatePrefix("topics_");
+                }
                 topicsLastVisible = null;
                 topicsHasMore = false;
                 allTopicsCache = [];
                 filteredTopicsCache = [];
-                container.innerHTML = '<div class="text-center py-6 text-slate-500 text-xs">Yükleniyor...</div>';
+                const cachedTopics = cacheGet("topics_page_1");
+                if (Array.isArray(cachedTopics) && cachedTopics.length > 0) {
+                    allTopicsCache = [...cachedTopics];
+                    filteredTopicsCache = [...cachedTopics];
+                    renderTopicsList();
+                } else {
+                    container.innerHTML = skeletonList(3);
+                }
                 loadMoreContainer.classList.add('hidden');
             } else if (loadMoreBtn) {
                 loadMoreBtn.disabled = true;
-                loadMoreBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1.5"></i>Yükleniyor...';
+                loadMoreBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1.5"></i>Yükleniyor... (<span id="remaining-topics-count">${topicsHasMore ? 'devamı var' : 0}</span>)`;
             }
 
             try {
@@ -1229,7 +1313,11 @@
                 topicsLastVisible = snapshot.docs[snapshot.docs.length - 1] || null;
                 topicsHasMore = snapshot.docs.length === TOPICS_PAGE_SIZE;
 
+                if (reset) allTopicsCache = [];
                 snapshot.forEach(docSnap => allTopicsCache.push({ id: docSnap.id, ...docSnap.data() }));
+                if (reset) {
+                    cacheSet("topics_page_1", allTopicsCache, 2 * 60 * 1000);
+                }
                 filteredTopicsCache = [...allTopicsCache];
 
                 renderTopicsList();
@@ -1239,7 +1327,7 @@
                 topicsLoading = false;
                 if (loadMoreBtn) {
                     loadMoreBtn.disabled = false;
-                    loadMoreBtn.innerHTML = `Daha Fazla Göster (<span id="remaining-topics-count">${topicsHasMore ? '?' : 0}</span>)`;
+                    loadMoreBtn.innerHTML = `Daha Fazla Göster (<span id="remaining-topics-count">${topicsHasMore ? 'devamı var' : 0}</span>)`;
                 }
             }
         }
@@ -1271,6 +1359,7 @@
                                     ${isPinned ? '<span class="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded font-semibold"><i class="fa-solid fa-thumbtack mr-1"></i>SABİT</span>' : ''}
                                     ${isLocked ? '<span class="text-[10px] bg-red-500/20 text-red-300 px-2 py-0.5 rounded font-semibold"><i class="fa-solid fa-lock mr-1"></i>KİLİTLİ</span>' : ''}
                                     <span class="text-[10px] bg-purple-500/20 text-purple-300 px-2 py-0.5 rounded font-semibold">${escapeHtml(topic.category || 'Genel')}</span>
+                                    ${topic.poll && topic.poll.question ? `<span onclick="showPollResults('${topicId}')" class="cursor-pointer text-[10px] bg-cyan-500/20 text-cyan-300 px-2 py-0.5 rounded font-semibold"><i class="fa-solid fa-chart-simple mr-1"></i>${Number(topic.poll.totalVotes) || 0} oy</span>` : ''}
                                     <span class="text-xs text-slate-400 truncate">Yazan: <strong>${escapeHtml(topic.authorName)}</strong></span>
                                 </div>
                                 <h3 class="text-sm font-bold text-white truncate">${escapeHtml(topic.title)}</h3>
@@ -1300,7 +1389,7 @@
             });
 
             if (topicsHasMore) {
-                remainingCountSpan.innerText = "devamı var";
+                if (remainingCountSpan) remainingCountSpan.innerText = "devamı var";
                 loadMoreContainer.classList.remove('hidden');
             } else {
                 loadMoreContainer.classList.add('hidden');
@@ -1326,6 +1415,7 @@
         window.togglePinTopic = async (topicId, pinStatus) => {
             try {
                 await updateDoc(doc(db, "topics", topicId), { isPinned: pinStatus });
+                cacheInvalidatePrefix("topics_");
                 const t = allTopicsCache.find(x => x.id === topicId);
                 if (t) t.isPinned = pinStatus;
                 renderTopicsList();
@@ -1336,6 +1426,7 @@
         window.toggleLockTopic = async (topicId, lockStatus) => {
             try {
                 await updateDoc(doc(db, "topics", topicId), { isLocked: lockStatus });
+                cacheInvalidatePrefix("topics_");
                 const t = allTopicsCache.find(x => x.id === topicId);
                 if (t) t.isLocked = lockStatus;
                 renderTopicsList();
@@ -1359,11 +1450,56 @@
             renderTopicsList();
         };
 
+        window.openPollDistributionModal = (topicId) => {
+            const topic = allTopicsCache.find(t => t.id === topicId);
+            const modal = document.getElementById('poll-distribution-modal');
+            const body = document.getElementById('poll-distribution-body');
+            if (!topic || !topic.poll || !modal || !body) return;
+            const poll = topic.poll;
+            const totalVotes = Number(poll.totalVotes) || 0;
+            const optionsHtml = (poll.options || []).map(opt => {
+                const v = Number(opt.votes) || 0;
+                const pct = totalVotes > 0 ? Math.round((v / totalVotes) * 100) : 0;
+                return `
+                    <div class="space-y-1">
+                        <div class="flex justify-between text-xs">
+                            <span class="text-slate-200 font-medium">${escapeHtml(opt.text)}</span>
+                            <span class="text-indigo-300 font-bold">${pct}% (${v} oy)</span>
+                        </div>
+                        <div class="w-full h-2 bg-slate-900 rounded-full overflow-hidden">
+                            <div class="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full" style="width: ${pct}%"></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            body.innerHTML = `
+                <div class="bg-slate-900/70 border border-slate-700/70 rounded-xl p-3">
+                    <p class="text-xs text-slate-400 mb-1">Konu: <strong class="text-slate-200">${escapeHtml(topic.title)}</strong></p>
+                    <p class="text-sm font-bold text-indigo-300">${escapeHtml(poll.question)}</p>
+                </div>
+                <div class="space-y-2.5">${optionsHtml}</div>
+                <div class="flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-slate-700/60">
+                    <span>Toplam Oy: <strong class="text-white">${totalVotes}</strong></span>
+                    <span>Tür: <strong class="text-slate-200">${poll.multipleChoice ? 'Çoktan Seçmeli' : 'Tek Seçim'}</strong></span>
+                </div>
+            `;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        };
+        window.showPollResults = window.openPollDistributionModal;
+
+        window.closePollDistributionModal = () => {
+            const modal = document.getElementById('poll-distribution-modal');
+            if (!modal) return;
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+        };
+
         async function loadRepliesForManagement(topicId) {
             const container = document.getElementById('manage-replies-list');
-            container.innerHTML = '<div class="text-center py-6 text-slate-500 text-xs">Yanıtlar yükleniyor...</div>';
+            container.innerHTML = skeletonList(3);
             try {
-                const repliesSnap = await getDocs(collection(db, "topics", topicId, "replies"));
+                const repliesSnap = await getDocs(query(collection(db, "topics", topicId, "replies"), limit(50)));
                 if (repliesSnap.empty) {
                     container.innerHTML = '<div class="text-center py-6 text-slate-500 text-xs">Bu konuya henüz yanıt yazılmamış.</div>';
                     return;
@@ -1423,6 +1559,7 @@
                                 xp: increment(-8),
                                 coins: increment(-2)
                             });
+                            cacheInvalidate(`user_profile_${replyAuthorUid}`);
                         } catch(e) { console.error(e); }
                     }
                 }
@@ -1434,6 +1571,7 @@
                     await updateDoc(doc(db, "topics", topicId), { replyCount: topic.replyCount });
                     renderTopicsList();
                 }
+                cacheInvalidatePrefix("topics_");
                 await loadRepliesForManagement(topicId);
                 showToast("Yanıt silindi", "success");
             } catch (err) { showToast("Yanıt silinemedi", "error"); }
@@ -1462,6 +1600,7 @@
                                 xp: increment(-8),      // yanıt için verilen XP'yi geri al
                                 coins: increment(-2)    // yanıt için verilen Coin'i geri al
                             });
+                            cacheInvalidate(`user_profile_${repAuthorUid}`);
                         } catch(e) { console.error(e); }
                     }
                     await deleteDoc(doc(db, "topics", topicId, "replies", rep.id));
@@ -1476,11 +1615,14 @@
                             xp: increment(-15),     // konu için verilen XP'yi geri al
                             coins: increment(-5)    // konu için verilen Coin'i geri al
                         });
+                        cacheInvalidate(`user_profile_${topicAuthorUid}`);
                     } catch(e) { console.error(e); }
                 }
 
                 // 3. Konuyu sil
                 await deleteDoc(doc(db, "topics", topicId));
+                cacheInvalidatePrefix("topics_");
+                cacheInvalidate("stats_global");
 
                 allTopicsCache = allTopicsCache.filter(t => t.id !== topicId);
                 filteredTopicsCache = filteredTopicsCache.filter(t => t.id !== topicId);
@@ -1524,6 +1666,7 @@
             const content = document.getElementById('edit-topic-content').value;
             try {
                 await updateDoc(doc(db, "topics", id), { title, content, category });
+                cacheInvalidatePrefix("topics_");
                 const topic = allTopicsCache.find(t => t.id === id);
                 if (topic) { topic.title = title; topic.content = content; topic.category = category; }
                 renderTopicsList();
@@ -1564,7 +1707,7 @@
         // ===== KOTA OPTİMİZASYONU: limit 50 + where =====
         async function loadReports() {
             const container = document.getElementById('admin-reports-list');
-            container.innerHTML = '<div class="text-center py-6 text-slate-500 text-xs">Raporlar yükleniyor...</div>';
+            container.innerHTML = skeletonList(3);
             try {
                 // Sadece son 90 günün raporları, en fazla 50 tane
                 const ninetyDaysAgo = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000);
@@ -1659,6 +1802,7 @@
         window.resolveReport = async (reportId) => {
             try {
                 await updateDoc(doc(db, "reports", reportId), { status: 'resolved', resolvedAt: serverTimestamp() });
+                cacheInvalidate("stats_global");
                 const rep = allReportsCache.find(r => r.id === reportId);
                 if (rep) rep.status = 'resolved';
                 renderReportsList();
@@ -1673,6 +1817,7 @@
             if (!confirm("Bu raporu silmek istiyor musun?")) return;
             try {
                 await deleteDoc(doc(db, "reports", reportId));
+                cacheInvalidate("stats_global");
                 allReportsCache = allReportsCache.filter(r => r.id !== reportId);
                 renderReportsList();
                 loadReportBadge();
@@ -1687,11 +1832,15 @@
             window.open(url, '_blank');
         };
 
+        // Cloud Function Push Endpoint (Firebase Console -> Functions bölümünden deploy edilen sendPushToUsers URL'si):
+        const CLOUD_FUNCTION_PUSH_URL = "BURAYA_DOLDUR";
+
         window.sendNotification = async (e) => {
             e.preventDefault();
             const target = document.getElementById('notif-target').value;
             const message = document.getElementById('notif-message').value.trim();
             const link = document.getElementById('notif-link').value.trim();
+            const sendAsPush = !!document.getElementById('notif-send-push')?.checked;
             if (!message) return;
 
             const btn = e.target.querySelector('button[type="submit"]');
@@ -1734,6 +1883,27 @@
                 if (count > 0) batches.push(currentBatch);
                 for (const b of batches) await b.commit();
 
+                if (sendAsPush && CLOUD_FUNCTION_PUSH_URL && CLOUD_FUNCTION_PUSH_URL !== "BURAYA_DOLDUR") {
+                    try {
+                        const idToken = currentUser ? await currentUser.getIdToken() : "";
+                        await fetch(CLOUD_FUNCTION_PUSH_URL, {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                ...(idToken ? { "Authorization": `Bearer ${idToken}` } : {})
+                            },
+                            body: JSON.stringify({
+                                uids: targetUsers,
+                                title: "Üni Portal Duyurusu",
+                                body: message,
+                                link: link || "/portal/index.html"
+                            })
+                        });
+                    } catch (pushErr) {
+                        console.warn("FCM Push isteği başarısız oldu:", pushErr);
+                    }
+                }
+
                 await addDoc(collection(db, "notificationHistory"), {
                     message, link, target, recipientCount: targetUsers.length,
                     sentAt: serverTimestamp(), sentBy: currentUserRole
@@ -1753,7 +1923,7 @@
 
         async function loadNotifHistory() {
             const container = document.getElementById('admin-notif-history');
-            container.innerHTML = '<div class="text-center py-6 text-slate-500 text-xs">Yükleniyor...</div>';
+            container.innerHTML = skeletonList(3);
             try {
                 const snap = await getDocs(query(collection(db, "notificationHistory"), orderBy("sentAt", "desc"), limit(20)));
                 if (snap.empty) {
@@ -1788,13 +1958,56 @@
         let jobsLastVisible = null;
         let jobsHasMore = false;
 
+        function renderAdminJobsList(jobsArray, append = false) {
+            const container = document.getElementById('admin-jobs-list');
+            if (!container) return;
+            if (!append) container.innerHTML = "";
+            if (!append && (!jobsArray || jobsArray.length === 0)) {
+                container.innerHTML = '<div class="text-center py-6 text-slate-500 text-xs">Kayıtlı ilan bulunmuyor.</div>';
+                return;
+            }
+            jobsArray.forEach(job => {
+                const jobId = job.id;
+                container.innerHTML += `
+                    <div class="bg-slate-900/60 border border-slate-700/70 p-4 rounded-xl flex items-center justify-between gap-4">
+                        <div>
+                            <span class="text-[10px] bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded font-semibold">${escapeHtml(job.category || 'Genel İlan')}</span>
+                            <h3 class="text-sm font-bold text-white mt-1">${escapeHtml(job.title)}</h3>
+                            <p class="text-xs text-slate-400">${escapeHtml(job.location)} • Link: <a href="${safeUrl(job.link) || '#'}" target="_blank" class="text-blue-400 underline">${escapeHtml(job.link || 'Yok')}</a></p>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <button onclick="openEditJobById('${jobId}')" class="bg-blue-500/20 hover:bg-blue-500 text-blue-400 hover:text-white px-3 py-1.5 rounded-lg text-xs font-semibold transition border border-blue-500/30">Düzenle</button>
+                            <button onclick="deleteJob('${jobId}')" class="bg-red-500/20 hover:bg-red-500 text-red-400 hover:text-white px-3 py-1.5 rounded-lg text-xs font-semibold transition border border-red-500/30">Sil</button>
+                        </div>
+                    </div>
+                `;
+            });
+            let loadMoreBtn = document.getElementById('load-more-jobs-btn');
+            if (jobsHasMore) {
+                if (!loadMoreBtn) {
+                    const btnWrap = document.createElement('div');
+                    btnWrap.className = 'text-center pt-3';
+                    btnWrap.innerHTML = '<button id="load-more-jobs-btn" onclick="loadAllJobsForAdmin(false)" class="bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs font-semibold px-4 py-2 rounded-xl transition">Daha Fazla Göster</button>';
+                    container.appendChild(btnWrap);
+                }
+            } else if (loadMoreBtn) {
+                loadMoreBtn.parentElement.remove();
+            }
+        }
+
         async function loadAllJobsForAdmin(reset = false) {
             const container = document.getElementById('admin-jobs-list');
             if (reset) {
                 jobsCache = [];
                 jobsLastVisible = null;
                 jobsHasMore = false;
-                container.innerHTML = '<div class="text-center py-6 text-slate-500 text-xs">Yükleniyor...</div>';
+                const cachedJobs = cacheGet("jobs_page_1");
+                if (Array.isArray(cachedJobs) && cachedJobs.length > 0) {
+                    jobsCache = [...cachedJobs];
+                    renderAdminJobsList(jobsCache, false);
+                } else {
+                    container.innerHTML = skeletonList(3);
+                }
             }
             try {
                 let q = query(collection(db, "jobs"), orderBy("createdAt", "desc"), limit(JOBS_PAGE_SIZE));
@@ -1805,41 +2018,17 @@
                 jobsLastVisible = snapshot.docs[snapshot.docs.length - 1] || null;
                 jobsHasMore = snapshot.docs.length === JOBS_PAGE_SIZE;
                 
-                if (reset) container.innerHTML = "";
-                if (reset && snapshot.empty) {
-                    container.innerHTML = '<div class="text-center py-6 text-slate-500 text-xs">Kayıtlı ilan bulunmuyor.</div>';
-                    return;
-                }
+                const batchJobs = [];
+                if (reset) jobsCache = [];
                 snapshot.forEach(docSnap => {
-                    const job = docSnap.data();
-                    jobsCache.push({ id: docSnap.id, ...job });
-                    const jobId = docSnap.id;
-                    container.innerHTML += `
-                        <div class="bg-slate-900/60 border border-slate-700/70 p-4 rounded-xl flex items-center justify-between gap-4">
-                            <div>
-                                <span class="text-[10px] bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded font-semibold">${escapeHtml(job.category || 'Genel İlan')}</span>
-                                <h3 class="text-sm font-bold text-white mt-1">${escapeHtml(job.title)}</h3>
-                                <p class="text-xs text-slate-400">${escapeHtml(job.location)} • Link: <a href="${safeUrl(job.link) || '#'}" target="_blank" class="text-blue-400 underline">${escapeHtml(job.link || 'Yok')}</a></p>
-                            </div>
-                            <div class="flex items-center space-x-2">
-                                <button onclick="openEditJobById('${jobId}')" class="bg-blue-500/20 hover:bg-blue-500 text-blue-400 hover:text-white px-3 py-1.5 rounded-lg text-xs font-semibold transition border border-blue-500/30">Düzenle</button>
-                                <button onclick="deleteJob('${jobId}')" class="bg-red-500/20 hover:bg-red-500 text-red-400 hover:text-white px-3 py-1.5 rounded-lg text-xs font-semibold transition border border-red-500/30">Sil</button>
-                            </div>
-                        </div>
-                    `;
+                    const jobItem = { id: docSnap.id, ...docSnap.data() };
+                    jobsCache.push(jobItem);
+                    batchJobs.push(jobItem);
                 });
-                // "Daha Fazla" butonu
-                let loadMoreBtn = document.getElementById('load-more-jobs-btn');
-                if (jobsHasMore) {
-                    if (!loadMoreBtn) {
-                        const btnWrap = document.createElement('div');
-                        btnWrap.className = 'text-center pt-3';
-                        btnWrap.innerHTML = '<button id="load-more-jobs-btn" onclick="loadAllJobsForAdmin(false)" class="bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs font-semibold px-4 py-2 rounded-xl transition">Daha Fazla Göster</button>';
-                        container.appendChild(btnWrap);
-                    }
-                } else if (loadMoreBtn) {
-                    loadMoreBtn.parentElement.remove();
+                if (reset) {
+                    cacheSet("jobs_page_1", jobsCache, 5 * 60 * 1000);
                 }
+                renderAdminJobsList(reset ? jobsCache : batchJobs, !reset);
             } catch(e) { console.error(e); }
         }
 
@@ -1887,8 +2076,10 @@
                     await addDoc(collection(db, "jobs"), { title, category, location, link, description, createdAt: serverTimestamp() });
                     showToast("İlan eklendi", "success");
                 }
+                cacheInvalidatePrefix('jobs_');
+                cacheInvalidate('stats_global');
                 closeJobModal();
-                loadAllJobsForAdmin();
+                loadAllJobsForAdmin(true);
             } catch(err) { showToast("İşlem başarısız", "error"); }
         };
 
@@ -1896,8 +2087,10 @@
             if (!confirm("İlanı silmek istiyor musun?")) return;
             try {
                 await deleteDoc(doc(db, "jobs", id));
+                cacheInvalidatePrefix('jobs_');
+                cacheInvalidate('stats_global');
                 showToast("İlan silindi", "success");
-                loadAllJobsForAdmin();
+                loadAllJobsForAdmin(true);
             } catch(e) { showToast("Silinemedi", "error"); }
         };
 
@@ -1913,7 +2106,7 @@
                 communitiesCache = [];
                 commLastVisible = null;
                 commHasMore = false;
-                container.innerHTML = '<div class="text-center py-6 text-slate-500 text-xs">Yükleniyor...</div>';
+                container.innerHTML = skeletonList(3);
             }
             try {
                 let q = query(collection(db, "communities"), orderBy("createdAt", "desc"), limit(COMM_PAGE_SIZE));
@@ -2003,8 +2196,10 @@
                     showToast("Topluluk eklendi", "success");
                 }
                 try { localStorage.removeItem('up_communities_v1'); localStorage.removeItem('up_showcase_v1'); } catch(err) {}
+                cacheInvalidate('communities_list');
+                cacheInvalidate('stats_global');
                 closeCommunityModal();
-                loadAllCommunitiesForAdmin();
+                loadAllCommunitiesForAdmin(true);
             } catch(err) { showToast("İşlem başarısız", "error"); }
         };
 
@@ -2013,8 +2208,10 @@
             try {
                 await deleteDoc(doc(db, "communities", id));
                 try { localStorage.removeItem('up_communities_v1'); localStorage.removeItem('up_showcase_v1'); } catch(err) {}
+                cacheInvalidate('communities_list');
+                cacheInvalidate('stats_global');
                 showToast("Topluluk silindi", "success");
-                loadAllCommunitiesForAdmin();
+                loadAllCommunitiesForAdmin(true);
             } catch(e) { showToast("Silinemedi", "error"); }
         };
 
@@ -2023,15 +2220,15 @@
         // ===== KOTA OPTİMİZASYONU: where sorgu ile sadece bekleyenler =====
         async function loadNameChangeRequests() {
             const container = document.getElementById('admin-namechange-list');
-            container.innerHTML = '<div class="text-center py-6 text-slate-500 text-xs">Yükleniyor...</div>';
+            container.innerHTML = skeletonList(2);
             try {
-                const q = query(collection(db, "users"), where("pendingNameChange.status", "==", "pending"));
+                const q = query(collection(db, "users"), where("pendingNameChange.status", "==", "pending"), limit(50));
                 let usersSnap;
                 try {
                     usersSnap = await getDocs(q);
                 } catch(err) {
-                    // index yoksa fallback: tüm kullanıcıları oku ama yine de filtrele
-                    usersSnap = await getDocs(collection(db, "users"));
+                    // index yoksa fallback: limit(50) ile oku ve filtrele
+                    usersSnap = await getDocs(query(collection(db, "users"), limit(50)));
                 }
                 allNameChangeRequests = [];
                 usersSnap.forEach(docSnap => {
@@ -2259,6 +2456,8 @@
                 if (typeof invalidateAuthorCache === 'function') {
                     invalidateAuthorCache(userId);
                 }
+                cacheInvalidate(`user_profile_${userId}`);
+                cacheInvalidatePrefix("topics_");
                 primeAuthor(userId, { ...data, displayName: newName, name: newName });
                 const cachedUser = allUsersCache.find(u => u.id === userId);
                 if (cachedUser) {
@@ -2292,6 +2491,7 @@
                 if (!pending) return;
 
                 await updateDoc(userRef, { pendingNameChange: null });
+                cacheInvalidate(`user_profile_${userId}`);
 
                 await addDoc(collection(db, "users", userId, "notifications"), {
                     message: `Kullanıcı adı değişiklik talebiniz reddedildi. Talep edilen ad: "${pending.newName}". Yeni bir talep gönderebilirsiniz.`,
@@ -2318,7 +2518,7 @@
                 usersLastVisible = null;
                 usersHasMore = false;
                 allUsersCache = [];
-                container.innerHTML = '<div class="text-center py-6 text-slate-500 text-xs">Yükleniyor...</div>';
+                container.innerHTML = skeletonList(3);
                 loadMoreContainer.classList.add('hidden');
             } else if (loadMoreBtn) {
                 loadMoreBtn.disabled = true;
@@ -2530,6 +2730,8 @@
                     localStorage.removeItem('up_communities_v1');
                     localStorage.removeItem('up_showcase_v1');
                 } catch (e) {}
+                cacheInvalidate(`user_profile_${activeUserCommunitiesUid}`);
+                cacheInvalidate('communities_list');
                 loadedTabs.delete('topluluklar');
 
                 renderUsersList(allUsersCache);
@@ -2555,6 +2757,7 @@
             if (currentUserRole !== 'admin') { showToast("Bu işlem yalnızca Admin yetkisi gerektirir", "warning"); return; }
             try {
                 await updateDoc(doc(db, "users", userId), { role: newRole });
+                cacheInvalidate(`user_profile_${userId}`);
                 const u = allUsersCache.find(x => x.id === userId);
                 if (u) u.role = newRole;
                 renderUsersList(allUsersCache);
@@ -2568,6 +2771,7 @@
             if (isNaN(newCoins)) { showToast("Geçerli bir sayı girin", "warning"); return; }
             try {
                 await updateDoc(doc(db, "users", userId), { coins: newCoins });
+                cacheInvalidate(`user_profile_${userId}`);
                 showToast("Coin güncellendi", "success");
                 const u = allUsersCache.find(x => x.id === userId);
                 if (u) u.coins = newCoins;
@@ -2577,6 +2781,7 @@
         window.toggleBanUser = async (userId, banStatus) => {
             try {
                 await updateDoc(doc(db, "users", userId), { isBanned: banStatus });
+                cacheInvalidate(`user_profile_${userId}`);
                 const u = allUsersCache.find(x => x.id === userId);
                 if (u) u.isBanned = banStatus;
                 renderUsersList(allUsersCache);
@@ -2734,7 +2939,7 @@
         // ===== KOTA OPTİMİZASYONU: limit 50 + where =====
         async function loadContactRequests() {
             const container = document.getElementById('admin-contact-list');
-            container.innerHTML = '<div class="text-center py-6 text-slate-500 text-xs">Talepler yükleniyor...</div>';
+            container.innerHTML = skeletonList(3);
             try {
                 const ninetyDaysAgo = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000);
                 const q = query(
@@ -3667,16 +3872,25 @@
         // =====================================================================
         let currentStoreCatalog = [];
 
-        async function loadAdminStoreCatalog() {
+        async function loadAdminStoreCatalog(force = false) {
             const container = document.getElementById('admin-store-items-list');
-            if (container) container.innerHTML = '<div class="text-center py-6 text-slate-500 text-xs col-span-full">Mağaza ürünleri yükleniyor...</div>';
             populateStyleSelect('frame');
+            const cachedStore = !force ? cacheGet("store_items") : null;
+            if (Array.isArray(cachedStore) && cachedStore.length > 0) {
+                currentStoreCatalog = cachedStore;
+                renderAdminStoreItems();
+            } else if (container) {
+                container.innerHTML = skeletonGrid(4);
+            }
             try {
-                currentStoreCatalog = await getStoreItems(db, { force: true });
+                currentStoreCatalog = await getStoreItems(db, { force });
+                cacheSet("store_items", currentStoreCatalog, 30 * 60 * 1000);
                 renderAdminStoreItems();
             } catch(e) {
                 console.error(e);
-                if (container) container.innerHTML = '<div class="text-center py-6 text-red-400 text-xs col-span-full">Mağaza kataloğu yüklenemedi.</div>';
+                if (container && (!currentStoreCatalog || currentStoreCatalog.length === 0)) {
+                    container.innerHTML = '<div class="text-center py-6 text-red-400 text-xs col-span-full">Mağaza kataloğu yüklenemedi.</div>';
+                }
             }
         }
         window.loadAdminStoreCatalog = loadAdminStoreCatalog;
@@ -3858,6 +4072,7 @@
                     items: currentStoreCatalog,
                     updatedAt: serverTimestamp()
                 });
+                cacheInvalidate('store_items');
                 setStoreCache(currentStoreCatalog);
                 renderAdminStoreItems();
             } catch(e) {
@@ -3874,10 +4089,18 @@
         }
         window.saveDefaultStoreCatalog = saveDefaultStoreCatalog;
 
-async function loadBadWordsAdmin() {
+        async function loadBadWordsAdmin() {
             const textarea = document.getElementById('badwords-textarea');
             const countEl = document.getElementById('badwords-count');
             if (!textarea) return;
+            const cachedBadWords = cacheGet('badwords_list');
+            if (Array.isArray(cachedBadWords) && cachedBadWords.length > 0) {
+                badWordsLoadedList = cachedBadWords;
+                textarea.value = badWordsLoadedList.join(", ");
+                textarea.disabled = false;
+                updateBadWordsCount();
+                return;
+            }
             textarea.value = "Yükleniyor...";
             textarea.disabled = true;
             try {
@@ -3889,6 +4112,7 @@ async function loadBadWordsAdmin() {
                     listStr = data.list || "";
                 }
                 badWordsLoadedList = parseBadWordsStringAdmin(listStr);
+                cacheSet('badwords_list', badWordsLoadedList, 60 * 60 * 1000);
                 textarea.value = badWordsLoadedList.join(", ");
                 textarea.disabled = false;
                 updateBadWordsCount();
@@ -3943,6 +4167,8 @@ async function loadBadWordsAdmin() {
                 updateBadWordsCount();
                 try { localStorage.removeItem('lianchez_badwords_v1'); } catch(e) {}
                 try { localStorage.removeItem('lianchez_badwords_v2'); } catch(e) {}
+                cacheInvalidate('badwords_list');
+                updateCacheStats();
                 showToast(`Yasaklı kelime listesi kaydedildi (${list.length} kelime)`, "success");
             } catch(e) {
                 console.error(e);
@@ -3951,6 +4177,25 @@ async function loadBadWordsAdmin() {
                 if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i><span>Kaydet</span>'; }
             }
         };
+
+        window.updateCacheStats = () => {
+            const countEl = document.getElementById('admin-cache-key-count');
+            const sizeEl = document.getElementById('admin-cache-byte-size');
+            const statsEl = document.getElementById('cache-stats');
+            const stats = typeof getCacheStats === 'function' ? getCacheStats() : { count: 0, bytes: 0 };
+            const kb = (stats.bytes / 1024).toFixed(1);
+            if (countEl) countEl.innerText = stats.count;
+            if (sizeEl) sizeEl.innerText = `${kb} KB (${stats.bytes} B)`;
+            if (statsEl) statsEl.textContent = `${stats.count} kayıt, ~${kb} KB`;
+        };
+        window.refreshAdminCacheStats = window.updateCacheStats;
+
+        window.clearAllCache = () => {
+            cacheInvalidatePrefix("");
+            showToast("Tüm önbellek temizlendi", "success");
+            updateCacheStats();
+        };
+        window.clearAllPortalCacheFromAdmin = window.clearAllCache;
 
         // Textarea'daki değişiklikleri dinle
         document.addEventListener('DOMContentLoaded', () => {

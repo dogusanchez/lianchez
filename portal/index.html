@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Öğrenci Portalı - Üni Portal</title>
     <link rel="icon" type="image/png" href="/portal/fav.png">
+    <link rel="manifest" href="/portal/manifest.json">
+    <meta name="theme-color" content="#0f172a">
+    <link rel="apple-touch-icon" href="/portal/fav.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -339,7 +342,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc, collection, getDocs, getCountFromServer, onSnapshot, deleteDoc, updateDoc, addDoc, query, where, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-        import { primeAuthor, injectCoreStyles, initDailyStreak } from '/portal/portal-core.js';
+        import { primeAuthor, injectCoreStyles, initDailyStreak, cacheGet, cacheSet } from '/portal/portal-core.js';
         injectCoreStyles();
 
         const firebaseConfig = {
@@ -448,28 +451,39 @@
                 dropdownEmail.innerText = user.email || "";
 
                 const userRef = doc(db, "users", user.uid);
-                const userSnap = await getDoc(userRef);
-
-                if (!userSnap.exists()) {
-                    const newUserData = {
-                        uid: user.uid, name: user.displayName, email: user.email, photoURL: user.photoURL,
-                        coins: 10, role: "user", createdAt: new Date()
-                    };
-                    await setDoc(userRef, newUserData);
-                    userCoins.innerText = "10";
-                    initDailyStreak(db, user.uid, newUserData);
-                    try {
-                        await addDoc(collection(db, "users", user.uid, "notifications"), {
-                            message: `Hoş geldin ${user.displayName || 'öğrenci'}! 🎉 Üni Portal'a katıldığın için teşekkürler. Forumda konu açarak +5 Coin kazanabilirsin!`,
-                            link: "/portal/forum.html", read: false, createdAt: new Date()
-                        });
-                    } catch (notifErr) { console.error(notifErr); }
-                } else {
-                    const userData = userSnap.data();
-                    userCoins.innerText = userData.coins || 0;
-                    if (userData.role === 'admin' || userData.role === 'moderator') adminPanelLink.classList.remove('hidden');
+                const cachedUser = cacheGet(`user_profile_${user.uid}`);
+                if (cachedUser) {
+                    userCoins.innerText = cachedUser.coins || 0;
+                    if (cachedUser.role === 'admin' || cachedUser.role === 'moderator') adminPanelLink.classList.remove('hidden');
                     else adminPanelLink.classList.add('hidden');
-                    initDailyStreak(db, user.uid, userData);
+                    initDailyStreak(db, user.uid, cachedUser);
+                    getDoc(userRef).then(s => { if (s.exists()) cacheSet(`user_profile_${user.uid}`, s.data(), 5 * 60 * 1000); }).catch(() => {});
+                } else {
+                    const userSnap = await getDoc(userRef);
+
+                    if (!userSnap.exists()) {
+                        const newUserData = {
+                            uid: user.uid, name: user.displayName, email: user.email, photoURL: user.photoURL,
+                            coins: 10, role: "user", createdAt: new Date()
+                        };
+                        await setDoc(userRef, newUserData);
+                        cacheSet(`user_profile_${user.uid}`, newUserData, 5 * 60 * 1000);
+                        userCoins.innerText = "10";
+                        initDailyStreak(db, user.uid, newUserData);
+                        try {
+                            await addDoc(collection(db, "users", user.uid, "notifications"), {
+                                message: `Hoş geldin ${user.displayName || 'öğrenci'}! 🎉 Üni Portal'a katıldığın için teşekkürler. Forumda konu açarak +5 Coin kazanabilirsin!`,
+                                link: "/portal/forum.html", read: false, createdAt: new Date()
+                            });
+                        } catch (notifErr) { console.error(notifErr); }
+                    } else {
+                        const userData = userSnap.data();
+                        cacheSet(`user_profile_${user.uid}`, userData, 5 * 60 * 1000);
+                        userCoins.innerText = userData.coins || 0;
+                        if (userData.role === 'admin' || userData.role === 'moderator') adminPanelLink.classList.remove('hidden');
+                        else adminPanelLink.classList.add('hidden');
+                        initDailyStreak(db, user.uid, userData);
+                    }
                 }
                 listenNotifications(user.uid);
             } else {

@@ -14,6 +14,9 @@
     <meta name="twitter:title" content="Tartışma Forumu - Üni Portal">
     <meta name="twitter:description" content="Üni Portal Tartışma Forumu: sorular sor, konular aç, öğrencilerle fikir alışverişi yap.">
     <link rel="icon" type="image/png" href="/portal/fav.png">
+    <link rel="manifest" href="/portal/manifest.json">
+    <meta name="theme-color" content="#0f172a">
+    <link rel="apple-touch-icon" href="/portal/fav.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -331,7 +334,8 @@
             </div>
 
             <div id="topics-container" class="space-y-3">
-                <div class="text-center py-10 text-slate-500">Konular yükleniyor...</div>
+                <div class="skeleton-card space-y-3"><div class="flex items-center space-x-3"><div class="skeleton skeleton-avatar"></div><div class="flex-1 space-y-2"><div class="skeleton skeleton-text w-1/3"></div><div class="skeleton skeleton-text w-1/4"></div></div></div><div class="skeleton skeleton-text w-3/4"></div></div>
+                <div class="skeleton-card space-y-3"><div class="flex items-center space-x-3"><div class="skeleton skeleton-avatar"></div><div class="flex-1 space-y-2"><div class="skeleton skeleton-text w-1/3"></div><div class="skeleton skeleton-text w-1/4"></div></div></div><div class="skeleton skeleton-text w-3/4"></div></div>
             </div>
 
             <div id="load-more-topics-forum" class="text-center mt-6 hidden">
@@ -351,7 +355,9 @@
 
             <div class="space-y-4">
                 <h3 class="text-lg font-bold text-white mt-6">Yanıtlar ve Tartışmalar</h3>
-                <div id="replies-container" class="space-y-3"></div>
+                <div id="replies-container" class="space-y-3">
+                    <div class="skeleton-card space-y-3"><div class="flex items-center space-x-3"><div class="skeleton skeleton-avatar"></div><div class="flex-1 space-y-2"><div class="skeleton skeleton-text w-1/3"></div><div class="skeleton skeleton-text w-1/4"></div></div></div><div class="skeleton skeleton-text w-full"></div></div>
+                </div>
             </div>
 
             <div id="reply-form-container" class="bg-slate-800 border border-slate-700 p-6 rounded-2xl shadow-xl mt-6">
@@ -419,8 +425,8 @@
         </div>
     </div>
 
-    <div id="topic-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
-        <div class="bg-slate-800 border border-slate-700 rounded-2xl max-w-lg w-full p-6 shadow-2xl">
+    <div id="topic-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden items-center justify-center z-50 p-4 overflow-y-auto">
+        <div class="bg-slate-800 border border-slate-700 rounded-2xl max-w-lg w-full p-6 shadow-2xl max-h-[90vh] overflow-y-auto my-8">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-xl font-bold">Yeni Tartışma Konusu Aç</h2>
                 <button onclick="closeTopicModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
@@ -474,6 +480,47 @@
                             <i class="fa-solid fa-link text-blue-400"></i>
                             <span>Link Ekle</span>
                         </button>
+                        <button type="button" id="poll-toggle-btn" onclick="togglePollSection()" class="format-btn flex items-center gap-1.5 bg-slate-900 border border-slate-700 text-slate-300 px-3 py-1.5 rounded-lg text-xs font-semibold">
+                            <i class="fa-solid fa-chart-pie text-purple-400"></i>
+                            <span>Anket Ekle</span>
+                        </button>
+                    </div>
+                    <!-- Opsiyonel Anket Oluşturma Bölümü -->
+                    <div id="topic-poll-section" class="hidden mt-3 bg-slate-900/80 border border-purple-500/30 rounded-xl p-3.5 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold text-purple-300 flex items-center gap-1.5"><i class="fa-solid fa-square-poll-vertical"></i>Anket Oluştur (Opsiyonel)</span>
+                            <button type="button" onclick="togglePollSection(false)" class="text-[11px] text-slate-400 hover:text-red-400 transition">Kaldır</button>
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-400 mb-1">Anket Sorusu (max 200 karakter)</label>
+                            <input type="text" id="poll-question-input" maxlength="200" placeholder="Örn: Hangi programlama dilini tercih ediyorsunuz?" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-500">
+                        </div>
+                        <div>
+                            <div class="flex items-center justify-between mb-1.5">
+                                <label class="block text-[11px] font-semibold text-slate-400">Seçenekler (En az 2, en fazla 6)</label>
+                                <button type="button" id="add-poll-option-btn" onclick="addPollOptionInput()" class="text-[11px] text-purple-400 hover:text-purple-300 font-semibold flex items-center gap-1"><i class="fa-solid fa-plus"></i>Seçenek Ekle</button>
+                            </div>
+                            <div id="poll-options-container" class="space-y-2">
+                                <div class="flex items-center gap-2 poll-option-row">
+                                    <input type="text" maxlength="100" placeholder="1. Seçenek" class="poll-option-input flex-1 bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-purple-500">
+                                    <button type="button" onclick="removePollOptionInput(this)" class="text-slate-400 hover:text-red-400 px-1.5 py-1 text-xs transition" title="Seçeneği Sil"><i class="fa-solid fa-trash-can"></i></button>
+                                </div>
+                                <div class="flex items-center gap-2 poll-option-row">
+                                    <input type="text" maxlength="100" placeholder="2. Seçenek" class="poll-option-input flex-1 bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-purple-500">
+                                    <button type="button" onclick="removePollOptionInput(this)" class="text-slate-400 hover:text-red-400 px-1.5 py-1 text-xs transition" title="Seçeneği Sil"><i class="fa-solid fa-trash-can"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                            <label class="flex items-center gap-2 text-xs text-slate-300 cursor-pointer select-none">
+                                <input type="checkbox" id="poll-multiple-choice" class="accent-purple-500 rounded">
+                                <span>Çoktan seçmeli (Birden fazla oy)</span>
+                            </label>
+                            <div>
+                                <label class="block text-[10px] text-slate-400 mb-0.5">Bitiş Tarihi (Opsiyonel)</label>
+                                <input type="datetime-local" id="poll-ends-at" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1 text-[11px] text-white focus:outline-none focus:border-purple-500">
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="flex justify-end space-x-3 pt-2">
@@ -667,8 +714,8 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, collection, addDoc, setDoc, getDocs, doc, updateDoc, increment, getDoc, query, orderBy, serverTimestamp, deleteDoc, arrayUnion, arrayRemove, limit, startAfter, writeBatch, where, getCountFromServer } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-        import { markdownToHtml, stripMarkdown, readingMinutes, formatCount, attachMarkdownToolbar, getNameEffectClass, getAvatarFrameClass, renderTitleBadge, renderKunyeLine, primeAuthor, resolveAuthors, mergeAuthor, hydrateAuthorElements, injectCoreStyles, initDailyStreak, getContentDepthInfo } from '/portal/portal-core.js';
+        import { getFirestore, collection, addDoc, setDoc, getDocs, doc, updateDoc, increment, getDoc, query, orderBy, serverTimestamp, deleteDoc, arrayUnion, arrayRemove, limit, startAfter, writeBatch, where, getCountFromServer, runTransaction } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { markdownToHtml, stripMarkdown, readingMinutes, formatCount, attachMarkdownToolbar, getNameEffectClass, getAvatarFrameClass, renderTitleBadge, renderKunyeLine, primeAuthor, resolveAuthors, mergeAuthor, hydrateAuthorElements, injectCoreStyles, initDailyStreak, getContentDepthInfo, cacheGet, cacheSet, cacheInvalidate } from '/portal/portal-core.js';
         const DEPTH_LABELS = { short: 'Öz Görüş', medium: 'Detaylı Yorum', deep: 'Usta Analiz' };
         injectCoreStyles();
 
@@ -734,6 +781,12 @@ let forumLastVisible = null;
         }
 
         async function loadBadWordsFromFirebase() {
+            const cmWords = cacheGet('badwords_list');
+            if (Array.isArray(cmWords) && cmWords.length > 0) {
+                badWordsList = cmWords;
+                badWordsRegex = buildBadWordsRegex(badWordsList);
+                return;
+            }
             try {
                 const cached = localStorage.getItem(BAD_WORDS_CACHE_KEY);
                 if (cached) {
@@ -741,6 +794,7 @@ let forumLastVisible = null;
                     if (parsed && parsed.timestamp && (Date.now() - parsed.timestamp < BAD_WORDS_CACHE_TTL) && Array.isArray(parsed.words)) {
                         badWordsList = parsed.words;
                         badWordsRegex = buildBadWordsRegex(badWordsList);
+                        cacheSet('badwords_list', badWordsList, 60 * 60 * 1000);
                         return;
                     }
                 }
@@ -757,6 +811,7 @@ let forumLastVisible = null;
                 if (words.length === 0) words = [...DEFAULT_BAD_WORDS];
                 badWordsList = words;
                 badWordsRegex = buildBadWordsRegex(badWordsList);
+                cacheSet('badwords_list', words, 60 * 60 * 1000);
                 try {
                     localStorage.setItem(BAD_WORDS_CACHE_KEY, JSON.stringify({ timestamp: Date.now(), words }));
                 } catch(e) {}
@@ -1279,34 +1334,47 @@ window.showToast = (message, type = 'info') => {
                 dropdownEmail.innerText = user.email || "";
 
                 const userRef = doc(db, "users", user.uid);
-                const userSnap = await getDoc(userRef);
-
-                if (!userSnap.exists()) {
-                    await setDoc(userRef, {
-                        uid: user.uid,
-                        name: user.displayName || "Öğrenci",
-                        displayName: user.displayName || "Öğrenci",
-                        email: user.email || "",
-                        photoURL: user.photoURL || "",
-                        coins: 10, xp: 0, role: "user",
-                        createdAt: new Date(), lastSeen: new Date()
-                    });
-                    userCoins.innerText = "10";
-                    isUserBanned = false;
-                    currentUserData = { displayName: user.displayName || "Öğrenci", name: user.displayName || "Öğrenci", coins: 10, xp: 0, role: "user" };
-                    try {
-                        await addDoc(collection(db, "users", user.uid, "notifications"), {
-                            message: `Hoş geldin ${user.displayName || 'öğrenci'}! 🎉 Üni Portal'a katıldığın için teşekkürler. Forumda konu açarak +5 Coin & +15 XP kazanabilirsin!`,
-                            link: "/portal/forum.html", read: false, createdAt: new Date()
-                        });
-                    } catch (notifErr) { console.error("Hoş geldin bildirimi gönderilemedi:", notifErr); }
+                const cachedUser = cacheGet(`user_profile_${user.uid}`);
+                if (cachedUser) {
+                    primeAuthor(user.uid, cachedUser);
+                    currentUserData = cachedUser;
+                    userCoins.innerText = cachedUser.coins || 0;
+                    isUserBanned = cachedUser.isBanned || false;
+                    if (dropdownName) dropdownName.innerText = cachedUser.displayName || cachedUser.name || user.displayName || "Kullanıcı";
+                    getDoc(userRef).then(s => { if (s.exists()) cacheSet(`user_profile_${user.uid}`, s.data(), 5 * 60 * 1000); }).catch(() => {});
                 } else {
-                    const userData = userSnap.data();
-                    primeAuthor(user.uid, userData);
-                    currentUserData = userData;
-                    userCoins.innerText = userData.coins || 0;
-                    isUserBanned = userData.isBanned || false;
-                    if (dropdownName) dropdownName.innerText = userData.displayName || userData.name || user.displayName || "Kullanıcı";
+                    const userSnap = await getDoc(userRef);
+
+                    if (!userSnap.exists()) {
+                        const newUserObj = {
+                            uid: user.uid,
+                            name: user.displayName || "Öğrenci",
+                            displayName: user.displayName || "Öğrenci",
+                            email: user.email || "",
+                            photoURL: user.photoURL || "",
+                            coins: 10, xp: 0, role: "user",
+                            createdAt: new Date(), lastSeen: new Date()
+                        };
+                        await setDoc(userRef, newUserObj);
+                        cacheSet(`user_profile_${user.uid}`, newUserObj, 5 * 60 * 1000);
+                        userCoins.innerText = "10";
+                        isUserBanned = false;
+                        currentUserData = { displayName: user.displayName || "Öğrenci", name: user.displayName || "Öğrenci", coins: 10, xp: 0, role: "user" };
+                        try {
+                            await addDoc(collection(db, "users", user.uid, "notifications"), {
+                                message: `Hoş geldin ${user.displayName || 'öğrenci'}! 🎉 Üni Portal'a katıldığın için teşekkürler. Forumda konu açarak +5 Coin & +15 XP kazanabilirsin!`,
+                                link: "/portal/forum.html", read: false, createdAt: new Date()
+                            });
+                        } catch (notifErr) { console.error("Hoş geldin bildirimi gönderilemedi:", notifErr); }
+                    } else {
+                        const userData = userSnap.data();
+                        cacheSet(`user_profile_${user.uid}`, userData, 5 * 60 * 1000);
+                        primeAuthor(user.uid, userData);
+                        currentUserData = userData;
+                        userCoins.innerText = userData.coins || 0;
+                        isUserBanned = userData.isBanned || false;
+                        if (dropdownName) dropdownName.innerText = userData.displayName || userData.name || user.displayName || "Kullanıcı";
+                    }
                 }
                 initDailyStreak(db, user.uid, currentUserData);
                 listenNotifications(user.uid);
@@ -1411,8 +1479,9 @@ window.showToast = (message, type = 'info') => {
             const topicDepth = getContentDepthInfo(content);
             const topicCoin = 5 + topicDepth.bonusCoin;
             const topicXp = 15 + topicDepth.bonusXp;
+            const pollData = buildPollPayloadFromForm();
             try {
-                const docRef = await addDoc(collection(db, "topics"), {
+                const topicPayload = {
                     depthTier: topicDepth.tier, wordCount: topicDepth.words,
                     category, title, content,
                     authorName: (currentUserData?.displayName || currentUserData?.name || currentUser.displayName),
@@ -1422,7 +1491,11 @@ window.showToast = (message, type = 'info') => {
                     authorXP: currentUserData?.xp || 0,
                     mentions: mentionedUids,
                     createdAt: now, lastActivityAt: now, likes: 0, likedBy: [], replyCount: 0, isPinned: false, isLocked: false
-                });
+                };
+                if (pollData) {
+                    topicPayload.poll = pollData;
+                }
+                const docRef = await addDoc(collection(db, "topics"), topicPayload);
                 await updateDoc(doc(db, "users", currentUser.uid), {
                     coins: increment(topicCoin), xp: increment(topicXp), totalTopics: increment(1), lastTopicTime: new Date(), lastSeen: new Date()
                 });
@@ -1440,13 +1513,332 @@ window.showToast = (message, type = 'info') => {
                 showRewardAnimation(`+${topicCoin} Coin`, "text-yellow-400", "fa-coins");
                 setTimeout(() => showRewardAnimation(`+${topicXp} XP`, "text-purple-400", "fa-bolt"), 250);
                 document.getElementById('topic-form').reset();
+                resetPollForm();
                 closeTopicModal();
                 updateTitleCounter();
                 updateDepthPreview('topic');
+                cacheInvalidate('topics_page_1');
+                cacheInvalidate('stats_global');
                 showToast(`Konu açıldı! +${topicCoin} Coin & +${topicXp} XP kazandın${topicDepth.bonusCoin ? ' (' + DEPTH_LABELS[topicDepth.tier] + ' bonusu dahil)' : ''}`, "success");
                 loadTopics(true);
             } catch (error) { console.error(error); showToast("Konu açılamadı", "error"); }
         }
+
+        // ===== ANKET (POLLS) FONKSİYONLARI =====
+        const userPollVotesMap = new Map();
+        const userMultiSelectionsMap = new Map();
+
+        window.togglePollSection = (forceState) => {
+            const section = document.getElementById('topic-poll-section');
+            const btn = document.getElementById('poll-toggle-btn');
+            if (!section) return;
+            const willOpen = typeof forceState === 'boolean' ? forceState : section.classList.contains('hidden');
+            if (willOpen) {
+                section.classList.remove('hidden');
+                if (btn) btn.classList.add('border-purple-500', 'text-purple-300');
+            } else {
+                section.classList.add('hidden');
+                if (btn) btn.classList.remove('border-purple-500', 'text-purple-300');
+                resetPollForm();
+            }
+        };
+
+        window.addPollOptionInput = () => {
+            const container = document.getElementById('poll-options-container');
+            if (!container) return;
+            const rows = container.querySelectorAll('.poll-option-row');
+            if (rows.length >= 6) {
+                showToast("En fazla 6 seçenek ekleyebilirsiniz", "warning");
+                return;
+            }
+            const idx = rows.length + 1;
+            const row = document.createElement('div');
+            row.className = 'flex items-center gap-2 poll-option-row';
+            row.innerHTML = `
+                <input type="text" maxlength="100" placeholder="${idx}. Seçenek" class="poll-option-input flex-1 bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-purple-500">
+                <button type="button" onclick="removePollOptionInput(this)" class="text-slate-400 hover:text-red-400 px-1.5 py-1 text-xs transition" title="Seçeneği Sil"><i class="fa-solid fa-trash-can"></i></button>
+            `;
+            container.appendChild(row);
+        };
+
+        window.removePollOptionInput = (btnEl) => {
+            const container = document.getElementById('poll-options-container');
+            if (!container) return;
+            const rows = container.querySelectorAll('.poll-option-row');
+            if (rows.length <= 2) {
+                showToast("En az 2 seçenek olmalıdır", "warning");
+                return;
+            }
+            const row = btnEl.closest('.poll-option-row');
+            if (row) row.remove();
+            container.querySelectorAll('.poll-option-input').forEach((inp, i) => {
+                inp.placeholder = `${i + 1}. Seçenek`;
+            });
+        };
+
+        function resetPollForm() {
+            const section = document.getElementById('topic-poll-section');
+            const btn = document.getElementById('poll-toggle-btn');
+            if (section) section.classList.add('hidden');
+            if (btn) btn.classList.remove('border-purple-500', 'text-purple-300');
+            const qInput = document.getElementById('poll-question-input');
+            if (qInput) qInput.value = '';
+            const multiChk = document.getElementById('poll-multiple-choice');
+            if (multiChk) multiChk.checked = false;
+            const endsInput = document.getElementById('poll-ends-at');
+            if (endsInput) endsInput.value = '';
+            const container = document.getElementById('poll-options-container');
+            if (container) {
+                container.innerHTML = `
+                    <div class="flex items-center gap-2 poll-option-row">
+                        <input type="text" maxlength="100" placeholder="1. Seçenek" class="poll-option-input flex-1 bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-purple-500">
+                        <button type="button" onclick="removePollOptionInput(this)" class="text-slate-400 hover:text-red-400 px-1.5 py-1 text-xs transition" title="Seçeneği Sil"><i class="fa-solid fa-trash-can"></i></button>
+                    </div>
+                    <div class="flex items-center gap-2 poll-option-row">
+                        <input type="text" maxlength="100" placeholder="2. Seçenek" class="poll-option-input flex-1 bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-purple-500">
+                        <button type="button" onclick="removePollOptionInput(this)" class="text-slate-400 hover:text-red-400 px-1.5 py-1 text-xs transition" title="Seçeneği Sil"><i class="fa-solid fa-trash-can"></i></button>
+                    </div>
+                `;
+            }
+        }
+
+        function buildPollPayloadFromForm() {
+            const section = document.getElementById('topic-poll-section');
+            if (!section || section.classList.contains('hidden')) return undefined;
+            const rawQuestion = (document.getElementById('poll-question-input')?.value || '').trim();
+            if (!rawQuestion) return undefined;
+            const optionInputs = Array.from(section.querySelectorAll('.poll-option-input'));
+            const validOptions = optionInputs
+                .map(inp => filterBadWords((inp.value || '').trim()))
+                .filter(txt => txt.length > 0)
+                .slice(0, 6);
+            if (validOptions.length < 2) return undefined;
+            const multipleChoice = !!document.getElementById('poll-multiple-choice')?.checked;
+            const endsAtVal = document.getElementById('poll-ends-at')?.value;
+            let endsAt = null;
+            if (endsAtVal) {
+                const parsed = new Date(endsAtVal);
+                if (!isNaN(parsed.getTime())) endsAt = parsed.toISOString();
+            }
+            return {
+                question: filterBadWords(rawQuestion.slice(0, 200)),
+                options: validOptions.map((text, idx) => ({
+                    id: (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') ? crypto.randomUUID() : `opt_${idx + 1}`,
+                    text: text.slice(0, 100),
+                    votes: 0
+                })),
+                multipleChoice,
+                endsAt,
+                totalVotes: 0
+            };
+        }
+
+        function getPollRemainingText(endsAt) {
+            if (!endsAt) return { expired: false, label: 'Süresiz' };
+            const endDate = typeof endsAt.toDate === 'function' ? endsAt.toDate() : new Date(endsAt);
+            if (isNaN(endDate.getTime())) return { expired: false, label: 'Süresiz' };
+            const diffMs = endDate.getTime() - Date.now();
+            if (diffMs <= 0) return { expired: true, label: 'Anket kapandı' };
+            const mins = Math.floor(diffMs / 60000);
+            if (mins < 60) return { expired: false, label: `${mins} dk kaldı` };
+            const hours = Math.floor(mins / 60);
+            if (hours < 24) return { expired: false, label: `${hours} saat kaldı` };
+            const days = Math.floor(hours / 24);
+            return { expired: false, label: `${days} gün kaldı` };
+        }
+
+        function renderPollWidget(topicId, poll, compact = false) {
+            if (!poll || !poll.question || !Array.isArray(poll.options) || poll.options.length < 2) return '';
+            const totalVotes = Number(poll.totalVotes) || 0;
+            const votedOptionIds = userPollVotesMap.get(topicId) || [];
+            const { expired, label: timeLabel } = getPollRemainingText(poll.endsAt);
+            const isMulti = !!poll.multipleChoice;
+            const multiPending = userMultiSelectionsMap.get(topicId) || [...votedOptionIds];
+
+            const optionsHtml = poll.options.map(opt => {
+                const optVotes = Number(opt.votes) || 0;
+                const pct = totalVotes > 0 ? Math.round((optVotes / totalVotes) * 100) : 0;
+                const isVoted = votedOptionIds.includes(opt.id);
+                const isSelectedMulti = multiPending.includes(opt.id);
+                const safeTopicId = escapeHtml(topicId);
+                const safeOptId = escapeHtml(opt.id);
+
+                const clickAttr = expired
+                    ? 'disabled'
+                    : (isMulti
+                        ? `onclick="toggleMultiPollOption(event, '${safeTopicId}', '${safeOptId}')"`
+                        : (isVoted ? 'disabled' : `onclick="handleSinglePollVote(event, '${safeTopicId}', '${safeOptId}')"`));
+
+                const borderCls = isVoted
+                    ? 'border-purple-500 bg-purple-900/20'
+                    : (isMulti && isSelectedMulti ? 'border-indigo-400 bg-indigo-900/20' : 'border-slate-700/80 bg-slate-900/70 hover:border-purple-500/50');
+
+                return `
+                    <button type="button" ${clickAttr} class="w-full text-left relative overflow-hidden rounded-xl border ${borderCls} px-3.5 py-2.5 transition group/opt ${expired ? 'cursor-not-allowed opacity-75' : ''}">
+                        <div class="absolute inset-y-0 left-0 bg-gradient-to-r from-purple-600/25 to-indigo-600/25 transition-all duration-500 pointer-events-none" style="width: ${pct}%"></div>
+                        <div class="relative flex items-center justify-between gap-2 text-xs">
+                            <span class="font-medium text-slate-100 flex items-center gap-2 truncate">
+                                ${isVoted ? '<span class="text-emerald-400 font-bold">✓</span>' : (isMulti && !expired ? `<span class="w-3.5 h-3.5 rounded border ${isSelectedMulti ? 'bg-purple-500 border-purple-400' : 'border-slate-500'} inline-block flex-shrink-0"></span>` : '')}
+                                <span class="truncate">${escapeHtml(opt.text)}</span>
+                            </span>
+                            <span class="text-[11px] font-semibold text-slate-300 flex-shrink-0">${pct}% (${optVotes} oy)</span>
+                        </div>
+                    </button>
+                `;
+            }).join('');
+
+            const multiSubmitBtn = (isMulti && !expired) ? `
+                <div class="flex justify-end pt-1">
+                    <button type="button" onclick="submitMultiPollVote(event, '${escapeHtml(topicId)}')" class="bg-purple-600 hover:bg-purple-700 text-white px-3.5 py-1.5 rounded-lg text-[11px] font-semibold transition">
+                        ${votedOptionIds.length > 0 ? 'Oyu Güncelle' : 'Oy Ver'}
+                    </button>
+                </div>
+            ` : '';
+
+            return `
+                <div class="bg-slate-900/60 border border-purple-500/30 rounded-2xl p-4 space-y-2.5 my-2" data-poll-topic-id="${escapeHtml(topicId)}" onclick="event.stopPropagation()">
+                    <div class="flex items-center justify-between gap-2 flex-wrap">
+                        <h4 class="text-xs sm:text-sm font-bold text-purple-200 flex items-center gap-1.5">
+                            <i class="fa-solid fa-square-poll-vertical text-purple-400"></i>
+                            <span>${escapeHtml(poll.question)}</span>
+                        </h4>
+                        <span class="text-[10px] px-2 py-0.5 rounded-full font-semibold ${expired ? 'bg-red-500/20 text-red-300 border border-red-500/30' : 'bg-purple-500/20 text-purple-300 border border-purple-500/30'}">
+                            ${escapeHtml(timeLabel)}
+                        </span>
+                    </div>
+                    <div class="space-y-1.5">
+                        ${optionsHtml}
+                    </div>
+                    ${multiSubmitBtn}
+                    <div class="flex items-center justify-between text-[11px] text-slate-400 pt-1">
+                        <span>Toplam <strong class="text-slate-200">${totalVotes}</strong> oy ${isMulti ? '• Çoktan seçmeli' : '• Tek seçim'}</span>
+                        ${votedOptionIds.length > 0 && !expired ? '<span class="text-emerald-400 font-medium">✓ Oyunuz kayıtlı (değiştirebilirsiniz)</span>' : ''}
+                    </div>
+                </div>
+            `;
+        }
+
+        async function hydrateUserPollVotes(topicIds) {
+            if (!currentUser || !Array.isArray(topicIds) || topicIds.length === 0) return;
+            await Promise.all(topicIds.map(async (tid) => {
+                try {
+                    const voteSnap = await getDoc(doc(db, "users", currentUser.uid, "pollVotes", tid));
+                    if (voteSnap.exists()) {
+                        const data = voteSnap.data();
+                        userPollVotesMap.set(tid, Array.isArray(data.optionIds) ? data.optionIds : []);
+                    } else {
+                        userPollVotesMap.delete(tid);
+                    }
+                } catch (e) {}
+            }));
+        }
+
+        window.handleSinglePollVote = async (event, topicId, optionId) => {
+            if (event) { event.preventDefault(); event.stopPropagation(); }
+            await window.votePoll(topicId, [optionId]);
+        };
+
+        window.toggleMultiPollOption = (event, topicId, optionId) => {
+            if (event) { event.preventDefault(); event.stopPropagation(); }
+            const current = userMultiSelectionsMap.get(topicId) || [...(userPollVotesMap.get(topicId) || [])];
+            const idx = current.indexOf(optionId);
+            if (idx >= 0) current.splice(idx, 1);
+            else current.push(optionId);
+            userMultiSelectionsMap.set(topicId, current);
+            refreshPollDom(topicId);
+        };
+
+        window.submitMultiPollVote = async (event, topicId) => {
+            if (event) { event.preventDefault(); event.stopPropagation(); }
+            const selected = userMultiSelectionsMap.get(topicId) || [];
+            if (selected.length === 0) {
+                showToast("Lütfen en az 1 seçenek işaretleyin", "warning");
+                return;
+            }
+            await window.votePoll(topicId, selected);
+        };
+
+        function refreshPollDom(topicId) {
+            const topicObj = (activeTopicId === topicId && activeTopicData?.poll)
+                ? activeTopicData
+                : allLoadedTopics.find(t => t.id === topicId);
+            if (!topicObj || !topicObj.poll) return;
+            document.querySelectorAll(`[data-poll-topic-id="${topicId}"]`).forEach(el => {
+                el.outerHTML = renderPollWidget(topicId, topicObj.poll);
+            });
+        }
+
+        window.votePoll = async (topicId, optionIds) => {
+            if (!currentUser) {
+                showToast("Ankete oy vermek için giriş yapmalısınız", "warning");
+                googleLogin();
+                return;
+            }
+            if (isUserBanned) { showBannedPopup(); return; }
+            if (!topicId || !Array.isArray(optionIds) || optionIds.length === 0) return;
+
+            const topicRef = doc(db, "topics", topicId);
+            const voteRef = doc(db, "users", currentUser.uid, "pollVotes", topicId);
+
+            try {
+                let updatedPollData = null;
+                await runTransaction(db, async (transaction) => {
+                    const topicDoc = await transaction.get(topicRef);
+                    if (!topicDoc.exists()) throw new Error("Konu bulunamadı");
+                    const tData = topicDoc.data();
+                    const poll = tData.poll;
+                    if (!poll || !Array.isArray(poll.options)) throw new Error("Anket bulunamadı");
+
+                    const { expired } = getPollRemainingText(poll.endsAt);
+                    if (expired) throw new Error("Bu anketin süresi dolmuş");
+
+                    const cleanIds = poll.multipleChoice ? [...new Set(optionIds)] : [optionIds[0]];
+                    const voteDoc = await transaction.get(voteRef);
+                    const oldOptionIds = voteDoc.exists() ? (voteDoc.data().optionIds || []) : [];
+
+                    let totalVotes = Number(poll.totalVotes) || 0;
+                    const newOptions = poll.options.map(opt => {
+                        let votes = Number(opt.votes) || 0;
+                        if (oldOptionIds.includes(opt.id)) {
+                            votes = Math.max(0, votes - 1);
+                            totalVotes = Math.max(0, totalVotes - 1);
+                        }
+                        if (cleanIds.includes(opt.id)) {
+                            votes += 1;
+                            totalVotes += 1;
+                        }
+                        return { ...opt, votes };
+                    });
+
+                    updatedPollData = {
+                        ...poll,
+                        options: newOptions,
+                        totalVotes
+                    };
+
+                    transaction.update(topicRef, { poll: updatedPollData });
+                    transaction.set(voteRef, {
+                        optionIds: cleanIds,
+                        votedAt: serverTimestamp()
+                    });
+                });
+
+                if (updatedPollData) {
+                    const cleanIds = updatedPollData.multipleChoice ? [...new Set(optionIds)] : [optionIds[0]];
+                    userPollVotesMap.set(topicId, cleanIds);
+                    userMultiSelectionsMap.set(topicId, [...cleanIds]);
+                    const inList = allLoadedTopics.find(t => t.id === topicId);
+                    if (inList) inList.poll = updatedPollData;
+                    if (activeTopicId === topicId && activeTopicData) activeTopicData.poll = updatedPollData;
+                    cacheInvalidatePrefix("topics_");
+                    refreshPollDom(topicId);
+                    showToast("Oyun kaydedildi", "success");
+                }
+            } catch (err) {
+                console.error("Anket oy hatası:", err);
+                showToast(err.message || "Oy kullanılamadı", "error");
+            }
+        };
 
         async function extractMentionedUids(text) {
             const uids = new Set();
@@ -2070,7 +2462,7 @@ Keyifli forumlar! 🎉
 
         async function loadRepliesForTopic(topicId) {
             const repliesContainer = document.getElementById('replies-container');
-            repliesContainer.innerHTML = '<div class="text-center py-6 text-slate-500 text-xs">Yanıtlar yükleniyor...</div>';
+            repliesContainer.innerHTML = typeof window.skeletonList === 'function' ? window.skeletonList(2) : '<div class="text-center py-6 text-slate-500 text-xs">Yanıtlar yükleniyor...</div>';
             try {
                 const snap = await getDocs(query(collection(db, "topics", topicId, "replies"), orderBy("createdAt", "asc"), limit(50)));
                 if (snap.empty) {
@@ -2212,6 +2604,10 @@ Keyifli forumlar! 🎉
                 lockedNotice.classList.add('hidden');
             }
 
+            if (topic.poll) {
+                await hydrateUserPollVotes([topicId]);
+            }
+
             detailCard.setAttribute('data-author-uid', topic.authorUid || '');
             detailCard.innerHTML = `
                 <div class="flex items-center justify-between mb-4">
@@ -2239,6 +2635,7 @@ Keyifli forumlar! 🎉
                 </div>
                 <h2 class="text-xl font-extrabold text-white mb-3">${escapeHtml(topic.title)}</h2>
                 <div class="text-slate-200 text-sm mb-6 whitespace-pre-line">${renderRichContent(topic.content)}</div>
+                ${topic.poll ? renderPollWidget(topicId, topic.poll) : ''}
                 <div class="flex items-center justify-end gap-2 pt-4 border-t border-slate-700/60">
                     <button onclick="shareTopic(event, '${topicId}', '${escapeHtml(topic.title).replace(/'/g, "\\'")}')" class="text-slate-400 hover:text-cyan-400 flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700 hover:border-cyan-500/50 transition text-xs">
                         <i class="fa-solid fa-share-nodes"></i>
@@ -2265,8 +2662,14 @@ Keyifli forumlar! 🎉
             if (reset) {
                 forumLastVisible = null;
                 forumHasMore = false;
-                allLoadedTopics = [];
-                container.innerHTML = '<div class="text-center py-10 text-slate-500">Yükleniyor...</div>';
+                const cachedPage1 = currentSortBy === 'recent' ? cacheGet('topics_page_1') : null;
+                if (Array.isArray(cachedPage1) && cachedPage1.length > 0) {
+                    allLoadedTopics = [...cachedPage1];
+                    renderTopicsWithFilter();
+                } else {
+                    allLoadedTopics = [];
+                    container.innerHTML = typeof window.skeletonList === 'function' ? window.skeletonList(3) : '<div class="text-center py-10 text-slate-500">Yükleniyor...</div>';
+                }
             }
             try {
                 let baseQuery;
@@ -2281,6 +2684,9 @@ Keyifli forumlar! 🎉
                 let list = [];
                 querySnapshot.forEach(docSnap => list.push({ id: docSnap.id, ...docSnap.data() }));
 
+                if (reset && currentSortBy === 'recent') {
+                    cacheSet('topics_page_1', list, 2 * 60 * 1000);
+                }
                 allLoadedTopics = reset ? [...list] : [...allLoadedTopics, ...list];
                 renderTopicsWithFilter();
             } catch (err) { console.error(err); }
@@ -2364,6 +2770,7 @@ Keyifli forumlar! 🎉
                             </div>
                         </div>
                         <h2 class="text-sm sm:text-base font-bold text-slate-100 group-hover:text-purple-400 transition">${escapeHtml(topic.title)}</h2>
+                        ${topic.poll ? renderPollWidget(topic.id, topic.poll, true) : ''}
                         <div class="flex items-center justify-between pt-2 border-t border-slate-700/60 text-xs text-slate-400">
                             <div class="flex items-center space-x-3">
                                 <span class="text-pink-400 font-semibold"><i class="fa-solid fa-heart mr-1"></i>${topic.likes || 0}</span>
@@ -2387,6 +2794,13 @@ Keyifli forumlar! 🎉
             resolveAuthors(db, uids).then(() => {
                 hydrateAuthorElements(container);
             }).catch(()=>{});
+
+            const pollTopicIds = list.filter(t => t.poll).map(t => t.id);
+            if (pollTopicIds.length > 0 && currentUser) {
+                hydrateUserPollVotes(pollTopicIds).then(() => {
+                    pollTopicIds.forEach(tid => refreshPollDom(tid));
+                }).catch(()=>{});
+            }
 
             if (forumHasMore && !currentSearchKeyword && selectedCategory === "Son Yazılanlar") loadMoreBtn.classList.remove('hidden');
             else loadMoreBtn.classList.add('hidden');

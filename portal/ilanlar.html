@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Öğrenci İlanları - Üni Portal</title>
     <link rel="icon" type="image/png" href="/portal/fav.png">
+    <link rel="manifest" href="/portal/manifest.json">
+    <meta name="theme-color" content="#0f172a">
+    <link rel="apple-touch-icon" href="/portal/fav.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -186,14 +189,17 @@
 
             <!-- İLANLAR IZGARASI -->
             <div id="student-listings-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-                <div class="text-center py-10 text-slate-500 col-span-full">İlanlar yükleniyor...</div>
+                <div class="skeleton-card space-y-3"><div class="skeleton skeleton-text w-1/3"></div><div class="skeleton skeleton-text w-3/4"></div><div class="skeleton skeleton-text w-full"></div></div>
+                <div class="skeleton-card space-y-3"><div class="skeleton skeleton-text w-1/3"></div><div class="skeleton skeleton-text w-3/4"></div><div class="skeleton skeleton-text w-full"></div></div>
+                <div class="skeleton-card space-y-3"><div class="skeleton skeleton-text w-1/3"></div><div class="skeleton skeleton-text w-3/4"></div><div class="skeleton skeleton-text w-full"></div></div>
             </div>
         </div>
 
         <!-- GENEL DUYURULAR İÇERİĞİ (Lazy load) -->
         <div id="section-genel" class="hidden">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6" id="job-listings">
-                <div class="text-center py-10 text-slate-500 col-span-full">Duyurular yükleniyor...</div>
+                <div class="skeleton-card space-y-3"><div class="skeleton skeleton-text w-1/3"></div><div class="skeleton skeleton-text w-3/4"></div><div class="skeleton skeleton-text w-full"></div></div>
+                <div class="skeleton-card space-y-3"><div class="skeleton skeleton-text w-1/3"></div><div class="skeleton skeleton-text w-3/4"></div><div class="skeleton skeleton-text w-full"></div></div>
             </div>
         </div>
     </main>
@@ -332,7 +338,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc, collection, getDocs, getCountFromServer, onSnapshot, deleteDoc, updateDoc, addDoc, query, where, orderBy, limit, deleteField } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-        import { getUniversities, formatRelativeTime as coreFormatRelativeTime, escapeHtml as coreEscapeHtml, safeUrl, renderKunyeLine, getNameEffectClass, getAvatarFrameClass, validateAndFormatUniversity, injectCoreStyles, initDailyStreak } from '/portal/portal-core.js';
+        import { getUniversities, formatRelativeTime as coreFormatRelativeTime, escapeHtml as coreEscapeHtml, safeUrl, renderKunyeLine, getNameEffectClass, getAvatarFrameClass, validateAndFormatUniversity, injectCoreStyles, initDailyStreak, cacheGet, cacheSet, cacheInvalidate } from '/portal/portal-core.js';
         injectCoreStyles();
 
         window.showToast = (message, type = 'info') => {
@@ -649,6 +655,8 @@
 
                 if (currentUserData) currentUserData.activeListing = activeListingObj;
                 updateMyListingCard(activeListingObj);
+                cacheInvalidate('jobs_page_1');
+                cacheInvalidate('stats_global');
                 try {
                     localStorage.removeItem('up_listings_v1');
                     localStorage.removeItem('up_student_listings_v1');
@@ -865,40 +873,52 @@
                 dropdownEmail.innerText = user.email || "";
 
                 const userRef = doc(db, "users", user.uid);
-                const userSnap = await getDoc(userRef);
-
-                if (!userSnap.exists()) {
-                    const newUserData = {
-                        uid: user.uid,
-                        name: user.displayName || "Öğrenci",
-                        email: user.email || "",
-                        photoURL: user.photoURL || "",
-                        coins: 10,
-                        role: "user",
-                        createdAt: new Date()
-                    };
-                    await setDoc(userRef, newUserData);
-                    currentUserData = newUserData;
-                    userCoins.innerText = "10";
+                const cachedUser = cacheGet(`user_profile_${user.uid}`);
+                if (cachedUser) {
+                    currentUserData = cachedUser;
+                    updateMyListingCard(cachedUser.activeListing);
+                    userCoins.innerText = cachedUser.coins || 0;
+                    if (dropdownName) dropdownName.innerText = cachedUser.displayName || cachedUser.name || user.displayName || "Kullanıcı";
                     initDailyStreak(db, user.uid, currentUserData);
-
-                    try {
-                        await addDoc(collection(db, "users", user.uid, "notifications"), {
-                            message: `Hoş geldin ${user.displayName || 'öğrenci'}! 🎉 Üni Portal'a katıldığın için teşekkürler. Forumda konu açarak +5 Coin kazanabilirsin!`,
-                            link: "/portal/forum.html",
-                            read: false,
-                            createdAt: new Date()
-                        });
-                    } catch (notifErr) {
-                        console.error("Hoş geldin bildirimi gönderilemedi:", notifErr);
-                    }
+                    getDoc(userRef).then(s => { if (s.exists()) cacheSet(`user_profile_${user.uid}`, s.data(), 5 * 60 * 1000); }).catch(() => {});
                 } else {
-                    const userData = userSnap.data();
-                    currentUserData = userData;
-                    updateMyListingCard(userData.activeListing);
-                    userCoins.innerText = userData.coins || 0;
-                    if (dropdownName) dropdownName.innerText = userData.displayName || userData.name || user.displayName || "Kullanıcı";
-                    initDailyStreak(db, user.uid, currentUserData);
+                    const userSnap = await getDoc(userRef);
+
+                    if (!userSnap.exists()) {
+                        const newUserData = {
+                            uid: user.uid,
+                            name: user.displayName || "Öğrenci",
+                            email: user.email || "",
+                            photoURL: user.photoURL || "",
+                            coins: 10,
+                            role: "user",
+                            createdAt: new Date()
+                        };
+                        await setDoc(userRef, newUserData);
+                        currentUserData = newUserData;
+                        cacheSet(`user_profile_${user.uid}`, newUserData, 5 * 60 * 1000);
+                        userCoins.innerText = "10";
+                        initDailyStreak(db, user.uid, currentUserData);
+
+                        try {
+                            await addDoc(collection(db, "users", user.uid, "notifications"), {
+                                message: `Hoş geldin ${user.displayName || 'öğrenci'}! 🎉 Üni Portal'a katıldığın için teşekkürler. Forumda konu açarak +5 Coin kazanabilirsin!`,
+                                link: "/portal/forum.html",
+                                read: false,
+                                createdAt: new Date()
+                            });
+                        } catch (notifErr) {
+                            console.error("Hoş geldin bildirimi gönderilemedi:", notifErr);
+                        }
+                    } else {
+                        const userData = userSnap.data();
+                        currentUserData = userData;
+                        cacheSet(`user_profile_${user.uid}`, userData, 5 * 60 * 1000);
+                        updateMyListingCard(userData.activeListing);
+                        userCoins.innerText = userData.coins || 0;
+                        if (dropdownName) dropdownName.innerText = userData.displayName || userData.name || user.displayName || "Kullanıcı";
+                        initDailyStreak(db, user.uid, currentUserData);
+                    }
                 }
 
                 listenNotifications(user.uid);
@@ -919,44 +939,56 @@
             }
         });
 
+        function renderPublicJobsList(jobsArray) {
+            const container = document.getElementById('job-listings');
+            if (!container) return;
+            if (!Array.isArray(jobsArray) || jobsArray.length === 0) {
+                container.innerHTML = '<div class="text-center py-10 text-slate-500 col-span-full">Şu anda aktif duyuru bulunmuyor.</div>';
+                return;
+            }
+            let html = "";
+            jobsArray.forEach(job => {
+                html = `
+                    <div class="bg-slate-800 border border-slate-700 p-4 sm:p-5 rounded-2xl hover:border-blue-500/50 transition flex flex-col justify-between overflow-hidden">
+                        <div>
+                            <div class="flex justify-between items-start gap-2 mb-3">
+                                <div class="min-w-0">
+                                    <span class="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 inline-block">${escapeHtml(job.category || 'Duyuru')}</span>
+                                    <h2 class="text-base sm:text-lg font-bold mt-2 text-white line-clamp-2 break-words">${escapeHtml(job.title)}</h2>
+                                </div>
+                                <span class="text-[11px] text-slate-400 flex-shrink-0"><i class="fa-solid fa-location-dot mr-1 text-blue-400"></i>${escapeHtml(job.location || 'Genel')}</span>
+                            </div>
+                            <p class="text-slate-300 text-xs sm:text-sm mb-4 leading-relaxed line-clamp-3 break-words">${escapeHtml(job.description)}</p>
+                        </div>
+                        <div class="flex items-center justify-end pt-3 border-t border-slate-700/60">
+                            <a href="${safeUrl(job.link) || '#'}" target="_blank" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl font-semibold transition text-xs flex items-center space-x-1.5">
+                                <span>Detayları Gör</span>
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                            </a>
+                        </div>
+                    </div>
+                ` + html;
+            });
+            container.innerHTML = html;
+        }
+
         async function loadPublicJobs() {
             const container = document.getElementById('job-listings');
+            const cachedJobs = cacheGet('jobs_page_1');
+            if (Array.isArray(cachedJobs)) {
+                renderPublicJobsList(cachedJobs);
+            }
             try {
                 const snapshot = await getDocs(query(collection(db, "jobs"), orderBy("createdAt", "desc"), limit(20)));
-                if (snapshot.empty) {
-                    container.innerHTML = '<div class="text-center py-10 text-slate-500 col-span-full">Şu anda aktif duyuru bulunmuyor.</div>';
-                    return;
-                }
-
-                container.innerHTML = "";
-                let html = "";
-                snapshot.forEach(docSnap => {
-                    const job = docSnap.data();
-                    html = `
-                        <div class="bg-slate-800 border border-slate-700 p-4 sm:p-5 rounded-2xl hover:border-blue-500/50 transition flex flex-col justify-between overflow-hidden">
-                            <div>
-                                <div class="flex justify-between items-start gap-2 mb-3">
-                                    <div class="min-w-0">
-                                        <span class="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 inline-block">${escapeHtml(job.category || 'Duyuru')}</span>
-                                        <h2 class="text-base sm:text-lg font-bold mt-2 text-white line-clamp-2 break-words">${escapeHtml(job.title)}</h2>
-                                    </div>
-                                    <span class="text-[11px] text-slate-400 flex-shrink-0"><i class="fa-solid fa-location-dot mr-1 text-blue-400"></i>${escapeHtml(job.location || 'Genel')}</span>
-                                </div>
-                                <p class="text-slate-300 text-xs sm:text-sm mb-4 leading-relaxed line-clamp-3 break-words">${escapeHtml(job.description)}</p>
-                            </div>
-                            <div class="flex items-center justify-end pt-3 border-t border-slate-700/60">
-                                <a href="${safeUrl(job.link) || '#'}" target="_blank" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl font-semibold transition text-xs flex items-center space-x-1.5">
-                                    <span>Detayları Gör</span>
-                                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                                </a>
-                            </div>
-                        </div>
-                    ` + html;
-                });
-                container.innerHTML = html;
+                const freshJobs = [];
+                snapshot.forEach(docSnap => freshJobs.push({ id: docSnap.id, ...docSnap.data() }));
+                cacheSet('jobs_page_1', freshJobs, 5 * 60 * 1000);
+                renderPublicJobsList(freshJobs);
             } catch(e) {
                 console.error(e);
-                container.innerHTML = '<div class="text-center py-10 text-red-400 col-span-full">Duyurular yüklenirken bir hata oluştu.</div>';
+                if (!cachedJobs) {
+                    container.innerHTML = '<div class="text-center py-10 text-red-400 col-span-full">Duyurular yüklenirken bir hata oluştu.</div>';
+                }
             }
         }
     </script>

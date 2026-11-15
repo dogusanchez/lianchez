@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>İletişim - Üni Portal</title>
     <link rel="icon" type="image/png" href="/portal/fav.png">
+    <link rel="manifest" href="/portal/manifest.json">
+    <meta name="theme-color" content="#0f172a">
+    <link rel="apple-touch-icon" href="/portal/fav.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -314,7 +317,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc, collection, getDocs, getCountFromServer, onSnapshot, deleteDoc, updateDoc, addDoc, query, where, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-        import { primeAuthor, escapeHtml, injectCoreStyles, initDailyStreak } from '/portal/portal-core.js';
+        import { primeAuthor, escapeHtml, injectCoreStyles, initDailyStreak, cacheGet, cacheSet } from '/portal/portal-core.js';
         injectCoreStyles();
 
         const firebaseConfig = {
@@ -481,36 +484,50 @@
                 userAvatar.src = user.photoURL || 'https://via.placeholder.com/40';
 
                 const userRef = doc(db, "users", user.uid);
-                const userSnap = await getDoc(userRef);
-                if (userSnap.exists()) {
-                    currentUserData = userSnap.data();
+                const cachedUser = cacheGet(`user_profile_${user.uid}`);
+                if (cachedUser) {
+                    currentUserData = cachedUser;
                     userCoins.innerText = currentUserData.coins || 0;
                     dropdownName.innerText = currentUserData.displayName || currentUserData.name || "Kullanıcı";
                     dropdownEmail.innerText = currentUserData.email || user.email || "";
                     contactEmail.value = currentUserData.email || user.email || "";
                     guestNameField.classList.add('hidden');
                     contactName.required = false;
+                    getDoc(userRef).then(s => { if (s.exists()) cacheSet(`user_profile_${user.uid}`, s.data(), 5 * 60 * 1000); }).catch(() => {});
                 } else {
-                    await setDoc(userRef, {
-                        uid: user.uid,
-                        name: user.displayName || "Öğrenci",
-                        displayName: user.displayName || "Öğrenci",
-                        email: user.email || "",
-                        photoURL: user.photoURL || "",
-                        coins: 10,
-                        role: "user",
-                        createdAt: new Date()
-                    });
-                    currentUserData = { 
-                        displayName: user.displayName || "Öğrenci", 
-                        name: user.displayName || "Öğrenci", 
-                        email: user.email || "", 
-                        coins: 10 
-                    };
-                    userCoins.innerText = "10";
-                    contactEmail.value = user.email || "";
-                    guestNameField.classList.add('hidden');
-                    contactName.required = false;
+                    const userSnap = await getDoc(userRef);
+                    if (userSnap.exists()) {
+                        currentUserData = userSnap.data();
+                        cacheSet(`user_profile_${user.uid}`, currentUserData, 5 * 60 * 1000);
+                        userCoins.innerText = currentUserData.coins || 0;
+                        dropdownName.innerText = currentUserData.displayName || currentUserData.name || "Kullanıcı";
+                        dropdownEmail.innerText = currentUserData.email || user.email || "";
+                        contactEmail.value = currentUserData.email || user.email || "";
+                        guestNameField.classList.add('hidden');
+                        contactName.required = false;
+                    } else {
+                        await setDoc(userRef, {
+                            uid: user.uid,
+                            name: user.displayName || "Öğrenci",
+                            displayName: user.displayName || "Öğrenci",
+                            email: user.email || "",
+                            photoURL: user.photoURL || "",
+                            coins: 10,
+                            role: "user",
+                            createdAt: new Date()
+                        });
+                        currentUserData = { 
+                            displayName: user.displayName || "Öğrenci", 
+                            name: user.displayName || "Öğrenci", 
+                            email: user.email || "", 
+                            coins: 10 
+                        };
+                        cacheSet(`user_profile_${user.uid}`, currentUserData, 5 * 60 * 1000);
+                        userCoins.innerText = "10";
+                        contactEmail.value = user.email || "";
+                        guestNameField.classList.add('hidden');
+                        contactName.required = false;
+                    }
                 }
                 initDailyStreak(db, user.uid, currentUserData);
                 listenNotifications(user.uid);

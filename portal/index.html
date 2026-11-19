@@ -80,13 +80,14 @@
                 </a>
             </div>
             
-            <nav class="hidden md:flex items-center space-x-6 text-sm font-medium">
-                <a href="/portal/index.html" class="text-blue-400 font-semibold transition">Ana Sayfa</a>
-                <a href="/portal/forum.html" class="px-2.5 py-1 rounded-xl bg-purple-500/15 text-purple-300 border border-purple-500/30 font-semibold hover:bg-purple-500/25 transition flex items-center space-x-1.5"><i class="fa-solid fa-comments text-purple-400 text-xs"></i><span>Forum</span></a>
-                <a href="/portal/ilanlar.html" class="text-slate-300 hover:text-white transition">İlanlar</a>
-                <a href="/portal/ogrenciler.html" class="text-slate-300 hover:text-white transition">Öğrenciler</a>
-                <a href="/portal/topluluk.html" class="text-slate-300 hover:text-white transition">Topluluklar</a>
-                <a href="/portal/iletisim.html" class="text-slate-300 hover:text-white transition">İletişim</a>
+            <nav class="hidden md:flex items-center space-x-1 lg:space-x-2 text-xs lg:text-sm font-medium whitespace-nowrap">
+                <a href="/portal/index.html" class="px-2.5 py-1.5 rounded-xl bg-blue-500/20 text-blue-200 border border-blue-400/40 font-bold hover:bg-blue-500/30 transition flex items-center space-x-1.5 shadow-sm shadow-blue-500/10"><i class="fa-solid fa-house text-blue-300 text-xs"></i><span>Ana Sayfa</span></a>
+                <a href="/portal/forum.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">Forum</a>
+                <a href="/portal/oyunlar.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">Oyunlar</a>
+                <a href="/portal/ilanlar.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">İlanlar</a>
+                <a href="/portal/ogrenciler.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">Öğrenciler</a>
+                <a href="/portal/topluluk.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">Topluluklar</a>
+                <a href="/portal/iletisim.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">İletişim</a>
             </nav>
 
             <div class="flex items-center space-x-2 sm:space-x-4">
@@ -160,13 +161,14 @@
             </div>
         </div>
 
-        <div id="mobile-menu" class="hidden md:hidden bg-slate-800 border-t border-slate-700 px-4 pt-3 pb-4 space-y-2">
-            <a href="/portal/index.html" class="block px-3 py-2 rounded-lg text-sm font-medium text-blue-400 bg-slate-700/50">Ana Sayfa</a>
-            <a href="/portal/forum.html" class="block px-3 py-2 rounded-lg text-sm font-semibold text-purple-300 bg-purple-500/10 border border-purple-500/20 hover:bg-purple-500/20 transition flex items-center"><i class="fa-solid fa-comments text-purple-400 mr-2"></i>Forum</a>
-            <a href="/portal/ilanlar.html" class="block px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-700 transition">İlanlar</a>
-            <a href="/portal/ogrenciler.html" class="block px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-700 transition">Öğrenciler</a>
-            <a href="/portal/topluluk.html" class="block px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-700 transition">Topluluklar</a>
-            <a href="/portal/iletisim.html" class="block px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-700 transition">İletişim</a>
+        <div id="mobile-menu" class="hidden md:hidden bg-slate-800 border-t border-slate-700 px-4 pt-3 pb-4 space-y-1.5">
+            <a href="/portal/index.html" class="block px-3 py-2 rounded-xl text-sm font-bold text-blue-200 bg-blue-500/20 border border-blue-400/40 flex items-center"><i class="fa-solid fa-house text-blue-300 mr-2"></i>Ana Sayfa</a>
+            <a href="/portal/forum.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">Forum</a>
+            <a href="/portal/oyunlar.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">Oyunlar</a>
+            <a href="/portal/ilanlar.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">İlanlar</a>
+            <a href="/portal/ogrenciler.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">Öğrenciler</a>
+            <a href="/portal/topluluk.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">Topluluklar</a>
+            <a href="/portal/iletisim.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">İletişim</a>
         </div>
     </header>
 
@@ -227,8 +229,22 @@
         </div>
 
         <!-- DİĞER KARTLAR -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             
+            <a href="/portal/oyunlar.html" class="bg-slate-800/80 backdrop-blur border border-slate-700/80 p-6 rounded-2xl hover:border-amber-500 transition-all duration-300 group shadow-xl flex flex-col justify-between hover:-translate-y-1">
+                <div>
+                    <div class="w-12 h-12 bg-amber-500/10 text-amber-400 rounded-2xl flex items-center justify-center text-xl mb-4 group-hover:scale-110 group-hover:bg-amber-500 group-hover:text-slate-900 transition shadow-inner">
+                        <i class="fa-solid fa-gamepad"></i>
+                    </div>
+                    <h2 class="text-lg font-bold text-white mb-2 group-hover:text-amber-400 transition">Bilgi & Oyunlar</h2>
+                    <p class="text-slate-400 text-xs leading-relaxed">Genel kültür, kelime ve hızlı zeka oyunlarıyla eğlenirken ekstra Coin ve XP kazan.</p>
+                </div>
+                <div class="mt-6 pt-4 border-t border-slate-700/60 flex items-center justify-between text-xs font-semibold text-amber-400">
+                    <span>Oyunlara Git</span>
+                    <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition"></i>
+                </div>
+            </a>
+
             <a href="/portal/ilanlar.html" class="bg-slate-800/80 backdrop-blur border border-slate-700/80 p-6 rounded-2xl hover:border-blue-500 transition-all duration-300 group shadow-xl flex flex-col justify-between hover:-translate-y-1">
                 <div>
                     <div class="w-12 h-12 bg-blue-500/10 text-blue-400 rounded-2xl flex items-center justify-center text-xl mb-4 group-hover:scale-110 group-hover:bg-blue-500 group-hover:text-white transition shadow-inner">

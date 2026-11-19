@@ -2,97 +2,203 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kapalı Test Daveti - Üni Portal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Kapalı Test Davet Kartı - Üni Portal</title>
     <link rel="icon" type="image/png" href="/portal/fav.png">
+    <link rel="manifest" href="/portal/manifest.json">
+    <meta name="theme-color" content="#0f172a">
+    <link rel="apple-touch-icon" href="/portal/fav.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
         .animate-float { animation: float 4s ease-in-out infinite; }
         @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(18px); }
+            from { opacity: 0; transform: translateY(16px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        .fade-up { animation: fadeUp 0.6s ease-out both; }
+        .fade-up { animation: fadeUp 0.5s ease-out both; }
         @keyframes glow {
-            0%, 100% { opacity: 0.4; }
-            50% { opacity: 0.7; }
+            0%, 100% { opacity: 0.35; transform: scale(1); }
+            50% { opacity: 0.65; transform: scale(1.06); }
         }
         .animate-glow { animation: glow 6s ease-in-out infinite; }
         #qrcode { line-height: 0; }
         #qrcode img, #qrcode canvas { width: 100% !important; height: auto !important; display: block; border-radius: 0.75rem; }
+        .qr-tab.active {
+            background: linear-gradient(90deg, rgba(6,182,212,0.22), rgba(59,130,246,0.22));
+            border-color: rgba(34,211,238,0.55);
+            color: #fff;
+        }
+        html { overflow-y: auto; overflow-x: hidden; }
+        body { overflow-x: hidden; }
     </style>
 </head>
-<body class="min-h-screen bg-slate-900 flex items-center justify-center p-4 sm:p-6 font-sans text-slate-100 relative overflow-hidden">
+<body class="min-h-screen bg-slate-900 flex flex-col items-center justify-start sm:justify-center py-6 px-4 sm:p-6 font-sans text-slate-100 relative">
 
     <!-- Arka plan glow -->
-    <div class="absolute top-0 left-1/4 w-80 h-80 bg-blue-600/20 rounded-full blur-3xl pointer-events-none animate-glow"></div>
-    <div class="absolute bottom-0 right-1/4 w-80 h-80 bg-purple-600/20 rounded-full blur-3xl pointer-events-none animate-glow" style="animation-delay: 3s;"></div>
+    <div class="absolute top-0 left-1/4 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl pointer-events-none animate-glow"></div>
+    <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-600/20 rounded-full blur-3xl pointer-events-none animate-glow" style="animation-delay: 3s;"></div>
 
-    <div class="w-full max-w-sm bg-slate-800/90 backdrop-blur border border-slate-700/80 rounded-3xl shadow-2xl overflow-hidden fade-up relative z-10">
+    <!-- Üst Geri Dönüş Barı -->
+    <div class="w-full max-w-md flex items-center justify-between mb-3 relative z-10 fade-up">
+        <a href="/portal/tester.html" class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-300 hover:text-white bg-slate-800/80 hover:bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-xl transition">
+            <i class="fa-solid fa-arrow-left text-[10px]"></i>
+            <span>Test Rehberi</span>
+        </a>
+        <a href="/portal/index.html" class="inline-flex items-center gap-1.5 text-xs font-bold text-blue-300 hover:text-blue-200 bg-blue-500/15 hover:bg-blue-500/25 border border-blue-400/30 px-3 py-1.5 rounded-xl transition">
+            <span>Portala Git</span>
+            <i class="fa-solid fa-arrow-right text-[10px]"></i>
+        </a>
+    </div>
+
+    <!-- DAVET KARTI -->
+    <div class="w-full max-w-md bg-slate-800/90 backdrop-blur-md border border-slate-700/80 rounded-3xl shadow-2xl overflow-hidden fade-up relative z-10">
 
         <!-- ÜST ŞERİT -->
-        <div class="h-1.5 w-full bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500"></div>
+        <div class="h-1.5 w-full bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500"></div>
 
         <div class="p-6 sm:p-7 flex flex-col items-center text-center">
 
-            <!-- İKON -->
-            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-2xl text-white shadow-lg shadow-blue-500/30 animate-float mb-4 border border-blue-400/30">
-                <i class="fa-solid fa-flask-vial"></i>
+            <!-- LOGO & ROZET -->
+            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 via-indigo-600 to-purple-600 flex items-center justify-center text-2xl text-white shadow-lg shadow-indigo-500/30 animate-float mb-3.5 border border-indigo-400/30">
+                <i class="fa-solid fa-graduation-cap"></i>
             </div>
 
-            <!-- ROZET -->
-            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-cyan-500/15 border border-cyan-400/40 text-cyan-300 text-[10px] font-bold mb-3">
-                <i class="fa-solid fa-lock text-[9px]"></i> KAPALI TEST
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-500/15 border border-cyan-400/40 text-cyan-300 text-[10px] font-extrabold tracking-wider uppercase mb-2.5">
+                <i class="fa-solid fa-flask-vial text-[10px]"></i> Üni Portal — Kapalı Beta Daveti
             </span>
 
-            <!-- BAŞLIK -->
-            <h1 class="text-xl font-extrabold text-white mb-1.5 leading-tight">
-                Sizi de Aramızda Görmek İsteriz
+            <h1 class="text-xl sm:text-2xl font-extrabold text-white mb-1.5 leading-tight">
+                Kampüs Ekosistemini Keşfet
             </h1>
 
-            <!-- AÇIKLAMA -->
-            <p class="text-[13px] text-slate-300 leading-relaxed mb-5">
-                Üni Portal'ı bizimle birlikte test etmek için QR kodu telefonunuzla okutmanız yeterli.
+            <p class="text-xs text-slate-300 leading-relaxed mb-4 max-w-xs">
+                Forum, bilgi oyunları, öğrenci ilanları ve kulüp vitrinini telefonunuzda deneyimlemek için QR kodu okutun.
             </p>
 
-            <!-- QR KOD (beyaz zemin — okunabilirlik için korunuyor) -->
-            <div class="bg-white p-3 rounded-2xl shadow-lg shadow-black/30 w-56 h-56 sm:w-60 sm:h-60 flex items-center justify-center mb-4 ring-4 ring-slate-700/50">
+            <!-- HEDEF SEÇİCİ SEKMELER -->
+            <div class="grid grid-cols-2 gap-2 w-full bg-slate-900/70 p-1.5 rounded-2xl border border-slate-700/80 mb-4">
+                <button type="button" id="tab-tester" onclick="switchTarget('tester')" class="qr-tab active py-2 px-3 rounded-xl border border-transparent text-xs font-bold text-slate-300 transition flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-flask-vial text-cyan-400"></i>
+                    <span>Test Rehberi</span>
+                </button>
+                <button type="button" id="tab-portal" onclick="switchTarget('portal')" class="qr-tab py-2 px-3 rounded-xl border border-transparent text-xs font-bold text-slate-300 transition flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-house text-blue-400"></i>
+                    <span>Ana Portal</span>
+                </button>
+            </div>
+
+            <!-- QR KOD KUTUSU -->
+            <div class="bg-white p-3.5 rounded-2xl shadow-xl shadow-black/40 w-56 h-56 sm:w-60 sm:h-60 flex items-center justify-center mb-3.5 ring-4 ring-slate-700/60">
                 <div id="qrcode" class="w-full"></div>
             </div>
 
-            <!-- URL -->
-            <a href="https://lianchez.com/portal/tester" target="_blank"
-               class="text-[11px] text-cyan-300 hover:text-cyan-200 font-semibold underline break-all mb-4">
+            <!-- AKTİF BAĞLANTI GÖSTERGESİ -->
+            <a id="active-url-link" href="https://lianchez.com/portal/tester" target="_blank"
+               class="text-xs text-cyan-300 hover:text-cyan-200 font-bold underline break-all mb-4">
                 lianchez.com/portal/tester
             </a>
 
+            <!-- ÖZELLİK ROZETLERİ -->
+            <div class="flex flex-wrap justify-center gap-1.5 mb-5">
+                <span class="text-[10px] bg-slate-900/80 text-purple-300 border border-slate-700 px-2.5 py-1 rounded-lg font-semibold"><i class="fa-solid fa-comments mr-1"></i>Forum</span>
+                <span class="text-[10px] bg-slate-900/80 text-amber-300 border border-slate-700 px-2.5 py-1 rounded-lg font-semibold"><i class="fa-solid fa-gamepad mr-1"></i>Bilgi Oyunları</span>
+                <span class="text-[10px] bg-slate-900/80 text-blue-300 border border-slate-700 px-2.5 py-1 rounded-lg font-semibold"><i class="fa-solid fa-bag-shopping mr-1"></i>İlanlar</span>
+                <span class="text-[10px] bg-slate-900/80 text-emerald-300 border border-slate-700 px-2.5 py-1 rounded-lg font-semibold"><i class="fa-solid fa-users-rectangle mr-1"></i>Topluluklar</span>
+            </div>
+
+            <!-- AKSİYON BUTONLARI -->
+            <div class="grid grid-cols-2 gap-2.5 w-full">
+                <button type="button" id="copy-btn" onclick="copyCurrentUrl()" class="w-full py-2.5 px-3 rounded-xl bg-slate-700/80 hover:bg-slate-700 border border-slate-600 text-xs font-bold text-slate-200 transition flex items-center justify-center gap-1.5">
+                    <i class="fa-regular fa-copy text-cyan-400"></i>
+                    <span>Linki Kopyala</span>
+                </button>
+                <button type="button" onclick="shareCurrentUrl()" class="w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-xs font-bold text-white transition shadow-lg shadow-cyan-900/30 flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-share-nodes"></i>
+                    <span>Daveti Paylaş</span>
+                </button>
+            </div>
+
             <!-- ALT BİLGİ -->
-            <div class="w-full pt-4 border-t border-slate-700/70 flex items-center justify-center gap-1.5 text-[10px] text-slate-400">
+            <div class="w-full mt-5 pt-4 border-t border-slate-700/70 flex items-center justify-center gap-1.5 text-[11px] text-slate-400">
                 <i class="fa-solid fa-graduation-cap text-blue-400"></i>
-                <span class="font-semibold text-slate-300">Üni Portal</span>
+                <span class="font-bold text-slate-200">Üni Portal</span>
                 <span class="text-slate-600">•</span>
-                <span>lianchez.com</span>
+                <span>Powered by <a href="https://lianchez.com" target="_blank" class="text-blue-400 hover:underline font-semibold">lianchez.com</a></span>
             </div>
         </div>
     </div>
 
-    <!-- QRCode.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script>
-        (function generateQR() {
+        const TARGETS = {
+            tester: {
+                url: "https://lianchez.com/portal/tester",
+                label: "lianchez.com/portal/tester",
+                title: "Üni Portal — Kapalı Test Rehberi"
+            },
+            portal: {
+                url: "https://lianchez.com/portal",
+                label: "lianchez.com/portal",
+                title: "Üni Portal — Kampüs Öğrenci Ağı"
+            }
+        };
+        let currentKey = 'tester';
+
+        function renderQR(url) {
             const el = document.getElementById('qrcode');
             if (!el || typeof QRCode === 'undefined') return;
+            el.innerHTML = '';
             new QRCode(el, {
-                text: "https://lianchez.com/portal/tester",
+                text: url,
                 width: 300,
                 height: 300,
                 colorDark: "#0f172a",
                 colorLight: "#ffffff",
                 correctLevel: QRCode.CorrectLevel.H
             });
-        })();
+        }
+
+        function switchTarget(key) {
+            if (!TARGETS[key]) return;
+            currentKey = key;
+            document.getElementById('tab-tester').classList.toggle('active', key === 'tester');
+            document.getElementById('tab-portal').classList.toggle('active', key === 'portal');
+            const linkEl = document.getElementById('active-url-link');
+            linkEl.href = TARGETS[key].url;
+            linkEl.textContent = TARGETS[key].label;
+            renderQR(TARGETS[key].url);
+        }
+
+        function copyCurrentUrl() {
+            const target = TARGETS[currentKey];
+            const btn = document.getElementById('copy-btn');
+            if (!navigator.clipboard || !target) return;
+            navigator.clipboard.writeText(target.url).then(() => {
+                const orig = btn.innerHTML;
+                btn.innerHTML = '<i class="fa-solid fa-check text-emerald-400"></i><span class="text-emerald-300">Kopyalandı!</span>';
+                setTimeout(() => { btn.innerHTML = orig; }, 1800);
+            });
+        }
+
+        async function shareCurrentUrl() {
+            const target = TARGETS[currentKey];
+            if (!target) return;
+            if (navigator.share) {
+                try {
+                    await navigator.share({
+                        title: target.title,
+                        text: "Üni Portal kapalı beta sürecine sen de katıl!",
+                        url: target.url
+                    });
+                    return;
+                } catch (e) {}
+            }
+            copyCurrentUrl();
+        }
+
+        renderQR(TARGETS.tester.url);
     </script>
 </body>
 </html>

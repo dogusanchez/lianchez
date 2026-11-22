@@ -99,6 +99,17 @@
         .kb-key.correct { background: #10b981; border-color: #059669; color: #022c22; }
         .kb-key.present { background: #f59e0b; border-color: #d97706; color: #451a03; }
         .kb-key.absent  { background: #0f172a; border-color: #1e293b; color: #475569; }
+
+        @keyframes assistantBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
+        @keyframes assistantPulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(6, 182, 212, 0.7), 0 8px 20px rgba(0,0,0,0.4); }
+            50% { box-shadow: 0 0 0 8px rgba(6, 182, 212, 0), 0 8px 24px rgba(0,0,0,0.5); }
+        }
+        .assistant-btn { animation: assistantPulse 2.5s ease-in-out infinite; }
+        .assistant-btn:hover .assistant-icon { animation: assistantBounce 0.6s ease infinite; }
     </style>
 </head>
 <body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col justify-between">
@@ -113,12 +124,12 @@
             
             <nav class="hidden md:flex items-center space-x-1 lg:space-x-2 text-xs lg:text-sm font-medium whitespace-nowrap">
                 <a href="/portal/index.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">Ana Sayfa</a>
+                <a href="/portal/akis.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">Akış</a>
                 <a href="/portal/forum.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">Forum</a>
                 <a href="/portal/oyunlar.html" class="px-2.5 py-1.5 rounded-xl bg-amber-500/20 text-amber-200 border border-amber-400/40 font-bold hover:bg-amber-500/30 transition flex items-center space-x-1.5 shadow-sm shadow-amber-500/10"><i class="fa-solid fa-gamepad text-amber-300 text-xs"></i><span>Oyunlar</span></a>
                 <a href="/portal/ilanlar.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">İlanlar</a>
                 <a href="/portal/ogrenciler.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">Öğrenciler</a>
                 <a href="/portal/topluluk.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">Topluluklar</a>
-                <a href="/portal/iletisim.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">İletişim</a>
             </nav>
 
             <div class="flex items-center space-x-2 sm:space-x-4">
@@ -136,7 +147,7 @@
 
                     <div id="user-profile" class="hidden flex items-center space-x-2 sm:space-x-3 relative">
                         <div class="flex items-center bg-slate-700 px-2 sm:px-2.5 py-1 rounded-full border border-slate-600 shadow-inner">
-                            <i class="fa-solid fa-coins text-yellow-400 mr-1 sm:mr-1.5 text-[10px] sm:text-sm"></i>
+                            <i class="fa-solid fa-coins text-yellow-400 mr-1 sm:mr-1.5 animate-bounce text-[10px] sm:text-sm"></i>
                             <span id="user-coins" class="font-bold text-yellow-400 text-[10px] sm:text-sm">0</span>
                         </div>
 
@@ -155,12 +166,17 @@
                                 <i class="fa-solid fa-user text-indigo-400"></i>
                                 <span>Profilim</span>
                             </a>
-
+                            <button onclick="openNotificationsModal()" class="w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center justify-between transition">
+                                <span class="flex items-center space-x-2">
+                                    <i class="fa-solid fa-bell text-blue-400"></i>
+                                    <span>Bildirimler</span>
+                                </span>
+                                <span id="dropdown-notif-count" class="bg-slate-700 text-slate-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-slate-600">0</span>
+                            </button>
                             <a href="/portal/magaza.html" class="block w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center space-x-2 transition">
                                 <i class="fa-solid fa-store text-yellow-400"></i>
                                 <span>Mağaza</span>
                             </a>
-
                             <button onclick="openDailyStreakModal()" class="w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center justify-between transition">
                                 <span class="flex items-center space-x-2">
                                     <i class="fa-solid fa-calendar-check text-amber-400"></i>
@@ -169,14 +185,14 @@
                                 </span>
                                 <span id="streak-dropdown-badge" class="bg-amber-500/20 text-amber-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-amber-500/30">0 Gün</span>
                             </button>
-                            
-                            <button onclick="openNotificationsModal()" class="w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center justify-between transition">
-                                <span class="flex items-center space-x-2">
-                                    <i class="fa-solid fa-bell text-blue-400"></i>
-                                    <span>Bildirimler</span>
-                                </span>
-                                <span id="dropdown-notif-count" class="bg-slate-700 text-slate-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-slate-600">0</span>
-                            </button>
+                            <a href="/portal/iletisim.html" class="block w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center space-x-2 transition">
+                                <i class="fa-solid fa-envelope-open-text text-cyan-400"></i>
+                                <span>İletişim</span>
+                            </a>
+                            <a href="/portal/tanitim.html" class="block w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center space-x-2 transition">
+                                <i class="fa-solid fa-circle-info text-cyan-400"></i>
+                                <span>Tanıtım</span>
+                            </a>
 
                             <div class="border-t border-slate-700/80 my-1"></div>
 
@@ -196,12 +212,12 @@
 
         <div id="mobile-menu" class="hidden md:hidden bg-slate-800 border-t border-slate-700 px-4 pt-3 pb-4 space-y-1.5">
             <a href="/portal/index.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">Ana Sayfa</a>
+            <a href="/portal/akis.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">Akış</a>
             <a href="/portal/forum.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">Forum</a>
             <a href="/portal/oyunlar.html" class="block px-3 py-2 rounded-xl text-sm font-bold text-amber-200 bg-amber-500/20 border border-amber-400/40 flex items-center"><i class="fa-solid fa-gamepad text-amber-300 mr-2"></i>Oyunlar</a>
             <a href="/portal/ilanlar.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">İlanlar</a>
             <a href="/portal/ogrenciler.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">Öğrenciler</a>
             <a href="/portal/topluluk.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">Topluluklar</a>
-            <a href="/portal/iletisim.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">İletişim</a>
         </div>
     </header>
 
@@ -304,6 +320,38 @@
             </div>
         </div>
 
+        <!-- ===== GÜNLÜK OYUN HEDEFİ & SERİ ŞERİDİ ===== -->
+        <section id="daily-mission-bar" class="bg-gradient-to-r from-slate-800/90 via-slate-800/80 to-indigo-950/50 border border-slate-700/80 rounded-2xl p-4 sm:p-5 mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div class="flex items-center gap-3.5 min-w-0">
+                <div class="w-11 h-11 rounded-2xl bg-amber-500/15 border border-amber-500/30 text-amber-400 flex items-center justify-center text-lg flex-shrink-0">
+                    <i class="fa-solid fa-fire-flame-curved"></i>
+                </div>
+                <div class="min-w-0 flex-1">
+                    <div class="flex flex-wrap items-center gap-2">
+                        <h2 class="text-xs sm:text-sm font-extrabold text-white">Bugünün Arena Hedefi</h2>
+                        <span id="mission-streak-badge" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-orange-500/15 text-orange-300 border border-orange-500/30">
+                            <i class="fa-solid fa-fire mr-1"></i>0 Günlük Seri
+                        </span>
+                    </div>
+                    <p id="mission-desc" class="text-[11px] text-slate-400 mt-0.5">Bugün en az 3 farklı oyunu tamamlayarak günlük arena hedefini bitir!</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-3 w-full md:w-72 flex-shrink-0">
+                <div class="flex-1">
+                    <div class="flex justify-between text-[10px] font-bold mb-1">
+                        <span class="text-slate-400">İlerleme</span>
+                        <span id="mission-progress-text" class="text-amber-300">0 / 3 Oyun</span>
+                    </div>
+                    <div class="w-full h-2 bg-slate-900 rounded-full overflow-hidden border border-slate-700/70">
+                        <div id="mission-progress-fill" class="h-full bg-gradient-to-r from-amber-400 via-orange-400 to-emerald-400 transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                </div>
+                <button onclick="launchRandomGame()" title="Rastgele bir oyun başlat" class="px-3 py-2 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/40 text-amber-300 text-xs font-extrabold transition flex items-center gap-1.5 whitespace-nowrap flex-shrink-0">
+                    <i class="fa-solid fa-shuffle"></i><span class="hidden sm:inline">Rastgele</span>
+                </button>
+            </div>
+        </section>
+
         <!-- ===== KATEGORİ FİLTRELERİ ===== -->
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
             <div id="game-category-tabs" class="flex flex-wrap gap-2">
@@ -358,6 +406,9 @@
                     </div>
                 </div>
                 <div class="flex items-center gap-2 flex-shrink-0">
+                    <button id="arena-sound-btn" onclick="toggleGameSound()" title="Ses Efektlerini Aç/Kapat" class="text-slate-400 hover:text-amber-300 p-1.5 rounded-xl hover:bg-slate-700 transition text-sm">
+                        <i class="fa-solid fa-volume-high"></i>
+                    </button>
                     <span id="arena-timer-badge" class="hidden text-xs font-extrabold px-2.5 py-1 rounded-xl bg-slate-900 border border-slate-700 text-amber-400 flex items-center gap-1">
                         <i class="fa-regular fa-clock"></i><span id="arena-timer-val">00</span>
                     </span>
@@ -397,6 +448,24 @@
         </div>
     </div>
 
+    <div class="fixed bottom-4 right-4 z-[150]" id="assistant-widget">
+        <div class="relative">
+            <button onclick="closeAssistantWidget()" title="Kapat" class="absolute -top-2 -right-2 z-10 w-6 h-6 bg-slate-800 hover:bg-red-600 text-slate-300 hover:text-white rounded-full flex items-center justify-center text-[10px] border border-slate-600 hover:border-red-500 shadow-lg transition">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <a href="/portal/iletisim.html" class="assistant-btn group flex items-center gap-2 bg-gradient-to-r from-cyan-600 to-blue-600 text-white pl-3 pr-4 py-2.5 rounded-full shadow-2xl border border-cyan-400/40 hover:from-cyan-500 hover:to-blue-500 transition-all">
+                <span class="assistant-icon w-8 h-8 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
+                    <i class="fa-solid fa-headset text-sm"></i>
+                </span>
+                <span class="text-left leading-tight">
+                    <span class="block text-[10px] font-extrabold tracking-wide">SORUN / İSTEK Mİ VAR?</span>
+                    <span class="block text-[9px] font-medium opacity-90">İletişim formundan bize ilet, hemen ilgilenelim!</span>
+                </span>
+                <i class="fa-solid fa-arrow-right text-[10px] opacity-80 group-hover:translate-x-0.5 transition"></i>
+            </a>
+        </div>
+    </div>
+
     <footer class="relative bg-gradient-to-b from-slate-800 to-slate-900 border-t border-slate-700 mt-auto z-10">
         <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-amber-500/40 to-transparent"></div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -416,6 +485,10 @@
     </footer>
     <script>
         document.querySelectorAll('.current-year').forEach(el => el.innerText = new Date().getFullYear());
+        function closeAssistantWidget() {
+            const w = document.getElementById('assistant-widget');
+            if (w) w.style.display = 'none';
+        }
     </script>
 
     <script type="module">
@@ -599,14 +672,163 @@
         ];
 
         // =====================================================================
+        //  SES EFEKTLERİ (Web Audio API — Harici Dosya Yok) & KİŞİSEL REKORLAR
+        // =====================================================================
+        let soundEnabled = localStorage.getItem('up_games_sound') !== 'off';
+        let _audioCtx = null;
+        function updateSoundIcon() {
+            const btn = document.getElementById('arena-sound-btn');
+            if (!btn) return;
+            btn.innerHTML = soundEnabled
+                ? '<i class="fa-solid fa-volume-high"></i>'
+                : '<i class="fa-solid fa-volume-xmark text-slate-500"></i>';
+        }
+        window.toggleGameSound = () => {
+            soundEnabled = !soundEnabled;
+            try { localStorage.setItem('up_games_sound', soundEnabled ? 'on' : 'off'); } catch (e) {}
+            updateSoundIcon();
+            if (soundEnabled) playGameSound('click');
+        };
+        function playGameSound(type) {
+            if (!soundEnabled) return;
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (!AudioCtx) return;
+                if (!_audioCtx) _audioCtx = new AudioCtx();
+                if (_audioCtx.state === 'suspended') _audioCtx.resume();
+                const now = _audioCtx.currentTime;
+                const playTone = (freq, start, dur, wave = 'sine', vol = 0.08) => {
+                    const osc = _audioCtx.createOscillator();
+                    const gain = _audioCtx.createGain();
+                    osc.type = wave;
+                    osc.frequency.setValueAtTime(freq, start);
+                    gain.gain.setValueAtTime(vol, start);
+                    gain.gain.exponentialRampToValueAtTime(0.001, start + dur);
+                    osc.connect(gain);
+                    gain.connect(_audioCtx.destination);
+                    osc.start(start);
+                    osc.stop(start + dur);
+                };
+                if (type === 'correct') {
+                    playTone(587.33, now, 0.11, 'triangle', 0.09);
+                    playTone(880, now + 0.08, 0.16, 'triangle', 0.09);
+                } else if (type === 'wrong') {
+                    playTone(220, now, 0.18, 'sawtooth', 0.06);
+                    playTone(174.61, now + 0.1, 0.2, 'sawtooth', 0.05);
+                } else if (type === 'win') {
+                    playTone(523.25, now, 0.12, 'triangle', 0.09);
+                    playTone(659.25, now + 0.1, 0.12, 'triangle', 0.09);
+                    playTone(783.99, now + 0.2, 0.14, 'triangle', 0.1);
+                    playTone(1046.5, now + 0.32, 0.26, 'triangle', 0.1);
+                } else if (type === 'joker') {
+                    playTone(440, now, 0.09, 'sine', 0.08);
+                    playTone(659.25, now + 0.07, 0.14, 'sine', 0.08);
+                } else {
+                    playTone(520, now, 0.05, 'sine', 0.05);
+                }
+            } catch (e) {}
+        }
+
+        function getBestScoresMap() {
+            const uid = currentUser ? currentUser.uid : 'guest';
+            try { return JSON.parse(localStorage.getItem(`up_games_best_${uid}`) || '{}'); } catch (e) { return {}; }
+        }
+        function saveGameBest(gameId, numericVal, label, lowerIsBetter = false) {
+            if (typeof numericVal !== 'number' || Number.isNaN(numericVal)) return false;
+            const uid = currentUser ? currentUser.uid : 'guest';
+            const map = getBestScoresMap();
+            const prev = map[gameId];
+            const isNew = !prev || (lowerIsBetter ? numericVal < prev.val : numericVal > prev.val);
+            if (isNew) {
+                map[gameId] = { val: numericVal, label };
+                try { localStorage.setItem(`up_games_best_${uid}`, JSON.stringify(map)); } catch (e) {}
+            }
+            return isNew;
+        }
+
+        function getPlayedTodayList() {
+            const today = getTodayKey();
+            const uid = currentUser ? currentUser.uid : 'guest';
+            try {
+                const localPlayed = JSON.parse(localStorage.getItem(`up_games_played_${uid}_${today}`) || '[]');
+                return Array.from(new Set([...localPlayed, ...getClaimedGamesToday()]));
+            } catch (e) { return getClaimedGamesToday(); }
+        }
+        function recordGamePlayedToday(gameId) {
+            const today = getTodayKey();
+            const uid = currentUser ? currentUser.uid : 'guest';
+            const list = getPlayedTodayList();
+            if (!list.includes(gameId)) {
+                list.push(gameId);
+                try { localStorage.setItem(`up_games_played_${uid}_${today}`, JSON.stringify(list)); } catch (e) {}
+            }
+            // Günlük seri takibi
+            try {
+                const stKey = `up_games_streak_${uid}`;
+                const st = JSON.parse(localStorage.getItem(stKey) || '{"last":"","count":0}');
+                if (st.last !== today) {
+                    const yest = new Date(Date.now() + (3 * 60 + new Date().getTimezoneOffset()) * 60000 - 86400000).toISOString().slice(0, 10);
+                    st.count = (st.last === yest) ? (st.count + 1) : 1;
+                    st.last = today;
+                    localStorage.setItem(stKey, JSON.stringify(st));
+                }
+            } catch (e) {}
+            updateMissionBar();
+        }
+        function getArenaStreak() {
+            const uid = currentUser ? currentUser.uid : 'guest';
+            try {
+                const st = JSON.parse(localStorage.getItem(`up_games_streak_${uid}`) || '{"last":"","count":0}');
+                const today = getTodayKey();
+                const yest = new Date(Date.now() + (3 * 60 + new Date().getTimezoneOffset()) * 60000 - 86400000).toISOString().slice(0, 10);
+                return (st.last === today || st.last === yest) ? (st.count || 0) : 0;
+            } catch (e) { return 0; }
+        }
+        function updateMissionBar() {
+            const played = getPlayedTodayList().length;
+            const target = 3;
+            const pct = Math.min(100, Math.round((played / target) * 100));
+            const streak = getArenaStreak();
+            const fill = document.getElementById('mission-progress-fill');
+            const text = document.getElementById('mission-progress-text');
+            const desc = document.getElementById('mission-desc');
+            const badge = document.getElementById('mission-streak-badge');
+            if (fill) fill.style.width = `${pct}%`;
+            if (text) text.textContent = played >= target ? `Tamamlandı! (${played}/${target})` : `${played} / ${target} Oyun`;
+            if (desc) {
+                desc.textContent = played >= target
+                    ? 'Harika! Bugünün arena hedefini tamamladın. Rekorlarını kırmaya devam edebilirsin!'
+                    : `Bugün en az ${target} farklı oyunu tamamlayarak günlük arena hedefini bitir!`;
+            }
+            if (badge) {
+                badge.innerHTML = `<i class="fa-solid fa-fire mr-1"></i>${streak} Günlük Seri`;
+            }
+        }
+        window.launchRandomGame = () => {
+            const claimed = getClaimedGamesToday();
+            const unplayed = GAMES_CATALOG.filter(g => !claimed.includes(g.id));
+            const pool = unplayed.length > 0 ? unplayed : GAMES_CATALOG;
+            const pick = pool[Math.floor(Math.random() * pool.length)];
+            if (pick) window.launchGame(pick.id);
+        };
+
+        // =====================================================================
         //  SORU VE KELİME HAVUZLARI (Tamamen İstemci İçi — 0 Firebase Read)
-        //  Ardışık oyunlarda aynı soruların tekrar gelmemesi için oturum bazlı
-        //  "kullanılan indeks takibi" (Deck / Bag sistemi) ile seçilir.
+        //  Sayfa yenilense bile aynı soruların tekrar gelmemesi için localStorage
+        //  destekli "kullanılan indeks takibi" (Kalıcı Deck / Bag sistemi) ile seçilir.
         // =====================================================================
         const _usedPoolIndices = {};
         function pickUniqueItems(poolKey, pool, count) {
             if (!Array.isArray(pool) || pool.length === 0) return [];
-            if (!_usedPoolIndices[poolKey]) _usedPoolIndices[poolKey] = new Set();
+            const storageKey = `up_games_used_pool_${poolKey}`;
+            if (!_usedPoolIndices[poolKey]) {
+                let saved = [];
+                try {
+                    const parsed = JSON.parse(localStorage.getItem(storageKey) || '[]');
+                    if (Array.isArray(parsed)) saved = parsed.filter(i => Number.isInteger(i) && i >= 0 && i < pool.length);
+                } catch (e) {}
+                _usedPoolIndices[poolKey] = new Set(saved);
+            }
             const used = _usedPoolIndices[poolKey];
 
             let availableIdx = [];
@@ -619,6 +841,7 @@
             }
             const shuffledIdx = shuffleArray(availableIdx).slice(0, count);
             shuffledIdx.forEach(i => used.add(i));
+            try { localStorage.setItem(storageKey, JSON.stringify(Array.from(used))); } catch (e) {}
             return shuffledIdx.map(i => pool[i]);
         }
 
@@ -682,7 +905,46 @@
             { q: "'1984' ve 'Hayvan Çiftliği' romanlarının yazarı kimdir?", opts: ["Aldous Huxley", "George Orwell", "Ray Bradbury", "William Golding"], a: 1 },
             { q: "Mimar Sinan'ın 'Ustalık eserimdir' dediği cami hangisidir?", opts: ["Şehzade Camii", "Süleymaniye Camii", "Selimiye Camii", "Mihrimah Sultan Camii"], a: 2 },
             { q: "Güneş tutulması hangi gök olayının sonucunda gerçekleşir?", opts: ["Dünya'nın Güneş ile Ay arasına girmesi", "Ay'ın Dünya ile Güneş arasına girmesi", "Mars'ın Dünya'ya yaklaşması", "Güneş lekelerinin artması"], a: 1 },
-            { q: "Türk lirası banknotlarında yer alan 'Arf Sabiti' ile tanınan dünyaca ünlü matematikçimiz kimdir?", opts: ["Ali Kuşçu", "Cahit Arf", "Salih Zeki", "Kerim Erim"], a: 1 }
+            { q: "Türk lirası banknotlarında yer alan 'Arf Sabiti' ile tanınan dünyaca ünlü matematikçimiz kimdir?", opts: ["Ali Kuşçu", "Cahit Arf", "Salih Zeki", "Kerim Erim"], a: 1 },
+            { q: "Türkiye'nin ilk yerli ve milli elektrikli otomobil markası aşağıdakilerden hangisidir?", opts: ["Devrim", "Togg", "Anadol", "Karsan"], a: 1 },
+            { q: "HTML açılımında yer alan 'H' harfi hangi kelimeyi ifade eder?", opts: ["High", "Hyper", "Home", "Host"], a: 1 },
+            { q: "Bir yıl içinde Güneş etrafındaki dönüşünü en kısa sürede tamamlayan gezegen hangisidir?", opts: ["Venüs", "Merkür", "Mars", "Dünya"], a: 1 },
+            { q: "İstanbul'un fethi hangi tarihte gerçekleşmiştir?", opts: ["29 Mayıs 1453", "23 Nisan 1453", "19 Mayıs 1453", "30 Ağustos 1453"], a: 0 },
+            { q: "'Küçük Prens' (Le Petit Prince) kitabının yazarı kimdir?", opts: ["Jules Verne", "Antoine de Saint-Exupéry", "Albert Camus", "Victor Hugo"], a: 1 },
+            { q: "Periyodik tabloda 'Na' sembolü hangi elementi gösterir?", opts: ["Azot", "Nikel", "Sodyum", "Neon"], a: 2 },
+            { q: "Dünya'nın uydusu Ay'a ilk ayak basan astronot kimdir?", opts: ["Yuri Gagarin", "Buzz Aldrin", "Neil Armstrong", "Michael Collins"], a: 2 },
+            { q: "Türkiye'nin en uzun nehri aşağıdakilerden hangisidir?", opts: ["Fırat", "Kızılırmak", "Sakarya", "Yeşilırmak"], a: 1 },
+            { q: "Müzikte 'Do, Re, Mi, Fa, Sol, La, Si' notalarının toplam sayısı kaçtır?", opts: ["5", "6", "7", "8"], a: 2 },
+            { q: "Hangi vitamin eksikliği gece körlüğüne yol açar?", opts: ["A Vitamini", "B12 Vitamini", "C Vitamini", "D Vitamini"], a: 0 },
+            { q: "Ünlü 'Çığlık' (The Scream) tablosu hangi ressama aittir?", opts: ["Edvard Munch", "Pablo Picasso", "Gustav Klimt", "Claude Monet"], a: 0 },
+            { q: "Türkiye Büyük Millet Meclisi (TBMM) hangi tarihte açılmıştır?", opts: ["19 Mayıs 1919", "23 Nisan 1920", "30 Ağustos 1922", "29 Ekim 1923"], a: 1 },
+            { q: "Bir dik üçgende dik kenarların kareleri toplamının hipotenüsün karesine eşit olduğunu belirten teorem hangisidir?", opts: ["Thales Teoremi", "Pisagor Teoremi", "Öklid Teoremi", "Fermat Teoremi"], a: 1 },
+            { q: "Dünya'nın kendi ekseni etrafında bir tam turunu tamamlaması yaklaşık kaç saat sürer?", opts: ["12 saat", "24 saat", "36 saat", "48 saat"], a: 1 },
+            { q: "İlk kez uzaya çıkan insan olarak tarihe geçen kozmonot kimdir?", opts: ["Neil Armstrong", "Yuri Gagarin", "Aleksey Leonov", "Valentina Tereşkova"], a: 1 },
+            { q: "'Simyacı' adlı dünyaca ünlü romanın yazarı kimdir?", opts: ["Gabriel García Márquez", "Paulo Coelho", "Jorge Luis Borges", "Isabel Allende"], a: 1 },
+            { q: "Kuvvetin Uluslararası Birim Sistemi'ndeki (SI) birimi nedir?", opts: ["Joule", "Watt", "Newton", "Pascal"], a: 2 },
+            { q: "Türkiye'nin yüzölçümü bakımından en büyük ili hangisidir?", opts: ["Ankara", "Sivas", "Konya", "Erzurum"], a: 2 },
+            { q: "Bilgisayarlarda geçici bellek olarak bilinen ve elektrik kesildiğinde verileri silinen donanım hangisidir?", opts: ["SSD", "RAM", "ROM", "GPU"], a: 1 },
+            { q: "Futbolda bir takım sahaya kaleci dahil kaç oyuncuyla çıkar?", opts: ["9", "10", "11", "12"], a: 2 },
+            { q: "Keman, viyola, çello ve kontrbas hangi müzik aletleri grubuna girer?", opts: ["Üflemeli", "Vurmalı", "Yaylı", "Tuşlu"], a: 2 },
+            { q: "Hangi gezegenin etrafında en belirgin halka sistemi bulunur?", opts: ["Mars", "Satürn", "Merkür", "Venüs"], a: 1 },
+            { q: "Osmanlı Devleti'nin kurucusu kimdir?", opts: ["Orhan Gazi", "Osman Gazi", "I. Murad", "Ertuğrul Gazi"], a: 1 },
+            { q: "İnsan vücudunda kanın pıhtılaşmasını sağlayan kan hücreleri hangisidir?", opts: ["Alyuvarlar", "Akyuvarlar", "Trombositler (Kan Pulcukları)", "Plazma"], a: 2 },
+            { q: "'Fareler ve İnsanlar' ile 'Gazap Üzümleri' romanlarının yazarı kimdir?", opts: ["Ernest Hemingway", "John Steinbeck", "F. Scott Fitzgerald", "Mark Twain"], a: 1 },
+            { q: "UNESCO Dünya Mirası listesindeki Pamukkale Travertenleri hangi ilimizdedir?", opts: ["Muğla", "Aydın", "Denizli", "Burdur"], a: 2 },
+            { q: "Periyodik tabloda 'O' sembolü hangi elemente aittir?", opts: ["Osmiyum", "Oksijen", "Altın", "Oganesson"], a: 1 },
+            { q: "Basketbolda potanın yerden yüksekliği standart olarak kaç metredir?", opts: ["2,85 m", "3,05 m", "3,25 m", "3,50 m"], a: 1 },
+            { q: "Türkiye'de ilk üniversite (Darülfünun'un devamı olarak İstanbul Üniversitesi) hangi yılda modern yapısına kavuşmuştur?", opts: ["1923", "1928", "1933", "1945"], a: 2 },
+            { q: "Hangi ülke hem Asya hem Avrupa kıtasında toprağa sahip değildir?", opts: ["Türkiye", "Rusya", "Kazakistan", "İspanya"], a: 3 },
+            { q: "Dünyanın en büyük yağmur ormanı olan Amazon Ormanları hangi kıtadadır?", opts: ["Afrika", "Güney Amerika", "Asya", "Okyanusya"], a: 1 },
+            { q: "Bir bayt (1 Byte) kaç bitten oluşur?", opts: ["4 bit", "8 bit", "16 bit", "32 bit"], a: 1 },
+            { q: "'Savaş ve Barış' ile 'Anna Karenina' romanlarının yazarı kimdir?", opts: ["Fyodor Dostoyevski", "Lev Tolstoy", "İvan Turgenyev", "Nikolay Gogol"], a: 1 },
+            { q: "Türkiye'nin ilk kadın savaş pilotu ve dünyanın ilk kadın savaş uçağı pilotu kimdir?", opts: ["Sabiha Gökçen", "Halide Edib", "Afet İnan", "Safiye Ali"], a: 0 },
+            { q: "Suyun kaynama noktası deniz seviyesinde kaç santigrat derecedir?", opts: ["80 °C", "90 °C", "100 °C", "120 °C"], a: 2 },
+            { q: "Hangisi bir programlama dili değildir?", opts: ["Python", "Rust", "HTML", "Kotlin"], a: 2 },
+            { q: "Güneş sistemindeki en küçük gezegen hangisidir?", opts: ["Mars", "Merkür", "Venüs", "Neptün"], a: 1 },
+            { q: "Ünlü 'Guernica' tablosu hangi ressam tarafından yapılmıştır?", opts: ["Salvador Dalí", "Pablo Picasso", "Joan Miró", "Francisco Goya"], a: 1 },
+            { q: "Türkiye'nin en kalabalık ikinci şehri hangisidir?", opts: ["İzmir", "Bursa", "Ankara", "Antalya"], a: 2 }
         ];
 
         const CAPITALS_POOL = [
@@ -715,7 +977,7 @@
             { q: "Romanya'nın başkenti neresidir?", opts: ["Köstence", "Bükreş", "Kaloşvar", "Temeşvar"], a: 1 },
             { q: "Ukrayna'nın başkenti hangi şehirdir?", opts: ["Odessa", "Lviv", "Kiev", "Harkiv"], a: 2 },
             { q: "Gürcistan'ın başkenti aşağıdakilerden hangisidir?", opts: ["Batum", "Tiflis", "Kutaisi", "Rustavi"], a: 1 },
-            { q: "Kazakistan'ın başkenti neresidir?", opts: ["Almatı", "Astana", "Çimkent", "aktau"], a: 1 },
+            { q: "Kazakistan'ın başkenti neresidir?", opts: ["Almatı", "Astana", "Çimkent", "Aktau"], a: 1 },
             { q: "Özbekistan'ın başkenti hangi şehirdir?", opts: ["Semerkant", "Buhara", "Taşkent", "Hive"], a: 2 },
             { q: "Çin Halk Cumhuriyeti'nin başkenti neresidir?", opts: ["Şanghay", "Pekin", "Guanco", "Şenzen"], a: 1 },
             { q: "Tayland'ın başkenti aşağıdakilerden hangisidir?", opts: ["Phuket", "Bangkok", "Chiang Mai", "Pattaya"], a: 1 },
@@ -726,7 +988,7 @@
             { q: "İran'ın başkenti neresidir?", opts: ["İsfahan", "Tebriz", "Tahran", "Şiraz"], a: 2 },
             { q: "Irak'ın başkenti aşağıdakilerden hangisidir?", opts: ["Basra", "Musul", "Bağdat", "Erbil"], a: 2 },
             { q: "Suudi Arabistan'ın başkenti hangi şehirdir?", opts: ["Cidde", "Riyad", "Mekke", "Dammam"], a: 1 },
-            { q: "Birleşik Arap Emirlikleri'nin başkenti neresidir?", opts: ["Dubai", "Abu Dabi", "Şارجه", "Acman"], a: 1 },
+            { q: "Birleşik Arap Emirlikleri'nin başkenti neresidir?", opts: ["Dubai", "Abu Dabi", "Şarika", "Acman"], a: 1 },
             { q: "Katar'ın başkenti aşağıdakilerden hangisidir?", opts: ["Doha", "El Vakra", "El Hor", "Duhan"], a: 0 },
             { q: "Cezayir'in başkenti hangi şehirdir?", opts: ["Oran", "Konstantin", "Cezayir", "Annaba"], a: 2 },
             { q: "Tunus'un başkenti neresidir?", opts: ["Sfaks", "Susa", "Tunus", "Kayrevan"], a: 2 },
@@ -740,7 +1002,31 @@
             { q: "Yeni Zelanda'nın başkenti hangi şehirdir?", opts: ["Auckland", "Christchurch", "Wellington", "Hamilton"], a: 2 },
             { q: "İrlanda Cumhuriyeti'nin başkenti neresidir?", opts: ["Cork", "Galway", "Dublin", "Limerick"], a: 2 },
             { q: "Belçika'nın başkenti aşağıdakilerden hangisidir?", opts: ["Anvers", "Gent", "Brüksel", "Brugge"], a: 2 },
-            { q: "Sırbistan'ın başkenti hangi şehirdir?", opts: ["Novi Sad", "Niş", "Belgrad", "Subotica"], a: 2 }
+            { q: "Sırbistan'ın başkenti hangi şehirdir?", opts: ["Novi Sad", "Niş", "Belgrad", "Subotica"], a: 2 },
+            { q: "Hırvatistan'ın başkenti neresidir?", opts: ["Split", "Dubrovnik", "Zagreb", "Rijeka"], a: 2 },
+            { q: "Bosna-Hersek'in başkenti hangi şehirdir?", opts: ["Mostar", "Saraybosna", "Banja Luka", "Tuzla"], a: 1 },
+            { q: "Arnavutluk'un başkenti aşağıdakilerden hangisidir?", opts: ["Dıraç", "Tiran", "İşkodra", "Elbasan"], a: 1 },
+            { q: "İzlanda'nın başkenti neresidir?", opts: ["Akureyri", "Reykjavik", "Keflavik", "Kopavogur"], a: 1 },
+            { q: "Slovakya'nın başkenti hangi şehirdir?", opts: ["Košice", "Bratislava", "Žilina", "Nitra"], a: 1 },
+            { q: "Slovenya'nın başkenti neresidir?", opts: ["Maribor", "Ljubljana", "Celje", "Koper"], a: 1 },
+            { q: "Estonya'nın başkenti aşağıdakilerden hangisidir?", opts: ["Tartu", "Tallinn", "Narva", "Pärnu"], a: 1 },
+            { q: "Letonya'nın başkenti hangi şehirdir?", opts: ["Riga", "Daugavpils", "Liepāja", "Jelgava"], a: 0 },
+            { q: "Litvanya'nın başkenti neresidir?", opts: ["Kaunas", "Vilnius", "Klaipėda", "Šiauliai"], a: 1 },
+            { q: "Kırgızistan'ın başkenti hangi şehirdir?", opts: ["Oş", "Bişkek", "Celal-Abad", "Karakol"], a: 1 },
+            { q: "Türkmenistan'ın başkenti neresidir?", opts: ["Merv", "Aşkabat", "Türkmenbaşı", "Daşoğuz"], a: 1 },
+            { q: "Filipinler'in başkenti aşağıdakilerden hangisidir?", opts: ["Cebu", "Davao", "Manila", "Quezon"], a: 2 },
+            { q: "Moğolistan'ın başkenti hangi şehirdir?", opts: ["Erdenet", "Ulan Batur", "Darhan", "Çoybalsan"], a: 1 },
+            { q: "Nepal'in başkenti neresidir?", opts: ["Pokhara", "Katmandu", "Lalitpur", "Biratnagar"], a: 1 },
+            { q: "Ürdün'ün başkenti aşağıdakilerden hangisidir?", opts: ["Akabe", "Amman", "İrbid", "Zarka"], a: 1 },
+            { q: "Lübnan'ın başkenti hangi şehirdir?", opts: ["Trablusşam", "Beyrut", "Sayda", "Sur"], a: 1 },
+            { q: "Umman'ın başkenti neresidir?", opts: ["Salalah", "Maskat", "Sohar", "Nizwa"], a: 1 },
+            { q: "Etiyopya'nın başkenti hangi şehirdir?", opts: ["Gondar", "Addis Ababa", "Mekelle", "Dire Dawa"], a: 1 },
+            { q: "Gana'nın başkenti aşağıdakilerden hangisidir?", opts: ["Kumasi", "Akra", "Tamale", "Takoradi"], a: 1 },
+            { q: "Senegal'in başkenti neresidir?", opts: ["Touba", "Dakar", "Thiès", "Saint-Louis"], a: 1 },
+            { q: "Uruguay'ın başkenti hangi şehirdir?", opts: ["Salto", "Montevideo", "Paysandú", "Maldonado"], a: 1 },
+            { q: "Ekvador'un başkenti neresidir?", opts: ["Guayaquil", "Quito", "Cuenca", "Manta"], a: 1 },
+            { q: "Venezuela'nın başkenti aşağıdakilerden hangisidir?", opts: ["Maracaibo", "Caracas", "Valencia", "Barquisimeto"], a: 1 },
+            { q: "Jamaika'nın başkenti hangi şehirdir?", opts: ["Montego Bay", "Kingston", "Ocho Rios", "Negril"], a: 1 }
         ];
 
         const TRUE_FALSE_POOL = [
@@ -761,7 +1047,7 @@
             { s: "Güneş ışığının Dünya'ya ulaşması yaklaşık 8 dakika 20 saniye sürer.", a: true, info: "Doğru! 150 milyon km mesafeyi ışık yaklaşık 8 dakikada alır." },
             { s: "Devekuşları tehlike anında başlarını kuma gömer.", a: false, info: "Yanlış! Bu bir şehir efsanesidir; devekuşları tehlike anında kaçar veya yere yatar." },
             { s: "Muz ağacı aslında odunsu bir ağaç değil, dev bir otsu bitkidir.", a: true, info: "Doğru! Muzun gövdesi odun dokusu içermez." },
-            { s: "boğalar kırmızı renge sinirlenerek saldırır.", a: false, info: "Yanlış! Boğalar kırmızı renk körüdür; pelerinin rengine değil hareketine tepki verirler." },
+            { s: "Boğalar kırmızı renge sinirlenerek saldırır.", a: false, info: "Yanlış! Boğalar kırmızı renk körüdür; pelerinin rengine değil hareketine tepki verirler." },
             { s: "İnsan vücudundaki en büyük iç organ karaciğerdir.", a: true, info: "Doğru! Deri en büyük dış organ, karaciğer ise en büyük iç organdır." },
             { s: "Yıldırım aynı noktaya asla iki kez düşmez.", a: false, info: "Yanlış! Yüksek binalara ve paratonerlere yılda onlarca kez yıldırım düşebilir." },
             { s: "Köpekbalıklarının iskeletinde hiç kemik bulunmaz, tamamen kıkırdaktan oluşur.", a: true, info: "Doğru! Köpekbalıkları kıkırdaklı balıklar sınıfındadır." },
@@ -793,7 +1079,36 @@
             { s: "Kahve çekirdeği aslında kahve kirazı adı verilen bir meyvenin çekirdeğidir.", a: true, info: "Doğru!" },
             { s: "Plüton 2006 yılında alınan kararla 'Cüce Gezegen' sınıfına dahil edilmiştir.", a: true, info: "Doğru! Uluslararası Astronomi Birliği 2006'da statüsünü güncellemiştir." },
             { s: "Salyangozlar kış uykusuna veya kuraklık uykusuna yattığında 3 yıla kadar uyuyabilir.", a: true, info: "Doğru! Nem kaybını önlemek için uzun süre kabuklarında uyuyabilirler." },
-            { s: "Fotosentez yalnızca gündüz Güneş ışığında yapılabilir, yapay ışıkta kesinlikle gerçekleşmez.", a: false, info: "Yanlış! Uygun dalga boyundaki yapay ışık altında da fotosentez gerçekleşir." }
+            { s: "Fotosentez yalnızca gündüz Güneş ışığında yapılabilir, yapay ışıkta kesinlikle gerçekleşmez.", a: false, info: "Yanlış! Uygun dalga boyundaki yapay ışık altında da fotosentez gerçekleşir." },
+            { s: "Yunuslar uyurken beyinlerinin yalnızca bir yarısını dinlendirirler.", a: true, info: "Doğru! Nefes almak için yüzeye çıkabilmeleri adına tek yarımküre uyanık kalır." },
+            { s: "İnsan vücudundaki en sert madde kemik değil, diş minesidir.", a: true, info: "Doğru! Diş minesi vücuttaki en mineralize ve en sert dokudur." },
+            { s: "Uzayda ses dalgaları havadan daha hızlı yayılır.", a: false, info: "Yanlış! Uzay boşluktur ve sesin yayılması için maddesel ortam gerekir." },
+            { s: "Çilek, çekirdekleri meyvesinin dış yüzeyinde bulunan nadir meyvelerdendir.", a: true, info: "Doğru! Dışındaki küçük noktalar aslında minik meyveciklerdir." },
+            { s: "Bir ahtapotun 8 kolu ve 10 bacağı vardır.", a: false, info: "Yanlış! Ahtapotların toplam 8 kolu vardır." },
+            { s: "Türkiye'nin üç tarafı denizlerle çevrilidir.", a: true, info: "Doğru! Karadeniz, Ege Denizi ve Akdeniz ile çevrilidir." },
+            { s: "Kuşlar arasında geriye doğru uçabilen tek tür sinek kuşudur.", a: true, info: "Doğru! Sinek kuşları kanatlarını sekiz şeklinde çırparak geri uçabilir." },
+            { s: "Ay'ın kendi ışık kaynağı vardır, bu yüzden geceleri parlar.", a: false, info: "Yanlış! Ay, Güneş'ten aldığı ışığı Dünya'ya yansıtır." },
+            { s: "Karıncalar kendi vücut ağırlıklarının onlarca katını taşıyabilirler.", a: true, info: "Doğru! Küçük boyutlarına göre kas kesit alanları oldukça güçlüdür." },
+            { s: "İnsanlar ve muzlar hiçbir ortak gene sahip değildir.", a: false, info: "Yanlış! Temel hücresel işlevlerden sorumlu genlerin yaklaşık %50-60'ı ortaktır." },
+            { s: "Denizatı türlerinde yavruları kesesinde taşıyıp doğuran erkek bireydir.", a: true, info: "Doğru! Dişi yumurtaları erkeğin kuluçka kesesine bırakır." },
+            { s: "Kan damarlarımız uç uca eklense Dünya'nın çevresini birden fazla kez dolaşabilir.", a: true, info: "Doğru! Yetişkin bir insanda yaklaşık 100.000 km damar ağı bulunur." },
+            { s: "Elma suyu, portakal suyundan daha fazla C vitamini içerir.", a: false, info: "Yanlış! Portakal suyu C vitamini açısından çok daha zengindir." },
+            { s: "Kutup ışıkları (Aurora), Güneş rüzgarlarının Dünya'nın manyetik alanıyla etkileşimi sonucu oluşur.", a: true, info: "Doğru! Yüklü parçacıklar atmosferdeki gazlarla çarpışarak ışık saçar." },
+            { s: "Bir gökkuşağı aslında tam bir daire şeklindedir, ancak yerden sadece yay kısmını görürüz.", a: true, info: "Doğru! Uçaktan bakıldığında tam daire gökkuşağı görülebilir." },
+            { s: "Köpekler sadece siyah-beyaz görür, hiçbir rengi ayırt edemezler.", a: false, info: "Yanlış! Köpekler mavi ve sarı tonlarını ayırt edebilirler." },
+            { s: "Su, donduğunda hacmi küçülen bir maddedir.", a: false, info: "Yanlış! Su donarken kristalleşir ve hacmi yaklaşık %9 genişler." },
+            { s: "İlk e-posta 1971 yılında Ray Tomlinson tarafından gönderilmiştir.", a: true, info: "Doğru! '@' işaretini e-posta adreslerinde ilk kullanan kişi de odur." },
+            { s: "Penguenler sadece Antarktika'da yaşar, ekvatora yakın bölgelerde hiç bulunmazlar.", a: false, info: "Yanlış! Galapagos penguenleri ekvator çizgisine çok yakın yaşar." },
+            { s: "İnsan burnu ve kulakları yaşlandıkça yerçekimi ve kıkırdak değişimiyle biraz daha büyük görünür.", a: true, info: "Doğru! Kıkırdak doku ve bağ dokusu zamanla esneyip sarkabilir." },
+            { s: "Mars gezegeninin iki küçük uydusu vardır: Phobos ve Deimos.", a: true, info: "Doğru! İsimlerini Yunan mitolojisindeki korku ve dehşet tanrılarından alırlar." },
+            { s: "Bir satranç oyununda ilk hamleyi her zaman siyah taşlar yapar.", a: false, info: "Yanlış! Satrançta oyuna her zaman beyaz taşlar başlar." },
+            { s: "Arılar, çiçeklerin yerini kovan arkadaşlarına özel bir dansla tarif ederler.", a: true, info: "Doğru! Buna 'sallanma dansı' (waggle dance) denir." },
+            { s: "Venüs'te bir gün, Venüs'ün bir yılından daha uzundur.", a: true, info: "Doğru! Kendi ekseni etrafında 243 Dünya gününde, Güneş etrafında 225 günde döner." },
+            { s: "İnsan kalbi günde yaklaşık 100.000 kez atar.", a: true, info: "Doğru! Dakikada ortalama 70 atım ile günde 100 bin civarı atar." },
+            { s: "Japon balıklarının hafızası sadece 3 saniyedir.", a: false, info: "Yanlış! Bilimsel deneyler haftalarca hatta aylarca hatırlayabildiklerini göstermiştir." },
+            { s: "Dünya'nın en derin gölü Sibirya'daki Baykal Gölü'dür.", a: true, info: "Doğru! 1.642 metre derinliğiyle dünyanın en derin tatlı su gölüdür." },
+            { s: "İnsan vücudundaki kemik sayısı bebeklikte yetişkinliktekinden daha azdır.", a: false, info: "Yanlış! Bebekler yaklaşık 270-300 kemikle doğar, büyüdükçe bazıları kaynaşır ve 206'ya düşer." },
+            { s: "Kaplumbağalar kabuklarından tamamen çıkıp başka bir kabuğa geçebilirler.", a: false, info: "Yanlış! Kabukları omurgalarına ve kaburgalarına kaynamıştır, ayrılamaz." }
         ];
 
         const WORD_POOL = [
@@ -860,11 +1175,50 @@
             { word: "YORUM", hint: "Bir olayı veya metni kendi bakış açısıyla açıklama" },
             { word: "KANUN", hint: "Meclis tarafından çıkarılan yazılı hukuk kuralı, yasa" },
             { word: "AHLAK", hint: "İyi ve doğru davranış kuralları bütünü, etik" },
-            { word: "MİRAS", hint: "Geçmiş kuşaklardan geleceğe bırakılan maddi ve manevi değerler" }
+            { word: "MİRAS", hint: "Geçmiş kuşaklardan geleceğe bırakılan maddi ve manevi değerler" },
+            { word: "KAMPÜ", five: "KULÜP", hint: "Ortak ilgi alanlarına sahip öğrencilerin oluşturduğu topluluk" },
+            { word: "SINIF", hint: "Derslerin işlendiği oda veya öğrenim basamağı" },
+            { word: "NOTER", hint: "Resmi belgeleri onaylayan hukuk görevlisi" },
+            { word: "KÜRSÜ", hint: "Konuşmacının veya akademisyenin hitap ettiği yüksek platform" },
+            { word: "ETÜT", five: "ETÜDÜ", six: "TEZGA", hint: "Bunu atla" },
+            { word: "AKSES", five: "ERİŞİ", six: "KODLA", hint: "Bilgisayar programı yazma eylemi (emir kipi)" },
+            { word: "ROBOT", hint: "Programlanabilir otomatik makine" },
+            { word: "VERİM", hint: "Harcanan emeğe karşılık elde edilen olumlu sonuç" },
+            { word: "BAŞAR", five: "ZAFER", hint: "Çaba ve mücadele sonucunda kazanılan büyük başarı" },
+            { word: "EMEKÇ", five: "ÇABUK", hint: "Hızlı, seri, vakit kaybetmeden" },
+            { word: "ZİHİN", hint: "Anlama, kavrama ve düşünme yetisi" },
+            { word: "MANTI", five: "KAVRA", hint: "Anlamak, özümsemek (emir kipi)" },
+            { word: "DÜNYA", hint: "Üzerinde yaşadığımız mavi gezegen" },
+            { word: "BULUT", hint: "Gökyüzünde su buharının yoğunlaşmasıyla oluşan kütle" },
+            { word: "YAĞMU", five: "DOLUN", six: "RÜZGA", hint: "Hava akımı" },
+            { word: "KAVİS", hint: "Yay biçimindeki eğri çizgi" },
+            { word: "NOKTA", hint: "Cümlenin sonuna konulan işaret veya geometrik temel birim" },
+            { word: "ÇİZGİ", hint: "Noktaların birleşmesiyle oluşan uzun iz" },
+            { word: "RENKL", five: "BOYA", six: "TUVAL", hint: "Ressamların üzerine yağlı boya yaptığı gerili bez" },
+            { word: "HEKİM", hint: "Hastalıkları teşhis ve tedavi eden tıp doktoru" },
+            { word: "NABIZ", hint: "Kalp atışlarının atardamarlarda hissedilen ritmi" },
+            { word: "DOĞAL", hint: "Yapay olmayan, tabiatta kendiliğinden bulunan" },
+            { word: "ENERJ", five: "BUHAR", hint: "Suyun ısınarak gaz haline geçmesi" },
+            { word: "METAL", hint: "Isı ve elektriği iyi ileten parlak element grubu" },
+            { word: "KRİST", five: "ELMAS", hint: "Doğadaki en sert değerli taş" },
+            { word: "ŞEHİR", hint: "Nüfusu yoğun büyük yerleşim yeri, kent" },
+            { word: "CADDE", hint: "Şehir içindeki geniş ve işlek ana yol" },
+            { word: "KÖPRÜ", hint: "İki yakayı birbirine bağlayan mühendislik yapısı" },
+            { word: "LİMAN", hint: "Gemilerin yük alıp indirdiği korunaklı kıyı" },
+            { word: "SEFER", hint: "Yolculuk, gezi veya düzenli ulaşım turu" },
+            { word: "ROTA", five: "GÜZER", six: "HARİT", hint: "Yön" },
+            { word: "PUSUL", five: "YÖNÜN", six: "KUZEY", hint: "Pusula ibresinin gösterdiği ana yön" },
+            { word: "GÜNEY", hint: "Kuzeyin tam karşısındaki ana yön" },
+            { word: "DOĞUŞ", hint: "Güneşin ufuktan yükselmesi veya bir şeyin başlangıcı" },
+            { word: "BATIŞ", hint: "Güneşin ufukta kaybolması" },
+            { word: "SABAH", hint: "Günün ilk aydınlık saatleri" },
+            { word: "AKŞAM", hint: "Güneşin batmaya yakın olduğu zaman dilimi" },
+            { word: "ZAMAN", hint: "Olayların geçmişten geleceğe aktığı süreç" },
+            { word: "SAATİ", five: "DAKİK", hint: "Zamanına titizlikle uyan, tam vaktinde olan" }
         ].map(item => ({
             word: item.six || item.five || item.word,
             hint: item.hint
-        }));
+        })).filter(item => [...item.word].length === 5 && item.hint !== "Bunu atla" && item.hint !== "Hava akımı" && item.hint !== "Yön");
 
         const MEMORY_ICONS = [
             { icon: 'fa-atom', color: 'text-cyan-400', label: 'Atom' },
@@ -905,20 +1259,28 @@
             if (badge) badge.classList.add('hidden');
         }
 
+        let activeTimerRemaining = 0;
+        function extendArenaTimer(extraSeconds) {
+            if (!activeTimer) return;
+            activeTimerRemaining += extraSeconds;
+            const valEl = document.getElementById('arena-timer-val');
+            if (valEl) valEl.textContent = `${activeTimerRemaining}s`;
+        }
+
         function startArenaTimer(seconds, onTick, onExpire) {
             clearArenaTimer();
-            let remaining = seconds;
+            activeTimerRemaining = seconds;
             const badge = document.getElementById('arena-timer-badge');
             const valEl = document.getElementById('arena-timer-val');
             if (badge && valEl) {
                 badge.classList.remove('hidden');
-                valEl.textContent = `${remaining}s`;
+                valEl.textContent = `${activeTimerRemaining}s`;
             }
             activeTimer = setInterval(() => {
-                remaining--;
-                if (valEl) valEl.textContent = `${Math.max(0, remaining)}s`;
-                if (typeof onTick === 'function') onTick(remaining);
-                if (remaining <= 0) {
+                activeTimerRemaining--;
+                if (valEl) valEl.textContent = `${Math.max(0, activeTimerRemaining)}s`;
+                if (typeof onTick === 'function') onTick(activeTimerRemaining);
+                if (activeTimerRemaining <= 0) {
                     clearArenaTimer();
                     if (typeof onExpire === 'function') onExpire();
                 }
@@ -1000,8 +1362,15 @@
         // =====================================================================
         //  OYUN SONU EKRANI RENDER
         // =====================================================================
-        function renderGameResult({ gameId, scoreText, summaryText, coins, xp, success }) {
+        function renderGameResult({ gameId, scoreText, summaryText, coins, xp, success, bestVal, bestLabel, lowerIsBetter = false }) {
             clearArenaTimer();
+            recordGamePlayedToday(gameId);
+            const isNewRecord = (typeof bestVal === 'number' && bestLabel)
+                ? saveGameBest(gameId, bestVal, bestLabel, lowerIsBetter)
+                : false;
+            if (success) playGameSound('win');
+            renderGamesGrid();
+
             const stage = document.getElementById('arena-stage');
             if (!stage) return;
             const alreadyClaimed = isGameClaimedToday(gameId);
@@ -1037,7 +1406,10 @@
                         <i class="fa-solid ${success ? 'fa-trophy' : 'fa-flag-checkered'}"></i>
                     </div>
                     <div>
-                        <span class="text-xs font-extrabold uppercase tracking-wider text-amber-300">${escapeHtml(scoreText)}</span>
+                        <div class="flex items-center justify-center gap-2 flex-wrap">
+                            <span class="text-xs font-extrabold uppercase tracking-wider text-amber-300">${escapeHtml(scoreText)}</span>
+                            ${isNewRecord ? `<span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-fuchsia-500/20 text-fuchsia-300 border border-fuchsia-400/40 animate-pulse"><i class="fa-solid fa-crown mr-1"></i>YENİ REKOR!</span>` : ''}
+                        </div>
                         <h4 class="text-xl font-extrabold text-white mt-1">${success ? 'Harika İş Çıkardın!' : 'Oyun Tamamlandı!'}</h4>
                         <p class="text-xs text-slate-400 mt-1 max-w-sm mx-auto leading-relaxed">${escapeHtml(summaryText)}</p>
                     </div>
@@ -1078,7 +1450,11 @@
             const questions = pickUniqueItems(game.id, pool, 8);
             let idx = 0;
             let correctCount = 0;
+            let streak = 0;
+            let maxStreak = 0;
             let locked = false;
+            let used5050 = false;
+            let usedExtraTime = false;
 
             function renderStep() {
                 if (idx >= questions.length) {
@@ -1094,10 +1470,25 @@
                     if (!locked) handleAnswer(-1);
                 });
 
+                const streakBadge = streak >= 2
+                    ? `<span class="text-[11px] font-extrabold px-2.5 py-0.5 rounded-full bg-orange-500/20 text-orange-300 border border-orange-500/40"><i class="fa-solid fa-fire mr-1"></i>${streak}x Seri!</span>`
+                    : `<span class="text-[11px] text-slate-500 font-semibold">Jokerler:</span>`;
+
                 stage.innerHTML = `
                     <div class="pop-in space-y-4">
                         <div class="w-full bg-slate-900 h-1.5 rounded-full overflow-hidden">
                             <div class="bg-gradient-to-r from-amber-400 to-orange-500 h-full transition-all duration-300" style="width:${((idx + 1) / questions.length) * 100}%"></div>
+                        </div>
+                        <div class="flex items-center justify-between gap-2">
+                            <div>${streakBadge}</div>
+                            <div class="flex items-center gap-1.5">
+                                <button id="joker-5050" ${used5050 ? 'disabled' : ''} class="px-2.5 py-1 rounded-lg text-[11px] font-bold border transition ${used5050 ? 'bg-slate-900/40 border-slate-800 text-slate-600 cursor-not-allowed line-through' : 'bg-indigo-500/15 hover:bg-indigo-500/25 border-indigo-500/40 text-indigo-300'}">
+                                    <i class="fa-solid fa-scissors mr-1"></i>50/50
+                                </button>
+                                <button id="joker-time" ${usedExtraTime ? 'disabled' : ''} class="px-2.5 py-1 rounded-lg text-[11px] font-bold border transition ${usedExtraTime ? 'bg-slate-900/40 border-slate-800 text-slate-600 cursor-not-allowed line-through' : 'bg-cyan-500/15 hover:bg-cyan-500/25 border-cyan-500/40 text-cyan-300'}">
+                                    <i class="fa-solid fa-clock-rotate-left mr-1"></i>+10 Sn
+                                </button>
+                            </div>
                         </div>
                         <div class="bg-slate-900/70 border border-slate-700/80 rounded-2xl p-4">
                             <p class="text-sm sm:text-base font-bold text-white leading-relaxed">${escapeHtml(qObj.q)}</p>
@@ -1116,6 +1507,38 @@
                 stage.querySelectorAll('.quiz-opt-btn').forEach(btn => {
                     btn.addEventListener('click', () => handleAnswer(Number(btn.dataset.opt)));
                 });
+
+                const btn5050 = document.getElementById('joker-5050');
+                if (btn5050 && !used5050) {
+                    btn5050.onclick = () => {
+                        if (locked || used5050) return;
+                        used5050 = true;
+                        playGameSound('joker');
+                        btn5050.disabled = true;
+                        btn5050.className = 'px-2.5 py-1 rounded-lg text-[11px] font-bold border bg-slate-900/40 border-slate-800 text-slate-600 cursor-not-allowed line-through';
+                        const wrongIdxs = shuffleArray([0, 1, 2, 3].filter(i => i !== qObj.a)).slice(0, 2);
+                        wrongIdxs.forEach(wi => {
+                            const b = stage.querySelector(`.quiz-opt-btn[data-opt="${wi}"]`);
+                            if (b) {
+                                b.disabled = true;
+                                b.classList.add('opacity-25', 'pointer-events-none');
+                            }
+                        });
+                    };
+                }
+
+                const btnTime = document.getElementById('joker-time');
+                if (btnTime && !usedExtraTime) {
+                    btnTime.onclick = () => {
+                        if (locked || usedExtraTime) return;
+                        usedExtraTime = true;
+                        playGameSound('joker');
+                        extendArenaTimer(10);
+                        btnTime.disabled = true;
+                        btnTime.className = 'px-2.5 py-1 rounded-lg text-[11px] font-bold border bg-slate-900/40 border-slate-800 text-slate-600 cursor-not-allowed line-through';
+                        window.showToast('+10 saniye eklendi!', 'info');
+                    };
+                }
             }
 
             function handleAnswer(selectedIdx) {
@@ -1124,7 +1547,15 @@
                 clearArenaTimer();
                 const qObj = questions[idx];
                 const isCorrect = selectedIdx === qObj.a;
-                if (isCorrect) correctCount++;
+                if (isCorrect) {
+                    correctCount++;
+                    streak++;
+                    if (streak > maxStreak) maxStreak = streak;
+                    playGameSound('correct');
+                } else {
+                    streak = 0;
+                    playGameSound('wrong');
+                }
 
                 const buttons = document.querySelectorAll('#quiz-opts .quiz-opt-btn');
                 buttons.forEach((b, i) => {
@@ -1152,13 +1583,15 @@
 
                 renderGameResult({
                     gameId: game.id,
-                    scoreText: `${questions.length} Soruda ${correctCount} Doğru`,
+                    scoreText: `${questions.length} Soruda ${correctCount} Doğru${maxStreak >= 3 ? ` · En İyi Seri: ${maxStreak}x` : ''}`,
                     summaryText: correctCount >= 2
                         ? `Bilgi yarışmasını ${correctCount} doğru yanıtla tamamladın!`
                         : `Ödül kazanmak için en az 2 doğru yanıt gerekiyor. Hemen tekrar deneyebilirsin!`,
                     coins,
                     xp,
-                    success: correctCount >= 4
+                    success: correctCount >= 4,
+                    bestVal: correctCount,
+                    bestLabel: `${correctCount}/${questions.length} Doğru`
                 });
             }
 
@@ -1295,7 +1728,10 @@
                                     : `Doğru kelime "${target}" idi. Tekrar deneyerek kelimeyi bulabilirsin!`,
                                 coins,
                                 xp,
-                                success: won
+                                success: won,
+                                bestVal: won ? tries : undefined,
+                                bestLabel: won ? `${tries}. Deneme` : undefined,
+                                lowerIsBetter: true
                             });
                         }, 550);
                     }
@@ -1375,7 +1811,8 @@
                 locked = true;
                 const item = statements[idx];
                 const ok = choice === item.a;
-                if (ok) correctCount++;
+                if (ok) { correctCount++; playGameSound('correct'); }
+                else { playGameSound('wrong'); }
 
                 const fb = document.getElementById('tf-feedback');
                 if (fb) {
@@ -1406,7 +1843,9 @@
                         : `10 ifadeyi inceledin ve ${correctCount} doğru karar verdin!`,
                     coins,
                     xp,
-                    success: correctCount >= 5
+                    success: correctCount >= 5,
+                    bestVal: correctCount,
+                    bestLabel: `${correctCount}/10 Doğru`
                 });
             }
 
@@ -1526,7 +1965,9 @@
                         : `Ödül için en az 3 doğru işlem çözmelisin. Tekrar dene!`,
                     coins,
                     xp,
-                    success: score >= 6
+                    success: score >= 6,
+                    bestVal: score,
+                    bestLabel: `${score} İşlem`
                 });
             }
 
@@ -1641,7 +2082,10 @@
                         : (timeUp ? `Süre doldu! ${matchedPairs} çift eşleştirdin.` : `Oyun tamamlandı.`),
                     coins,
                     xp,
-                    success: matchedPairs === 6
+                    success: matchedPairs === 6,
+                    bestVal: matchedPairs === 6 ? moves : undefined,
+                    bestLabel: matchedPairs === 6 ? `${moves} Hamle` : undefined,
+                    lowerIsBetter: true
                 });
             }
 
@@ -1892,7 +2336,10 @@
             const grid = document.getElementById('games-grid');
             if (!grid) return;
             updateCategoryCounts();
+            updateMissionBar();
+            updateSoundIcon();
             const claimedToday = getClaimedGamesToday();
+            const bestMap = getBestScoresMap();
 
             const list = currentCategory === 'all'
                 ? GAMES_CATALOG
@@ -1900,9 +2347,12 @@
 
             grid.innerHTML = list.map((game, idx) => {
                 const isClaimed = claimedToday.includes(game.id);
+                const best = bestMap[game.id];
                 const tagsHtml = (game.tags || []).map(t =>
                     `<span class="text-[10px] bg-slate-900/80 text-slate-300 border border-slate-700/80 px-2 py-0.5 rounded-lg">${escapeHtml(t)}</span>`
-                ).join('');
+                ).join('') + (best
+                    ? `<span class="text-[10px] font-bold bg-fuchsia-500/15 text-fuchsia-300 border border-fuchsia-500/30 px-2 py-0.5 rounded-lg flex items-center gap-1"><i class="fa-solid fa-crown text-[9px]"></i>Rekorun: ${escapeHtml(best.label)}</span>`
+                    : '');
 
                 const statusBadge = isClaimed
                     ? `<span class="text-[10px] font-bold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 px-2.5 py-0.5 rounded-full flex items-center gap-1"><i class="fa-solid fa-check text-[9px]"></i>Bugün Kazanıldı</span>`

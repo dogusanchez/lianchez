@@ -55,12 +55,12 @@
             
             <nav class="hidden md:flex items-center space-x-1 lg:space-x-2 text-xs lg:text-sm font-medium whitespace-nowrap">
                 <a href="/portal/index.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">Ana Sayfa</a>
+                <a href="/portal/akis.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">Akış</a>
                 <a href="/portal/forum.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">Forum</a>
                 <a href="/portal/oyunlar.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">Oyunlar</a>
                 <a href="/portal/ilanlar.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">İlanlar</a>
                 <a href="/portal/ogrenciler.html" class="px-2.5 py-1.5 rounded-xl bg-indigo-500/20 text-indigo-200 border border-indigo-400/40 font-bold hover:bg-indigo-500/30 transition flex items-center space-x-1.5 shadow-sm shadow-indigo-500/10"><i class="fa-solid fa-users text-indigo-300 text-xs"></i><span>Öğrenciler</span></a>
                 <a href="/portal/topluluk.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">Topluluklar</a>
-                <a href="/portal/iletisim.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">İletişim</a>
             </nav>
 
             <div class="flex items-center space-x-2 sm:space-x-4">
@@ -72,7 +72,7 @@
 
                     <div id="user-profile" class="hidden flex items-center space-x-2 sm:space-x-3 relative">
                         <div class="flex items-center bg-slate-700 px-2 sm:px-2.5 py-1 rounded-full border border-slate-600 shadow-inner">
-                            <i class="fa-solid fa-coins text-yellow-400 mr-1 sm:mr-1.5 text-[10px] sm:text-sm"></i>
+                            <i class="fa-solid fa-coins text-yellow-400 mr-1 sm:mr-1.5 animate-bounce text-[10px] sm:text-sm"></i>
                             <span id="user-coins" class="font-bold text-yellow-400 text-[10px] sm:text-sm">0</span>
                         </div>
 
@@ -91,6 +91,13 @@
                                 <i class="fa-solid fa-user text-indigo-400"></i>
                                 <span>Profilim</span>
                             </a>
+                            <button onclick="openNotificationsModal()" class="w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center justify-between transition">
+                                <span class="flex items-center space-x-2">
+                                    <i class="fa-solid fa-bell text-blue-400"></i>
+                                    <span>Bildirimler</span>
+                                </span>
+                                <span id="dropdown-notif-count" class="bg-slate-700 text-slate-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-slate-600">0</span>
+                            </button>
                             <a href="/portal/magaza.html" class="block w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center space-x-2 transition">
                                 <i class="fa-solid fa-store text-yellow-400"></i>
                                 <span>Mağaza</span>
@@ -103,14 +110,14 @@
                                 </span>
                                 <span id="streak-dropdown-badge" class="bg-amber-500/20 text-amber-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-amber-500/30">0 Gün</span>
                             </button>
-
-                            <button onclick="openNotificationsModal()" class="w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center justify-between transition">
-                                <span class="flex items-center space-x-2">
-                                    <i class="fa-solid fa-bell text-blue-400"></i>
-                                    <span>Bildirimler</span>
-                                </span>
-                                <span id="dropdown-notif-count" class="bg-slate-700 text-slate-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-slate-600">0</span>
-                            </button>
+                            <a href="/portal/iletisim.html" class="block w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center space-x-2 transition">
+                                <i class="fa-solid fa-envelope-open-text text-cyan-400"></i>
+                                <span>İletişim</span>
+                            </a>
+                            <a href="/portal/tanitim.html" class="block w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center space-x-2 transition">
+                                <i class="fa-solid fa-circle-info text-cyan-400"></i>
+                                <span>Tanıtım</span>
+                            </a>
 
                             <div class="border-t border-slate-700/80 my-1"></div>
 
@@ -130,42 +137,45 @@
 
         <div id="mobile-menu" class="hidden md:hidden bg-slate-800 border-t border-slate-700 px-4 pt-3 pb-4 space-y-1.5">
             <a href="/portal/index.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">Ana Sayfa</a>
+            <a href="/portal/akis.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">Akış</a>
             <a href="/portal/forum.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">Forum</a>
             <a href="/portal/oyunlar.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">Oyunlar</a>
             <a href="/portal/ilanlar.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">İlanlar</a>
             <a href="/portal/ogrenciler.html" class="block px-3 py-2 rounded-xl text-sm font-bold text-indigo-200 bg-indigo-500/20 border border-indigo-400/40 flex items-center"><i class="fa-solid fa-users text-indigo-300 mr-2"></i>Öğrenciler</a>
             <a href="/portal/topluluk.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">Topluluklar</a>
-            <a href="/portal/iletisim.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">İletişim</a>
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-grow w-full">
-        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-            <div>
-                <h1 class="text-3xl font-extrabold tracking-tight">Öğrenci Ağı ve Liderlik Tablosu</h1>
-                <p class="text-slate-400 text-sm mt-1">Portalımıza katılan diğer öğrencileri keşfet, en çok coin toplayanları gör!</p>
-            </div>
-            <div class="text-xs bg-slate-800 border border-slate-700 px-4 py-2 rounded-xl text-slate-400">
-                Powered by <a href="https://lianchez.com" target="_blank" class="text-blue-400 hover:underline font-semibold">lianchez.com</a>
-            </div>
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 flex-grow w-full">
+        <div class="flex items-center justify-between gap-3 mb-4 sm:mb-6">
+            <h1 class="text-xl sm:text-3xl font-extrabold tracking-tight flex items-center bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent min-w-0">
+                <i class="fa-solid fa-users text-indigo-400 mr-2 sm:mr-2.5 text-lg sm:text-2xl flex-shrink-0"></i><span class="truncate">Öğrenciler & Liderlik</span>
+            </h1>
+            <span id="students-total-badge" class="flex-shrink-0 text-xs font-bold bg-indigo-500/15 text-indigo-300 border border-indigo-500/30 px-3 py-1.5 rounded-xl flex items-center gap-1.5 whitespace-nowrap">
+                <i class="fa-solid fa-trophy text-yellow-400 text-[11px]"></i><span id="students-total-count">0</span> Öğrenci
+            </span>
         </div>
 
-                <!-- İSTEMCİ TARAFLI FİLTRELEME (0 Read) -->
-        <div class="bg-slate-800 border border-slate-700 rounded-2xl p-4 mb-6 flex flex-col sm:flex-row gap-3 items-center justify-between shadow-lg">
-            <div class="relative w-full sm:w-72">
-                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-500 text-xs"></i>
-                <input type="text" id="student-search-input" oninput="filterStudentsClientSide()" placeholder="İsim veya bölüm ile ara..." class="w-full bg-slate-900 border border-slate-700 rounded-xl pl-9 pr-4 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500">
-            </div>
-            <div class="flex items-center gap-2 w-full sm:w-auto">
-                <i class="fa-solid fa-building-columns text-slate-400 text-xs hidden sm:inline"></i>
-                <input type="text" id="student-uni-filter" autocomplete="off" maxlength="65" oninput="filterStudentsClientSide()" placeholder="Üniversiteye göre filtrele..." class="w-full sm:w-64 bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500">
-                <button onclick="resetStudentFilters()" title="Filtreleri Sıfırla" class="bg-slate-700 hover:bg-slate-600 text-slate-300 p-2 rounded-xl text-xs transition flex-shrink-0">
-                    <i class="fa-solid fa-rotate-left"></i>
-                </button>
+        <!-- İSTEMCİ TARAFLI FİLTRELEME & SIRALAMA (0 Read) -->
+        <div class="bg-slate-800 border border-slate-700 rounded-2xl p-3 sm:p-4 mb-4 shadow-lg">
+            <div class="flex items-center gap-2">
+                <div class="relative flex-1 min-w-0">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-xs"></i>
+                    <input type="text" id="student-search-input" oninput="filterStudentsClientSide()" placeholder="İsim, bölüm veya üniversite ara..." class="w-full bg-slate-900 border border-slate-700 rounded-xl pl-9 pr-3 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500">
+                </div>
+                <div class="relative flex-shrink-0">
+                    <i class="fa-solid fa-arrow-down-wide-short absolute left-3 top-1/2 -translate-y-1/2 text-indigo-400 text-xs pointer-events-none"></i>
+                    <select id="student-sort-select" onchange="filterStudentsClientSide()" class="appearance-none bg-slate-700 hover:bg-slate-600 border border-slate-600 rounded-xl pl-8 pr-3 py-2.5 text-xs text-slate-100 font-semibold focus:outline-none focus:border-indigo-500 cursor-pointer">
+                        <option value="coins">En Çok Coin</option>
+                        <option value="xp">En Yüksek XP</option>
+                        <option value="az">A - Z</option>
+                    </select>
+                </div>
             </div>
         </div>
+        <p id="student-result-count" class="text-[11px] text-slate-500 mb-3 ml-1"></p>
 
-        <div id="students-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div id="students-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5">
             <div class="text-center py-10 text-slate-500 col-span-full">Öğrenciler yükleniyor...</div>
         </div>
 
@@ -713,7 +723,9 @@ if (studentsHasMore) {
         }
 
         function renderStudentCard(student, rank) {
-            const badgeColor = rank === 1 ? 'text-yellow-400 bg-yellow-400/10 border-yellow-400/30' : (rank === 2 ? 'text-slate-300 bg-slate-300/10 border-slate-300/30' : (rank === 3 ? 'text-amber-600 bg-amber-600/10 border-amber-600/30' : 'text-slate-400 bg-slate-800 border-slate-700'));
+            const topBar = rank === 1 ? 'from-yellow-400 to-amber-500' : (rank === 2 ? 'from-slate-300 to-slate-400' : (rank === 3 ? 'from-amber-600 to-orange-700' : 'from-indigo-500/70 to-purple-500/70'));
+            const badgeColor = rank === 1 ? 'text-yellow-300 bg-yellow-400/15 border-yellow-400/40' : (rank === 2 ? 'text-slate-200 bg-slate-300/15 border-slate-300/40' : (rank === 3 ? 'text-amber-400 bg-amber-500/15 border-amber-500/40' : 'text-slate-400 bg-slate-900/70 border-slate-700'));
+            const rankIcon = rank === 1 ? '<i class="fa-solid fa-crown mr-1 text-yellow-400 text-[10px]"></i>' : (rank === 2 ? '<i class="fa-solid fa-medal mr-1 text-slate-300 text-[10px]"></i>' : (rank === 3 ? '<i class="fa-solid fa-medal mr-1 text-amber-500 text-[10px]"></i>' : ''));
             const studentRole = student.role || 'user';
             const studentXP = student.xp || 0;
             const nameEffectClass = getNameEffectClass(studentRole, studentXP);
@@ -722,6 +734,7 @@ if (studentsHasMore) {
             const titleBadge = renderTitleBadge(student);
             const kunyeChips = renderKunyeChips(student);
             const displayName = student.displayName || student.name || 'Öğrenci';
+            const initial = coreEscape((displayName.trim()[0] || 'Ö').toUpperCase());
             const communitiesHtml = renderStudentCommunitiesHtml(student.communities);
 
             const activeListingHtml = (student.activeListing && student.activeListing.status === 'approved' && student.activeListing.title)
@@ -732,25 +745,35 @@ if (studentsHasMore) {
                 : '';
 
             return `
-                <a href="/portal/profil.html?id=${student.id}" class="bg-slate-800 border border-slate-700 p-6 rounded-2xl flex flex-col items-center text-center relative hover:border-indigo-500/50 transition cursor-pointer group up-card-glow">
-                    <span class="absolute top-4 left-4 text-xs font-bold px-2.5 py-1 rounded-full border ${badgeColor}">
-                        #${rank}
-                    </span>
-                    <img src="${student.photoURL || 'https://via.placeholder.com/80'}" class="w-20 h-20 rounded-full border-2 border-indigo-500/30 mb-4 object-cover shadow-md group-hover:border-indigo-400 transition ${avatarFrameClass}">
-                    <div class="flex items-center gap-1.5 mb-1 justify-center max-w-full">
-                        <h3 class="font-bold text-base truncate ${nameEffectClass}">${coreEscape(displayName)}</h3>
-                    </div>
-                    ${titleBadge ? `<div class="mb-2">${titleBadge}</div>` : ''}
-                    <div class="mb-2.5">${roleBadge}</div>
-                    ${kunyeChips ? `<div class="flex flex-wrap gap-1 justify-center mb-2">${kunyeChips}</div>` : ''}
-                    <p class="text-[10px] text-slate-500 mb-1">${studentXP} XP • Üni Portal Üyesi</p>
-                    ${communitiesHtml}
-                    ${activeListingHtml}
-                    
-                    <div class="mt-auto w-full pt-4 border-t border-slate-700/60 flex items-center justify-center bg-slate-900/40 rounded-xl py-2">
-                        <i class="fa-solid fa-coins text-yellow-400 mr-2"></i>
-                        <span class="font-extrabold text-yellow-400 text-sm">${student.coins || 0}</span>
-                        <span class="text-xs text-slate-400 ml-1">Coin</span>
+                <a href="/portal/profil.html?id=${student.id}" class="relative bg-slate-800 border border-slate-700 rounded-2xl flex flex-col hover:border-indigo-500/50 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-indigo-500/5 transition-all duration-200 cursor-pointer group up-card-glow overflow-hidden">
+                    <div class="h-1 bg-gradient-to-r ${topBar}"></div>
+                    <div class="p-5 flex flex-col items-center text-center flex-1 relative">
+                        <span class="absolute top-3.5 left-3.5 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border inline-flex items-center ${badgeColor}">
+                            ${rankIcon}#${rank}
+                        </span>
+                        <div class="relative w-18 h-18 w-[72px] h-[72px] rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 text-white text-xl font-extrabold flex items-center justify-center border-2 border-indigo-500/30 mb-3 mt-1 shadow-md group-hover:border-indigo-400 transition overflow-hidden ${avatarFrameClass}">
+                            ${initial}
+                            ${student.photoURL ? `<img src="${coreEscape(student.photoURL)}" onerror="this.remove()" class="absolute inset-0 w-full h-full object-cover">` : ''}
+                        </div>
+                        <div class="flex items-center gap-1.5 mb-1 justify-center max-w-full">
+                            <h3 class="font-bold text-sm sm:text-base truncate ${nameEffectClass}">${coreEscape(displayName)}</h3>
+                        </div>
+                        ${titleBadge ? `<div class="mb-2">${titleBadge}</div>` : ''}
+                        <div class="mb-2">${roleBadge}</div>
+                        ${kunyeChips ? `<div class="flex flex-wrap gap-1 justify-center mb-1.5">${kunyeChips}</div>` : ''}
+                        ${communitiesHtml}
+                        ${activeListingHtml}
+                        
+                        <div class="mt-auto w-full pt-3 border-t border-slate-700/60 grid grid-cols-2 gap-2">
+                            <div class="bg-slate-900/60 border border-slate-700/60 rounded-xl py-1.5 px-2 flex items-center justify-center gap-1.5">
+                                <i class="fa-solid fa-coins text-yellow-400 text-xs"></i>
+                                <span class="font-extrabold text-yellow-400 text-xs">${student.coins || 0}</span>
+                            </div>
+                            <div class="bg-slate-900/60 border border-slate-700/60 rounded-xl py-1.5 px-2 flex items-center justify-center gap-1">
+                                <i class="fa-solid fa-bolt text-purple-400 text-xs"></i>
+                                <span class="font-bold text-purple-300 text-xs">${studentXP} XP</span>
+                            </div>
+                        </div>
                     </div>
                 </a>
             `;
@@ -758,9 +781,18 @@ if (studentsHasMore) {
 
         function renderFilteredStudents(list) {
             const container = document.getElementById('students-container');
+            const totalEl = document.getElementById('students-total-count');
+            const resEl = document.getElementById('student-result-count');
+            if (totalEl) totalEl.textContent = allStudentsCache.length;
+            if (resEl) resEl.textContent = list.length ? `${list.length} öğrenci gösteriliyor` : '';
             if (!container) return;
             if (list.length === 0) {
-                container.innerHTML = '<div class="text-center py-10 text-slate-500 col-span-full">Aramanızla eşleşen öğrenci bulunamadı.</div>';
+                container.innerHTML = `
+                    <div class="col-span-full text-center py-14 bg-slate-800/50 border border-dashed border-slate-700 rounded-2xl">
+                        <div class="w-14 h-14 mx-auto mb-3 rounded-2xl bg-slate-700/50 flex items-center justify-center text-slate-500 text-2xl"><i class="fa-solid fa-user-slash"></i></div>
+                        <p class="text-sm font-bold text-slate-300">Aramanızla eşleşen öğrenci bulunamadı</p>
+                        <p class="text-xs text-slate-500 mt-1">Farklı bir isim, bölüm veya üniversite ile tekrar deneyebilirsin.</p>
+                    </div>`;
                 return;
             }
             container.innerHTML = list.map((s, idx) => renderStudentCard(s, s.rank || (idx + 1))).join('');
@@ -769,17 +801,23 @@ if (studentsHasMore) {
 
         function filterStudentsClientSide() {
             const keyword = (document.getElementById('student-search-input')?.value || '').trim().toLocaleLowerCase('tr-TR');
-            const uniFilter = (document.getElementById('student-uni-filter')?.value || '').trim().toLocaleLowerCase('tr-TR');
+            const sortBy = document.getElementById('student-sort-select')?.value || 'coins';
 
-            const filtered = allStudentsCache.filter(s => {
+            let filtered = allStudentsCache.filter(s => {
+                if (!keyword) return true;
                 const name = (s.displayName || s.name || '').toLocaleLowerCase('tr-TR');
                 const dep = (s.department || '').toLocaleLowerCase('tr-TR');
                 const uni = (s.university || '').toLocaleLowerCase('tr-TR');
-
-                const matchesKeyword = !keyword || name.includes(keyword) || dep.includes(keyword);
-                const matchesUni = !uniFilter || uni.includes(uniFilter);
-                return matchesKeyword && matchesUni;
+                return name.includes(keyword) || dep.includes(keyword) || uni.includes(keyword);
             });
+
+            if (sortBy === 'xp') {
+                filtered = [...filtered].sort((a, b) => (b.xp || 0) - (a.xp || 0));
+            } else if (sortBy === 'az') {
+                filtered = [...filtered].sort((a, b) => (a.displayName || a.name || '').localeCompare(b.displayName || b.name || '', 'tr'));
+            } else {
+                filtered = [...filtered].sort((a, b) => (b.coins || 0) - (a.coins || 0));
+            }
 
             renderFilteredStudents(filtered);
         }
@@ -788,9 +826,11 @@ if (studentsHasMore) {
         function resetStudentFilters() {
             const searchInput = document.getElementById('student-search-input');
             const uniInput = document.getElementById('student-uni-filter');
+            const sortSelect = document.getElementById('student-sort-select');
             if (searchInput) searchInput.value = '';
             if (uniInput) uniInput.value = '';
-            renderFilteredStudents(allStudentsCache);
+            if (sortSelect) sortSelect.value = 'coins';
+            filterStudentsClientSide();
         }
         window.resetStudentFilters = resetStudentFilters;
 

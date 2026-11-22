@@ -37,6 +37,14 @@ service cloud.firestore {
             && !changedKeys().hasAny(['role', 'isBanned'])
             && (!changedKeys().hasAny(['coins']) || numDelta('coins') <= 25)
             && (!changedKeys().hasAny(['xp']) || numDelta('xp') <= 100))
+        // Referans: kod sahibine, aynı batch'te yeni oluşan referrals/{ben} kaydıyla +20 coin
+        || (signedIn() && !isBanned()
+            && changedKeys().hasOnly(['coins', 'referralCount'])
+            && numDelta('coins') == 20 && numDelta('referralCount') == 1
+            && request.auth.uid != uid
+            && !exists(/databases/$(database)/documents/referrals/$(request.auth.uid))
+            && existsAfter(/databases/$(database)/documents/referrals/$(request.auth.uid))
+            && getAfter(/databases/$(database)/documents/referrals/$(request.auth.uid)).data.referrerUid == uid)
         // Başkası: yalnızca beğeni/etkileşim kaynaklı xp & totalLikes değişimi (küçük)
         || (signedIn() && !isBanned()
             && changedKeys().hasOnly(['xp', 'totalLikes'])
@@ -49,6 +57,14 @@ service cloud.firestore {
         allow read, update, delete: if isOwner(uid) || isAdmin();
         allow create: if signedIn();
       }
+    }
+
+    // ---------- referrals (belge id = kodu kullanan kullanıcı; tek seferlik) ----------
+    match /referrals/{uid} {
+      allow read: if isOwner(uid) || isStaff();
+      allow create: if isOwner(uid) && !isBanned()
+        && request.resource.data.referrerUid != request.auth.uid;
+      allow update, delete: if false;
     }
 
     // ---------- topics & replies ----------
@@ -116,6 +132,13 @@ service cloud.firestore {
     match /settings/badwords {
       allow read: if true;
       allow write: if isAdmin();
+    }
+    match /settings/feed {
+      allow read: if true;
+      allow create, delete: if isStaff();
+      allow update: if isStaff()
+        // Giriş yapmış kullanıcılar akış gönderilerini beğendiğinde yalnızca items alanını güncelleyebilir (0 ekstra okuma)
+        || (signedIn() && !isBanned() && changedKeys().hasOnly(['items']));
     }
     match /settings/{other} {
       allow read: if true;

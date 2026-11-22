@@ -73,12 +73,12 @@
             
             <nav class="hidden md:flex items-center space-x-1 lg:space-x-2 text-xs lg:text-sm font-medium whitespace-nowrap">
                 <a href="/portal/index.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">Ana Sayfa</a>
+                <a href="/portal/akis.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">Akış</a>
                 <a href="/portal/forum.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">Forum</a>
                 <a href="/portal/oyunlar.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">Oyunlar</a>
                 <a href="/portal/ilanlar.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">İlanlar</a>
                 <a href="/portal/ogrenciler.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">Öğrenciler</a>
                 <a href="/portal/topluluk.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">Topluluklar</a>
-                <a href="/portal/iletisim.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">İletişim</a>
             </nav>
 
             <div class="flex items-center space-x-2 sm:space-x-4">
@@ -90,7 +90,7 @@
 
                     <div id="user-profile" class="hidden flex items-center space-x-2 sm:space-x-3 relative">
                         <div class="flex items-center bg-slate-700 px-2 sm:px-2.5 py-1 rounded-full border border-slate-600 shadow-inner">
-                            <i class="fa-solid fa-coins text-yellow-400 mr-1 sm:mr-1.5 text-[10px] sm:text-sm"></i>
+                            <i class="fa-solid fa-coins text-yellow-400 mr-1 sm:mr-1.5 animate-bounce text-[10px] sm:text-sm"></i>
                             <span id="user-coins" class="font-bold text-yellow-400 text-[10px] sm:text-sm">0</span>
                         </div>
                         <div class="relative cursor-pointer" onclick="toggleUserDropdown(event)">
@@ -106,6 +106,13 @@
                                 <i class="fa-solid fa-user text-indigo-400"></i>
                                 <span>Profilim</span>
                             </a>
+                            <button onclick="openNotificationsModal()" class="w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center justify-between transition">
+                                <span class="flex items-center space-x-2">
+                                    <i class="fa-solid fa-bell text-blue-400"></i>
+                                    <span>Bildirimler</span>
+                                </span>
+                                <span id="dropdown-notif-count" class="bg-slate-700 text-slate-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-slate-600">0</span>
+                            </button>
                             <a href="/portal/magaza.html" class="block w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center space-x-2 transition">
                                 <i class="fa-solid fa-store text-yellow-400"></i>
                                 <span>Mağaza</span>
@@ -118,13 +125,14 @@
                                 </span>
                                 <span id="streak-dropdown-badge" class="bg-amber-500/20 text-amber-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-amber-500/30">0 Gün</span>
                             </button>
-                            <button onclick="openNotificationsModal()" class="w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center justify-between transition">
-                                <span class="flex items-center space-x-2">
-                                    <i class="fa-solid fa-bell text-blue-400"></i>
-                                    <span>Bildirimler</span>
-                                </span>
-                                <span id="dropdown-notif-count" class="bg-slate-700 text-slate-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-slate-600">0</span>
-                            </button>
+                            <a href="/portal/iletisim.html" class="block w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center space-x-2 transition">
+                                <i class="fa-solid fa-envelope-open-text text-cyan-400"></i>
+                                <span>İletişim</span>
+                            </a>
+                            <a href="/portal/tanitim.html" class="block w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center space-x-2 transition">
+                                <i class="fa-solid fa-circle-info text-cyan-400"></i>
+                                <span>Tanıtım</span>
+                            </a>
                             <div class="border-t border-slate-700/80 my-1"></div>
                             <button onclick="googleLogout()" class="w-full text-left px-4 py-2 text-xs text-red-400 hover:bg-red-500/10 flex items-center space-x-2 transition font-semibold">
                                 <i class="fa-solid fa-right-from-bracket"></i>
@@ -140,12 +148,12 @@
         </div>
         <div id="mobile-menu" class="hidden md:hidden bg-slate-800 border-t border-slate-700 px-4 pt-3 pb-4 space-y-1.5">
             <a href="/portal/index.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">Ana Sayfa</a>
+            <a href="/portal/akis.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">Akış</a>
             <a href="/portal/forum.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">Forum</a>
             <a href="/portal/oyunlar.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">Oyunlar</a>
             <a href="/portal/ilanlar.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">İlanlar</a>
             <a href="/portal/ogrenciler.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">Öğrenciler</a>
             <a href="/portal/topluluk.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">Topluluklar</a>
-            <a href="/portal/iletisim.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">İletişim</a>
         </div>
     </header>
 
@@ -259,6 +267,7 @@
         const provider = new GoogleAuthProvider();
 
         let currentUser = null;
+        const REFERRAL_REWARD = 20;
         let notificationsUnsubscribe = null;
         let viewedUserUid = null;
         let viewedUserData = null;
@@ -478,9 +487,21 @@
             } catch(e) { console.error("Bildirim sayısı alınamadı:", e); }
         }
 
+        function parseAnyDate(v) {
+            if (v === null || v === undefined || v === '') return null;
+            let d;
+            if (typeof v.toDate === 'function') d = v.toDate();
+            else if (v instanceof Date) d = v;
+            else if (typeof v === 'object' && (v.seconds !== undefined || v._seconds !== undefined)) d = new Date((v.seconds ?? v._seconds) * 1000);
+            else if (typeof v === 'number') d = new Date(v < 1e12 ? v * 1000 : v);
+            else if (typeof v === 'string' && /^\d+$/.test(v.trim())) { const n = Number(v); d = new Date(n < 1e12 ? n * 1000 : n); }
+            else d = new Date(v);
+            return isNaN(d.getTime()) ? null : d;
+        }
+
         function formatTimestamp(timestamp) {
-            if (!timestamp) return "Bilinmiyor";
-            const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+            const date = parseAnyDate(timestamp);
+            if (!date) return "Bilinmiyor";
             return date.toLocaleString('tr-TR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
         }
 
@@ -673,7 +694,7 @@
                 const userRole = viewedUserData.role || 'user';
                 const isStaff = userRole === 'admin' || userRole === 'moderator';
 
-                const lastSeenDate = viewedUserData.lastSeen?.toDate?.() || (viewedUserData.lastSeen ? new Date(viewedUserData.lastSeen) : null);
+                const lastSeenDate = parseAnyDate(viewedUserData.lastSeen);
                 const online = isUserOnline(lastSeenDate);
                 const lastSeenText = formatRelativeTime(lastSeenDate);
 
@@ -713,6 +734,20 @@
                     }
                 }
 
+                if (isOwnProfile && !viewedUserData.referralCode) {
+                    try {
+                        const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+                        for (let attempt = 0; attempt < 5 && !viewedUserData.referralCode; attempt++) {
+                            let code = "";
+                            for (let i = 0; i < 8; i++) code += chars[Math.floor(Math.random() * chars.length)];
+                            const dup = await getDocs(query(collection(db, "users"), where("referralCode", "==", code), limit(1)));
+                            if (!dup.empty) continue;
+                            await updateDoc(doc(db, "users", currentUser.uid), { referralCode: code, referralCount: viewedUserData.referralCount || 0 });
+                            viewedUserData.referralCode = code;
+                        }
+                    } catch (e) { console.error("Referans kodu oluşturulamadı:", e); }
+                }
+
                 const hasPendingRequest = viewedUserData.pendingNameChange && viewedUserData.pendingNameChange.status === 'pending';
                 const displayName = viewedUserData.displayName || viewedUserData.name || 'İsimsiz Kullanıcı';
                 const suggestedName = viewedUserData.displayName || viewedUserData.name || '';
@@ -744,7 +779,7 @@
                                         ? '<span class="text-[11px] bg-emerald-500/20 text-emerald-300 px-3 py-1 rounded-full font-bold border border-emerald-500/30 inline-flex items-center"><span class="relative flex h-2 w-2 mr-1.5"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span></span>Çevrimiçi</span>'
                                         : `<span class="text-[11px] bg-slate-600/30 text-slate-400 px-3 py-1 rounded-full font-bold border border-slate-600/40 inline-flex items-center"><i class="fa-solid fa-clock mr-1.5"></i>Son görülme: ${lastSeenText}</span>`
                                     }
-                                    <span class="text-[11px] bg-slate-600/30 text-slate-400 px-3 py-1 rounded-full font-bold border border-slate-600/40 inline-flex items-center"><i class="fa-solid fa-calendar mr-1.5"></i>${formatTimestamp(viewedUserData.createdAt)}'den beri üye</span>
+                                    <span class="text-[11px] bg-slate-600/30 text-slate-400 px-3 py-1 rounded-full font-bold border border-slate-600/40 inline-flex items-center"><i class="fa-solid fa-calendar mr-1.5"></i>${formatTimestamp(viewedUserData.createdAt).split(' ')[0]}'den beri üye</span>
                                 </div>
 
                                 ${!isStaff ? `
@@ -788,6 +823,34 @@
                     </div>
 
                     ${renderSocialLinks(socials, isOwnProfile)}
+
+                    ${isOwnProfile ? `
+                    <div class="bg-slate-800 border border-slate-700 rounded-2xl p-6 shadow-lg mb-6">
+                        <h2 class="text-lg font-bold text-white flex items-center mb-1"><i class="fa-solid fa-gift text-pink-400 mr-2"></i>Referans Sistemi</h2>
+                        <p class="text-[11px] text-slate-400 mb-4">Arkadaşın senin kodunu girerse ikiniz de <strong class="text-yellow-400">${REFERRAL_REWARD} coin</strong> kazanırsınız.</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="bg-slate-900/60 border border-slate-700 rounded-xl p-4">
+                                <p class="text-xs font-bold text-slate-300 mb-2">Referans Kodun</p>
+                                ${viewedUserData.referralCode ? `
+                                <div class="flex gap-2">
+                                    <input id="my-ref-code" readonly value="${escapeHtml(viewedUserData.referralCode)}" class="flex-1 bg-slate-800 border border-slate-600 rounded-lg px-3 py-2 text-sm font-mono text-yellow-300 tracking-widest">
+                                    <button onclick="copyReferralCode()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 rounded-lg text-xs font-semibold"><i class="fa-solid fa-copy"></i></button>
+                                </div>
+                                <p class="text-[10px] text-slate-500 mt-2">Davet ettiğin kişi: <strong class="text-white">${viewedUserData.referralCount || 0}</strong></p>
+                                ` : `<p class="text-xs text-slate-500">Kod şu an oluşturulamadı, sayfayı yenileyin.</p>`}
+                            </div>
+                            <div class="bg-slate-900/60 border border-slate-700 rounded-xl p-4">
+                                <p class="text-xs font-bold text-slate-300 mb-2">Referans Kodu Gir</p>
+                                ${viewedUserData.referredBy ? `<p class="text-xs text-emerald-400"><i class="fa-solid fa-circle-check mr-1"></i>Bir referans kodu zaten kullandın.</p>` : `
+                                <div class="flex gap-2">
+                                    <input id="ref-code-input" maxlength="8" placeholder="Örn: AB12CD34" class="flex-1 bg-slate-800 border border-slate-600 rounded-lg px-3 py-2 text-sm font-mono uppercase text-white outline-none focus:border-indigo-500">
+                                    <button onclick="redeemReferralCode()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 rounded-lg text-xs font-semibold">Kullan</button>
+                                </div>
+                                <p class="text-[10px] text-slate-500 mt-2">Yalnızca bir kez kullanılabilir.</p>`}
+                            </div>
+                        </div>
+                    </div>
+                    ` : ''}
 
                     ${isOwnProfile && viewedUserData.activeListing ? `
                     <div class="bg-slate-800 border border-indigo-500/30 rounded-2xl p-6 shadow-lg mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -1175,6 +1238,44 @@
                     btn.innerHTML = '<i class="fa-solid fa-arrow-down mr-1.5"></i>Daha Fazla Konu Göster';
                 }
             }
+        };
+
+        window.generateReferralCode = async () => {
+            try {
+                const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+                let code = "";
+                for (let i = 0; i < 8; i++) code += chars[Math.floor(Math.random() * chars.length)];
+                const dup = await getDocs(query(collection(db, "users"), where("referralCode", "==", code), limit(1)));
+                if (!dup.empty) return showToast("Tekrar deneyin.", "warning");
+                await updateDoc(doc(db, "users", currentUser.uid), { referralCode: code, referralCount: 0 });
+                showToast("Referans kodun oluşturuldu!", "success");
+                setTimeout(() => location.reload(), 600);
+            } catch (e) { console.error(e); showToast("Kod oluşturulamadı.", "error"); }
+        };
+        window.copyReferralCode = async () => {
+            try { await navigator.clipboard.writeText(document.getElementById('my-ref-code').value); showToast("Kod kopyalandı!", "success"); }
+            catch (e) { showToast("Kopyalanamadı.", "warning"); }
+        };
+        window.redeemReferralCode = async () => {
+            const code = (document.getElementById('ref-code-input').value || "").trim().toUpperCase();
+            if (code.length !== 8) return showToast("Geçerli bir kod girin.", "warning");
+            try {
+                const meRef = doc(db, "users", currentUser.uid);
+                const meSnap = await getDoc(meRef);
+                if (meSnap.data().referredBy) return showToast("Zaten bir kod kullandınız.", "warning");
+                if (meSnap.data().referralCode === code) return showToast("Kendi kodunuzu kullanamazsınız.", "warning");
+                const q = await getDocs(query(collection(db, "users"), where("referralCode", "==", code), limit(1)));
+                if (q.empty) return showToast("Kod bulunamadı.", "error");
+                const refDoc = q.docs[0];
+                if (refDoc.id === currentUser.uid) return showToast("Kendi kodunuzu kullanamazsınız.", "warning");
+                const batch = writeBatch(db);
+                batch.set(doc(db, "referrals", currentUser.uid), { referrerUid: refDoc.id, code, createdAt: new Date() });
+                batch.update(meRef, { referredBy: refDoc.id, coins: (meSnap.data().coins || 0) + REFERRAL_REWARD });
+                batch.update(refDoc.ref, { coins: (refDoc.data().coins || 0) + REFERRAL_REWARD, referralCount: (refDoc.data().referralCount || 0) + 1 });
+                await batch.commit();
+                showToast(`Tebrikler! ${REFERRAL_REWARD} coin kazandınız.`, "success");
+                setTimeout(() => location.reload(), 800);
+            } catch (e) { console.error(e); showToast("Kod kullanılamadı.", "error"); }
         };
 
         window.deleteMyListing = async () => {

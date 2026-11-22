@@ -34,6 +34,10 @@
                 </a>
             </div>
             <div class="flex items-center space-x-2 sm:space-x-3">
+                <a href="/portal/akis.html" class="px-2.5 py-1.5 rounded-xl bg-pink-500/15 text-pink-300 border border-pink-500/30 text-[10px] sm:text-xs font-semibold hover:bg-pink-500/25 transition flex items-center space-x-1.5">
+                    <i class="fa-solid fa-clapperboard text-pink-400"></i>
+                    <span>Akış</span>
+                </a>
                 <a href="/portal/forum.html" class="px-2.5 py-1.5 rounded-xl bg-purple-500/15 text-purple-300 border border-purple-500/30 text-[10px] sm:text-xs font-semibold hover:bg-purple-500/25 transition flex items-center space-x-1.5">
                     <i class="fa-solid fa-comments text-purple-400"></i>
                     <span>Forum</span>
@@ -98,6 +102,9 @@
         <div class="flex space-x-2 border-b border-slate-700 pb-3 overflow-x-auto no-scrollbar">
             <button onclick="switchTab('forum')" id="tab-btn-forum" class="admin-tab-btn px-4 py-2 rounded-xl text-xs font-semibold bg-blue-600 text-white transition whitespace-nowrap">
                 <i class="fa-solid fa-comments mr-1.5"></i>Forum & Yanıtlar
+            </button>
+            <button onclick="switchTab('akis')" id="tab-btn-akis" class="admin-tab-btn px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition whitespace-nowrap">
+                <i class="fa-solid fa-clapperboard mr-1.5 text-pink-400"></i>Akış Yönetimi
             </button>
             <button onclick="switchTab('talepler')" id="tab-btn-talepler" class="admin-tab-btn px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition whitespace-nowrap">
                 <i class="fa-solid fa-inbox mr-1.5 text-red-400"></i>Talepler & Raporlar <span id="total-requests-badge" class="hidden bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full ml-1">0</span>
@@ -490,6 +497,123 @@
             </div>
         </div>
 
+        <!-- TAB: AKIŞ YÖNETİMİ (TEK DOKÜMAN KOTA DOSTU) -->
+        <div id="tab-content-akis" class="hidden space-y-6">
+            <div class="bg-slate-800 border border-slate-700 rounded-2xl p-6 shadow-xl">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b border-slate-700 pb-4">
+                    <div>
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <h2 class="text-base sm:text-lg font-bold text-white flex items-center">
+                                <i class="fa-solid fa-clapperboard text-pink-400 mr-2"></i>Kampüs Akışı Yönetimi
+                            </h2>
+                            <span class="text-[10px] font-extrabold px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                                <i class="fa-solid fa-bolt mr-1"></i>TEK DOKÜMAN (1 READ)
+                            </span>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-1">
+                            Tüm akış gönderileri <code class="text-pink-300">settings/feed</code> içinde tek bir pakette saklanır. Kullanıcılar akış sayfasına girdiğinde yalnızca <strong>1 okuma</strong> harcanır ve gönderiler rastgele sunulur. Burada ise <strong>en yeniden eskiye doğru</strong> parçalanmış halde yönetebilirsiniz.
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <a href="/portal/akis.html" target="_blank" class="text-xs bg-pink-500/20 hover:bg-pink-500 text-pink-300 hover:text-white border border-pink-500/30 px-3 py-1.5 rounded-xl font-bold transition flex items-center space-x-1.5">
+                            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                            <span>Akışı Gör</span>
+                        </a>
+                        <button type="button" onclick="saveDefaultFeedCatalog()" class="text-xs bg-amber-500/20 hover:bg-amber-500 text-amber-300 hover:text-slate-900 border border-amber-500/30 px-3 py-1.5 rounded-xl font-bold transition flex items-center space-x-1.5">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i>
+                            <span>Örnek Akışları Yükle</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Yeni Akış Gönderisi Ekleme Formu -->
+                <form id="add-feed-item-form" onsubmit="submitNewFeedItem(event)" class="bg-slate-900/60 border border-slate-700 rounded-2xl p-4 sm:p-5 mb-6 space-y-4">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-pink-300 flex items-center">
+                        <i class="fa-solid fa-plus-circle text-pink-400 mr-1.5"></i>Yeni Akış Gönderisi Ekle
+                    </h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-400 mb-1">Kategori</label>
+                            <select id="feed-item-category" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-pink-500"></select>
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-400 mb-1">Kart Arka Plan Teması</label>
+                            <select id="feed-item-theme" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-pink-500"></select>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div class="sm:col-span-2">
+                            <label class="block text-[11px] font-semibold text-slate-400 mb-1">Başlık <span class="text-red-400">*</span></label>
+                            <input type="text" id="feed-item-title" required maxlength="120" placeholder="Örn: Merkez Kütüphane 7/24 Gece Nöbeti Başladı ☕" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-pink-500">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-400 mb-1">Üst Rozet (Opsiyonel)</label>
+                            <input type="text" id="feed-item-badge" maxlength="30" placeholder="Örn: SON DAKİKA" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-pink-500">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-semibold text-slate-400 mb-1">İçerik / Detay Metni (Markdown Destekli: **kalın**, *italik*) <span class="text-red-400">*</span></label>
+                        <textarea id="feed-item-content" rows="3" required maxlength="700" placeholder="Öğrencilerin kaydırırken okuyacağı anlık haber, bilgi veya mizah içeriği..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-pink-500"></textarea>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-400 mb-1">FontAwesome İkonu</label>
+                            <input type="text" id="feed-item-icon" placeholder="fa-bolt" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-pink-500">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-400 mb-1">Görsel URL (Opsiyonel)</label>
+                            <input type="url" id="feed-item-image" placeholder="https://..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-pink-500">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-400 mb-1">Yönlendirme Linki (Opsiyonel)</label>
+                            <input type="text" id="feed-item-link" placeholder="/portal/forum.html" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-pink-500">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-400 mb-1">Buton Yazısı & Başlangıç Beğeni</label>
+                            <div class="flex gap-1.5">
+                                <input type="text" id="feed-item-linktext" placeholder="Detayları Gör" maxlength="30" class="w-2/3 bg-slate-900 border border-slate-700 rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none focus:border-pink-500">
+                                <input type="number" id="feed-item-likes" min="0" value="0" title="Başlangıç Beğeni Sayısı" class="w-1/3 bg-slate-900 border border-slate-700 rounded-xl px-2 py-2 text-xs text-white focus:outline-none focus:border-pink-500">
+                            </div>
+                            <label class="inline-flex items-center space-x-1.5 mt-1.5 text-[11px] text-slate-400 cursor-pointer select-none">
+                                <input type="checkbox" id="feed-item-likes-random" checked class="accent-pink-500 w-3.5 h-3.5 rounded">
+                                <span>Rastgele beğeni (5-25)</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2 border-t border-slate-800">
+                        <label class="inline-flex items-center space-x-2 text-xs text-slate-300 cursor-pointer select-none">
+                            <input type="checkbox" id="feed-item-pinned" class="accent-pink-500 w-4 h-4 rounded">
+                            <span><i class="fa-solid fa-thumbtack text-pink-400 mr-1"></i>Öncelikli Gönderi (Akış açılışında ilk sıralarda gösterilsin)</span>
+                        </label>
+                        <button type="submit" class="bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white px-5 py-2.5 rounded-xl text-xs font-bold transition shadow-lg flex items-center justify-center space-x-1.5">
+                            <i class="fa-solid fa-plus"></i>
+                            <span>Akışa Ekle (Tek Dokümana Kaydet)</span>
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Arama / Filtreleme & Toplam Gönderi Bilgisi -->
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+                    <div class="flex items-center gap-2 text-xs text-slate-300">
+                        <span class="font-bold text-white">Gönderi Listesi (En Yeniden Eskiye)</span>
+                        <span id="admin-feed-count-badge" class="bg-pink-500/20 text-pink-300 border border-pink-500/30 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full">0 Gönderi</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <input type="text" id="admin-feed-search" oninput="renderAdminFeedItems()" placeholder="Başlık, içerik veya kategori ara..." class="w-full sm:w-64 bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-1.5 text-xs text-white focus:outline-none focus:border-pink-500">
+                    </div>
+                </div>
+
+                <!-- Parçalanmış (En Yeniden Eskiye Sıralı) Gönderiler Listesi -->
+                <div id="admin-feed-items-list" class="space-y-3">
+                    <div class="skeleton-card space-y-3"><div class="skeleton skeleton-text w-1/3"></div><div class="skeleton skeleton-text w-2/3"></div></div>
+                </div>
+            </div>
+        </div>
+
         <div id="tab-content-badwords" class="hidden space-y-6">
             <div class="bg-slate-800 border border-slate-700 p-6 rounded-2xl shadow-lg">
                 <h2 class="text-lg font-bold text-white flex items-center mb-4">
@@ -869,6 +993,79 @@
         </div>
     </div>
 
+    <!-- AKIŞ GÖNDERİSİ DÜZENLEME MODALI -->
+    <div id="edit-feed-item-modal" class="fixed inset-0 bg-black/75 backdrop-blur-sm hidden items-center justify-center z-50 p-4" onclick="if(event.target===this) closeEditFeedItemModal()">
+        <div class="bg-slate-800 border border-slate-700 rounded-2xl max-w-xl w-full p-6 shadow-2xl max-h-[92vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-4 border-b border-slate-700 pb-3">
+                <h3 class="text-lg font-bold text-white flex items-center">
+                    <i class="fa-solid fa-clapperboard text-pink-400 mr-2"></i>Akış Gönderisini Düzenle
+                </h3>
+                <button type="button" onclick="closeEditFeedItemModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form id="edit-feed-item-form" onsubmit="saveEditedFeedItem(event)" class="space-y-4">
+                <input type="hidden" id="edit-feed-item-id">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Kategori</label>
+                        <select id="edit-feed-item-category" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-pink-500"></select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Tema</label>
+                        <select id="edit-feed-item-theme" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-pink-500"></select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div class="sm:col-span-2">
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Başlık</label>
+                        <input type="text" id="edit-feed-item-title" required maxlength="120" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-pink-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Üst Rozet</label>
+                        <input type="text" id="edit-feed-item-badge" maxlength="30" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-pink-500">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">İçerik (Markdown Destekli)</label>
+                    <textarea id="edit-feed-item-content" rows="4" required maxlength="700" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-pink-500"></textarea>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">FontAwesome İkonu</label>
+                        <input type="text" id="edit-feed-item-icon" placeholder="fa-bolt" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-pink-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Beğeni Sayısı</label>
+                        <input type="number" id="edit-feed-item-likes" min="0" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-pink-500">
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Görsel URL</label>
+                        <input type="url" id="edit-feed-item-image" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-pink-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Yönlendirme Linki</label>
+                        <input type="text" id="edit-feed-item-link" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-pink-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Buton Yazısı</label>
+                        <input type="text" id="edit-feed-item-linktext" maxlength="30" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-pink-500">
+                    </div>
+                </div>
+                <div class="flex items-center justify-between pt-2 border-t border-slate-700">
+                    <label class="inline-flex items-center space-x-2 text-xs text-slate-300 cursor-pointer select-none">
+                        <input type="checkbox" id="edit-feed-item-pinned" class="accent-pink-500 w-4 h-4 rounded">
+                        <span><i class="fa-solid fa-thumbtack text-pink-400 mr-1"></i>Öncelikli Gönderi</span>
+                    </label>
+                    <div class="flex items-center space-x-2">
+                        <button type="button" onclick="closeEditFeedItemModal()" class="bg-slate-700 hover:bg-slate-600 text-slate-300 px-4 py-2 rounded-xl text-xs font-semibold transition">İptal</button>
+                        <button type="submit" class="bg-pink-600 hover:bg-pink-700 text-white px-5 py-2 rounded-xl text-xs font-bold transition">Güncelle</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- KULLANICIYA ÖZEL BİLDİRİM / UYARI GÖNDERME MODALI -->
     <div id="send-user-notification-modal" class="fixed inset-0 bg-black/75 backdrop-blur-sm hidden items-center justify-center z-50 p-4" onclick="if(event.target===this) closeSendUserNotificationModal()">
         <div class="bg-slate-800 border border-slate-700 rounded-2xl max-w-lg w-full p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
@@ -986,7 +1183,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, collection, collectionGroup, getDocs, getCountFromServer, doc, getDoc, setDoc, addDoc, updateDoc, deleteDoc, query, orderBy, where, limit, startAfter, serverTimestamp, increment, writeBatch, deleteField } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-        import { getStoreItems, setStoreCache, DEFAULT_STORE_ITEMS, FRAME_STYLES, TITLE_STYLES, validateAndFormatUniversity, primeAuthor, invalidateAuthorCache, escapeHtml as coreEscapeHtml, safeUrl, injectCoreStyles, cacheGet, cacheSet, cacheInvalidate, cacheInvalidatePrefix, getCacheStats, skeletonCard, skeletonList, skeletonGrid } from '/portal/portal-core.js';
+        import { getStoreItems, setStoreCache, DEFAULT_STORE_ITEMS, FRAME_STYLES, TITLE_STYLES, FEED_CATEGORIES, FEED_THEMES, DEFAULT_FEED_ITEMS, getFeedItems, setFeedCache, invalidateFeedCache, formatRelativeTime, validateAndFormatUniversity, primeAuthor, invalidateAuthorCache, escapeHtml as coreEscapeHtml, safeUrl, injectCoreStyles, cacheGet, cacheSet, cacheInvalidate, cacheInvalidatePrefix, getCacheStats, skeletonCard, skeletonList, skeletonGrid } from '/portal/portal-core.js';
         injectCoreStyles();
 
         function escapeHtml(text) {
@@ -1084,10 +1281,10 @@
             }
 
             document.querySelectorAll('.admin-tab-btn').forEach(btn => {
-                btn.classList.remove('bg-blue-600', 'bg-emerald-600', 'bg-red-600', 'bg-amber-600', 'bg-indigo-600', 'bg-cyan-600', 'text-white');
+                btn.classList.remove('bg-blue-600', 'bg-emerald-600', 'bg-red-600', 'bg-amber-600', 'bg-indigo-600', 'bg-cyan-600', 'bg-pink-600', 'text-white');
                 btn.classList.add('bg-slate-800', 'text-slate-300');
             });
-            ['forum', 'talepler', 'bildirimler', 'ilanlar', 'topluluklar', 'users', 'badwords', 'topluluktayfa', 'magaza'].forEach(t => {
+            ['forum', 'akis', 'talepler', 'bildirimler', 'ilanlar', 'topluluklar', 'users', 'badwords', 'topluluktayfa', 'magaza'].forEach(t => {
                 const el = document.getElementById(`tab-content-${t}`);
                 if (el) el.classList.add('hidden');
             });
@@ -1098,6 +1295,7 @@
                 if (tabName === 'topluluklar') activeBtn.classList.add('bg-emerald-600', 'text-white');
                 else if (tabName === 'talepler') activeBtn.classList.add('bg-red-600', 'text-white');
                 else if (tabName === 'bildirimler') activeBtn.classList.add('bg-amber-600', 'text-white');
+                else if (tabName === 'akis') activeBtn.classList.add('bg-pink-600', 'text-white');
                 else activeBtn.classList.add('bg-blue-600', 'text-white');
             }
 
@@ -1106,6 +1304,7 @@
 
             // KOTA: Sadece ilk açılışta yükle
             if (tabName === 'forum' && !loadedTabs.has('forum')) { loadAllTopicsForModeration(true); loadedTabs.add('forum'); }
+            else if (tabName === 'akis' && !loadedTabs.has('akis')) { loadAdminFeedCatalog(); loadedTabs.add('akis'); }
             else if (tabName === 'talepler') {
                 if (!loadedTabs.has('raporlar')) { loadReports(); loadedTabs.add('raporlar'); }
                 if (!loadedTabs.has('nametalep')) { loadNameChangeRequests(); loadedTabs.add('nametalep'); }
@@ -4088,6 +4287,307 @@
             showToast("Varsayılan katalog yüklendi!", "success");
         }
         window.saveDefaultStoreCatalog = saveDefaultStoreCatalog;
+
+        // =====================================================================
+        // KAMPÜS AKIŞI (REELS) YÖNETİMİ — TEK DOKÜMAN (settings/feed)
+        // Admin panelinde parçalanmış olarak EN YENİDEN ESKİYE sıralanır.
+        // =====================================================================
+        let currentFeedCatalog = [];
+
+        function populateFeedSelects() {
+            const catOptions = Object.entries(FEED_CATEGORIES).map(([k, v]) => `<option value="${k}">${v.label}</option>`).join('');
+            const themeOptions = Object.entries(FEED_THEMES).map(([k, v]) => `<option value="${k}">${v.label}</option>`).join('');
+            ['feed-item-category', 'edit-feed-item-category'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.innerHTML = catOptions;
+            });
+            ['feed-item-theme', 'edit-feed-item-theme'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.innerHTML = themeOptions;
+            });
+        }
+
+        // ---- Yeni gönderi formu kolaylıkları ----
+        let feedIconTouched = false;
+        function applyFeedFormDefaults() {
+            const $ = id => document.getElementById(id);
+            if (!$('feed-item-theme')) return;
+            const themeKeys = Object.keys(FEED_THEMES);
+            $('feed-item-theme').value = themeKeys[Math.floor(Math.random() * themeKeys.length)];
+            feedIconTouched = false;
+            syncFeedIconToCategory();
+            $('feed-item-link').value = 'https://lianchez.com/portal/forum.html';
+            $('feed-item-linktext').value = 'Forumda Tartış';
+            $('feed-item-likes-random').checked = true;
+            applyRandomLikes();
+        }
+        function syncFeedIconToCategory() {
+            if (feedIconTouched) return;
+            const cat = document.getElementById('feed-item-category').value;
+            document.getElementById('feed-item-icon').value = FEED_CATEGORIES[cat]?.icon || 'fa-bolt';
+        }
+        function applyRandomLikes() {
+            if (document.getElementById('feed-item-likes-random').checked) {
+                document.getElementById('feed-item-likes').value = 5 + Math.floor(Math.random() * 21);
+            }
+        }
+        function initFeedFormHelpers() {
+            const $ = id => document.getElementById(id);
+            if (!$('feed-item-category') || $('feed-item-category').dataset.helpers) return;
+            $('feed-item-category').dataset.helpers = '1';
+            $('feed-item-category').addEventListener('change', syncFeedIconToCategory);
+            $('feed-item-icon').addEventListener('input', () => { feedIconTouched = true; });
+            $('feed-item-likes-random').addEventListener('change', () => { if ($('feed-item-likes-random').checked) applyRandomLikes(); });
+            $('feed-item-likes').addEventListener('input', () => { $('feed-item-likes-random').checked = false; });
+            applyFeedFormDefaults();
+        }
+
+        async function loadAdminFeedCatalog(force = false) {
+            populateFeedSelects();
+            initFeedFormHelpers();
+            const container = document.getElementById('admin-feed-items-list');
+            if (container && currentFeedCatalog.length === 0) {
+                container.innerHTML = skeletonList(3);
+            }
+            try {
+                const items = await getFeedItems(db, { force });
+                currentFeedCatalog = Array.isArray(items) ? [...items] : [];
+                renderAdminFeedItems();
+            } catch (e) {
+                console.error("Akış kataloğu yüklenemedi:", e);
+                if (container) {
+                    container.innerHTML = '<div class="text-center py-6 text-red-400 text-xs">Akış verileri yüklenemedi.</div>';
+                }
+            }
+        }
+        window.loadAdminFeedCatalog = loadAdminFeedCatalog;
+
+        function renderAdminFeedItems() {
+            const container = document.getElementById('admin-feed-items-list');
+            const badge = document.getElementById('admin-feed-count-badge');
+            if (!container) return;
+
+            // En yeniden eskiye doğru sırala (createdAt desc)
+            const sorted = [...currentFeedCatalog].sort((a, b) => (Number(b.createdAt) || 0) - (Number(a.createdAt) || 0));
+            if (badge) badge.textContent = `${sorted.length} Gönderi`;
+
+            const kw = (document.getElementById('admin-feed-search')?.value || '').toLowerCase().trim();
+            const filtered = kw
+                ? sorted.filter(item =>
+                    (item.title || '').toLowerCase().includes(kw) ||
+                    (item.content || '').toLowerCase().includes(kw) ||
+                    (FEED_CATEGORIES[item.category]?.label || '').toLowerCase().includes(kw)
+                )
+                : sorted;
+
+            if (filtered.length === 0) {
+                container.innerHTML = '<div class="text-center py-8 text-slate-500 text-xs">Gösterilecek akış gönderisi bulunamadı.</div>';
+                return;
+            }
+
+            container.innerHTML = filtered.map(item => {
+                const cat = FEED_CATEGORIES[item.category] || FEED_CATEGORIES.haber;
+                const relTime = typeof formatRelativeTime === 'function' ? formatRelativeTime(new Date(item.createdAt)) : '';
+                const exactTime = new Date(item.createdAt).toLocaleString('tr-TR');
+                const isActive = item.active !== false;
+
+                return `
+                    <div class="bg-slate-900/70 border ${item.pinned ? 'border-pink-500/50' : 'border-slate-700/80'} rounded-2xl p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 transition hover:border-slate-600">
+                        <div class="flex items-start gap-3.5 flex-1 min-w-0">
+                            <div class="w-11 h-11 rounded-2xl bg-gradient-to-br ${cat.gradient} flex items-center justify-center text-white text-base shadow-md flex-shrink-0 mt-0.5">
+                                <i class="fa-solid ${escapeHtml(item.icon || cat.icon)}"></i>
+                            </div>
+                            <div class="space-y-1 flex-1 min-w-0">
+                                <div class="flex items-center gap-1.5 flex-wrap">
+                                    <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full ${cat.bg} ${cat.color} border ${cat.border}">
+                                        <i class="fa-solid ${escapeHtml(cat.icon)} mr-1"></i>${escapeHtml(cat.label)}
+                                    </span>
+                                    ${item.pinned ? '<span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-pink-500/20 text-pink-300 border border-pink-500/40"><i class="fa-solid fa-thumbtack mr-1"></i>ÖNCELİKLİ</span>' : ''}
+                                    ${item.badge ? `<span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-800 text-amber-300 border border-amber-500/30">${escapeHtml(item.badge)}</span>` : ''}
+                                    <span class="text-[11px] text-slate-400 font-medium" title="${exactTime}">
+                                        <i class="fa-regular fa-clock mr-1 text-pink-400"></i>${escapeHtml(relTime)} (${exactTime})
+                                    </span>
+                                    <span class="text-[11px] text-rose-400 font-bold">
+                                        <i class="fa-solid fa-heart mr-1"></i>${Number(item.likes) || 0} Beğeni
+                                    </span>
+                                </div>
+                                <h3 class="text-sm font-extrabold text-white truncate">${escapeHtml(item.title)}</h3>
+                                <p class="text-xs text-slate-300 line-clamp-2 leading-relaxed">${escapeHtml(item.content)}</p>
+                                ${item.linkUrl ? `
+                                <div class="flex items-center gap-3 text-[11px] text-slate-400 pt-0.5 flex-wrap">
+                                    <a href="${escapeHtml(safeUrl(item.linkUrl))}" target="_blank" class="text-pink-400 hover:underline"><i class="fa-solid fa-link mr-1"></i>${escapeHtml(item.linkText || item.linkUrl)}</a>
+                                </div>` : ''}
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-1.5 w-full md:w-auto justify-end flex-shrink-0 flex-wrap border-t md:border-t-0 border-slate-800 pt-2.5 md:pt-0">
+                            <button type="button" onclick="toggleFeedItemActive('${escapeHtml(item.id)}')" class="text-[11px] font-bold px-2.5 py-1.5 rounded-xl transition ${isActive ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-500/30' : 'bg-slate-700 text-slate-400'}">
+                                ${isActive ? '<i class="fa-solid fa-eye mr-1"></i>Yayında' : '<i class="fa-solid fa-eye-slash mr-1"></i>Gizli'}
+                            </button>
+                            <button type="button" onclick="toggleFeedItemPinned('${escapeHtml(item.id)}')" title="Öncelik Durumunu Değiştir" class="text-xs px-2.5 py-1.5 rounded-xl font-semibold transition border ${item.pinned ? 'bg-pink-500/25 text-pink-300 border-pink-500/40' : 'bg-slate-800 text-slate-400 border-slate-700 hover:text-white'}">
+                                <i class="fa-solid fa-thumbtack"></i>
+                            </button>
+                            <button type="button" onclick="bumpFeedItemTimestamp('${escapeHtml(item.id)}')" title="Zamanını Şimdiye Güncelle (Az Önce Paylaşıldı Yap)" class="text-xs bg-amber-500/15 hover:bg-amber-500 text-amber-300 hover:text-slate-950 px-2.5 py-1.5 rounded-xl font-semibold transition border border-amber-500/30">
+                                <i class="fa-solid fa-clock-rotate-left"></i>
+                            </button>
+                            <button type="button" onclick="openEditFeedItemModal('${escapeHtml(item.id)}')" class="text-xs bg-blue-500/20 hover:bg-blue-500 text-blue-300 hover:text-white px-3 py-1.5 rounded-xl font-semibold transition border border-blue-500/30">
+                                <i class="fa-solid fa-pen-to-square mr-1"></i>Düzenle
+                            </button>
+                            <button type="button" onclick="deleteFeedItem('${escapeHtml(item.id)}')" class="text-xs bg-red-500/20 hover:bg-red-500 text-red-400 hover:text-white px-2.5 py-1.5 rounded-xl font-semibold transition border border-red-500/30" title="Sil">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        window.renderAdminFeedItems = renderAdminFeedItems;
+
+        async function persistFeedCatalog() {
+            try {
+                // En yeniden eskiye sıralı şekilde tek dokümana (settings/feed) kaydet
+                currentFeedCatalog.sort((a, b) => (Number(b.createdAt) || 0) - (Number(a.createdAt) || 0));
+                await setDoc(doc(db, "settings", "feed"), {
+                    items: currentFeedCatalog,
+                    updatedAt: serverTimestamp()
+                });
+                invalidateFeedCache();
+                setFeedCache(currentFeedCatalog);
+                renderAdminFeedItems();
+            } catch (e) {
+                console.error("Akış kaydedilemedi:", e);
+                showToast("Akış kaydedilirken bir hata oluştu", "error");
+            }
+        }
+
+        window.submitNewFeedItem = async (e) => {
+            e.preventDefault();
+            const category = document.getElementById('feed-item-category').value || 'haber';
+            const theme = document.getElementById('feed-item-theme').value || 'galaxy';
+            const title = document.getElementById('feed-item-title').value.trim();
+            const badge = document.getElementById('feed-item-badge').value.trim();
+            const content = document.getElementById('feed-item-content').value.trim();
+            const icon = document.getElementById('feed-item-icon').value.trim() || (FEED_CATEGORIES[category]?.icon || 'fa-bolt');
+            const imageUrl = document.getElementById('feed-item-image').value.trim();
+            const linkUrl = document.getElementById('feed-item-link').value.trim();
+            const linkText = document.getElementById('feed-item-linktext').value.trim() || 'Detayları Gör';
+            const likes = Math.max(0, parseInt(document.getElementById('feed-item-likes').value, 10) || 0);
+            const pinned = document.getElementById('feed-item-pinned').checked;
+
+            const newItem = {
+                id: 'fd_' + Date.now().toString(36) + '_' + Math.random().toString(36).substring(2, 6),
+                category,
+                theme,
+                title,
+                badge,
+                content,
+                icon,
+                imageUrl,
+                linkUrl,
+                linkText,
+                likes,
+                createdAt: Date.now(),
+                active: true,
+                pinned
+            };
+
+            currentFeedCatalog.unshift(newItem);
+            await persistFeedCatalog();
+            document.getElementById('add-feed-item-form').reset();
+            applyFeedFormDefaults();
+            showToast("Yeni gönderi akışa eklendi (Tek doküman güncellendi)!", "success");
+        };
+
+        window.openEditFeedItemModal = (id) => {
+            const item = currentFeedCatalog.find(x => x.id === id);
+            if (!item) return;
+            populateFeedSelects();
+            document.getElementById('edit-feed-item-id').value = item.id;
+            document.getElementById('edit-feed-item-category').value = item.category || 'haber';
+            document.getElementById('edit-feed-item-theme').value = item.theme || 'galaxy';
+            document.getElementById('edit-feed-item-title').value = item.title || '';
+            document.getElementById('edit-feed-item-badge').value = item.badge || '';
+            document.getElementById('edit-feed-item-content').value = item.content || '';
+            document.getElementById('edit-feed-item-icon').value = item.icon || 'fa-bolt';
+            document.getElementById('edit-feed-item-likes').value = item.likes || 0;
+            document.getElementById('edit-feed-item-image').value = item.imageUrl || '';
+            document.getElementById('edit-feed-item-link').value = item.linkUrl || '';
+            document.getElementById('edit-feed-item-linktext').value = item.linkText || 'Detayları Gör';
+            document.getElementById('edit-feed-item-pinned').checked = Boolean(item.pinned);
+
+            const modal = document.getElementById('edit-feed-item-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        };
+
+        window.closeEditFeedItemModal = () => {
+            const modal = document.getElementById('edit-feed-item-modal');
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+        };
+
+        window.saveEditedFeedItem = async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('edit-feed-item-id').value;
+            const item = currentFeedCatalog.find(x => x.id === id);
+            if (!item) return;
+
+            item.category = document.getElementById('edit-feed-item-category').value;
+            item.theme = document.getElementById('edit-feed-item-theme').value;
+            item.title = document.getElementById('edit-feed-item-title').value.trim();
+            item.badge = document.getElementById('edit-feed-item-badge').value.trim();
+            item.content = document.getElementById('edit-feed-item-content').value.trim();
+            item.icon = document.getElementById('edit-feed-item-icon').value.trim() || 'fa-bolt';
+            item.likes = Math.max(0, parseInt(document.getElementById('edit-feed-item-likes').value, 10) || 0);
+            item.imageUrl = document.getElementById('edit-feed-item-image').value.trim();
+            item.linkUrl = document.getElementById('edit-feed-item-link').value.trim();
+            item.linkText = document.getElementById('edit-feed-item-linktext').value.trim() || 'Detayları Gör';
+            item.pinned = document.getElementById('edit-feed-item-pinned').checked;
+
+            await persistFeedCatalog();
+            window.closeEditFeedItemModal();
+            showToast("Akış gönderisi güncellendi!", "success");
+        };
+
+        window.toggleFeedItemActive = async (id) => {
+            const item = currentFeedCatalog.find(x => x.id === id);
+            if (!item) return;
+            item.active = !(item.active !== false);
+            await persistFeedCatalog();
+            showToast(item.active ? "Gönderi yayına alındı" : "Gönderi gizlendi", "info");
+        };
+
+        window.toggleFeedItemPinned = async (id) => {
+            const item = currentFeedCatalog.find(x => x.id === id);
+            if (!item) return;
+            item.pinned = !item.pinned;
+            await persistFeedCatalog();
+            showToast(item.pinned ? "Gönderi öncelikli yapıldı" : "Öncelik kaldırıldı", "info");
+        };
+
+        window.bumpFeedItemTimestamp = async (id) => {
+            const item = currentFeedCatalog.find(x => x.id === id);
+            if (!item) return;
+            item.createdAt = Date.now();
+            await persistFeedCatalog();
+            showToast("Gönderi zamanı 'Az önce' olarak güncellendi ve en üste taşındı!", "success");
+        };
+
+        window.deleteFeedItem = async (id) => {
+            if (!confirm("Bu gönderiyi akıştan kalıcı olarak silmek istediğinizden emin misiniz?")) return;
+            currentFeedCatalog = currentFeedCatalog.filter(x => x.id !== id);
+            await persistFeedCatalog();
+            showToast("Gönderi akıştan silindi", "info");
+        };
+
+        window.saveDefaultFeedCatalog = async () => {
+            if (!confirm("Varsayılan örnek akış gönderileri yüklensin mi? Mevcut akış listesi yenilenecektir.")) return;
+            currentFeedCatalog = DEFAULT_FEED_ITEMS.map((item, idx) => ({
+                ...item,
+                createdAt: Date.now() - idx * 35 * 60 * 1000
+            }));
+            await persistFeedCatalog();
+            showToast("Örnek akış gönderileri tek dokümana yüklendi!", "success");
+        };
 
         async function loadBadWordsAdmin() {
             const textarea = document.getElementById('badwords-textarea');

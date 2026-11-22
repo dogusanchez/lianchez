@@ -375,7 +375,12 @@ export const FRAME_STYLES = {
     'frame-cyberpunk': 'Siberpunk Neon',
     'frame-amethyst':  'Ametist Kristali',
     'frame-solar':     'Güneş Patlaması',
-    'frame-ice':       'Kutup Buzulu'
+    'frame-ice':       'Kutup Buzulu',
+    'frame-ruby':      'Yakut Alevi',
+    'frame-aurora':    'Kuzey Işıkları',
+    'frame-obsidian':  'Obsidyen Gölge',
+    'frame-sakura':    'Sakura Esintisi',
+    'frame-diamond':   'Elmas Pırıltı'
 };
 export const TITLE_STYLES = {
     'title-violet':   'Mor Işıltı',
@@ -386,7 +391,11 @@ export const TITLE_STYLES = {
     'title-ice':      'Buz',
     'title-neonblue': 'Neon Mavi',
     'title-night':    'Gece Karanlığı',
-    'title-pink':     'Pembe Eflatun'
+    'title-pink':     'Pembe Eflatun',
+    'title-amber':    'Kehribar',
+    'title-cyber':    'Siberpunk',
+    'title-aurora':   'Aurora',
+    'title-obsidian': 'Obsidyen'
 };
 
 /** Avatar <img> için çerçeve sınıfı. Kozmetik çerçeve rütbe halkasını ezer. */
@@ -416,27 +425,45 @@ export function renderTitleBadge(profileOrTitle) {
 export const DEFAULT_STORE_ITEMS = [
     // Çerçeveler
     { id: 'frm_neon', type: 'frame', name: 'Neon Mavi Çerçeve', description: 'Avatarının etrafında nabız gibi atan neon ışık.', price: 50, style: 'frame-neon', icon: 'fa-circle-notch', active: true },
+    { id: 'frm_emerald', type: 'frame', name: 'Zümrüt Aura', description: 'Doğal ve sakin zümrüt yeşili ışıltı halkası.', price: 65, style: 'frame-emerald', icon: 'fa-leaf', active: true },
+    { id: 'frm_sakura', type: 'frame', name: 'Sakura Esintisi', description: 'Zarif kiraz çiçeği pembesi ve yumuşak beyaz parıltı.', price: 75, style: 'frame-sakura', icon: 'fa-fan', active: true },
     { id: 'frm_cyberpunk', type: 'frame', name: 'Siberpunk Neon', description: 'Eflatun ve sarı neon geçişleriyle fütüristik bir enerji yay.', price: 80, style: 'frame-cyberpunk', icon: 'fa-bolt', active: true },
     { id: 'frm_ice', type: 'frame', name: 'Kutup Buzulu', description: 'Buz mavisi dondurucu parıltıyla soğukkanlı tarzını yansıt.', price: 85, style: 'frame-ice', icon: 'fa-snowflake', active: true },
     { id: 'frm_amethyst', type: 'frame', name: 'Ametist Kristali', description: 'Derin mor kristal ışıltısıyla profiline mistik bir hava kat.', price: 90, style: 'frame-amethyst', icon: 'fa-gem', active: true },
+    { id: 'frm_fire', type: 'frame', name: 'Alev Çemberi', description: 'Kızıl-turuncu kor alevlerle enerjini profiline taşı.', price: 95, style: 'frame-fire', icon: 'fa-fire', active: true },
+    { id: 'frm_ruby', type: 'frame', name: 'Yakut Alevi', description: 'Koyu yakut kırmızısı nabızlı lüks çerçeve.', price: 100, style: 'frame-ruby', icon: 'fa-heart', active: true },
     { id: 'frm_solar', type: 'frame', name: 'Güneş Patlaması', description: 'Turuncu-altın alev dalgasıyla tüm bakışları üzerine topla.', price: 110, style: 'frame-solar', icon: 'fa-sun', active: true },
+    { id: 'frm_obsidian', type: 'frame', name: 'Obsidyen Gölge', description: 'Karanlık metalik gümüş ve gece mavisi gizemli aura.', price: 115, style: 'frame-obsidian', icon: 'fa-moon', active: true },
     { id: 'frm_gold', type: 'frame', name: 'Altın Parıltı Çerçeve', description: 'Seçkinler için ışıldayan altın halka.', price: 120, style: 'frame-gold', icon: 'fa-ring', active: true },
+    { id: 'frm_galaxy', type: 'frame', name: 'Kozmik Galaksi', description: 'Mor ve pembe nebula bulutları arasında parlayan yıldız halkası.', price: 130, style: 'frame-galaxy', icon: 'fa-meteor', active: true },
+    { id: 'frm_aurora', type: 'frame', name: 'Kuzey Işıkları', description: 'Zümrüt, camgöbeği ve mor arasında akan kutup ışığı efekti.', price: 140, style: 'frame-aurora', icon: 'fa-wand-magic-sparkles', active: true },
     { id: 'frm_rainbow', type: 'frame', name: 'Gökkuşağı Çerçeve', description: 'Dönen renk çemberiyle herkesin dikkatini çek.', price: 200, style: 'frame-rainbow', icon: 'fa-rainbow', active: true },
+    { id: 'frm_diamond', type: 'frame', name: 'Elmas Pırıltı', description: 'Buz beyazı ve saf elmas parlaklığıyla en nadir prestij çerçevesi.', price: 220, style: 'frame-diamond', icon: 'fa-diamond', active: true },
     // Unvanlar
+    { id: 'ttl_kahve', type: 'title', name: 'Kahve Bağımlısı', description: 'Vize haftalarını kafeinle atlatanlara sıcak kehribar unvan.', price: 35, style: 'title-amber', icon: 'fa-mug-hot', active: true },
     { id: 'ttl_kod', type: 'title', name: 'Kod Ustası', description: 'İsminin yanında mor ışıltılı unvan.', price: 40, style: 'title-violet', icon: 'fa-code', active: true },
     { id: 'ttl_kutup', type: 'title', name: 'Kütüphane Kurdu', description: 'Zümrüt yeşili, çalışkanlara özel unvan.', price: 40, style: 'title-emerald', icon: 'fa-book', active: true },
+    { id: 'ttl_not', type: 'title', name: 'Not Avcısı', description: 'En iyi ders notlarını paylaşan ve toplayanlara buz mavisi rozet.', price: 40, style: 'title-ice', icon: 'fa-note-sticky', active: true },
     { id: 'ttl_gece', type: 'title', name: 'Gece Nöbetçisi', description: 'Sabaha kadar ders çalışan ve kod yazanlara özel karanlık mod baykuş rozeti.', price: 45, style: 'title-night', icon: 'fa-moon', active: true },
     { id: 'ttl_social', type: 'title', name: 'Sosyal Kelebek', description: 'Kampüsün her etkinliğinde boy gösterenlere pembe-eflatun ışık.', price: 50, style: 'title-pink', icon: 'fa-heart', active: true },
+    { id: 'ttl_tasarim', type: 'title', name: 'Piksel Sanatçısı', description: 'Yaratıcı ve estetik gözü olan tasarımcılara özel pembe parıltı.', price: 50, style: 'title-pink', icon: 'fa-palette', active: true },
     { id: 'ttl_vizyoner', type: 'title', name: 'Vizyoner Mühendis', description: 'Geleceği inşa edenler için parlayan neon mavi rozet.', price: 60, style: 'title-neonblue', icon: 'fa-microchip', active: true },
     { id: 'ttl_guru', type: 'title', name: 'Final Fatihi', description: 'Vize ve finallerden korkmayanlara zümrüt yeşili rozet.', price: 65, style: 'title-emerald', icon: 'fa-graduation-cap', active: true },
+    { id: 'ttl_algoritma', type: 'title', name: 'Algoritma Dehası', description: 'Karmaşık problemleri çözenlere özel siberpunk ışıltılı unvan.', price: 65, style: 'title-cyber', icon: 'fa-terminal', active: true },
+    { id: 'ttl_bilge', type: 'title', name: 'Genel Kültür Bilgesi', description: 'Bilgi oyunlarında rekor kıranlara kuzey ışığı parıltılı rozet.', price: 70, style: 'title-aurora', icon: 'fa-brain', active: true },
     { id: 'ttl_lider', type: 'title', name: 'Kampüs Lideri', description: 'Topluluklara yön verenler için altın taç ışıltısı.', price: 75, style: 'title-gold', icon: 'fa-crown', active: true },
+    { id: 'ttl_mentor', type: 'title', name: 'Kampüs Mentoru', description: 'Forumda herkese yardım eden deneyimli öğrencilere altın rozet.', price: 80, style: 'title-gold', icon: 'fa-compass', active: true },
+    { id: 'ttl_oyuncu', type: 'title', name: 'Arena Şampiyonu', description: 'Oyun arenasının zirvesindekilere kızıl alevli şampiyonluk unvanı.', price: 85, style: 'title-crimson', icon: 'fa-trophy', active: true },
+    { id: 'ttl_girisimci', type: 'title', name: 'Startup Kurucusu', description: 'Fikirlerini projeye dönüştüren girişimcilere neon mavi unvan.', price: 95, style: 'title-neonblue', icon: 'fa-rocket', active: true },
+    { id: 'ttl_golge', type: 'title', name: 'Sessiz Efsane', description: 'Az konuşup çok iş başaranlara özel obsidyen metalik unvan.', price: 110, style: 'title-obsidian', icon: 'fa-user-secret', active: true },
     { id: 'ttl_efsane', type: 'title', name: 'Kampüs Efsanesi', description: 'Gökkuşağı akışlı nadir unvan.', price: 150, style: 'title-rainbow', icon: 'fa-crown', active: true },
+    { id: 'ttl_yildiz', type: 'title', name: 'Üni Portal Yıldızı', description: 'Portalın en parlak isimleri için gökkuşağı ışıltılı zirve unvanı.', price: 180, style: 'title-rainbow', icon: 'fa-star', active: true },
     // Sponsor Kuponları
     { id: 'cpn_fotokopi', type: 'coupon', name: '100 Sayfa Ücretsiz Fotokopi', description: 'Ders notları ve çıkmış sorular için 100 sayfa ücretsiz siyah-beyaz çıktı kuponu.', price: 25, sponsor: 'Merkez Kırtasiye', couponCode: 'FOTO100', icon: 'fa-print', active: true },
     { id: 'cpn_kahve', type: 'coupon', name: 'Kampüs Kafe %20 İndirim', description: 'Tüm sıcak ve soğuk kahvelerde geçerli anında %20 öğrenci indirimi.', price: 30, sponsor: 'Kampüs Kafe', couponCode: 'KAMPUS20', icon: 'fa-mug-hot', active: true },
     { id: 'cpn_kitap', type: 'coupon', name: 'Akademik Kitap Evi 50₺ İndirim', description: 'Seçili akademik ve kültür kitaplarında 200₺ ve üzeri alışverişte 50₺ indirim.', price: 40, sponsor: 'Kitap Kurdu', couponCode: 'KİTAP50', icon: 'fa-book-open', active: true }
 ];
-const STORE_CACHE_KEY = 'up_store_v2';
+const STORE_CACHE_KEY = 'up_store_v3';
 const STORE_CACHE_TTL = 60 * 60 * 1000;
 
 export async function getStoreItems(db, { force = false } = {}) {
@@ -449,7 +476,12 @@ export async function getStoreItems(db, { force = false } = {}) {
     let items = null;
     try {
         const snap = await getDoc(doc(db, "settings", "store"));
-        if (snap.exists() && Array.isArray(snap.data().items)) items = snap.data().items;
+        if (snap.exists() && Array.isArray(snap.data().items)) {
+            const remote = snap.data().items;
+            const existingIds = new Set(remote.map(i => i && i.id));
+            const missingDefaults = DEFAULT_STORE_ITEMS.filter(d => !existingIds.has(d.id));
+            items = [...remote, ...missingDefaults];
+        }
     } catch (e) { console.warn('Mağaza kataloğu okunamadı', e); }
     if (!items) items = [...DEFAULT_STORE_ITEMS];
     lsSet(STORE_CACHE_KEY, { t: Date.now(), items });
@@ -463,6 +495,255 @@ export function setStoreCache(items) {
 export function invalidateStoreCache() {
     try { localStorage.removeItem(STORE_CACHE_KEY); } catch (e) {}
     cacheInvalidate('store_items');
+}
+
+// ---------------------------------------------------------------------
+// 5.5) Kampüs Akışı (Dikey akış) — settings/feed TEK DOKÜMAN (1 okuma)
+//      Şema: { items: [ {
+//          id, category: 'haber'|'bilgi'|'mizah',
+//          title, content, theme, icon, badge, imageUrl, linkUrl, linkText,
+//          likes, createdAt (ms timestamp), active: bool, pinned: bool
+//      } ], rawPayload (isteğe bağlı tek-string yedek), updatedAt }
+// ---------------------------------------------------------------------
+export const FEED_CATEGORIES = {
+    haber: { label: 'Haber', icon: 'fa-newspaper',          color: 'text-rose-300', bg: 'bg-rose-500/20', border: 'border-rose-400/40', gradient: 'from-rose-600 to-pink-600' },
+    bilgi: { label: 'Bilgi', icon: 'fa-circle-info',        color: 'text-cyan-300', bg: 'bg-cyan-500/20', border: 'border-cyan-400/40', gradient: 'from-cyan-500 to-blue-600' },
+    mizah: { label: 'Mizah', icon: 'fa-face-laugh-squint',  color: 'text-pink-300', bg: 'bg-pink-500/20', border: 'border-pink-400/40', gradient: 'from-pink-500 to-fuchsia-600' }
+};
+
+export const FEED_THEMES = {
+    sunset:  { label: 'Gün Batımı (Pembe-Turuncu)', bg: 'from-rose-950 via-purple-950 to-slate-950', accent: 'rose',   glow: 'rgba(244,63,94,0.32)' },
+    ocean:   { label: 'Okyanus (Mavi-Turkuaz)',     bg: 'from-cyan-950 via-blue-950 to-slate-950',   accent: 'cyan',   glow: 'rgba(6,182,212,0.32)' },
+    aurora:  { label: 'Kuzey Işıkları (Zümrüt-Mor)',bg: 'from-emerald-950 via-teal-950 to-slate-950',accent: 'emerald',glow: 'rgba(16,185,129,0.32)' },
+    galaxy:  { label: 'Galaksi (Mor-İndigo)',       bg: 'from-purple-950 via-indigo-950 to-slate-950',accent: 'purple', glow: 'rgba(168,85,247,0.35)' },
+    ember:   { label: 'Kor Ateş (Kırmızı-Kehribar)',bg: 'from-amber-950 via-red-950 to-slate-950',   accent: 'amber',  glow: 'rgba(245,158,11,0.32)' },
+    midnight:{ label: 'Gece Kampüsü (Koyu İndigo)', bg: 'from-slate-900 via-indigo-950 to-slate-950',accent: 'indigo', glow: 'rgba(99,102,241,0.32)' }
+};
+
+const NOW_REF = Date.now();
+export const DEFAULT_FEED_ITEMS = [
+    {
+        id: 'fd_welcome_feed',
+        category: 'haber',
+        title: 'Kampüs Akışı Yayında! Kaydırmaya Başla 🚀',
+        content: 'Üni Portal\'ın yeni dikey akış bölümüne hoş geldin! Aşağı kaydırdıkça kampüsten anlık haberler, öğrenci bilgileri ve eğlenceli paylaşımlar karşında. Üstelik akışta kaydırarak vakit geçirdikçe sürpriz **Coin & XP** kazanırsın!',
+        theme: 'galaxy',
+        icon: 'fa-clapperboard',
+        badge: 'YENİ ÖZELLİK',
+        imageUrl: '',
+        linkUrl: '/portal/forum.html',
+        linkText: 'Forumda Fikrini Paylaş',
+        likes: 128,
+        createdAt: NOW_REF - 18 * 60 * 1000, // 18 dk önce
+        active: true,
+        pinned: true
+    },
+    {
+        id: 'fd_library_night',
+        category: 'bilgi',
+        title: 'Merkez Kütüphane Gece Nöbeti Başladı ☕📚',
+        content: 'Vize ve final haftası yaklaşırken kütüphanede 7/24 çalışma salonları dolmaya başladı. Gece 01:00\'de ücretsiz çay & kahve ikramı noktalarını kaçırmayın! Çalışma arkadaşı arıyorsan forumdaki **Ders Notları** kategorisine göz at.',
+        theme: 'midnight',
+        icon: 'fa-mug-hot',
+        badge: 'KAMPÜS BİLGİ',
+        imageUrl: '',
+        linkUrl: '/portal/forum.html',
+        linkText: 'Çalışma Arkadaşı Bul',
+        likes: 94,
+        createdAt: NOW_REF - 42 * 60 * 1000, // 42 dk önce
+        active: true,
+        pinned: false
+    },
+    {
+        id: 'fd_burs_duyuru',
+        category: 'haber',
+        title: 'Teknoloji & İnovasyon Öğrenci Bursu Başvuruları Açıldı 🎓',
+        content: 'Mühendislik, temel bilimler ve sosyal bilimler öğrencileri için aylık geri ödemesiz eğitim desteği başvuruları bu hafta sonuna kadar devam ediyor. Detaylı başvuru şartları ve yönlendirme bağlantısı **İlanlar & Duyurular** sayfasında!',
+        theme: 'ocean',
+        icon: 'fa-graduation-cap',
+        badge: 'ÖNEMLİ HABER',
+        imageUrl: '',
+        linkUrl: '/portal/ilanlar.html',
+        linkText: 'Duyuruyu İncele',
+        likes: 215,
+        createdAt: NOW_REF - 2 * 60 * 60 * 1000, // 2 sa önce
+        active: true,
+        pinned: false
+    },
+    {
+        id: 'fd_tip_coin',
+        category: 'bilgi',
+        title: 'Günde 2 Dakikada Ekstra Coin Kazanma Sırrı 💡',
+        content: 'Sağ üstteki profil menünden **Günlük Ödül** serini bozmadan 7. güne ulaşırsan tek seferde **+20 Coin & +30 XP** kaparsın! Üstüne **Oyunlar** sayfasındaki günlük Kelime, Bayrak ve Hızlı Matematik oyunlarını oynayarak mağazadaki çerçeveleri hemen alabilirsin.',
+        theme: 'ember',
+        icon: 'fa-coins',
+        badge: 'PRATİK BİLGİ',
+        imageUrl: '',
+        linkUrl: '/portal/oyunlar.html',
+        linkText: 'Oyunlara Git & Kazan',
+        likes: 163,
+        createdAt: NOW_REF - 4 * 60 * 60 * 1000, // 4 sa önce
+        active: true,
+        pinned: false
+    },
+    {
+        id: 'fd_event_fest',
+        category: 'haber',
+        title: 'Bahar Şenliği & Kampüs Sahnesi Takvimi Netleşiyor 🎸🔥',
+        content: 'Müzik, Tiyatro ve Dans topluluklarının ortaklaşa hazırladığı kampüs sahnesi için geri sayım başladı! Hangi kulübün hangi gün sahne alacağını görmek ve kendi kulübünün etkinliğini takvime eklemek için **Topluluklar** vitrinine uğra.',
+        theme: 'sunset',
+        icon: 'fa-guitar',
+        badge: 'ETKİNLİK HABERİ',
+        imageUrl: '',
+        linkUrl: '/portal/topluluk.html',
+        linkText: 'Etkinlik Takvimine Bak',
+        likes: 187,
+        createdAt: NOW_REF - 7 * 60 * 60 * 1000, // 7 sa önce
+        active: true,
+        pinned: false
+    },
+    {
+        id: 'fd_second_hand',
+        category: 'bilgi',
+        title: 'Dönem Sonu Kitap ve Ders Notlarını Nakite Çevir 📦',
+        content: 'Artık işine yaramayan ders kitaplarını, hesap makineni veya laboratuvar malzemelerini çöpe atma! **Öğrenci İlanları** bölümünde ücretsiz ilan vererek alt sınıftaki öğrencilere ulaştırabilir ya da ücretsiz ders notu paylaşabilirsin.',
+        theme: 'aurora',
+        icon: 'fa-bag-shopping',
+        badge: 'DAYANIŞMA',
+        imageUrl: '',
+        linkUrl: '/portal/ilanlar.html',
+        linkText: 'Hemen İlan Ver',
+        likes: 112,
+        createdAt: NOW_REF - 14 * 60 * 60 * 1000, // 14 sa önce
+        active: true,
+        pinned: false
+    },
+    {
+        id: 'fd_humor_vize',
+        category: 'mizah',
+        title: 'Hocanın "Sınavda Sadece İşlediğimiz Yerlerden Çıkacak" Demesi 😂',
+        content: 'Slaytta 12 sayfa olan konunun sınavda 4 farklı makaleden sentezlenmiş soruya dönüşmesi şoku... Senin bölümde de durumlar aynı mı? Forumda en komik sınav anılarını konuşuyoruz, gel içini dök!',
+        theme: 'sunset',
+        icon: 'fa-face-laugh-tears',
+        badge: 'GÜNÜN MİZAHI',
+        imageUrl: '',
+        linkUrl: '/portal/forum.html',
+        linkText: 'Sohbete Katıl',
+        likes: 342,
+        createdAt: NOW_REF - 22 * 60 * 60 * 1000, // 22 sa önce
+        active: true,
+        pinned: false
+    },
+    {
+        id: 'fd_cosmetic_store',
+        category: 'haber',
+        title: 'Mağazaya Yeni Kozmetik Çerçeveler ve Sponsor Kuponları Eklendi ✨',
+        content: 'Kazandığın coinlerle profil fotoğrafına **Güneş Patlaması**, **Kutup Buzulu** veya **Ametist Kristali** çerçevesi takabilir; isminin yanına **Gece Nöbetçisi** unvanı ekleyebilirsin. Üstelik gerçek fotokopi ve kahve indirim kuponları da mağazada!',
+        theme: 'galaxy',
+        icon: 'fa-store',
+        badge: 'MAĞAZA VİTRİNİ',
+        imageUrl: '',
+        linkUrl: '/portal/magaza.html',
+        linkText: 'Mağazayı Keşfet',
+        likes: 149,
+        createdAt: NOW_REF - 28 * 60 * 60 * 1000, // 1 gün önce
+        active: true,
+        pinned: false
+    }
+];
+
+const FEED_CACHE_KEY = 'up_feed_v2';
+const FEED_CACHE_TTL = 10 * 60 * 1000; // 10 dk localStorage önbellek (0 ekstra okuma)
+
+const LEGACY_CATEGORY_MAP = {
+    haber: 'haber',
+    guncelleme: 'haber',
+    olay: 'haber',
+    bilgi: 'bilgi',
+    bilgilendirme: 'bilgi',
+    ipucu: 'bilgi',
+    durum: 'bilgi',
+    mizah: 'mizah',
+    eglence: 'mizah'
+};
+
+export function normalizeFeedItems(rawData) {
+    if (!rawData) return null;
+    let list = null;
+    if (Array.isArray(rawData)) {
+        list = rawData;
+    } else if (Array.isArray(rawData.items)) {
+        list = rawData.items;
+    } else if (typeof rawData.rawPayload === 'string' && rawData.rawPayload.trim()) {
+        try { list = JSON.parse(rawData.rawPayload); } catch (_) {}
+    } else if (typeof rawData.payload === 'string' && rawData.payload.trim()) {
+        try { list = JSON.parse(rawData.payload); } catch (_) {}
+    }
+    if (!Array.isArray(list) || list.length === 0) return null;
+    return list.map((item, idx) => {
+        let ts = item.createdAt;
+        if (ts && typeof ts.toMillis === 'function') ts = ts.toMillis();
+        else if (ts && typeof ts.seconds === 'number') ts = ts.seconds * 1000;
+        else if (typeof ts === 'string') { const p = Date.parse(ts); ts = isNaN(p) ? Date.now() : p; }
+        else if (typeof ts !== 'number' || isNaN(ts)) ts = Date.now() - idx * 60000;
+        const mappedCat = LEGACY_CATEGORY_MAP[item.category] || 'haber';
+        return {
+            id: String(item.id || ('fd_' + idx + '_' + ts)),
+            category: FEED_CATEGORIES[mappedCat] ? mappedCat : 'haber',
+            title: String(item.title || 'Kampüs Güncellemesi').trim(),
+            content: String(item.content || '').trim(),
+            author: String(item.author || 'Üni Portal').trim(),
+            theme: FEED_THEMES[item.theme] ? item.theme : 'galaxy',
+            icon: String(item.icon || FEED_CATEGORIES[mappedCat]?.icon || 'fa-bolt').trim(),
+            badge: String(item.badge || '').trim(),
+            imageUrl: String(item.imageUrl || '').trim(),
+            linkUrl: String(item.linkUrl || '').trim(),
+            linkText: String(item.linkText || 'İncele').trim(),
+            likes: Math.max(0, parseInt(item.likes, 10) || 0),
+            createdAt: ts,
+            active: item.active !== false,
+            pinned: Boolean(item.pinned)
+        };
+    });
+}
+
+/**
+ * Kampüs Akışı gönderilerini TEK BİR OKUMA (getDoc(doc(db, "settings", "feed"))) ile çeker.
+ * Önbellekte taze veri varsa 0 okuma yapar; force:true ile doğrudan 1 okuma yapar.
+ */
+export async function getFeedItems(db, { force = false } = {}) {
+    if (!force) {
+        const cmCached = cacheGet('feed_items');
+        if (Array.isArray(cmCached) && cmCached.length > 0) return cmCached;
+        const cached = lsGet(FEED_CACHE_KEY);
+        if (cached && Array.isArray(cached.items) && cached.items.length > 0 && (Date.now() - cached.t < FEED_CACHE_TTL)) {
+            return cached.items;
+        }
+    }
+    let items = null;
+    try {
+        const snap = await getDoc(doc(db, "settings", "feed"));
+        if (snap.exists()) {
+            items = normalizeFeedItems(snap.data());
+        }
+    } catch (e) { console.warn('Akış verisi okunamadı, varsayılan akış kullanılıyor:', e); }
+    if (!items || items.length === 0) {
+        items = normalizeFeedItems(DEFAULT_FEED_ITEMS);
+    }
+    lsSet(FEED_CACHE_KEY, { t: Date.now(), items });
+    cacheSet('feed_items', items, FEED_CACHE_TTL);
+    return items;
+}
+
+export function setFeedCache(items) {
+    const normalized = normalizeFeedItems(items) || [];
+    lsSet(FEED_CACHE_KEY, { t: Date.now(), items: normalized });
+    cacheSet('feed_items', normalized, FEED_CACHE_TTL);
+}
+
+export function invalidateFeedCache() {
+    try { localStorage.removeItem(FEED_CACHE_KEY); } catch (e) {}
+    cacheInvalidate('feed_items');
 }
 
 // ---------------------------------------------------------------------
@@ -869,6 +1150,15 @@ const CORE_CSS = `
 @keyframes upSolar{from{box-shadow:0 0 0 2px #f97316,0 0 14px rgba(251,191,36,.6);}to{box-shadow:0 0 0 3px #fde047,0 0 26px rgba(249,115,22,.9);}}
 .frame-ice{box-shadow:0 0 0 2px #7dd3fc,0 0 0 4px rgba(186,230,253,.35),0 0 18px rgba(56,189,248,.75) !important;animation:upIce 3s ease-in-out infinite;}
 @keyframes upIce{0%,100%{box-shadow:0 0 0 2px #38bdf8,0 0 12px rgba(125,211,252,.55);}50%{box-shadow:0 0 0 2px #e0f2fe,0 0 22px rgba(56,189,248,.85);}}
+.frame-ruby{box-shadow:0 0 0 2px #e11d48,0 0 0 4px rgba(251,113,133,.35),0 0 20px rgba(225,29,72,.75) !important;animation:upRuby 2.2s ease-in-out infinite;}
+@keyframes upRuby{0%,100%{box-shadow:0 0 0 2px #be123c,0 0 14px rgba(225,29,72,.6);}50%{box-shadow:0 0 0 3px #fb7185,0 0 24px rgba(244,63,94,.85);}}
+.frame-aurora{box-shadow:0 0 0 2px #2dd4bf,0 0 0 4px rgba(139,92,246,.35),0 0 22px rgba(45,212,191,.7) !important;animation:upAurora 4s ease-in-out infinite;}
+@keyframes upAurora{0%,100%{box-shadow:0 0 0 2px #2dd4bf,0 0 18px rgba(45,212,191,.65);}50%{box-shadow:0 0 0 3px #818cf8,0 0 24px rgba(167,139,250,.75);}}
+.frame-obsidian{box-shadow:0 0 0 2px #94a3b8,0 0 0 4px rgba(15,23,42,.9),0 0 18px rgba(148,163,184,.55) !important;}
+.frame-sakura{box-shadow:0 0 0 2px #f9a8d4,0 0 0 4px rgba(253,242,248,.35),0 0 18px rgba(244,114,182,.65) !important;animation:upSakura 3s ease-in-out infinite;}
+@keyframes upSakura{0%,100%{box-shadow:0 0 0 2px #f472b6,0 0 12px rgba(249,168,212,.55);}50%{box-shadow:0 0 0 3px #fbcfe8,0 0 22px rgba(244,114,182,.8);}}
+.frame-diamond{box-shadow:0 0 0 2px #ffffff,0 0 0 4px rgba(125,211,252,.55),0 0 24px rgba(255,255,255,.8),0 0 34px rgba(56,189,248,.5) !important;animation:upDiamond 2.6s ease-in-out infinite;}
+@keyframes upDiamond{0%,100%{box-shadow:0 0 0 2px #e0f2fe,0 0 16px rgba(255,255,255,.65);}50%{box-shadow:0 0 0 3px #ffffff,0 0 28px rgba(186,230,253,.95);}}
 
 /* ---------- Unvanlar ---------- */
 .user-title{display:inline-flex;align-items:center;gap:.25rem;font-size:9px;font-weight:800;letter-spacing:.03em;padding:.1rem .45rem;border-radius:9999px;border:1px solid transparent;white-space:nowrap;transition:transform .2s ease;}
@@ -882,6 +1172,10 @@ const CORE_CSS = `
 .title-neonblue{color:#bae6fd;background:rgba(14,165,233,.2);border-color:rgba(56,189,248,.6);box-shadow:0 0 10px rgba(56,189,248,.45);}
 .title-night{color:#cbd5e1;background:rgba(15,23,42,.85);border-color:rgba(99,102,241,.5);box-shadow:0 0 10px rgba(99,102,241,.35);}
 .title-pink{color:#fbcfe8;background:rgba(236,72,153,.18);border-color:rgba(244,114,182,.5);box-shadow:0 0 10px rgba(236,72,153,.4);}
+.title-amber{color:#fed7aa;background:rgba(249,115,22,.18);border-color:rgba(251,146,60,.5);box-shadow:0 0 10px rgba(249,115,22,.35);}
+.title-cyber{color:#fef08a;background:linear-gradient(90deg,rgba(232,121,249,.28),rgba(250,204,21,.22));border-color:rgba(232,121,249,.55);box-shadow:0 0 10px rgba(232,121,249,.4);}
+.title-aurora{color:#ccfbf1;background:linear-gradient(90deg,rgba(20,184,166,.28),rgba(99,102,241,.28));border-color:rgba(45,212,191,.5);box-shadow:0 0 10px rgba(45,212,191,.35);}
+.title-obsidian{color:#e2e8f0;background:linear-gradient(135deg,#0f172a,#1e293b);border-color:rgba(148,163,184,.5);box-shadow:0 0 10px rgba(148,163,184,.3);}
 .title-rainbow{color:#fff;background:linear-gradient(90deg,#ec4899,#f59e0b,#10b981,#3b82f6,#8b5cf6,#ec4899);background-size:300% auto;animation:upShine 5s linear infinite;border-color:rgba(255,255,255,.25);text-shadow:0 1px 2px rgba(0,0,0,.4);}
 
 /* ---------- Künye ---------- */
@@ -1713,3 +2007,387 @@ if (typeof window !== 'undefined') {
 
 
 
+
+// ═══════════════════════════════════════════════════════════
+//  PWA KURULUM (Ana Ekrana Ekle) — Firebase okuma/yazma: 0
+//  Buton profil menüsüne (#user-dropdown) eklenir.
+// ═══════════════════════════════════════════════════════════
+let _deferredInstallPrompt = null;
+
+function _pwaIsStandalone() {
+    return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+}
+function _pwaDetect() {
+    const ua = navigator.userAgent || '';
+    const ios = /iphone|ipad|ipod/i.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    const android = /android/i.test(ua);
+    const crios = /CriOS/i.test(ua), fxios = /FxiOS/i.test(ua), edgios = /EdgiOS/i.test(ua), opios = /OPiOS/i.test(ua);
+    let browser = 'other';
+    if (/SamsungBrowser/i.test(ua)) browser = 'samsung';
+    else if (/Edg(e|A|iOS)?\//i.test(ua)) browser = 'edge';
+    else if (/OPR\/|Opera|OPiOS/i.test(ua)) browser = 'opera';
+    else if (/Firefox|FxiOS/i.test(ua)) browser = 'firefox';
+    else if (/Chrome|CriOS/i.test(ua)) browser = 'chrome';
+    else if (/Safari/i.test(ua)) browser = 'safari';
+    const iosSafari = ios && browser === 'safari' && !crios && !fxios && !edgios && !opios;
+    const inapp = /Instagram|FBAN|FBAV|FB_IAB|WhatsApp|BytedanceWebview|musical_ly|TikTok|Snapchat|LinkedInApp|Twitter|Line\/|; wv\)/i.test(ua);
+    return { ios, android, browser, iosSafari, inapp, desktop: !ios && !android };
+}
+function _pwaEl(tag, cls, text) {
+    const e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text) e.textContent = text;
+    return e;
+}
+function _pwaIcon(cls) { return _pwaEl('i', cls); }
+
+async function _pwaCopy(text) {
+    try { await navigator.clipboard.writeText(text); return true; } catch (_) {}
+    try {
+        const ta = document.createElement('textarea');
+        ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select();
+        const ok = document.execCommand('copy');
+        ta.remove();
+        return ok;
+    } catch (_) { return false; }
+}
+
+// steps: [{icon, title, text}] — actions: [{label, icon, primary, onClick(btn)}]
+function _pwaShowModal({ title, subtitle, steps = [], actions = [], note }) {
+    const old = document.getElementById('pwaInstallModal');
+    if (old) old.remove();
+    const overlay = _pwaEl('div', 'fixed inset-0 z-[300] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4');
+    overlay.id = 'pwaInstallModal';
+    overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;width:100%;height:100dvh;display:flex;align-items:center;justify-content:center;';
+    overlay.setAttribute('role', 'dialog');
+    overlay.setAttribute('aria-modal', 'true');
+    const box = _pwaEl('div', 'bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl w-full max-w-md p-5 text-slate-200 max-h-[85vh] overflow-y-auto');
+
+    const head = _pwaEl('div', 'flex items-start justify-between mb-4 gap-3');
+    const hl = _pwaEl('div', 'flex items-center gap-3');
+    const logo = _pwaEl('div', 'w-11 h-11 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shrink-0');
+    logo.appendChild(_pwaIcon('fa-solid fa-graduation-cap text-white text-lg'));
+    const ht = _pwaEl('div');
+    ht.appendChild(_pwaEl('h3', 'font-bold text-white text-base leading-tight', title));
+    if (subtitle) ht.appendChild(_pwaEl('p', 'text-xs text-slate-400 mt-0.5', subtitle));
+    hl.appendChild(logo); hl.appendChild(ht);
+    const close = _pwaEl('button', 'text-slate-400 hover:text-white w-8 h-8 shrink-0 rounded-lg hover:bg-slate-700 transition', '✕');
+    close.type = 'button'; close.setAttribute('aria-label', 'Kapat');
+    head.appendChild(hl); head.appendChild(close);
+    box.appendChild(head);
+
+    steps.forEach((s, i) => {
+        const row = _pwaEl('div', 'flex items-start gap-3 bg-slate-900/60 border border-slate-700 rounded-xl p-3 mb-2');
+        row.appendChild(_pwaEl('span', 'w-6 h-6 shrink-0 rounded-full bg-blue-500/20 text-blue-300 flex items-center justify-center text-xs font-bold mt-0.5', String(i + 1)));
+        const body = _pwaEl('div', 'flex-1 min-w-0');
+        body.appendChild(_pwaEl('p', 'text-sm font-semibold text-white', s.title));
+        if (s.text) body.appendChild(_pwaEl('p', 'text-xs text-slate-400 mt-0.5', s.text));
+        row.appendChild(body);
+        const ic = _pwaEl('div', 'w-9 h-9 shrink-0 rounded-lg bg-slate-700/70 flex items-center justify-center text-blue-300');
+        ic.appendChild(_pwaIcon(s.icon || 'fa-solid fa-circle'));
+        row.appendChild(ic);
+        box.appendChild(row);
+    });
+
+    if (note) box.appendChild(_pwaEl('p', 'text-[11px] text-slate-500 mt-2 mb-1', note));
+
+    const hide = () => overlay.remove();
+    actions.forEach((a) => {
+        const b = _pwaEl('button', (a.primary
+            ? 'bg-blue-600 hover:bg-blue-500 text-white'
+            : 'bg-slate-700 hover:bg-slate-600 text-slate-100') +
+            ' mt-2 w-full py-2.5 rounded-xl font-bold text-sm transition flex items-center justify-center gap-2');
+        b.type = 'button';
+        if (a.icon) b.appendChild(_pwaIcon(a.icon));
+        const sp = _pwaEl('span', '', a.label);
+        b.appendChild(sp);
+        b.addEventListener('click', async () => {
+            try { await a.onClick({ btn: b, label: sp, hide }); } catch (e) { console.warn('PWA action:', e); }
+        });
+        box.appendChild(b);
+    });
+    const ok = _pwaEl('button', 'mt-2 w-full py-2 rounded-xl text-slate-400 hover:text-white text-xs transition', 'Kapat');
+    ok.type = 'button';
+    box.appendChild(ok);
+
+    overlay.appendChild(box);
+    close.addEventListener('click', hide);
+    ok.addEventListener('click', hide);
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) hide(); });
+    document.addEventListener('keydown', function esc(e) {
+        if (e.key === 'Escape') { hide(); document.removeEventListener('keydown', esc); }
+    });
+    document.body.appendChild(overlay);
+}
+
+function _pwaCopyAction() {
+    return {
+        label: 'Bağlantıyı Kopyala', icon: 'fa-solid fa-copy',
+        onClick: async ({ label }) => {
+            const ok = await _pwaCopy(location.origin + '/portal/index.html');
+            label.textContent = ok ? 'Kopyalandı ✓' : 'Kopyalanamadı — adresi elle kopyala';
+        }
+    };
+}
+
+function _pwaShowInstructions(env) {
+    const portalUrl = location.origin + '/portal/index.html';
+    if (env.inapp) { _pwaShowInAppModal(env); return; }
+    if (env.ios) {
+        if (!env.iosSafari) {
+            _pwaShowModal({
+                title: 'Safari ile Aç', subtitle: 'iOS\'ta yükleme yalnızca Safari\'den yapılır',
+                steps: [
+                    { icon: 'fa-solid fa-copy', title: 'Bağlantıyı kopyala', text: 'Aşağıdaki butonla adresi kopyala.' },
+                    { icon: 'fa-brands fa-safari', title: 'Safari\'yi aç ve yapıştır', text: 'Adres çubuğuna yapıştırıp git.' },
+                    { icon: 'fa-solid fa-arrow-up-from-bracket', title: 'Paylaş → Ana Ekrana Ekle', text: 'Safari\'de bu menüden ekle.' }
+                ],
+                actions: [Object.assign(_pwaCopyAction(), { primary: true })]
+            });
+            return;
+        }
+        const actions = [];
+        if (navigator.share) {
+            actions.push({
+                label: 'Paylaş Menüsünü Aç', icon: 'fa-solid fa-arrow-up-from-bracket', primary: true,
+                onClick: async () => { try { await navigator.share({ title: 'Üni Portal', url: portalUrl }); } catch (_) {} }
+            });
+        }
+        _pwaShowModal({
+            title: 'Ana Ekrana Ekle', subtitle: 'iPhone / iPad · Safari',
+            steps: [
+                { icon: 'fa-solid fa-arrow-up-from-bracket', title: 'Paylaş (↑) simgesine dokun', text: 'Safari\'nin alt çubuğunda (iPad\'de üstte) bulunur.' },
+                { icon: 'fa-solid fa-square-plus', title: '"Ana Ekrana Ekle" seç', text: 'Listeyi aşağı kaydırman gerekebilir.' },
+                { icon: 'fa-solid fa-check', title: 'Sağ üstten "Ekle"ye dokun', text: 'Üni Portal ana ekranında uygulama olarak görünür.' }
+            ],
+            actions,
+            note: 'İpucu: Paylaş menüsünü açma butonu sana bir kısayol sağlar; son adımları sistem kendisi sorar.'
+        });
+        return;
+    }
+    if (env.android) {
+        const menu = { icon: 'fa-solid fa-ellipsis-vertical', title: 'Tarayıcı menüsünü aç (⋮)' };
+        let third = 'Uygulamayı yükle / Ana ekrana ekle';
+        if (env.browser === 'firefox') third = 'Yükle';
+        if (env.browser === 'samsung') { menu.title = 'Menüyü aç (≡)'; third = 'Geçerli sayfayı ekle → Ana ekran'; }
+        _pwaShowModal({
+            title: 'Uygulamayı Yükle', subtitle: 'Android · ' + ({ chrome: 'Chrome', samsung: 'Samsung Internet', firefox: 'Firefox', edge: 'Edge', opera: 'Opera' }[env.browser] || 'Tarayıcı'),
+            steps: [
+                menu,
+                { icon: 'fa-solid fa-mobile-screen', title: '"' + third + '" seçeneğine dokun', text: 'Bulamazsan sayfayı yenileyip birkaç saniye bekle.' },
+                { icon: 'fa-solid fa-check', title: 'Onayla', text: 'Uygulama ana ekranına eklenir.' }
+            ],
+            actions: [_pwaCopyAction()]
+        });
+        return;
+    }
+    // Masaüstü
+    let steps;
+    if (env.browser === 'safari') {
+        steps = [
+            { icon: 'fa-solid fa-arrow-up-from-bracket', title: 'Paylaş düğmesine tıkla', text: 'Safari araç çubuğunda (macOS Sonoma+).' },
+            { icon: 'fa-solid fa-square-plus', title: '"Dock\'a Ekle" seç' }
+        ];
+    } else if (env.browser === 'firefox') {
+        steps = [
+            { icon: 'fa-solid fa-circle-info', title: 'Firefox masaüstü PWA yüklemeyi desteklemez', text: 'Chrome veya Edge ile açarak yükleyebilirsin.' }
+        ];
+    } else {
+        steps = [
+            { icon: 'fa-solid fa-download', title: 'Adres çubuğunun sağındaki yükle simgesine tıkla', text: 'Görünmüyorsa menüden "Uygulamayı yükle / Üni Portal\'ı yükle"yi seç.' },
+            { icon: 'fa-solid fa-check', title: '"Yükle"yi onayla' }
+        ];
+    }
+    _pwaShowModal({ title: 'Uygulamayı Yükle', subtitle: 'Masaüstü', steps, actions: [_pwaCopyAction()] });
+}
+
+
+
+function _pwaShowInAppModal(env) {
+    const actions = [];
+    if (env.android) {
+        const u = new URL(location.href);
+        const intentUrl = 'intent://' + u.host + u.pathname + u.search + '#Intent;scheme=' + u.protocol.replace(':', '') + ';package=com.android.chrome;end';
+        actions.push({
+            label: 'Chrome\'da Aç', icon: 'fa-brands fa-chrome', primary: true,
+            onClick: () => { location.href = intentUrl; }
+        });
+    }
+    actions.push(Object.assign(_pwaCopyAction(), { primary: !env.android }));
+    _pwaShowModal({
+        title: 'Tarayıcıda Aç', subtitle: 'Uygulama içi tarayıcı yüklemeyi desteklemez',
+        steps: [
+            { icon: 'fa-solid fa-ellipsis', title: 'Sağ üst / alt menüyü aç (⋯ veya ⋮)', text: 'Bu sayfayı açtığın uygulamanın menüsü.' },
+            { icon: 'fa-solid fa-up-right-from-square', title: '"Tarayıcıda Aç" seçeneğini seç', text: env.ios ? 'Safari ile açılmalı.' : 'Chrome ile açılması önerilir.' },
+            { icon: 'fa-solid fa-download', title: 'Tam uygulama deneyimi için tekrar "Uygulamayı Yükle"ye dokun' }
+        ],
+        actions,
+        note: 'Tek tıkla ana ekrana ekleme yalnızca Chrome / Safari gibi gerçek tarayıcılarda çalışır.'
+    });
+}
+
+function _pwaToast(msg) {
+    const t = _pwaEl('div', 'fixed top-4 left-1/2 -translate-x-1/2 z-[320] bg-emerald-600 text-white text-sm font-semibold px-4 py-2.5 rounded-xl shadow-2xl flex items-center gap-2 max-w-[92vw]');
+    t.appendChild(_pwaIcon('fa-solid fa-circle-check'));
+    t.appendChild(_pwaEl('span', '', msg));
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 4000);
+}
+
+const _PWA_DISMISS_KEY = 'up_pwa_banner_dismissed';
+const _PWA_DISMISS_MS = 3 * 24 * 60 * 60 * 1000;
+function _pwaBannerDismissed() {
+    try {
+        if (sessionStorage.getItem('up_pwa_banner_shown')) return true;
+        const ts = parseInt(localStorage.getItem(_PWA_DISMISS_KEY) || '0', 10);
+        return ts && (Date.now() - ts) < _PWA_DISMISS_MS;
+    } catch (_) { return false; }
+}
+
+export function initPwaInstall() {
+    if (typeof window === 'undefined' || window.__pwaInstallInit) return;
+    window.__pwaInstallInit = true;
+    if (_pwaIsStandalone()) return; // Zaten uygulama olarak açıldı: hiçbir kurulum arayüzü yok
+    const env = _pwaDetect();
+    let installed = false;
+    let bannerEl = null;
+    let bannerTimerDone = false;
+
+    // ── Profil menüsü öğesi ──
+    const item = _pwaEl('button', 'pwa-install-item w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center justify-between transition');
+    item.type = 'button';
+    const left = _pwaEl('span', 'flex items-center space-x-2');
+    left.appendChild(_pwaIcon('fa-solid fa-download text-emerald-400'));
+    left.appendChild(_pwaEl('span', '', 'Uygulamayı Yükle'));
+    const badge = _pwaEl('span', 'hidden bg-emerald-500/20 text-emerald-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-emerald-500/30', 'Hazır');
+    item.appendChild(left); item.appendChild(badge);
+    item.setAttribute('data-pwa-menu-item', '1');
+
+    // Sayfadaki data-pwa-install-btn düğmeleri uygun cihazda görünür
+    const eligible = () => !installed && (!!_deferredInstallPrompt || env.ios || env.android || env.inapp);
+    const updateButtons = () => {
+        document.querySelectorAll('[data-pwa-install-btn]').forEach(b => b.classList.toggle('hidden', !eligible()));
+        badge.classList.toggle('hidden', !( _deferredInstallPrompt && !installed));
+    };
+
+    const mountItem = () => {
+        const dd = document.getElementById('user-dropdown');
+        if (dd) {
+            const tanitim = dd.querySelector('a[href$="tanitim.html"]');
+            const logout = Array.from(dd.querySelectorAll('button')).find(b => (b.getAttribute('onclick') || '').includes('googleLogout'));
+            const anchor = logout ? logout.previousElementSibling : null;
+            if (tanitim && tanitim.parentNode) tanitim.parentNode.insertBefore(item, tanitim);
+            else if (logout && anchor && anchor.parentNode) anchor.parentNode.insertBefore(item, anchor);
+            else dd.appendChild(item);
+        }
+        updateButtons();
+    };
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mountItem);
+    else mountItem();
+
+    // ── Tıklama mantığı ──
+    const trigger = async () => {
+        try { localStorage.setItem(_PWA_DISMISS_KEY, String(Date.now())); } catch (_) {}
+        hideBanner();
+        if (env.inapp) { _pwaShowInAppModal(env); return; }
+        if (_deferredInstallPrompt) {
+            const p = _deferredInstallPrompt;
+            _deferredInstallPrompt = null;
+            updateButtons();
+            try {
+                p.prompt();
+                const choice = await p.userChoice;
+                if (choice && choice.outcome === 'accepted') return; // appinstalled olayı arayüzü temizler
+                hideBanner();
+                _pwaShowModal({
+                    title: 'Kurulum İptal Edildi', subtitle: 'İstediğin zaman tekrar deneyebilirsin',
+                    steps: [{ icon: 'fa-solid fa-rotate-right', title: 'Sayfayı yenileyip tekrar "Uygulamayı Yükle"ye dokun' }]
+                });
+            } catch (err) { console.warn('PWA install:', err); _pwaShowInstructions(env); }
+            return;
+        }
+        _pwaShowInstructions(env);
+    };
+    item.addEventListener('click', trigger);
+    document.addEventListener('click', (e) => {
+        const b = e.target.closest && e.target.closest('[data-pwa-install-btn]');
+        if (b) { e.preventDefault(); trigger(); }
+    });
+
+    // ── Akıllı kurulum şeridi ──
+    function hideBanner() { if (bannerEl) { clearInterval(bannerEl._pwaTimer); window.removeEventListener('resize', bannerEl._pwaReposition); bannerEl.remove(); bannerEl = null; } }
+    function maybeShowBanner() {
+        if (bannerEl || installed || !bannerTimerDone || !eligible() || _pwaBannerDismissed()) return;
+        bannerEl = _pwaEl('div', 'fixed right-4 z-[140] max-w-[calc(100vw-2rem)]');
+        // Sağ alttaki diğer baloncuğun (asistan) hemen üstüne, 8px boşlukla diz
+        const reposition = () => {
+            if (!bannerEl) return;
+            const w = document.getElementById('assistant-widget');
+            const vis = w && getComputedStyle(w).display !== 'none' && w.getBoundingClientRect().height > 0;
+            let bottom = 16;
+            let right = 16;
+            if (vis) { const r = w.getBoundingClientRect(); bottom = Math.max(16, Math.round(window.innerHeight - r.top + 8)); right = Math.max(8, Math.round(window.innerWidth - r.right)); }
+            bannerEl.style.right = right + 'px';
+            bannerEl.style.bottom = 'calc(' + bottom + 'px + env(safe-area-inset-bottom, 0px))';
+        };
+        reposition();
+        bannerEl._pwaTimer = setInterval(reposition, 500);
+        bannerEl._pwaReposition = reposition;
+        window.addEventListener('resize', reposition);
+        if (!document.getElementById('pwa-banner-style')) {
+            const st = document.createElement('style'); st.id = 'pwa-banner-style';
+            st.textContent = '@keyframes pwaBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}@keyframes pwaPulse{0%,100%{box-shadow:0 0 0 0 rgba(16,185,129,.7),0 8px 20px rgba(0,0,0,.4)}50%{box-shadow:0 0 0 8px rgba(16,185,129,0),0 8px 24px rgba(0,0,0,.5)}}.pwa-pill{animation:pwaPulse 2.5s ease-in-out infinite}.pwa-pill:hover .pwa-ico{animation:pwaBounce .6s ease infinite}';
+            document.head.appendChild(st);
+        }
+        const pill = _pwaEl('div', 'pwa-pill group cursor-pointer flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white pl-3 pr-4 py-2.5 rounded-full shadow-2xl border border-emerald-300/40 transition-all');
+        pill.setAttribute('role', 'button');
+        pill.setAttribute('tabindex', '0');
+        pill.setAttribute('aria-label', 'Üni Portal\'ı Ana Ekrana Ekle');
+        const ico = _pwaEl('span', 'pwa-ico w-8 h-8 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0');
+        ico.appendChild(_pwaIcon('fa-solid fa-graduation-cap text-sm text-white'));
+        const txt = _pwaEl('span', 'text-left leading-tight min-w-0');
+        txt.appendChild(_pwaEl('span', 'block text-[10px] font-extrabold tracking-wide', 'ÜNİ PORTAL\'I UYGULAMA OLARAK YÜKLE'));
+        txt.appendChild(_pwaEl('span', 'block text-[9px] font-medium opacity-90', _deferredInstallPrompt ? 'Tek dokunuşla hızlı kurulum' : 'Nasıl yükleneceğini görmek için tıkla'));
+        pill.appendChild(ico); pill.appendChild(txt);
+        pill.appendChild(_pwaIcon('fa-solid fa-arrow-right text-[10px] opacity-80 group-hover:translate-x-0.5 transition'));
+        pill.addEventListener('click', () => { trigger(); });
+        pill.addEventListener('keydown', (ev) => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); trigger(); } });
+        const x = _pwaEl('button', 'absolute -top-2 -right-2 z-10 w-6 h-6 bg-slate-800 hover:bg-red-600 text-slate-300 hover:text-white rounded-full flex items-center justify-center text-[10px] border border-slate-600 hover:border-red-500 shadow-lg transition');
+        x.type = 'button'; x.setAttribute('aria-label', 'Kapat');
+        x.appendChild(_pwaIcon('fa-solid fa-xmark'));
+        x.addEventListener('click', (ev) => {
+            ev.stopPropagation();
+            try { localStorage.setItem(_PWA_DISMISS_KEY, String(Date.now())); } catch (_) {}
+            hideBanner();
+        });
+        const holder = _pwaEl('div', 'relative');
+        holder.appendChild(pill); holder.appendChild(x);
+        bannerEl.appendChild(holder);
+        document.body.appendChild(bannerEl);
+        try { sessionStorage.setItem('up_pwa_banner_shown', '1'); } catch (_) {}
+    }
+    setTimeout(() => { bannerTimerDone = true; maybeShowBanner(); }, 3000);
+
+    // ── Olaylar ──
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        _deferredInstallPrompt = e;
+        updateButtons();
+        maybeShowBanner();
+    });
+    window.addEventListener('appinstalled', () => {
+        installed = true;
+        _deferredInstallPrompt = null;
+        hideBanner();
+        item.remove();
+        updateButtons();
+        const m = document.getElementById('pwaInstallModal'); if (m) m.remove();
+        _pwaToast('Üni Portal ana ekranına eklendi 🎉');
+    });
+}
+
+if (typeof window !== 'undefined') {
+    window.initPwaInstall = initPwaInstall;
+    initPwaInstall();
+}

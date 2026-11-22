@@ -145,12 +145,12 @@
             
             <nav class="hidden md:flex items-center space-x-1 lg:space-x-2 text-xs lg:text-sm font-medium whitespace-nowrap">
                 <a href="/portal/index.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">Ana Sayfa</a>
+                <a href="/portal/akis.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">Akış</a>
                 <a href="/portal/forum.html" class="px-2.5 py-1.5 rounded-xl bg-purple-500/20 text-purple-200 border border-purple-400/40 font-bold hover:bg-purple-500/30 transition flex items-center space-x-1.5 shadow-sm shadow-purple-500/10"><i class="fa-solid fa-comments text-purple-300 text-xs"></i><span>Forum</span></a>
                 <a href="/portal/oyunlar.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">Oyunlar</a>
                 <a href="/portal/ilanlar.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">İlanlar</a>
                 <a href="/portal/ogrenciler.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">Öğrenciler</a>
                 <a href="/portal/topluluk.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">Topluluklar</a>
-                <a href="/portal/iletisim.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">İletişim</a>
             </nav>
 
             <div class="flex items-center space-x-2 sm:space-x-4">
@@ -162,7 +162,7 @@
 
                     <div id="user-profile" class="hidden flex items-center space-x-2 sm:space-x-3 relative">
                         <div id="user-coins-box" class="flex items-center bg-slate-700 px-2 sm:px-2.5 py-1 rounded-full border border-slate-600 shadow-inner">
-                            <i class="fa-solid fa-coins text-yellow-400 mr-1 sm:mr-1.5 text-[10px] sm:text-sm"></i>
+                            <i class="fa-solid fa-coins text-yellow-400 mr-1 sm:mr-1.5 animate-bounce text-[10px] sm:text-sm"></i>
                             <span id="user-coins" class="font-bold text-yellow-400 text-[10px] sm:text-sm">0</span>
                         </div>
 
@@ -181,11 +181,17 @@
                                 <i class="fa-solid fa-user text-indigo-400"></i>
                                 <span>Profilim</span>
                             </a>
+                            <button onclick="openNotificationsModal()" class="w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center justify-between transition">
+                                <span class="flex items-center space-x-2">
+                                    <i class="fa-solid fa-bell text-blue-400"></i>
+                                    <span>Bildirimler</span>
+                                </span>
+                                <span id="dropdown-notif-count" class="bg-slate-700 text-slate-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-slate-600">0</span>
+                            </button>
                             <a href="/portal/magaza.html" class="block w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center space-x-2 transition">
                                 <i class="fa-solid fa-store text-yellow-400"></i>
                                 <span>Mağaza</span>
                             </a>
-
                             <button onclick="openDailyStreakModal()" class="w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center justify-between transition">
                                 <span class="flex items-center space-x-2">
                                     <i class="fa-solid fa-calendar-check text-amber-400"></i>
@@ -194,14 +200,14 @@
                                 </span>
                                 <span id="streak-dropdown-badge" class="bg-amber-500/20 text-amber-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-amber-500/30">0 Gün</span>
                             </button>
-                            
-                            <button onclick="openNotificationsModal()" class="w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center justify-between transition">
-                                <span class="flex items-center space-x-2">
-                                    <i class="fa-solid fa-bell text-blue-400"></i>
-                                    <span>Bildirimler</span>
-                                </span>
-                                <span id="dropdown-notif-count" class="bg-slate-700 text-slate-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-slate-600">0</span>
-                            </button>
+                            <a href="/portal/iletisim.html" class="block w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center space-x-2 transition">
+                                <i class="fa-solid fa-envelope-open-text text-cyan-400"></i>
+                                <span>İletişim</span>
+                            </a>
+                            <a href="/portal/tanitim.html" class="block w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center space-x-2 transition">
+                                <i class="fa-solid fa-circle-info text-cyan-400"></i>
+                                <span>Tanıtım</span>
+                            </a>
 
                             <div class="border-t border-slate-700/80 my-1"></div>
 
@@ -221,12 +227,12 @@
 
         <div id="mobile-menu" class="hidden md:hidden bg-slate-800 border-t border-slate-700 px-4 pt-3 pb-4 space-y-1.5">
             <a href="/portal/index.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">Ana Sayfa</a>
+            <a href="/portal/akis.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">Akış</a>
             <a href="/portal/forum.html" class="block px-3 py-2 rounded-xl text-sm font-bold text-purple-200 bg-purple-500/20 border border-purple-400/40 flex items-center"><i class="fa-solid fa-comments text-purple-300 mr-2"></i>Forum</a>
             <a href="/portal/oyunlar.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">Oyunlar</a>
             <a href="/portal/ilanlar.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">İlanlar</a>
             <a href="/portal/ogrenciler.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">Öğrenciler</a>
             <a href="/portal/topluluk.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">Topluluklar</a>
-            <a href="/portal/iletisim.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">İletişim</a>
         </div>
     </header>
 
@@ -234,17 +240,11 @@
 
     <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-grow w-full">
         <div id="main-forum-view">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-                <div>
-                    <h1 class="text-3xl font-extrabold tracking-tight">Tartışma Forumu</h1>
-                    <p class="text-slate-400 text-sm mt-1">Konu açarak <strong>+5–8 Coin & +15–22 XP</strong>, yanıt yazarak <strong>+2–5 Coin & +8–15 XP</strong> kazan! <span class="text-purple-300 text-xs">(İçerik derinliğine göre ekstra bonus!)</span></p>
-                </div>
-                <div class="flex items-center gap-4 w-full md:w-auto justify-between md:justify-end">
-                    <button onclick="openTopicModal()" class="bg-purple-600 hover:bg-purple-700 text-white px-5 py-2.5 rounded-xl font-semibold transition shadow-lg flex items-center space-x-2 text-sm">
-                        <i class="fa-solid fa-plus"></i>
-                        <span>Yeni Konu Aç</span>
-                    </button>
-                </div>
+            <div class="flex items-center justify-between gap-3 mb-4">
+                <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight">Tartışma Forumu</h1>
+                <button onclick="openTopicModal()" class="bg-purple-600 hover:bg-purple-700 text-white px-3.5 py-2 rounded-xl font-semibold transition shadow-lg flex items-center space-x-1.5 text-xs sm:text-sm whitespace-nowrap flex-shrink-0">
+                    <span>+ Yeni Konu</span>
+                </button>
             </div>
 
             <div class="bg-slate-800 border border-slate-700 rounded-2xl mb-4 shadow-lg overflow-hidden">
@@ -269,6 +269,21 @@
                 </div>
             </div>
 
+            <!-- KAMPÜS AKIŞI YÖNLENDİRME KARTI -->
+            <a href="/portal/akis.html" class="block relative overflow-hidden bg-gradient-to-r from-rose-950/80 via-pink-900/50 to-purple-950/80 border-2 border-pink-500/45 hover:border-pink-400 rounded-2xl px-3.5 py-2.5 sm:px-5 sm:py-3 mb-4 shadow-lg transition-all duration-300 group">
+                <div class="absolute -right-12 -top-12 w-40 h-40 bg-pink-500/20 rounded-full blur-2xl pointer-events-none"></div>
+                <div class="relative flex items-center gap-3">
+                    <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-gradient-to-br from-pink-500 via-rose-500 to-orange-500 flex items-center justify-center text-white text-base sm:text-xl shadow-lg flex-shrink-0 group-hover:scale-105 transition">
+                        <i class="fa-solid fa-clapperboard"></i>
+                    </div>
+                    <div class="min-w-0 flex-1">
+                        <h2 class="text-[13px] sm:text-base font-extrabold text-white group-hover:text-pink-200 transition leading-tight mt-0.5">🎬 Kampüs Akışını Keşfet!</h2>
+                        <p class="text-[11px] text-slate-300 leading-snug mt-0.5 line-clamp-2"><i class="fa-solid fa-bolt text-yellow-300 mr-1"></i>Kaydırdıkça kampüsten son haberleri, duyuruları ve eğlenceli paylaşımları hızlıca yakala.</p>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-pink-200 text-sm flex-shrink-0 group-hover:translate-x-0.5 transition"></i>
+                </div>
+            </a>
+
             <div onclick="openPinnedRulesTopic()" class="bg-gradient-to-br from-amber-900/40 via-amber-800/30 to-red-900/30 border-2 border-amber-500/50 rounded-2xl px-5 py-4 mb-6 shadow-lg hover:border-amber-400/80 transition cursor-pointer group">
                 <div class="flex items-center justify-between gap-3">
                     <div class="flex items-center space-x-3 flex-1 min-w-0">
@@ -286,51 +301,100 @@
                 </div>
             </div>
 
-            <div class="bg-slate-800 border border-slate-700 p-4 rounded-2xl mb-4 shadow-md">
-                <div class="relative">
-                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-500"></i>
-                    <input type="text" id="forum-search-input" oninput="handleForumSearch()" placeholder="Konu başlığı, içerik veya yazar ara..." class="w-full bg-slate-900 border border-slate-700 rounded-xl pl-11 pr-4 py-2.5 text-xs text-white focus:outline-none focus:border-purple-500">
-                </div>
-            </div>
-
-            <div class="bg-slate-800 border border-slate-700 p-4 rounded-2xl mb-4 shadow-md space-y-3">
-                <div>
-                    <p class="text-[10px] text-slate-500 uppercase tracking-wider font-semibold mb-2 ml-1">Kategoriler</p>
-                    <div class="flex flex-wrap gap-2" id="category-filters">
-                        <button onclick="filterCategory('Son Yazılanlar')" data-cat="Son Yazılanlar" class="cat-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-700 text-slate-300 hover:bg-slate-600 transition whitespace-nowrap flex items-center space-x-1.5">
-                            <i class="fa-solid fa-clock-rotate-left text-slate-400"></i><span>Son Yazılanlar</span>
-                        </button>
-                        <button onclick="filterCategory('Genel')" data-cat="Genel" class="cat-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-700 text-slate-300 hover:bg-slate-600 transition whitespace-nowrap flex items-center space-x-1.5">
-                            <i class="fa-solid fa-comments text-blue-400"></i><span>Genel</span>
-                        </button>
-                        <button onclick="filterCategory('Yardım')" data-cat="Yardım" class="cat-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-700 text-slate-300 hover:bg-slate-600 transition whitespace-nowrap flex items-center space-x-1.5">
-                            <i class="fa-solid fa-life-ring text-orange-400"></i><span>Yardım</span>
-                        </button>
-                        <button onclick="filterCategory('Ders Notları')" data-cat="Ders Notları" class="cat-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-700 text-slate-300 hover:bg-slate-600 transition whitespace-nowrap flex items-center space-x-1.5"><i class="fa-solid fa-book-open text-amber-400"></i><span>Ders Notları</span></button>
-                        <button onclick="filterCategory('Soru & Cevap')" data-cat="Soru & Cevap" class="cat-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-700 text-slate-300 hover:bg-slate-600 transition whitespace-nowrap flex items-center space-x-1.5">
-                            <i class="fa-solid fa-circle-question text-yellow-400"></i><span>Soru & Cevap</span>
-                        </button>
-                        <button onclick="filterCategory('Etkinlik')" data-cat="Etkinlik" class="cat-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-700 text-slate-300 hover:bg-slate-600 transition whitespace-nowrap flex items-center space-x-1.5">
-                            <i class="fa-solid fa-calendar-check text-pink-400"></i><span>Etkinlik</span>
-                        </button>
-                        <button onclick="filterCategory('Hakkında')" data-cat="Hakkında" class="cat-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-700 text-slate-300 hover:bg-slate-600 transition whitespace-nowrap flex items-center space-x-1.5">
-                            <i class="fa-solid fa-circle-info text-pink-400"></i><span>Hakkında</span>
-                        </button>
-                        <button onclick="filterCategory('Üniversite')" data-cat="Üniversite" class="cat-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-700 text-slate-300 hover:bg-slate-600 transition whitespace-nowrap flex items-center space-x-1.5">
-                            <i class="fa-solid fa-graduation-cap text-indigo-400"></i><span>Üniversite</span>
-                        </button>
+            <div class="relative bg-slate-800 border border-slate-700 p-2.5 rounded-2xl mb-4 shadow-md">
+                <div class="flex items-center gap-2">
+                    <div class="relative flex-1 min-w-0">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-xs"></i>
+                        <input type="text" id="forum-search-input" oninput="handleForumSearch()" placeholder="Konu ara..." class="w-full bg-slate-900 border border-slate-700 rounded-xl pl-9 pr-3 py-2.5 text-xs text-white focus:outline-none focus:border-purple-500">
                     </div>
+                    <button type="button" onclick="toggleTopicsMenu(event)" class="flex-shrink-0 bg-slate-700 hover:bg-slate-600 text-slate-200 px-3 py-2.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 whitespace-nowrap max-w-[45%]">
+                        <i class="fa-solid fa-layer-group text-purple-400"></i>
+                        <span id="topics-menu-label" class="truncate">Konular</span>
+                        <i class="fa-solid fa-chevron-down text-[10px] text-slate-400" id="topics-menu-icon"></i>
+                    </button>
                 </div>
-
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 pt-2 border-t border-slate-700/60">
-                    <p id="active-category-info" class="text-[11px] text-slate-400">
-                        <i class="fa-solid fa-circle-info mr-1"></i><span id="active-category-label">Son yazılan konular</span>
-                        <span id="active-category-count" class="text-purple-400 font-semibold ml-1"></span>
-                    </p>
-                    <div class="flex items-center space-x-2 w-full sm:w-auto justify-end">
-                        <span class="text-xs text-slate-400 mr-1"><i class="fa-solid fa-sort mr-1"></i>Sırala:</span>
-                        <button onclick="changeSort('recent')" id="sort-recent" class="sort-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-700 text-purple-400 transition">Güncel</button>
-                        <button onclick="changeSort('popular')" id="sort-popular" class="sort-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-700 text-slate-400 hover:text-white transition">Popüler</button>
+                <div id="topics-menu-panel" onclick="event.stopPropagation()" class="hidden absolute right-2.5 left-2.5 sm:left-auto sm:w-[26rem] top-full mt-2 z-30 bg-slate-800 border border-slate-600 rounded-2xl shadow-2xl shadow-black/50 overflow-hidden">
+                    <div class="flex items-center justify-between px-4 py-3 border-b border-slate-700 bg-slate-900/50">
+                        <h3 class="text-xs font-extrabold text-white uppercase tracking-wider flex items-center gap-2"><i class="fa-solid fa-layer-group text-purple-400"></i>Kategori Seç</h3>
+                        <button type="button" onclick="closeTopicsMenu()" class="text-slate-400 hover:text-white w-7 h-7 rounded-lg hover:bg-slate-700 transition"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                    <div class="p-3 max-h-[60vh] overflow-y-auto">
+                        <div class="grid grid-cols-1 min-[420px]:grid-cols-2 gap-2" id="category-filters">
+                            <button type="button" onclick="filterCategory('Son Yazılanlar')" data-cat="Son Yazılanlar" class="cat-btn group flex items-center gap-2.5 text-left px-2.5 py-2 rounded-xl border border-slate-700 bg-slate-900/60 hover:bg-slate-700/60 hover:border-slate-500 transition">
+                                <span class="w-8 h-8 rounded-lg bg-slate-800 border border-slate-700 flex items-center justify-center flex-shrink-0"><i class="fa-solid fa-clock-rotate-left text-slate-300 text-sm"></i></span>
+                                <span class="min-w-0 flex-1">
+                                    <span class="block text-xs font-bold text-slate-100 truncate">Son Yazılanlar</span>
+                                    <span class="block text-[10px] text-slate-500 truncate">Tüm konular</span>
+                                </span>
+                                <i class="cat-check fa-solid fa-circle-check text-purple-400 text-sm hidden"></i>
+                            </button>
+                            <button type="button" onclick="filterCategory('Genel')" data-cat="Genel" class="cat-btn group flex items-center gap-2.5 text-left px-2.5 py-2 rounded-xl border border-slate-700 bg-slate-900/60 hover:bg-slate-700/60 hover:border-slate-500 transition">
+                                <span class="w-8 h-8 rounded-lg bg-slate-800 border border-slate-700 flex items-center justify-center flex-shrink-0"><i class="fa-solid fa-comments text-blue-400 text-sm"></i></span>
+                                <span class="min-w-0 flex-1">
+                                    <span class="block text-xs font-bold text-slate-100 truncate">Genel</span>
+                                    <span class="block text-[10px] text-slate-500 truncate">Genel sohbet</span>
+                                </span>
+                                <i class="cat-check fa-solid fa-circle-check text-purple-400 text-sm hidden"></i>
+                            </button>
+                            <button type="button" onclick="filterCategory('Yardım')" data-cat="Yardım" class="cat-btn group flex items-center gap-2.5 text-left px-2.5 py-2 rounded-xl border border-slate-700 bg-slate-900/60 hover:bg-slate-700/60 hover:border-slate-500 transition">
+                                <span class="w-8 h-8 rounded-lg bg-slate-800 border border-slate-700 flex items-center justify-center flex-shrink-0"><i class="fa-solid fa-life-ring text-orange-400 text-sm"></i></span>
+                                <span class="min-w-0 flex-1">
+                                    <span class="block text-xs font-bold text-slate-100 truncate">Yardım</span>
+                                    <span class="block text-[10px] text-slate-500 truncate">Destek al</span>
+                                </span>
+                                <i class="cat-check fa-solid fa-circle-check text-purple-400 text-sm hidden"></i>
+                            </button>
+                            <button type="button" onclick="filterCategory('Ders Notları')" data-cat="Ders Notları" class="cat-btn group flex items-center gap-2.5 text-left px-2.5 py-2 rounded-xl border border-slate-700 bg-slate-900/60 hover:bg-slate-700/60 hover:border-slate-500 transition">
+                                <span class="w-8 h-8 rounded-lg bg-slate-800 border border-slate-700 flex items-center justify-center flex-shrink-0"><i class="fa-solid fa-book-open text-amber-400 text-sm"></i></span>
+                                <span class="min-w-0 flex-1">
+                                    <span class="block text-xs font-bold text-slate-100 truncate">Ders Notları</span>
+                                    <span class="block text-[10px] text-slate-500 truncate">Not paylaşımı</span>
+                                </span>
+                                <i class="cat-check fa-solid fa-circle-check text-purple-400 text-sm hidden"></i>
+                            </button>
+                            <button type="button" onclick="filterCategory('Soru &amp; Cevap')" data-cat="Soru &amp; Cevap" class="cat-btn group flex items-center gap-2.5 text-left px-2.5 py-2 rounded-xl border border-slate-700 bg-slate-900/60 hover:bg-slate-700/60 hover:border-slate-500 transition">
+                                <span class="w-8 h-8 rounded-lg bg-slate-800 border border-slate-700 flex items-center justify-center flex-shrink-0"><i class="fa-solid fa-circle-question text-yellow-400 text-sm"></i></span>
+                                <span class="min-w-0 flex-1">
+                                    <span class="block text-xs font-bold text-slate-100 truncate">Soru &amp; Cevap</span>
+                                    <span class="block text-[10px] text-slate-500 truncate">Sor, öğren</span>
+                                </span>
+                                <i class="cat-check fa-solid fa-circle-check text-purple-400 text-sm hidden"></i>
+                            </button>
+                            <button type="button" onclick="filterCategory('Etkinlik')" data-cat="Etkinlik" class="cat-btn group flex items-center gap-2.5 text-left px-2.5 py-2 rounded-xl border border-slate-700 bg-slate-900/60 hover:bg-slate-700/60 hover:border-slate-500 transition">
+                                <span class="w-8 h-8 rounded-lg bg-slate-800 border border-slate-700 flex items-center justify-center flex-shrink-0"><i class="fa-solid fa-calendar-check text-pink-400 text-sm"></i></span>
+                                <span class="min-w-0 flex-1">
+                                    <span class="block text-xs font-bold text-slate-100 truncate">Etkinlik</span>
+                                    <span class="block text-[10px] text-slate-500 truncate">Kampüs etkinlikleri</span>
+                                </span>
+                                <i class="cat-check fa-solid fa-circle-check text-purple-400 text-sm hidden"></i>
+                            </button>
+                            <button type="button" onclick="filterCategory('Hakkında')" data-cat="Hakkında" class="cat-btn group flex items-center gap-2.5 text-left px-2.5 py-2 rounded-xl border border-slate-700 bg-slate-900/60 hover:bg-slate-700/60 hover:border-slate-500 transition">
+                                <span class="w-8 h-8 rounded-lg bg-slate-800 border border-slate-700 flex items-center justify-center flex-shrink-0"><i class="fa-solid fa-circle-info text-cyan-400 text-sm"></i></span>
+                                <span class="min-w-0 flex-1">
+                                    <span class="block text-xs font-bold text-slate-100 truncate">Hakkında</span>
+                                    <span class="block text-[10px] text-slate-500 truncate">Forum bilgileri</span>
+                                </span>
+                                <i class="cat-check fa-solid fa-circle-check text-purple-400 text-sm hidden"></i>
+                            </button>
+                            <button type="button" onclick="filterCategory('Üniversite')" data-cat="Üniversite" class="cat-btn group flex items-center gap-2.5 text-left px-2.5 py-2 rounded-xl border border-slate-700 bg-slate-900/60 hover:bg-slate-700/60 hover:border-slate-500 transition">
+                                <span class="w-8 h-8 rounded-lg bg-slate-800 border border-slate-700 flex items-center justify-center flex-shrink-0"><i class="fa-solid fa-graduation-cap text-indigo-400 text-sm"></i></span>
+                                <span class="min-w-0 flex-1">
+                                    <span class="block text-xs font-bold text-slate-100 truncate">Üniversite</span>
+                                    <span class="block text-[10px] text-slate-500 truncate">Üniversite hayatı</span>
+                                </span>
+                                <i class="cat-check fa-solid fa-circle-check text-purple-400 text-sm hidden"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="px-4 py-3 border-t border-slate-700 bg-slate-900/50 flex flex-wrap items-center justify-between gap-2">
+                        <p id="active-category-info" class="text-[11px] text-slate-400 min-w-0">
+                            <i class="fa-solid fa-circle-info mr-1"></i><span id="active-category-label">Son yazılan konular</span>
+                            <span id="active-category-count" class="text-purple-400 font-semibold ml-1"></span>
+                        </p>
+                        <div class="flex items-center bg-slate-900 border border-slate-700 rounded-lg p-0.5">
+                            <button onclick="changeSort('recent')" id="sort-recent" class="sort-btn px-3 py-1 rounded-md text-[11px] font-semibold bg-slate-700 text-purple-400 transition"><i class="fa-regular fa-clock mr-1"></i>Güncel</button>
+                            <button onclick="changeSort('popular')" id="sort-popular" class="sort-btn px-3 py-1 rounded-md text-[11px] font-semibold text-slate-400 hover:text-white transition"><i class="fa-solid fa-fire mr-1"></i>Popüler</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -362,54 +426,41 @@
                 </div>
             </div>
 
-            <div id="reply-form-container" class="bg-slate-800 border border-slate-700 p-6 rounded-2xl shadow-xl mt-6">
-                <div id="active-quote-banner" class="hidden mb-3 bg-purple-950/40 border border-purple-500/40 p-3 rounded-xl flex items-center justify-between text-xs">
+            <div id="reply-form-container" class="bg-slate-800 border border-slate-700 p-4 sm:p-5 rounded-2xl shadow-xl mt-6">
+                <div id="active-quote-banner" class="hidden mb-3 bg-purple-950/40 border border-purple-500/40 px-3.5 py-2.5 rounded-xl flex items-center justify-between text-xs">
                     <div class="flex items-center space-x-2 truncate">
                         <i class="fa-solid fa-quote-left text-purple-400"></i>
                         <span id="active-quote-text" class="text-slate-300 truncate"></span>
                     </div>
-                    <button onclick="cancelQuote()" class="text-slate-400 hover:text-white ml-2"><i class="fa-solid fa-xmark"></i></button>
+                    <button type="button" onclick="cancelQuote()" class="text-slate-400 hover:text-white ml-2 p-0.5"><i class="fa-solid fa-xmark"></i></button>
                 </div>
 
-                <h3 class="text-base font-bold text-white mb-3 flex items-center flex-wrap gap-y-1">
-                    <i class="fa-solid fa-reply text-purple-400 mr-2"></i>Tartışmaya Katıl <span class="text-xs text-purple-300 font-normal ml-2">(İçerik derinliğine göre ekstra bonus!)</span>
-                </h3>
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="text-sm font-extrabold text-white flex items-center gap-2">
+                        <span class="w-7 h-7 rounded-lg bg-purple-500/15 border border-purple-500/30 text-purple-400 flex items-center justify-center text-xs"><i class="fa-solid fa-reply"></i></span>
+                        <span>Yanıt Yaz</span>
+                    </h3>
+                    <span class="text-[11px] text-slate-500 hidden sm:inline"><i class="fa-solid fa-at mr-1"></i>@ ile kullanıcı etiketle</span>
+                </div>
                 <form id="reply-form" onsubmit="prepareReply(event)" class="space-y-3">
                     <div class="reply-input-wrapper">
                         <div id="mention-suggestions-reply" class="mention-suggestions hidden"></div>
-                        <textarea id="reply-content" rows="3" required oninput="updateDepthPreview('reply')" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-purple-500 text-white" placeholder="Fikrini veya cevabını paylaş... (@ ile etiketle)"></textarea>
+                        <textarea id="reply-content" rows="3" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500/40 text-white placeholder-slate-500 transition resize-y" placeholder="Fikrini veya cevabını paylaş... (@ ile etiketle)"></textarea>
                     </div>
-                    <!-- Canlı Kelime Sayacı & Rozet Önizleme Çubuğu (Yanıt) -->
-                    <div id="reply-depth-preview" class="bg-slate-900/70 border border-slate-700/80 rounded-xl px-3.5 py-2.5 space-y-1.5">
-                        <div class="flex items-center justify-between gap-2 flex-wrap text-[11px]">
-                            <div class="flex items-center gap-2">
-                                <span id="reply-depth-badge"><span class="inline-flex items-center gap-1 text-[9px] px-2 py-0.5 rounded-full bg-slate-700/60 text-slate-300 border border-slate-600/70"><i class="fa-solid fa-comment-dots text-[8px] text-slate-400"></i>Öz Görüş</span></span>
-                                <span class="text-slate-400 font-medium"><strong id="reply-word-count" class="text-slate-200">0</strong> kelime</span>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <span id="reply-depth-hint" class="text-[10px] text-slate-400">Detaylı Yorum (+1 Coin & +3 XP) için 25 kelimeye ulaş</span>
-                                <span id="reply-depth-reward" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-yellow-500/15 text-yellow-300 border border-yellow-500/30">+2 Coin & +8 XP</span>
-                            </div>
+                    <div class="flex items-center justify-between gap-2 flex-wrap pt-1">
+                        <div class="flex items-center gap-1.5">
+                            <button type="button" onclick="openEmbedModal('reply')" class="format-btn flex items-center gap-1.5 bg-slate-900 hover:bg-slate-700 border border-slate-700 text-slate-300 px-3 py-2 rounded-xl text-xs font-semibold transition">
+                                <i class="fa-solid fa-image text-emerald-400"></i>
+                                <span>Görsel</span>
+                            </button>
+                            <button type="button" onclick="openEmbedModal('reply', 'link')" class="format-btn flex items-center gap-1.5 bg-slate-900 hover:bg-slate-700 border border-slate-700 text-slate-300 px-3 py-2 rounded-xl text-xs font-semibold transition">
+                                <i class="fa-solid fa-link text-blue-400"></i>
+                                <span>Link</span>
+                            </button>
                         </div>
-                        <div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
-                            <div id="reply-depth-bar" class="h-full bg-slate-500 transition-all duration-300 rounded-full" style="width: 0%"></div>
-                        </div>
-                    </div>
-                    <!-- Format toolbar -->
-                    <div class="flex items-center gap-1.5 flex-wrap">
-                        <button type="button" onclick="openEmbedModal('reply')" class="format-btn flex items-center gap-1.5 bg-slate-900 border border-slate-700 text-slate-300 px-3 py-1.5 rounded-lg text-xs font-semibold">
-                            <i class="fa-solid fa-image text-emerald-400"></i>
-                            <span>Görsel Ekle</span>
-                        </button>
-                        <button type="button" onclick="openEmbedModal('reply', 'link')" class="format-btn flex items-center gap-1.5 bg-slate-900 border border-slate-700 text-slate-300 px-3 py-1.5 rounded-lg text-xs font-semibold">
-                            <i class="fa-solid fa-link text-blue-400"></i>
-                            <span>Link Ekle</span>
-                        </button>
-                        <span class="text-[10px] text-slate-500 ml-auto hidden sm:inline"><i class="fa-solid fa-at mr-1"></i>@ ile etiketle</span>
-                    </div>
-                    <div class="flex justify-end">
-                        <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white px-5 py-2 rounded-xl text-xs font-semibold transition shadow-md">
-                            Yanıtı Gönder
+                        <button type="submit" class="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white px-5 py-2 rounded-xl text-xs font-bold transition shadow-lg shadow-purple-500/20 flex items-center gap-1.5">
+                            <i class="fa-solid fa-paper-plane text-[11px]"></i>
+                            <span>Yanıtı Gönder</span>
                         </button>
                     </div>
                 </form>
@@ -427,107 +478,101 @@
         </div>
     </div>
 
-    <div id="topic-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden items-center justify-center z-50 p-4 overflow-y-auto">
-        <div class="bg-slate-800 border border-slate-700 rounded-2xl max-w-lg w-full p-6 shadow-2xl max-h-[90vh] overflow-y-auto my-8">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-xl font-bold">Yeni Tartışma Konusu Aç</h2>
-                <button onclick="closeTopicModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+    <div id="topic-modal" class="fixed inset-0 bg-black/75 backdrop-blur-sm hidden items-center justify-center z-50 p-3 sm:p-4">
+        <div class="bg-slate-800 border border-slate-600/80 rounded-2xl max-w-lg w-full shadow-2xl shadow-black/50 max-h-[90vh] flex flex-col overflow-hidden">
+            <div class="flex justify-between items-center px-5 py-3.5 border-b border-slate-700 bg-slate-900/50 flex-shrink-0">
+                <h2 class="text-sm sm:text-base font-extrabold text-white flex items-center gap-2">
+                    <span class="w-7 h-7 rounded-lg bg-purple-500/15 border border-purple-500/30 text-purple-400 flex items-center justify-center text-xs"><i class="fa-solid fa-pen-to-square"></i></span>
+                    <span>Yeni Konu Aç</span>
+                </h2>
+                <button type="button" onclick="closeTopicModal()" class="text-slate-400 hover:text-white w-8 h-8 rounded-lg hover:bg-slate-700 transition flex items-center justify-center">
+                    <i class="fa-solid fa-xmark text-base"></i>
+                </button>
             </div>
-            <form id="topic-form" onsubmit="prepareTopic(event)" class="space-y-4">
-                <div>
-                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Kategori Seçin</label>
-                    <select id="topic-category" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-purple-500 text-white">
-                        <option value="Genel">Genel</option>
-                        <option value="Yardım">Yardım</option>
-                        <option value="Ders Notları">Ders Notları</option>
-                        <option value="Soru & Cevap">Soru & Cevap</option>
-                        <option value="Etkinlik">Etkinlik</option>
-                        <option value="Hakkında">Hakkında</option>
-                        <option value="Üniversite">Üniversite</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Konu Başlığı</label>
-                    <input type="text" id="topic-title" required minlength="3" maxlength="100" oninput="updateTitleCounter()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-purple-500 text-white" placeholder="Konu başlığı (max 100 karakter)...">
-                    <div class="flex justify-end mt-1">
-                        <span id="title-char-counter" class="text-[10px] text-slate-500 font-semibold"><span id="title-char-current">0</span>/100 karakter</span>
+            <form id="topic-form" onsubmit="prepareTopic(event)" class="flex flex-col flex-1 min-h-0">
+                <div class="p-5 space-y-4 overflow-y-auto flex-1">
+                    <div>
+                        <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Kategori</label>
+                        <select id="topic-category" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-purple-500 text-white">
+                            <option value="Genel">Genel</option>
+                            <option value="Yardım">Yardım</option>
+                            <option value="Ders Notları">Ders Notları</option>
+                            <option value="Soru & Cevap">Soru & Cevap</option>
+                            <option value="Etkinlik">Etkinlik</option>
+                            <option value="Hakkında">Hakkında</option>
+                            <option value="Üniversite">Üniversite</option>
+                        </select>
                     </div>
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">İçerik / Soru</label>
-                    <textarea id="topic-content" rows="4" required oninput="updateDepthPreview('topic')" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-purple-500 text-white" placeholder="Detaylar..."></textarea>
-                    <!-- Canlı Kelime Sayacı & Rozet Önizleme Çubuğu (Konu) -->
-                    <div id="topic-depth-preview" class="bg-slate-900/70 border border-slate-700/80 rounded-xl px-3.5 py-2.5 mt-2 space-y-1.5">
-                        <div class="flex items-center justify-between gap-2 flex-wrap text-[11px]">
-                            <div class="flex items-center gap-2">
-                                <span id="topic-depth-badge"><span class="inline-flex items-center gap-1 text-[9px] px-2 py-0.5 rounded-full bg-slate-700/60 text-slate-300 border border-slate-600/70"><i class="fa-solid fa-comment-dots text-[8px] text-slate-400"></i>Öz Görüş</span></span>
-                                <span class="text-slate-400 font-medium"><strong id="topic-word-count" class="text-slate-200">0</strong> kelime</span>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <span id="topic-depth-hint" class="text-[10px] text-slate-400">Detaylı Yorum (+1 Coin & +3 XP) için 25 kelimeye ulaş</span>
-                                <span id="topic-depth-reward" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-yellow-500/15 text-yellow-300 border border-yellow-500/30">+5 Coin & +15 XP</span>
-                            </div>
+                    <div>
+                        <div class="flex items-center justify-between mb-1.5">
+                            <label class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Konu Başlığı</label>
+                            <span id="title-char-counter" class="text-[10px] text-slate-500 font-semibold"><span id="title-char-current">0</span>/100</span>
                         </div>
-                        <div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
-                            <div id="topic-depth-bar" class="h-full bg-slate-500 transition-all duration-300 rounded-full" style="width: 0%"></div>
-                        </div>
+                        <input type="text" id="topic-title" required minlength="3" maxlength="100" oninput="updateTitleCounter()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500/40 text-white placeholder-slate-500 transition" placeholder="Kısa ve net bir başlık yaz...">
                     </div>
-                    <!-- Format toolbar -->
-                    <div class="flex items-center gap-1.5 flex-wrap mt-2">
-                        <button type="button" onclick="openEmbedModal('topic')" class="format-btn flex items-center gap-1.5 bg-slate-900 border border-slate-700 text-slate-300 px-3 py-1.5 rounded-lg text-xs font-semibold">
-                            <i class="fa-solid fa-image text-emerald-400"></i>
-                            <span>Görsel Ekle</span>
-                        </button>
-                        <button type="button" onclick="openEmbedModal('topic', 'link')" class="format-btn flex items-center gap-1.5 bg-slate-900 border border-slate-700 text-slate-300 px-3 py-1.5 rounded-lg text-xs font-semibold">
-                            <i class="fa-solid fa-link text-blue-400"></i>
-                            <span>Link Ekle</span>
-                        </button>
-                        <button type="button" id="poll-toggle-btn" onclick="togglePollSection()" class="format-btn flex items-center gap-1.5 bg-slate-900 border border-slate-700 text-slate-300 px-3 py-1.5 rounded-lg text-xs font-semibold">
-                            <i class="fa-solid fa-chart-pie text-purple-400"></i>
-                            <span>Anket Ekle</span>
-                        </button>
-                    </div>
-                    <!-- Opsiyonel Anket Oluşturma Bölümü -->
-                    <div id="topic-poll-section" class="hidden mt-3 bg-slate-900/80 border border-purple-500/30 rounded-xl p-3.5 space-y-3">
-                        <div class="flex items-center justify-between">
-                            <span class="text-xs font-bold text-purple-300 flex items-center gap-1.5"><i class="fa-solid fa-square-poll-vertical"></i>Anket Oluştur (Opsiyonel)</span>
-                            <button type="button" onclick="togglePollSection(false)" class="text-[11px] text-slate-400 hover:text-red-400 transition">Kaldır</button>
+                    <div>
+                        <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">İçerik</label>
+                        <textarea id="topic-content" rows="5" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-3 text-sm focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500/40 text-white placeholder-slate-500 transition resize-y" placeholder="Konu detaylarını veya sorunu buraya yaz..."></textarea>
+                        <!-- Format toolbar -->
+                        <div class="flex items-center gap-1.5 flex-wrap mt-2.5">
+                            <button type="button" onclick="openEmbedModal('topic')" class="format-btn flex items-center gap-1.5 bg-slate-900 hover:bg-slate-700 border border-slate-700 text-slate-300 px-3 py-1.5 rounded-xl text-xs font-semibold transition">
+                                <i class="fa-solid fa-image text-emerald-400"></i>
+                                <span>Görsel</span>
+                            </button>
+                            <button type="button" onclick="openEmbedModal('topic', 'link')" class="format-btn flex items-center gap-1.5 bg-slate-900 hover:bg-slate-700 border border-slate-700 text-slate-300 px-3 py-1.5 rounded-xl text-xs font-semibold transition">
+                                <i class="fa-solid fa-link text-blue-400"></i>
+                                <span>Link</span>
+                            </button>
+                            <button type="button" id="poll-toggle-btn" onclick="togglePollSection()" class="format-btn flex items-center gap-1.5 bg-slate-900 hover:bg-slate-700 border border-slate-700 text-slate-300 px-3 py-1.5 rounded-xl text-xs font-semibold transition">
+                                <i class="fa-solid fa-chart-pie text-purple-400"></i>
+                                <span>Anket</span>
+                            </button>
                         </div>
-                        <div>
-                            <label class="block text-[11px] font-semibold text-slate-400 mb-1">Anket Sorusu (max 200 karakter)</label>
-                            <input type="text" id="poll-question-input" maxlength="200" placeholder="Örn: Hangi programlama dilini tercih ediyorsunuz?" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-500">
-                        </div>
-                        <div>
-                            <div class="flex items-center justify-between mb-1.5">
-                                <label class="block text-[11px] font-semibold text-slate-400">Seçenekler (En az 2, en fazla 6)</label>
-                                <button type="button" id="add-poll-option-btn" onclick="addPollOptionInput()" class="text-[11px] text-purple-400 hover:text-purple-300 font-semibold flex items-center gap-1"><i class="fa-solid fa-plus"></i>Seçenek Ekle</button>
+                        <!-- Opsiyonel Anket Oluşturma Bölümü -->
+                        <div id="topic-poll-section" class="hidden mt-3 bg-slate-900/80 border border-purple-500/30 rounded-xl p-3.5 space-y-3">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-bold text-purple-300 flex items-center gap-1.5"><i class="fa-solid fa-square-poll-vertical"></i>Anket Oluştur (Opsiyonel)</span>
+                                <button type="button" onclick="togglePollSection(false)" class="text-[11px] text-slate-400 hover:text-red-400 transition">Kaldır</button>
                             </div>
-                            <div id="poll-options-container" class="space-y-2">
-                                <div class="flex items-center gap-2 poll-option-row">
-                                    <input type="text" maxlength="100" placeholder="1. Seçenek" class="poll-option-input flex-1 bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-purple-500">
-                                    <button type="button" onclick="removePollOptionInput(this)" class="text-slate-400 hover:text-red-400 px-1.5 py-1 text-xs transition" title="Seçeneği Sil"><i class="fa-solid fa-trash-can"></i></button>
-                                </div>
-                                <div class="flex items-center gap-2 poll-option-row">
-                                    <input type="text" maxlength="100" placeholder="2. Seçenek" class="poll-option-input flex-1 bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-purple-500">
-                                    <button type="button" onclick="removePollOptionInput(this)" class="text-slate-400 hover:text-red-400 px-1.5 py-1 text-xs transition" title="Seçeneği Sil"><i class="fa-solid fa-trash-can"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-                            <label class="flex items-center gap-2 text-xs text-slate-300 cursor-pointer select-none">
-                                <input type="checkbox" id="poll-multiple-choice" class="accent-purple-500 rounded">
-                                <span>Çoktan seçmeli (Birden fazla oy)</span>
-                            </label>
                             <div>
-                                <label class="block text-[10px] text-slate-400 mb-0.5">Bitiş Tarihi (Opsiyonel)</label>
-                                <input type="datetime-local" id="poll-ends-at" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1 text-[11px] text-white focus:outline-none focus:border-purple-500">
+                                <label class="block text-[11px] font-semibold text-slate-400 mb-1">Anket Sorusu (max 200 karakter)</label>
+                                <input type="text" id="poll-question-input" maxlength="200" placeholder="Örn: Hangi programlama dilini tercih ediyorsunuz?" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-500">
+                            </div>
+                            <div>
+                                <div class="flex items-center justify-between mb-1.5">
+                                    <label class="block text-[11px] font-semibold text-slate-400">Seçenekler (En az 2, en fazla 6)</label>
+                                    <button type="button" id="add-poll-option-btn" onclick="addPollOptionInput()" class="text-[11px] text-purple-400 hover:text-purple-300 font-semibold flex items-center gap-1"><i class="fa-solid fa-plus"></i>Seçenek Ekle</button>
+                                </div>
+                                <div id="poll-options-container" class="space-y-2">
+                                    <div class="flex items-center gap-2 poll-option-row">
+                                        <input type="text" maxlength="100" placeholder="1. Seçenek" class="poll-option-input flex-1 bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-purple-500">
+                                        <button type="button" onclick="removePollOptionInput(this)" class="text-slate-400 hover:text-red-400 px-1.5 py-1 text-xs transition" title="Seçeneği Sil"><i class="fa-solid fa-trash-can"></i></button>
+                                    </div>
+                                    <div class="flex items-center gap-2 poll-option-row">
+                                        <input type="text" maxlength="100" placeholder="2. Seçenek" class="poll-option-input flex-1 bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-purple-500">
+                                        <button type="button" onclick="removePollOptionInput(this)" class="text-slate-400 hover:text-red-400 px-1.5 py-1 text-xs transition" title="Seçeneği Sil"><i class="fa-solid fa-trash-can"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                                <label class="flex items-center gap-2 text-xs text-slate-300 cursor-pointer select-none">
+                                    <input type="checkbox" id="poll-multiple-choice" class="accent-purple-500 rounded">
+                                    <span>Çoktan seçmeli (Birden fazla oy)</span>
+                                </label>
+                                <div>
+                                    <label class="block text-[10px] text-slate-400 mb-0.5">Bitiş Tarihi (Opsiyonel)</label>
+                                    <input type="datetime-local" id="poll-ends-at" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1 text-[11px] text-white focus:outline-none focus:border-purple-500">
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="flex justify-end space-x-3 pt-2">
-                    <button type="button" onclick="closeTopicModal()" class="bg-slate-700 hover:bg-slate-600 text-slate-300 px-4 py-2 rounded-xl text-sm font-medium transition">İptal</button>
-                    <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white px-5 py-2 rounded-xl text-sm font-semibold transition">İlerle</button>
+                <div class="flex justify-end items-center gap-2.5 px-5 py-3.5 border-t border-slate-700 bg-slate-900/50 flex-shrink-0">
+                    <button type="button" onclick="closeTopicModal()" class="bg-slate-700 hover:bg-slate-600 text-slate-200 px-4 py-2 rounded-xl text-xs font-semibold transition">İptal</button>
+                    <button type="submit" class="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white px-5 py-2 rounded-xl text-xs font-bold transition shadow-lg shadow-purple-500/20 flex items-center gap-1.5">
+                        <span>İlerle</span>
+                        <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                    </button>
                 </div>
             </form>
         </div>
@@ -2077,22 +2122,50 @@ window.showToast = (message, type = 'info') => {
         window.filterCategory = (cat) => {
             selectedCategory = VALID_FORUM_CATEGORIES.has(cat) ? cat : "Son Yazılanlar";
             document.querySelectorAll('.cat-btn').forEach(btn => {
-                btn.classList.remove('bg-purple-600', 'text-white', 'shadow-lg', 'ring-2', 'ring-purple-400/50');
-                btn.classList.add('bg-slate-700', 'text-slate-300');
+                const on = btn.dataset.cat === selectedCategory;
+                btn.classList.toggle('ring-2', on);
+                btn.classList.toggle('ring-purple-500/60', on);
+                btn.classList.toggle('bg-purple-600/20', on);
+                btn.classList.toggle('border-purple-500/60', on);
+                const chk = btn.querySelector('.cat-check');
+                if (chk) chk.classList.toggle('hidden', !on);
             });
-            const activeBtn = document.querySelector(`.cat-btn[data-cat="${selectedCategory}"]`);
-            if (activeBtn) {
-                activeBtn.classList.remove('bg-slate-700', 'text-slate-300');
-                activeBtn.classList.add('bg-purple-600', 'text-white', 'shadow-lg', 'ring-2', 'ring-purple-400/50');
-            }
+            const menuLabel = document.getElementById('topics-menu-label');
+            if (menuLabel) menuLabel.textContent = selectedCategory === "Son Yazılanlar" ? "Konular" : selectedCategory;
+            closeTopicsMenu();
             renderTopicsWithFilter();
         };
 
+        window.closeTopicsMenu = () => {
+            const panel = document.getElementById('topics-menu-panel');
+            if (panel) panel.classList.add('hidden');
+            const icon = document.getElementById('topics-menu-icon');
+            if (icon) icon.classList.remove('rotate-180');
+        };
+        window.toggleTopicsMenu = (e) => {
+            if (e) e.stopPropagation();
+            const panel = document.getElementById('topics-menu-panel');
+            if (!panel) return;
+            const willOpen = panel.classList.contains('hidden');
+            panel.classList.toggle('hidden', !willOpen);
+            const icon = document.getElementById('topics-menu-icon');
+            if (icon) icon.classList.toggle('rotate-180', willOpen);
+        };
+        document.addEventListener('click', () => window.closeTopicsMenu());
+        {
+            const initBtn = document.querySelector('.cat-btn[data-cat="Son Yazılanlar"]');
+            if (initBtn) {
+                initBtn.classList.add('ring-2', 'ring-purple-500/60', 'bg-purple-600/20', 'border-purple-500/60');
+                const chk = initBtn.querySelector('.cat-check');
+                if (chk) chk.classList.remove('hidden');
+            }
+        }
+
         window.changeSort = (sortType) => {
             currentSortBy = sortType;
-            document.querySelectorAll('.sort-btn').forEach(btn => { btn.classList.remove('text-purple-400'); btn.classList.add('text-slate-400'); });
+            document.querySelectorAll('.sort-btn').forEach(btn => { btn.classList.remove('text-purple-400', 'bg-slate-700'); btn.classList.add('text-slate-400'); });
             document.getElementById(`sort-${sortType}`).classList.remove('text-slate-400');
-            document.getElementById(`sort-${sortType}`).classList.add('text-purple-400');
+            document.getElementById(`sort-${sortType}`).classList.add('text-purple-400', 'bg-slate-700');
             loadTopics(true);
         };
 

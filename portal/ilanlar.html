@@ -46,12 +46,12 @@
             
             <nav class="hidden md:flex items-center space-x-1 lg:space-x-2 text-xs lg:text-sm font-medium whitespace-nowrap">
                 <a href="/portal/index.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">Ana Sayfa</a>
+                <a href="/portal/akis.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">Akış</a>
                 <a href="/portal/forum.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">Forum</a>
                 <a href="/portal/oyunlar.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">Oyunlar</a>
                 <a href="/portal/ilanlar.html" class="px-2.5 py-1.5 rounded-xl bg-blue-500/20 text-blue-200 border border-blue-400/40 font-bold hover:bg-blue-500/30 transition flex items-center space-x-1.5 shadow-sm shadow-blue-500/10"><i class="fa-solid fa-bag-shopping text-blue-300 text-xs"></i><span>İlanlar</span></a>
                 <a href="/portal/ogrenciler.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">Öğrenciler</a>
                 <a href="/portal/topluluk.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">Topluluklar</a>
-                <a href="/portal/iletisim.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">İletişim</a>
             </nav>
 
             <div class="flex items-center space-x-2 sm:space-x-4">
@@ -63,7 +63,7 @@
 
                     <div id="user-profile" class="hidden flex items-center space-x-2 sm:space-x-3 relative">
                         <div class="flex items-center bg-slate-700 px-2 sm:px-2.5 py-1 rounded-full border border-slate-600 shadow-inner">
-                            <i class="fa-solid fa-coins text-yellow-400 mr-1 sm:mr-1.5 text-[10px] sm:text-sm"></i>
+                            <i class="fa-solid fa-coins text-yellow-400 mr-1 sm:mr-1.5 animate-bounce text-[10px] sm:text-sm"></i>
                             <span id="user-coins" class="font-bold text-yellow-400 text-[10px] sm:text-sm">0</span>
                         </div>
 
@@ -82,6 +82,13 @@
                                 <i class="fa-solid fa-user text-indigo-400"></i>
                                 <span>Profilim</span>
                             </a>
+                            <button onclick="openNotificationsModal()" class="w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center justify-between transition">
+                                <span class="flex items-center space-x-2">
+                                    <i class="fa-solid fa-bell text-blue-400"></i>
+                                    <span>Bildirimler</span>
+                                </span>
+                                <span id="dropdown-notif-count" class="bg-slate-700 text-slate-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-slate-600">0</span>
+                            </button>
                             <a href="/portal/magaza.html" class="block w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center space-x-2 transition">
                                 <i class="fa-solid fa-store text-yellow-400"></i>
                                 <span>Mağaza</span>
@@ -94,14 +101,14 @@
                                 </span>
                                 <span id="streak-dropdown-badge" class="bg-amber-500/20 text-amber-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-amber-500/30">0 Gün</span>
                             </button>
-                            
-                            <button onclick="openNotificationsModal()" class="w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center justify-between transition">
-                                <span class="flex items-center space-x-2">
-                                    <i class="fa-solid fa-bell text-blue-400"></i>
-                                    <span>Bildirimler</span>
-                                </span>
-                                <span id="dropdown-notif-count" class="bg-slate-700 text-slate-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-slate-600">0</span>
-                            </button>
+                            <a href="/portal/iletisim.html" class="block w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center space-x-2 transition">
+                                <i class="fa-solid fa-envelope-open-text text-cyan-400"></i>
+                                <span>İletişim</span>
+                            </a>
+                            <a href="/portal/tanitim.html" class="block w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center space-x-2 transition">
+                                <i class="fa-solid fa-circle-info text-cyan-400"></i>
+                                <span>Tanıtım</span>
+                            </a>
 
                             <div class="border-t border-slate-700/80 my-1"></div>
 
@@ -121,30 +128,25 @@
 
         <div id="mobile-menu" class="hidden md:hidden bg-slate-800 border-t border-slate-700 px-4 pt-3 pb-4 space-y-1.5">
             <a href="/portal/index.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">Ana Sayfa</a>
+            <a href="/portal/akis.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">Akış</a>
             <a href="/portal/forum.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">Forum</a>
             <a href="/portal/oyunlar.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">Oyunlar</a>
             <a href="/portal/ilanlar.html" class="block px-3 py-2 rounded-xl text-sm font-bold text-blue-200 bg-blue-500/20 border border-blue-400/40 flex items-center"><i class="fa-solid fa-bag-shopping text-blue-300 mr-2"></i>İlanlar</a>
             <a href="/portal/ogrenciler.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">Öğrenciler</a>
             <a href="/portal/topluluk.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">Topluluklar</a>
-            <a href="/portal/iletisim.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">İletişim</a>
         </div>
     </header>
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 flex-grow w-full">
         <!-- BAŞLIK & İLAN VER BUTONU -->
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 sm:mb-8 gap-3 sm:gap-4">
-            <div class="min-w-0">
-                <h1 class="text-xl sm:text-3xl font-extrabold tracking-tight bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent flex items-center">
-                    <i class="fa-solid fa-bag-shopping mr-2.5 text-indigo-400 text-lg sm:text-2xl"></i>Öğrenci İlanları
-                </h1>
-                <p class="text-slate-400 text-xs sm:text-sm mt-1">Öğrenciden öğrenciye ikinci el kitap/eşya, ev arkadaşı, proje ekibi ve özel ders paylaşımları.</p>
-            </div>
-            <div class="flex items-center space-x-2 w-full sm:w-auto justify-end">
-                <button onclick="openCreateListingModal()" class="w-full sm:w-auto justify-center bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl font-bold shadow-lg shadow-indigo-500/20 text-xs flex items-center space-x-2 transition">
-                    <i class="fa-solid fa-plus"></i>
-                    <span>İlan Ver</span>
-                </button>
-            </div>
+        <div class="flex items-center justify-between gap-3 mb-4 sm:mb-6">
+            <h1 class="text-xl sm:text-3xl font-extrabold tracking-tight bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent flex items-center min-w-0">
+                <i class="fa-solid fa-bag-shopping mr-2.5 text-indigo-400 text-lg sm:text-2xl"></i><span class="truncate">Öğrenci İlanları</span>
+            </h1>
+            <button onclick="openCreateListingModal()" class="flex-shrink-0 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white px-3.5 py-2 sm:px-5 sm:py-2.5 rounded-xl font-bold shadow-lg shadow-indigo-500/20 text-xs sm:text-sm flex items-center space-x-1.5 transition whitespace-nowrap">
+                <i class="fa-solid fa-plus"></i>
+                <span>İlan Ver</span>
+            </button>
         </div>
 
         <!-- KULLANICININ AKTİF İLANI DURUM KARTI (Varsa gösterilir) -->
@@ -167,13 +169,13 @@
         </div>
 
         <!-- SEKMELER: İLANLAR & DUYURULAR -->
-        <div class="flex items-center space-x-1 sm:space-x-2 border-b border-slate-700/80 mb-5 sm:mb-6 overflow-x-auto no-scrollbar">
-            <button onclick="switchTab('pazar')" id="tab-pazar-btn" class="px-3.5 sm:px-5 py-2.5 sm:py-3 border-b-2 border-blue-500 text-blue-400 font-bold text-xs sm:text-sm flex items-center space-x-1.5 sm:space-x-2 transition whitespace-nowrap">
+        <div class="inline-flex w-full sm:w-auto items-center bg-slate-800 border border-slate-700 rounded-2xl p-1 mb-5 sm:mb-6 shadow-md">
+            <button onclick="switchTab('pazar')" id="tab-pazar-btn" class="flex-1 sm:flex-none justify-center px-4 sm:px-6 py-2 rounded-xl bg-blue-600 text-white font-bold text-xs sm:text-sm flex items-center space-x-2 transition whitespace-nowrap shadow">
                 <i class="fa-solid fa-store"></i>
                 <span>İlanlar</span>
-                <span id="pazar-count-badge" class="bg-blue-500/20 text-blue-300 text-[10px] px-2 py-0.5 rounded-full font-bold">0</span>
+                <span id="pazar-count-badge" class="bg-white/20 text-white text-[10px] px-2 py-0.5 rounded-full font-bold">0</span>
             </button>
-            <button onclick="switchTab('genel')" id="tab-genel-btn" class="px-3.5 sm:px-5 py-2.5 sm:py-3 border-b-2 border-transparent text-slate-400 hover:text-white font-semibold text-xs sm:text-sm flex items-center space-x-1.5 sm:space-x-2 transition whitespace-nowrap">
+            <button onclick="switchTab('genel')" id="tab-genel-btn" class="flex-1 sm:flex-none justify-center px-4 sm:px-6 py-2 rounded-xl text-slate-400 hover:text-white font-semibold text-xs sm:text-sm flex items-center space-x-2 transition whitespace-nowrap">
                 <i class="fa-solid fa-bullhorn"></i>
                 <span>Duyurular</span>
             </button>
@@ -181,13 +183,42 @@
 
         <!-- ÖĞRENCİ PAZARI İÇERİĞİ -->
         <div id="section-pazar">
-            <!-- Arama Araç Çubuğu (0 Read) -->
-            <div class="bg-slate-800 border border-slate-700 rounded-2xl p-3 sm:p-4 mb-5 sm:mb-6 shadow-lg">
-                <div class="relative w-full">
-                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-500 text-xs"></i>
-                    <input type="text" id="listing-search-input" oninput="applyListingFilters()" placeholder="Başlık, açıklama veya üniversite ara..." class="w-full bg-slate-900 border border-slate-700 rounded-xl pl-9 pr-4 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500">
+            <!-- Arama & Filtre Araç Çubuğu (0 Read) -->
+            <div class="bg-slate-800 border border-slate-700 rounded-2xl p-3 sm:p-4 mb-4 shadow-lg space-y-3">
+                <div class="flex items-center gap-2">
+                    <div class="relative flex-1 min-w-0">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-xs"></i>
+                        <input type="text" id="listing-search-input" oninput="applyListingFilters()" placeholder="İlan, üniversite veya kişi ara..." class="w-full bg-slate-900 border border-slate-700 rounded-xl pl-9 pr-3 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500">
+                    </div>
+                    <div class="relative flex-shrink-0">
+                        <i class="fa-solid fa-arrow-down-wide-short absolute left-3 top-1/2 -translate-y-1/2 text-indigo-400 text-xs pointer-events-none"></i>
+                        <select id="listing-sort" onchange="applyListingFilters()" class="appearance-none bg-slate-700 hover:bg-slate-600 border border-slate-600 rounded-xl pl-8 pr-3 py-2.5 text-xs text-slate-100 font-semibold focus:outline-none focus:border-indigo-500 cursor-pointer">
+                            <option value="new">En Yeni</option>
+                            <option value="old">En Eski</option>
+                            <option value="price-asc">Fiyat ↑</option>
+                            <option value="price-desc">Fiyat ↓</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="flex gap-2 overflow-x-auto no-scrollbar -mx-1 px-1 pb-0.5" id="listing-cat-chips">
+                    <button type="button" onclick="setCategoryFilter('all')" data-cat="all" class="cat-pill flex-shrink-0 px-3 py-1.5 rounded-xl text-xs font-semibold border transition flex items-center gap-1.5 whitespace-nowrap bg-slate-900 text-slate-300 border-slate-700 hover:bg-slate-700">
+                        <i class="fa-solid fa-layer-group text-indigo-400"></i><span>Tümü</span><span data-cat-count="all" class="cat-count text-[10px] font-bold px-1.5 rounded-full bg-slate-700/80 text-slate-400">0</span>
+                    </button>
+                    <button type="button" onclick="setCategoryFilter('kitap-esya')" data-cat="kitap-esya" class="cat-pill flex-shrink-0 px-3 py-1.5 rounded-xl text-xs font-semibold border transition flex items-center gap-1.5 whitespace-nowrap bg-slate-900 text-slate-300 border-slate-700 hover:bg-slate-700">
+                        <i class="fa-solid fa-book text-amber-400"></i><span>Kitap / Eşya</span><span data-cat-count="kitap-esya" class="cat-count text-[10px] font-bold px-1.5 rounded-full bg-slate-700/80 text-slate-400">0</span>
+                    </button>
+                    <button type="button" onclick="setCategoryFilter('ev-arkadasi')" data-cat="ev-arkadasi" class="cat-pill flex-shrink-0 px-3 py-1.5 rounded-xl text-xs font-semibold border transition flex items-center gap-1.5 whitespace-nowrap bg-slate-900 text-slate-300 border-slate-700 hover:bg-slate-700">
+                        <i class="fa-solid fa-house-user text-emerald-400"></i><span>Ev Arkadaşı</span><span data-cat-count="ev-arkadasi" class="cat-count text-[10px] font-bold px-1.5 rounded-full bg-slate-700/80 text-slate-400">0</span>
+                    </button>
+                    <button type="button" onclick="setCategoryFilter('proje-takim')" data-cat="proje-takim" class="cat-pill flex-shrink-0 px-3 py-1.5 rounded-xl text-xs font-semibold border transition flex items-center gap-1.5 whitespace-nowrap bg-slate-900 text-slate-300 border-slate-700 hover:bg-slate-700">
+                        <i class="fa-solid fa-people-group text-purple-400"></i><span>Proje / Takım</span><span data-cat-count="proje-takim" class="cat-count text-[10px] font-bold px-1.5 rounded-full bg-slate-700/80 text-slate-400">0</span>
+                    </button>
+                    <button type="button" onclick="setCategoryFilter('ozel-ders')" data-cat="ozel-ders" class="cat-pill flex-shrink-0 px-3 py-1.5 rounded-xl text-xs font-semibold border transition flex items-center gap-1.5 whitespace-nowrap bg-slate-900 text-slate-300 border-slate-700 hover:bg-slate-700">
+                        <i class="fa-solid fa-chalkboard-user text-sky-400"></i><span>Özel Ders</span><span data-cat-count="ozel-ders" class="cat-count text-[10px] font-bold px-1.5 rounded-full bg-slate-700/80 text-slate-400">0</span>
+                    </button>
                 </div>
             </div>
+            <p id="listing-result-count" class="text-[11px] text-slate-500 mb-3 ml-1"></p>
 
             <!-- İLANLAR IZGARASI -->
             <div id="student-listings-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
@@ -397,15 +428,18 @@
         let pazarLoadedOnce = false;
         let allListingsCache = [];
         let activeCategoryFilter = 'all';
+        document.addEventListener('DOMContentLoaded', () => { if (window.setCategoryFilter) window.setCategoryFilter('all', true); });
         let currentUserData = null;
 
         const CATEGORY_META = {
-            'kitap-esya': { label: '2. El Kitap / Eşya', icon: 'fa-book', color: 'text-amber-400', bg: 'bg-amber-400/10', border: 'border-amber-400/20' },
-            'ev-arkadasi': { label: 'Ev / Yurt Arkadaşı', icon: 'fa-house-user', color: 'text-emerald-400', bg: 'bg-emerald-400/10', border: 'border-emerald-400/20' },
-            'proje-takim': { label: 'Proje / Takım', icon: 'fa-people-group', color: 'text-purple-400', bg: 'bg-purple-400/10', border: 'border-purple-400/20' },
-            'ozel-ders': { label: 'Özel Ders', icon: 'fa-chalkboard-user', color: 'text-sky-400', bg: 'bg-sky-400/10', border: 'border-sky-400/20' }
+            'kitap-esya': { bar: 'from-amber-400 to-orange-500', label: '2. El Kitap / Eşya', icon: 'fa-book', color: 'text-amber-400', bg: 'bg-amber-400/10', border: 'border-amber-400/20' },
+            'ev-arkadasi': { bar: 'from-emerald-400 to-teal-500', label: 'Ev / Yurt Arkadaşı', icon: 'fa-house-user', color: 'text-emerald-400', bg: 'bg-emerald-400/10', border: 'border-emerald-400/20' },
+            'proje-takim': { bar: 'from-purple-400 to-fuchsia-500', label: 'Proje / Takım', icon: 'fa-people-group', color: 'text-purple-400', bg: 'bg-purple-400/10', border: 'border-purple-400/20' },
+            'ozel-ders': { bar: 'from-sky-400 to-blue-500', label: 'Özel Ders', icon: 'fa-chalkboard-user', color: 'text-sky-400', bg: 'bg-sky-400/10', border: 'border-sky-400/20' }
         };
 
+        const TAB_ACTIVE = 'flex-1 sm:flex-none justify-center px-4 sm:px-6 py-2 rounded-xl bg-blue-600 text-white font-bold text-xs sm:text-sm flex items-center space-x-2 transition whitespace-nowrap shadow';
+        const TAB_IDLE = 'flex-1 sm:flex-none justify-center px-4 sm:px-6 py-2 rounded-xl text-slate-400 hover:text-white font-semibold text-xs sm:text-sm flex items-center space-x-2 transition whitespace-nowrap';
         window.switchTab = (tab) => {
             const pazarBtn = document.getElementById('tab-pazar-btn');
             const genelBtn = document.getElementById('tab-genel-btn');
@@ -413,50 +447,81 @@
             const genelSec = document.getElementById('section-genel');
 
             if (tab === 'pazar') {
-                pazarBtn.className = 'px-5 py-3 border-b-2 border-blue-500 text-blue-400 font-bold text-sm flex items-center space-x-2 transition';
-                genelBtn.className = 'px-5 py-3 border-b-2 border-transparent text-slate-400 hover:text-white font-semibold text-sm flex items-center space-x-2 transition';
+                pazarBtn.className = TAB_ACTIVE;
+                genelBtn.className = TAB_IDLE;
                 pazarSec.classList.remove('hidden');
                 genelSec.classList.add('hidden');
             } else {
-                genelBtn.className = 'px-5 py-3 border-b-2 border-blue-500 text-blue-400 font-bold text-sm flex items-center space-x-2 transition';
-                pazarBtn.className = 'px-5 py-3 border-b-2 border-transparent text-slate-400 hover:text-white font-semibold text-sm flex items-center space-x-2 transition';
+                genelBtn.className = TAB_ACTIVE;
+                pazarBtn.className = TAB_IDLE;
                 genelSec.classList.remove('hidden');
                 pazarSec.classList.add('hidden');
 
                 if (!pazarLoadedOnce) {
-                pazarLoadedOnce = true;
-                loadUniversitiesIntoSelects();
-                loadStudentListings();
-            }
-            if (!jobsLoadedOnce) {
+                    pazarLoadedOnce = true;
+                    loadUniversitiesIntoSelects();
+                    loadStudentListings();
+                }
+                if (!jobsLoadedOnce) {
                     jobsLoadedOnce = true;
                     loadPublicJobs();
                 }
             }
         };
 
-        window.setCategoryFilter = (cat) => {
+        window.setCategoryFilter = (cat, silent) => {
             activeCategoryFilter = cat;
             document.querySelectorAll('.cat-pill').forEach(btn => {
-                if (btn.dataset.cat === cat) {
-                    btn.className = 'cat-pill bg-blue-600 text-white px-3.5 py-1.5 rounded-xl text-xs font-bold transition';
-                } else {
-                    btn.className = 'cat-pill bg-slate-900 text-slate-300 hover:bg-slate-700 px-3.5 py-1.5 rounded-xl text-xs font-semibold border border-slate-700 transition';
-                }
+                const on = btn.dataset.cat === cat;
+                btn.classList.toggle('bg-indigo-600', on);
+                btn.classList.toggle('border-indigo-400', on);
+                btn.classList.toggle('text-white', on);
+                btn.classList.toggle('shadow-lg', on);
+                btn.classList.toggle('bg-slate-900', !on);
+                btn.classList.toggle('text-slate-300', !on);
+                btn.classList.toggle('border-slate-700', !on);
             });
-            applyListingFilters();
+            if (!silent) applyListingFilters();
         };
+
+        function listingPriceNum(item) {
+            const n = Number(item.price);
+            return (item.price === null || item.price === undefined || item.price === '' || Number.isNaN(n)) ? 0 : n;
+        }
 
         window.applyListingFilters = () => {
             const keyword = (document.getElementById('listing-search-input')?.value || '').trim().toLowerCase();
+            const sort = document.getElementById('listing-sort')?.value || 'new';
 
-            const filtered = allListingsCache.filter(item => {
-                if (!keyword) return true;
-                return (item.title || '').toLowerCase().includes(keyword) ||
-                       (item.description || '').toLowerCase().includes(keyword) ||
-                       (item.university || '').toLowerCase().includes(keyword) ||
-                       (item.contact || '').toLowerCase().includes(keyword);
+            const matchesKeyword = (item) => !keyword ||
+                (item.title || '').toLowerCase().includes(keyword) ||
+                (item.description || '').toLowerCase().includes(keyword) ||
+                (item.university || '').toLowerCase().includes(keyword) ||
+                (item.authorName || '').toLowerCase().includes(keyword) ||
+                (item.contact || '').toLowerCase().includes(keyword);
+
+            // Kategori sayaçları (arama kelimesine göre)
+            const counts = { all: 0 };
+            allListingsCache.forEach(item => {
+                if (!matchesKeyword(item)) return;
+                counts.all++;
+                counts[item.category] = (counts[item.category] || 0) + 1;
             });
+            document.querySelectorAll('[data-cat-count]').forEach(el => {
+                el.textContent = counts[el.dataset.catCount] || 0;
+            });
+
+            const filtered = allListingsCache.filter(item =>
+                matchesKeyword(item) && (activeCategoryFilter === 'all' || item.category === activeCategoryFilter)
+            );
+
+            if (sort === 'old') filtered.sort((a, b) => a.createdAt - b.createdAt);
+            else if (sort === 'price-asc') filtered.sort((a, b) => listingPriceNum(a) - listingPriceNum(b));
+            else if (sort === 'price-desc') filtered.sort((a, b) => listingPriceNum(b) - listingPriceNum(a));
+            else filtered.sort((a, b) => b.createdAt - a.createdAt);
+
+            const info = document.getElementById('listing-result-count');
+            if (info) info.textContent = filtered.length ? `${filtered.length} ilan gösteriliyor` : '';
 
             renderListings(filtered);
         };
@@ -466,46 +531,65 @@
             if (!container) return;
 
             if (list.length === 0) {
-                container.innerHTML = '<div class="text-center py-12 text-slate-500 col-span-full"><i class="fa-solid fa-inbox text-3xl mb-2 text-slate-600 block"></i>Kriterlere uygun ilan bulunamadı.</div>';
+                container.innerHTML = `
+                    <div class="col-span-full text-center py-14 bg-slate-800/50 border border-dashed border-slate-700 rounded-2xl">
+                        <div class="w-14 h-14 mx-auto mb-3 rounded-2xl bg-slate-700/50 flex items-center justify-center text-slate-500 text-2xl"><i class="fa-solid fa-inbox"></i></div>
+                        <p class="text-sm font-bold text-slate-300">Kriterlere uygun ilan bulunamadı</p>
+                        <p class="text-xs text-slate-500 mt-1">Filtreleri değiştirmeyi veya ilk ilanı sen vermeyi dene.</p>
+                    </div>`;
                 return;
             }
 
             container.innerHTML = list.map(item => {
-                const meta = CATEGORY_META[item.category] || { label: 'İlan', icon: 'fa-tag', color: 'text-indigo-400', bg: 'bg-indigo-400/10', border: 'border-indigo-400/20' };
-                const timeAgo = formatRelativeTime(item.createdAt ? new Date(item.createdAt) : null);
-                const priceBadge = (item.price !== null && item.price !== undefined && item.price !== '') ? `<span class="text-[11px] sm:text-xs font-black text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-2 py-0.5 rounded-lg flex-shrink-0">${item.price} ₺</span>` : '<span class="text-[10px] sm:text-[11px] font-semibold text-slate-400 bg-slate-700/50 px-2 py-0.5 rounded-lg flex-shrink-0">Ücretsiz / Pazarlık</span>';
+                const meta = CATEGORY_META[item.category] || { bar: 'from-indigo-400 to-blue-500', label: 'İlan', icon: 'fa-tag', color: 'text-indigo-400', bg: 'bg-indigo-400/10', border: 'border-indigo-400/20' };
+                const created = item.createdAt ? new Date(item.createdAt) : null;
+                const timeAgo = formatRelativeTime(created);
+                const isNew = created && (Date.now() - created.getTime() < 24 * 60 * 60 * 1000);
+                const hasPrice = item.price !== null && item.price !== undefined && item.price !== '';
+                const priceBlock = hasPrice
+                    ? `<div class="flex items-baseline gap-1"><span class="text-xl font-black text-emerald-400 leading-none">${escapeHtml(String(item.price))}</span><span class="text-xs font-bold text-emerald-500/80">₺</span></div>`
+                    : `<span class="text-[11px] font-semibold text-slate-300 bg-slate-700/60 border border-slate-600/60 px-2.5 py-1 rounded-lg">Ücretsiz / Pazarlık</span>`;
+                const authorName = item.authorName || 'Öğrenci';
+                const initial = escapeHtml((authorName.trim()[0] || 'Ö').toUpperCase());
 
                 return `
-                    <div class="bg-slate-800 border border-slate-700 p-4 sm:p-5 rounded-2xl hover:border-indigo-500/50 transition flex flex-col justify-between group up-card-glow overflow-hidden">
-                        <div>
-                            <div class="flex items-center justify-between gap-2 mb-2.5 flex-wrap">
-                                <span class="text-[10px] sm:text-[11px] font-bold px-2.5 py-0.5 rounded-full ${meta.bg} ${meta.color} border ${meta.border} inline-flex items-center">
-                                    <i class="fa-solid ${meta.icon} mr-1 text-[10px]"></i>${meta.label}
-                                </span>
-                                ${priceBadge}
-                            </div>
-                            <h2 class="text-sm sm:text-base font-bold text-white mb-1.5 group-hover:text-indigo-300 transition line-clamp-2 break-words">${escapeHtml(item.title)}</h2>
-                            <p class="text-xs text-slate-300 mb-3.5 leading-relaxed line-clamp-3 break-words">${escapeHtml(item.description)}</p>
-                        </div>
-
-                        <div class="pt-3 border-t border-slate-700/60 space-y-2.5">
-                            <div class="flex items-center justify-between gap-2 text-[11px] text-slate-400">
-                                <span class="truncate min-w-0 flex-1"><i class="fa-solid fa-building-columns mr-1 text-slate-500"></i>${escapeHtml(item.university || 'Genel')}</span>
-                                <span class="flex-shrink-0"><i class="fa-solid fa-clock mr-1 text-slate-500"></i>${timeAgo}</span>
+                    <article class="relative bg-slate-800 border border-slate-700 rounded-2xl hover:border-indigo-500/50 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-indigo-500/5 transition-all duration-200 flex flex-col group up-card-glow overflow-hidden">
+                        <div class="h-1 bg-gradient-to-r ${meta.bar}"></div>
+                        <div class="p-4 sm:p-5 flex flex-col flex-1 justify-between">
+                            <div>
+                                <div class="flex items-center justify-between gap-2 mb-3">
+                                    <span class="text-[10px] sm:text-[11px] font-bold px-2.5 py-1 rounded-full ${meta.bg} ${meta.color} border ${meta.border} inline-flex items-center">
+                                        <i class="fa-solid ${meta.icon} mr-1.5 text-[10px]"></i>${meta.label}
+                                    </span>
+                                    ${isNew ? '<span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-rose-500/15 text-rose-300 border border-rose-500/30">YENİ</span>' : ''}
+                                </div>
+                                <h2 class="text-sm sm:text-base font-bold text-white mb-1.5 group-hover:text-indigo-300 transition line-clamp-2 break-words">${escapeHtml(item.title)}</h2>
+                                <p class="text-xs text-slate-400 mb-4 leading-relaxed line-clamp-3 break-words">${escapeHtml(item.description)}</p>
                             </div>
 
-                            <div class="flex items-center justify-between gap-2 pt-0.5">
-                                <a href="/portal/profil.html?id=${item.authorUid || ''}" class="flex items-center space-x-2 min-w-0 truncate hover:opacity-80 transition">
-                                    <img src="${item.authorPhoto || 'https://via.placeholder.com/28'}" class="w-6 h-6 rounded-full object-cover border border-slate-600 flex-shrink-0">
-                                    <span class="text-xs font-semibold text-slate-300 truncate">${escapeHtml(item.authorName || 'Öğrenci')}</span>
-                                </a>
-                                <button onclick="revealContact('${item.id}', '${escapeHtml(item.contact).replace(/'/g, "\\'")}')" id="contact-btn-${item.id}" class="bg-indigo-600/20 hover:bg-indigo-600 text-indigo-300 hover:text-white px-2.5 py-1.5 rounded-xl text-[11px] sm:text-xs font-bold transition flex items-center space-x-1.5 border border-indigo-500/30 flex-shrink-0 max-w-[60%] truncate">
-                                    <i class="fa-solid fa-address-book"></i>
-                                    <span>İletişim</span>
-                                </button>
+                            <div>
+                                <div class="flex items-center justify-between gap-2 mb-3">
+                                    ${priceBlock}
+                                    <span class="text-[11px] text-slate-500 flex-shrink-0"><i class="fa-regular fa-clock mr-1"></i>${timeAgo}</span>
+                                </div>
+                                <div class="text-[11px] text-slate-400 mb-3 truncate"><i class="fa-solid fa-building-columns mr-1.5 text-slate-500"></i>${escapeHtml(item.university || 'Genel')}</div>
+
+                                <div class="flex items-center justify-between gap-2 pt-3 border-t border-slate-700/60">
+                                    <a href="/portal/profil.html?id=${item.authorUid || ''}" class="flex items-center gap-2 min-w-0 hover:opacity-80 transition">
+                                        <span class="relative w-7 h-7 rounded-full bg-gradient-to-br from-indigo-500 to-blue-600 text-white text-[11px] font-bold flex items-center justify-center flex-shrink-0 overflow-hidden">
+                                            ${initial}
+                                            ${item.authorPhoto ? `<img src="${escapeHtml(item.authorPhoto)}" onerror="this.remove()" class="absolute inset-0 w-full h-full object-cover">` : ''}
+                                        </span>
+                                        <span class="text-xs font-semibold text-slate-300 truncate">${escapeHtml(authorName)}</span>
+                                    </a>
+                                    <button onclick="revealContact('${item.id}', '${escapeHtml(item.contact).replace(/'/g, "\\'")}')" id="contact-btn-${item.id}" class="bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1.5 rounded-xl text-[11px] sm:text-xs font-bold transition flex items-center space-x-1.5 shadow-md shadow-indigo-500/20 flex-shrink-0 max-w-[60%] truncate">
+                                        <i class="fa-solid fa-address-book"></i>
+                                        <span>İletişim</span>
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </article>
                 `;
             }).join('');
         }
@@ -537,7 +621,7 @@
                         if (parsed && (Date.now() - parsed.time < CACHE_TTL) && Array.isArray(parsed.data)) {
                             allListingsCache = parsed.data.filter(item => item && item.status === 'approved' && !item.deleted);
                             if (badge) badge.innerText = allListingsCache.length;
-                            renderListings(allListingsCache);
+                            applyListingFilters();
                             return;
                         }
                     }
@@ -568,7 +652,7 @@
                 } catch(e){}
 
                 if (badge) badge.innerText = allListingsCache.length;
-                renderListings(allListingsCache);
+                applyListingFilters();
             } catch(err) {
                 console.error("İlanlar çekilemedi:", err);
                 container.innerHTML = '<div class="text-center py-12 text-red-400 col-span-full">İlanlar yüklenirken bir hata oluştu.</div>';
@@ -723,7 +807,7 @@
                 allListingsCache = allListingsCache.filter(item => item.id !== listingId);
                 const badge = document.getElementById('pazar-count-badge');
                 if (badge) badge.innerText = allListingsCache.length;
-                renderListings(allListingsCache);
+                applyListingFilters();
                 await loadStudentListings(true);
 
                 showToast("İlanınız başarıyla silindi.", "success");

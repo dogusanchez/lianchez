@@ -44,12 +44,12 @@
             
             <nav class="hidden md:flex items-center space-x-1 lg:space-x-2 text-xs lg:text-sm font-medium whitespace-nowrap">
                 <a href="/portal/index.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">Ana Sayfa</a>
+                <a href="/portal/akis.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">Akış</a>
                 <a href="/portal/forum.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">Forum</a>
                 <a href="/portal/oyunlar.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">Oyunlar</a>
                 <a href="/portal/ilanlar.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">İlanlar</a>
                 <a href="/portal/ogrenciler.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">Öğrenciler</a>
                 <a href="/portal/topluluk.html" class="px-2.5 py-1.5 rounded-xl bg-emerald-500/20 text-emerald-200 border border-emerald-400/40 font-bold hover:bg-emerald-500/30 transition flex items-center space-x-1.5 shadow-sm shadow-emerald-500/10"><i class="fa-solid fa-users-rectangle text-emerald-300 text-xs"></i><span>Topluluklar</span></a>
-                <a href="/portal/iletisim.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">İletişim</a>
             </nav>
 
             <div class="flex items-center space-x-2 sm:space-x-4">
@@ -61,7 +61,7 @@
 
                     <div id="user-profile" class="hidden flex items-center space-x-2 sm:space-x-3 relative">
                         <div class="flex items-center bg-slate-700 px-2 sm:px-2.5 py-1 rounded-full border border-slate-600 shadow-inner">
-                            <i class="fa-solid fa-coins text-yellow-400 mr-1 sm:mr-1.5 text-[10px] sm:text-sm"></i>
+                            <i class="fa-solid fa-coins text-yellow-400 mr-1 sm:mr-1.5 animate-bounce text-[10px] sm:text-sm"></i>
                             <span id="user-coins" class="font-bold text-yellow-400 text-[10px] sm:text-sm">0</span>
                         </div>
 
@@ -80,6 +80,13 @@
                                 <i class="fa-solid fa-user text-indigo-400"></i>
                                 <span>Profilim</span>
                             </a>
+                            <button onclick="openNotificationsModal()" class="w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center justify-between transition">
+                                <span class="flex items-center space-x-2">
+                                    <i class="fa-solid fa-bell text-blue-400"></i>
+                                    <span>Bildirimler</span>
+                                </span>
+                                <span id="dropdown-notif-count" class="bg-slate-700 text-slate-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-slate-600">0</span>
+                            </button>
                             <a href="/portal/magaza.html" class="block w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center space-x-2 transition">
                                 <i class="fa-solid fa-store text-yellow-400"></i>
                                 <span>Mağaza</span>
@@ -92,14 +99,14 @@
                                 </span>
                                 <span id="streak-dropdown-badge" class="bg-amber-500/20 text-amber-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-amber-500/30">0 Gün</span>
                             </button>
-                            
-                            <button onclick="openNotificationsModal()" class="w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center justify-between transition">
-                                <span class="flex items-center space-x-2">
-                                    <i class="fa-solid fa-bell text-blue-400"></i>
-                                    <span>Bildirimler</span>
-                                </span>
-                                <span id="dropdown-notif-count" class="bg-slate-700 text-slate-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-slate-600">0</span>
-                            </button>
+                            <a href="/portal/iletisim.html" class="block w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center space-x-2 transition">
+                                <i class="fa-solid fa-envelope-open-text text-cyan-400"></i>
+                                <span>İletişim</span>
+                            </a>
+                            <a href="/portal/tanitim.html" class="block w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center space-x-2 transition">
+                                <i class="fa-solid fa-circle-info text-cyan-400"></i>
+                                <span>Tanıtım</span>
+                            </a>
 
                             <div class="border-t border-slate-700/80 my-1"></div>
 
@@ -119,64 +126,108 @@
 
         <div id="mobile-menu" class="hidden md:hidden bg-slate-800 border-t border-slate-700 px-4 pt-3 pb-4 space-y-1.5">
             <a href="/portal/index.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">Ana Sayfa</a>
+            <a href="/portal/akis.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">Akış</a>
             <a href="/portal/forum.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">Forum</a>
             <a href="/portal/oyunlar.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">Oyunlar</a>
             <a href="/portal/ilanlar.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">İlanlar</a>
             <a href="/portal/ogrenciler.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">Öğrenciler</a>
             <a href="/portal/topluluk.html" class="block px-3 py-2 rounded-xl text-sm font-bold text-emerald-200 bg-emerald-500/20 border border-emerald-400/40 flex items-center"><i class="fa-solid fa-users-rectangle text-emerald-300 mr-2"></i>Topluluklar</a>
-            <a href="/portal/iletisim.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">İletişim</a>
         </div>
     </header>
 
     <div id="toast-container" class="fixed bottom-5 right-5 z-[200] space-y-2 max-w-sm"></div>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-grow w-full">
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 flex-grow w-full">
         <!-- BAŞLIK & EYLEM BUTONLARI -->
-        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-            <div>
-                <h1 class="text-3xl font-extrabold tracking-tight flex items-center bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">
-                    <i class="fa-solid fa-users-rectangle text-emerald-400 mr-3"></i>Kulüpler & Etkinlik Vitrini
-                </h1>
-                <p class="text-slate-400 text-sm mt-1">Üniversitelerin aktif topluluklarını incele, yaklaşan etkinlikleri kaçırma!</p>
-            </div>
-            <div class="flex flex-wrap items-center gap-3">
-                <button onclick="openEventApplicationModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 hover:border-slate-600 px-4 py-2.5 rounded-xl font-bold text-xs flex items-center space-x-2 transition">
+        <div class="flex items-center justify-between gap-2 sm:gap-3 mb-4 sm:mb-6">
+            <h1 class="text-xl sm:text-3xl font-extrabold tracking-tight flex items-center bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent min-w-0">
+                <i class="fa-solid fa-users-rectangle text-emerald-400 mr-2 sm:mr-2.5 text-lg sm:text-2xl flex-shrink-0"></i><span class="truncate">Topluluklar</span>
+            </h1>
+            <div class="flex items-center gap-2 flex-shrink-0">
+                <button onclick="openEventApplicationModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 hover:border-slate-600 px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl font-bold text-xs flex items-center space-x-1.5 transition whitespace-nowrap">
                     <i class="fa-solid fa-calendar-plus text-purple-400"></i>
-                    <span>Etkinlik Bildir</span>
+                    <span class="hidden sm:inline">Etkinlik Bildir</span>
+                    <span class="sm:hidden">Etkinlik</span>
                 </button>
-                <button onclick="openClubApplicationModal()" class="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white px-5 py-2.5 rounded-xl font-bold shadow-lg shadow-emerald-500/20 text-xs flex items-center space-x-2 transition">
-                    <i class="fa-solid fa-plus-circle"></i>
-                    <span>Topluluğunu Ekle</span>
+                <button onclick="openClubApplicationModal()" class="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white px-3.5 py-2 sm:px-5 sm:py-2.5 rounded-xl font-bold shadow-lg shadow-emerald-500/20 text-xs flex items-center space-x-1.5 transition whitespace-nowrap">
+                    <i class="fa-solid fa-plus"></i>
+                    <span class="hidden sm:inline">Topluluk Ekle</span>
+                    <span class="sm:hidden">Ekle</span>
                 </button>
+            </div>
+        </div>
+
+        <!-- SEKMELER: TOPLULUKLAR & ETKİNLİKLER -->
+        <div class="inline-flex w-full sm:w-auto items-center bg-slate-800 border border-slate-700 rounded-2xl p-1 mb-5 sm:mb-6 shadow-md">
+            <button onclick="switchShowcaseTab('clubs')" id="tab-clubs-btn" class="flex-1 sm:flex-none justify-center px-4 sm:px-6 py-2 rounded-xl bg-emerald-600 text-white font-bold text-xs sm:text-sm flex items-center space-x-2 transition whitespace-nowrap shadow">
+                <i class="fa-solid fa-compass"></i>
+                <span>Topluluklar</span>
+                <span id="clubs-count-badge" class="bg-white/20 text-white text-[10px] px-2 py-0.5 rounded-full font-bold">0</span>
+            </button>
+            <button onclick="switchShowcaseTab('events')" id="tab-events-btn" class="flex-1 sm:flex-none justify-center px-4 sm:px-6 py-2 rounded-xl text-slate-400 hover:text-white font-semibold text-xs sm:text-sm flex items-center space-x-2 transition whitespace-nowrap">
+                <i class="fa-solid fa-calendar-days"></i>
+                <span>Etkinlikler</span>
+                <span id="events-count-badge" class="bg-purple-500/20 text-purple-300 text-[10px] px-2 py-0.5 rounded-full font-bold">0</span>
+            </button>
+        </div>
+
+        <!-- TOPLULUKLAR VİTRİNİ -->
+        <div id="section-clubs">
+            <!-- Arama & Filtre Araç Çubuğu (0 Read) -->
+            <div class="bg-slate-800 border border-slate-700 rounded-2xl p-3 sm:p-4 mb-4 shadow-lg space-y-3">
+                <div class="flex items-center gap-2">
+                    <div class="relative flex-1 min-w-0">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-xs"></i>
+                        <input type="text" id="club-search-input" oninput="applyCommunityFilters()" placeholder="Topluluk, üniversite veya etiket ara..." class="w-full bg-slate-900 border border-slate-700 rounded-xl pl-9 pr-3 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500">
+                    </div>
+                    <div class="relative flex-shrink-0">
+                        <i class="fa-solid fa-arrow-down-wide-short absolute left-3 top-1/2 -translate-y-1/2 text-emerald-400 text-xs pointer-events-none"></i>
+                        <select id="club-sort-select" onchange="applyCommunityFilters()" class="appearance-none bg-slate-700 hover:bg-slate-600 border border-slate-600 rounded-xl pl-8 pr-3 py-2.5 text-xs text-slate-100 font-semibold focus:outline-none focus:border-emerald-500 cursor-pointer">
+                            <option value="popular">En Popüler</option>
+                            <option value="az">A - Z</option>
+                            <option value="joined">Üyeliklerim</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="flex gap-2 overflow-x-auto no-scrollbar -mx-1 px-1 pb-0.5" id="club-cat-chips">
+                    <button type="button" onclick="setClubCategoryFilter('all')" data-cat="all" class="club-cat-pill flex-shrink-0 px-3 py-1.5 rounded-xl text-xs font-semibold border transition flex items-center gap-1.5 whitespace-nowrap bg-emerald-600 text-white border-emerald-400 shadow-lg">
+                        <i class="fa-solid fa-layer-group text-emerald-200"></i><span>Tümü</span><span data-club-count="all" class="text-[10px] font-bold px-1.5 rounded-full bg-white/20 text-white">0</span>
+                    </button>
+                    <button type="button" onclick="setClubCategoryFilter('Teknoloji & Yazılım')" data-cat="Teknoloji & Yazılım" class="club-cat-pill flex-shrink-0 px-3 py-1.5 rounded-xl text-xs font-semibold border transition flex items-center gap-1.5 whitespace-nowrap bg-slate-900 text-slate-300 border-slate-700 hover:bg-slate-700">
+                        <i class="fa-solid fa-microchip text-cyan-400"></i><span>Teknoloji</span><span data-club-count="Teknoloji & Yazılım" class="text-[10px] font-bold px-1.5 rounded-full bg-slate-700/80 text-slate-400">0</span>
+                    </button>
+                    <button type="button" onclick="setClubCategoryFilter('Kültür & Sanat')" data-cat="Kültür & Sanat" class="club-cat-pill flex-shrink-0 px-3 py-1.5 rounded-xl text-xs font-semibold border transition flex items-center gap-1.5 whitespace-nowrap bg-slate-900 text-slate-300 border-slate-700 hover:bg-slate-700">
+                        <i class="fa-solid fa-palette text-pink-400"></i><span>Kültür & Sanat</span><span data-club-count="Kültür & Sanat" class="text-[10px] font-bold px-1.5 rounded-full bg-slate-700/80 text-slate-400">0</span>
+                    </button>
+                    <button type="button" onclick="setClubCategoryFilter('Spor & Macera')" data-cat="Spor & Macera" class="club-cat-pill flex-shrink-0 px-3 py-1.5 rounded-xl text-xs font-semibold border transition flex items-center gap-1.5 whitespace-nowrap bg-slate-900 text-slate-300 border-slate-700 hover:bg-slate-700">
+                        <i class="fa-solid fa-person-running text-amber-400"></i><span>Spor & Macera</span><span data-club-count="Spor & Macera" class="text-[10px] font-bold px-1.5 rounded-full bg-slate-700/80 text-slate-400">0</span>
+                    </button>
+                    <button type="button" onclick="setClubCategoryFilter('Girişimcilik & Kariyer')" data-cat="Girişimcilik & Kariyer" class="club-cat-pill flex-shrink-0 px-3 py-1.5 rounded-xl text-xs font-semibold border transition flex items-center gap-1.5 whitespace-nowrap bg-slate-900 text-slate-300 border-slate-700 hover:bg-slate-700">
+                        <i class="fa-solid fa-briefcase text-indigo-400"></i><span>Kariyer</span><span data-club-count="Girişimcilik & Kariyer" class="text-[10px] font-bold px-1.5 rounded-full bg-slate-700/80 text-slate-400">0</span>
+                    </button>
+                    <button type="button" onclick="setClubCategoryFilter('Sosyal Sorumluluk')" data-cat="Sosyal Sorumluluk" class="club-cat-pill flex-shrink-0 px-3 py-1.5 rounded-xl text-xs font-semibold border transition flex items-center gap-1.5 whitespace-nowrap bg-slate-900 text-slate-300 border-slate-700 hover:bg-slate-700">
+                        <i class="fa-solid fa-hand-holding-heart text-rose-400"></i><span>Sosyal Sorumluluk</span><span data-club-count="Sosyal Sorumluluk" class="text-[10px] font-bold px-1.5 rounded-full bg-slate-700/80 text-slate-400">0</span>
+                    </button>
+                    <button type="button" onclick="setClubCategoryFilter('Diğer')" data-cat="Diğer" class="club-cat-pill flex-shrink-0 px-3 py-1.5 rounded-xl text-xs font-semibold border transition flex items-center gap-1.5 whitespace-nowrap bg-slate-900 text-slate-300 border-slate-700 hover:bg-slate-700">
+                        <i class="fa-solid fa-shapes text-slate-400"></i><span>Diğer</span><span data-club-count="Diğer" class="text-[10px] font-bold px-1.5 rounded-full bg-slate-700/80 text-slate-400">0</span>
+                    </button>
+                </div>
+            </div>
+            <p id="club-result-count" class="text-[11px] text-slate-500 mb-3 ml-1"></p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6" id="communities-container">
+                <div class="skeleton-card space-y-3"><div class="flex items-center space-x-3"><div class="skeleton skeleton-avatar"></div><div class="flex-1 space-y-2"><div class="skeleton skeleton-text w-1/2"></div><div class="skeleton skeleton-text w-1/3"></div></div></div><div class="skeleton skeleton-text w-full"></div></div>
+                <div class="skeleton-card space-y-3"><div class="flex items-center space-x-3"><div class="skeleton skeleton-avatar"></div><div class="flex-1 space-y-2"><div class="skeleton skeleton-text w-1/2"></div><div class="skeleton skeleton-text w-1/3"></div></div></div><div class="skeleton skeleton-text w-full"></div></div>
+                <div class="skeleton-card space-y-3"><div class="flex items-center space-x-3"><div class="skeleton skeleton-avatar"></div><div class="flex-1 space-y-2"><div class="skeleton skeleton-text w-1/2"></div><div class="skeleton skeleton-text w-1/3"></div></div></div><div class="skeleton skeleton-text w-full"></div></div>
             </div>
         </div>
 
         <!-- YAKLAŞAN ETKİNLİKLER VİTRİNİ -->
-        <div class="mb-12">
-            <div class="flex items-center justify-between mb-4">
-                <h2 class="text-lg font-bold text-white flex items-center">
-                    <i class="fa-solid fa-calendar-days text-purple-400 mr-2"></i>Yaklaşan Kulüp Etkinlikleri
-                </h2>
-                <span id="events-count-badge" class="text-xs bg-purple-500/20 text-purple-300 font-bold px-2.5 py-0.5 rounded-full border border-purple-500/30">0 Etkinlik</span>
-            </div>
+        <div id="section-events" class="hidden">
             <div id="events-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 <div class="skeleton-card space-y-3"><div class="skeleton skeleton-text w-1/3"></div><div class="skeleton skeleton-text w-3/4"></div><div class="skeleton skeleton-text w-full"></div></div>
                 <div class="skeleton-card space-y-3"><div class="skeleton skeleton-text w-1/3"></div><div class="skeleton skeleton-text w-3/4"></div><div class="skeleton skeleton-text w-full"></div></div>
                 <div class="skeleton-card space-y-3"><div class="skeleton skeleton-text w-1/3"></div><div class="skeleton skeleton-text w-3/4"></div><div class="skeleton skeleton-text w-full"></div></div>
-            </div>
-        </div>
-
-        <!-- TOPLULUKLAR VİTRİNİ -->
-        <div>
-            <div class="flex items-center justify-between mb-4">
-                <h2 class="text-lg font-bold text-white flex items-center">
-                    <i class="fa-solid fa-compass text-emerald-400 mr-2"></i>Tüm Topluluklar
-                </h2>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="communities-container">
-                <div class="skeleton-card space-y-3"><div class="flex items-center space-x-3"><div class="skeleton skeleton-avatar"></div><div class="flex-1 space-y-2"><div class="skeleton skeleton-text w-1/2"></div><div class="skeleton skeleton-text w-1/3"></div></div></div><div class="skeleton skeleton-text w-full"></div></div>
-                <div class="skeleton-card space-y-3"><div class="flex items-center space-x-3"><div class="skeleton skeleton-avatar"></div><div class="flex-1 space-y-2"><div class="skeleton skeleton-text w-1/2"></div><div class="skeleton skeleton-text w-1/3"></div></div></div><div class="skeleton skeleton-text w-full"></div></div>
-                <div class="skeleton-card space-y-3"><div class="flex items-center space-x-3"><div class="skeleton skeleton-avatar"></div><div class="flex-1 space-y-2"><div class="skeleton skeleton-text w-1/2"></div><div class="skeleton skeleton-text w-1/3"></div></div></div><div class="skeleton skeleton-text w-full"></div></div>
             </div>
         </div>
     </main>
@@ -477,7 +528,7 @@
             if (cmCached && Array.isArray(cmCached.communities) && cmCached.communities.length > 0) {
                 allCommunitiesCache = normalizeCommunitiesWithUser(cmCached.communities).sort((a, b) => (b.memberCount || 0) - (a.memberCount || 0));
                 allEventsCache = cmCached.events || [];
-                renderCommunities(allCommunitiesCache);
+                applyCommunityFilters();
                 renderEvents(allEventsCache);
                 populateEventClubSelect(allCommunitiesCache);
             }
@@ -494,7 +545,7 @@
                         if (parsed && (Date.now() - parsed.time < CACHE_TTL) && Array.isArray(parsed.communities) && parsed.communities.length > 0) {
                             allCommunitiesCache = normalizeCommunitiesWithUser(parsed.communities).sort((a, b) => (b.memberCount || 0) - (a.memberCount || 0));
                             allEventsCache = parsed.events || [];
-                            renderCommunities(allCommunitiesCache);
+                            applyCommunityFilters();
                             renderEvents(allEventsCache);
                             populateEventClubSelect(allCommunitiesCache);
                         }
@@ -552,7 +603,7 @@
 
                 persistCommunitiesCache();
 
-                renderCommunities(allCommunitiesCache);
+                applyCommunityFilters();
                 renderEvents(allEventsCache);
                 populateEventClubSelect(allCommunitiesCache);
             } catch(e) {
@@ -565,59 +616,164 @@
         window.loadCommunities = loadCommunities;
         window.loadShowcaseData = loadShowcaseData;
 
-        function renderCommunities(list) {
+        let activeClubCategory = 'all';
+        const CLUB_CAT_BARS = {
+            'Teknoloji & Yazılım': 'from-cyan-400 to-blue-500',
+            'Kültür & Sanat': 'from-pink-400 to-rose-500',
+            'Spor & Macera': 'from-amber-400 to-orange-500',
+            'Girişimcilik & Kariyer': 'from-indigo-400 to-purple-500',
+            'Sosyal Sorumluluk': 'from-rose-400 to-red-500',
+            'Diğer': 'from-emerald-400 to-teal-500'
+        };
+
+        const SHOWCASE_TAB_ACTIVE_CLUBS = 'flex-1 sm:flex-none justify-center px-4 sm:px-6 py-2 rounded-xl bg-emerald-600 text-white font-bold text-xs sm:text-sm flex items-center space-x-2 transition whitespace-nowrap shadow';
+        const SHOWCASE_TAB_ACTIVE_EVENTS = 'flex-1 sm:flex-none justify-center px-4 sm:px-6 py-2 rounded-xl bg-purple-600 text-white font-bold text-xs sm:text-sm flex items-center space-x-2 transition whitespace-nowrap shadow';
+        const SHOWCASE_TAB_IDLE = 'flex-1 sm:flex-none justify-center px-4 sm:px-6 py-2 rounded-xl text-slate-400 hover:text-white font-semibold text-xs sm:text-sm flex items-center space-x-2 transition whitespace-nowrap';
+
+        window.switchShowcaseTab = (tab) => {
+            const clubsBtn = document.getElementById('tab-clubs-btn');
+            const eventsBtn = document.getElementById('tab-events-btn');
+            const clubsSec = document.getElementById('section-clubs');
+            const eventsSec = document.getElementById('section-events');
+            if (!clubsBtn || !eventsBtn || !clubsSec || !eventsSec) return;
+            if (tab === 'events') {
+                eventsBtn.className = SHOWCASE_TAB_ACTIVE_EVENTS;
+                clubsBtn.className = SHOWCASE_TAB_IDLE;
+                eventsSec.classList.remove('hidden');
+                clubsSec.classList.add('hidden');
+            } else {
+                clubsBtn.className = SHOWCASE_TAB_ACTIVE_CLUBS;
+                eventsBtn.className = SHOWCASE_TAB_IDLE;
+                clubsSec.classList.remove('hidden');
+                eventsSec.classList.add('hidden');
+            }
+        };
+
+        window.setClubCategoryFilter = (cat) => {
+            activeClubCategory = cat || 'all';
+            document.querySelectorAll('.club-cat-pill').forEach(btn => {
+                const on = btn.dataset.cat === activeClubCategory;
+                btn.classList.toggle('bg-emerald-600', on);
+                btn.classList.toggle('border-emerald-400', on);
+                btn.classList.toggle('text-white', on);
+                btn.classList.toggle('shadow-lg', on);
+                btn.classList.toggle('bg-slate-900', !on);
+                btn.classList.toggle('text-slate-300', !on);
+                btn.classList.toggle('border-slate-700', !on);
+            });
+            applyCommunityFilters();
+        };
+
+        window.applyCommunityFilters = () => {
+            const keyword = (document.getElementById('club-search-input')?.value || '').trim().toLowerCase();
+            const sort = document.getElementById('club-sort-select')?.value || 'popular';
+            const userComms = (currentUserData && Array.isArray(currentUserData.communities)) ? currentUserData.communities : [];
+
+            const clubsBadge = document.getElementById('clubs-count-badge');
+            if (clubsBadge) clubsBadge.textContent = allCommunitiesCache.length;
+
+            const matchesKeyword = (comm) => {
+                if (!keyword) return true;
+                const tagsStr = Array.isArray(comm.tags) ? comm.tags.join(' ').toLowerCase() : '';
+                return (comm.name || '').toLowerCase().includes(keyword) ||
+                       (comm.university || '').toLowerCase().includes(keyword) ||
+                       (comm.description || '').toLowerCase().includes(keyword) ||
+                       (comm.category || '').toLowerCase().includes(keyword) ||
+                       tagsStr.includes(keyword);
+            };
+
+            const counts = { all: 0 };
+            allCommunitiesCache.forEach(comm => {
+                if (!matchesKeyword(comm)) return;
+                counts.all++;
+                const c = comm.category || 'Diğer';
+                counts[c] = (counts[c] || 0) + 1;
+            });
+            document.querySelectorAll('[data-club-count]').forEach(el => {
+                el.textContent = counts[el.dataset.clubCount] || 0;
+            });
+
+            let filtered = allCommunitiesCache.filter(comm => {
+                if (!matchesKeyword(comm)) return false;
+                if (activeClubCategory !== 'all' && (comm.category || 'Diğer') !== activeClubCategory) return false;
+                if (sort === 'joined' && !userComms.includes(comm.id)) return false;
+                return true;
+            });
+
+            if (sort === 'az') {
+                filtered = [...filtered].sort((a, b) => (a.name || '').localeCompare(b.name || '', 'tr'));
+            } else {
+                filtered = [...filtered].sort((a, b) => (b.memberCount || 0) - (a.memberCount || 0));
+            }
+
+            const info = document.getElementById('club-result-count');
+            if (info) info.textContent = filtered.length ? `${filtered.length} topluluk gösteriliyor` : '';
+
+            renderCommunities(filtered, true);
+        };
+
+        function renderCommunities(list, preserveOrder = false) {
             const container = document.getElementById('communities-container');
             if (!container) return;
 
             if (list.length === 0) {
-                container.innerHTML = '<div class="text-center py-10 text-slate-500 col-span-full">Şu anda kayıtlı topluluk bulunmuyor.</div>';
+                container.innerHTML = `
+                    <div class="col-span-full text-center py-14 bg-slate-800/50 border border-dashed border-slate-700 rounded-2xl">
+                        <div class="w-14 h-14 mx-auto mb-3 rounded-2xl bg-slate-700/50 flex items-center justify-center text-slate-500 text-2xl"><i class="fa-solid fa-users-slash"></i></div>
+                        <p class="text-sm font-bold text-slate-300">Kriterlere uygun topluluk bulunamadı</p>
+                        <p class="text-xs text-slate-500 mt-1">Arama filtreni değiştirebilir veya kendi topluluğunu ekleyebilirsin.</p>
+                    </div>`;
                 return;
             }
 
             const normalizedList = normalizeCommunitiesWithUser(list);
-            const sortedList = [...normalizedList].sort((a, b) => (b.memberCount || 0) - (a.memberCount || 0));
+            const sortedList = preserveOrder ? normalizedList : [...normalizedList].sort((a, b) => (b.memberCount || 0) - (a.memberCount || 0));
             const userComms = (currentUserData && Array.isArray(currentUserData.communities)) ? currentUserData.communities : [];
 
             container.innerHTML = sortedList.map(comm => {
-                const logoHtml = comm.logo ? `<img src="${escapeHtml(comm.logo)}" class="w-12 h-12 rounded-2xl object-cover border border-emerald-500/30 flex-shrink-0" onerror="this.onerror=null;this.parentElement.innerHTML='<div class=\\'w-12 h-12 bg-emerald-500/15 text-emerald-400 rounded-2xl flex items-center justify-center text-xl font-bold flex-shrink-0\\'><i class=\\'fa-solid fa-users\\'></i></div>'">` : `<div class="w-12 h-12 bg-emerald-500/15 text-emerald-400 rounded-2xl flex items-center justify-center text-xl font-bold flex-shrink-0"><i class="fa-solid fa-users"></i></div>`;
-                const tagsHtml = (comm.tags && Array.isArray(comm.tags)) ? comm.tags.slice(0, 3).map(t => `<span class="text-[9px] bg-slate-900 text-slate-300 px-2 py-0.5 rounded border border-slate-700/80">${escapeHtml(t)}</span>`).join('') : '';
+                const bar = CLUB_CAT_BARS[comm.category] || 'from-emerald-400 to-teal-500';
+                const logoHtml = comm.logo ? `<img src="${escapeHtml(comm.logo)}" class="w-12 h-12 rounded-2xl object-cover border border-emerald-500/30 flex-shrink-0" onerror="this.onerror=null;this.parentElement.innerHTML='<div class=\\'w-12 h-12 bg-emerald-500/15 text-emerald-400 rounded-2xl flex items-center justify-center text-xl font-bold flex-shrink-0\\'><i class=\\'fa-solid fa-users\\'></i></div>'">` : `<div class="w-12 h-12 bg-emerald-500/15 text-emerald-400 rounded-2xl flex items-center justify-center text-xl font-bold flex-shrink-0 border border-emerald-500/20"><i class="fa-solid fa-users"></i></div>`;
+                const tagsHtml = (comm.tags && Array.isArray(comm.tags)) ? comm.tags.slice(0, 3).map(t => `<span class="text-[10px] bg-slate-900/80 text-slate-300 px-2 py-0.5 rounded-lg border border-slate-700/80">${escapeHtml(t)}</span>`).join('') : '';
                 const isMember = userComms.includes(comm.id);
                 const btnHtml = isMember
-                    ? `<button id="comm-join-btn-${comm.id}" onclick="toggleCommunityMembership('${comm.id}')" class="bg-slate-700 hover:bg-red-600/80 text-slate-200 hover:text-white border border-slate-600 hover:border-red-500/50 px-3.5 py-2 rounded-xl font-bold transition text-xs flex items-center space-x-1.5">
+                    ? `<button id="comm-join-btn-${comm.id}" onclick="toggleCommunityMembership('${comm.id}')" class="bg-slate-700 hover:bg-red-600/80 text-slate-200 hover:text-white border border-slate-600 hover:border-red-500/50 px-3 py-1.5 rounded-xl font-bold transition text-xs flex items-center space-x-1.5">
                            <i class="fa-solid fa-user-check text-emerald-400"></i>
-                           <span>Üyesin (Ayrıl)</span>
+                           <span>Üyesin</span>
                        </button>`
-                    : `<button id="comm-join-btn-${comm.id}" onclick="toggleCommunityMembership('${comm.id}')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-xl font-bold transition text-xs flex items-center space-x-1.5 shadow-md shadow-emerald-600/20">
+                    : `<button id="comm-join-btn-${comm.id}" onclick="toggleCommunityMembership('${comm.id}')" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3.5 py-1.5 rounded-xl font-bold transition text-xs flex items-center space-x-1.5 shadow-md shadow-emerald-600/20">
                            <i class="fa-solid fa-user-plus"></i>
                            <span>Katıl</span>
                        </button>`;
 
                 return `
-                    <div class="bg-slate-800 border border-slate-700 p-6 rounded-2xl hover:border-emerald-500/50 transition flex flex-col justify-between group up-card-glow">
-                        <div>
-                            <div class="flex items-start space-x-3 mb-4">
-                                ${logoHtml}
-                                <div class="flex-1 min-w-0">
-                                    <span class="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">${escapeHtml(comm.category || 'Öğrenci Kulübü')}</span>
-                                    <h2 class="text-base font-bold text-white mt-1 group-hover:text-emerald-300 transition truncate">${escapeHtml(comm.name)}</h2>
-                                    <p class="text-[11px] text-slate-400"><i class="fa-solid fa-building-columns mr-1 text-slate-500"></i>${escapeHtml(comm.university || 'Üniversite Kulübü')}</p>
+                    <article class="relative bg-slate-800 border border-slate-700 rounded-2xl hover:border-emerald-500/50 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-emerald-500/5 transition-all duration-200 flex flex-col group up-card-glow overflow-hidden">
+                        <div class="h-1 bg-gradient-to-r ${bar}"></div>
+                        <div class="p-4 sm:p-5 flex flex-col flex-1 justify-between">
+                            <div>
+                                <div class="flex items-start space-x-3 mb-3.5">
+                                    ${logoHtml}
+                                    <div class="flex-1 min-w-0">
+                                        <span class="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20 inline-block">${escapeHtml(comm.category || 'Öğrenci Kulübü')}</span>
+                                        <h2 class="text-sm sm:text-base font-bold text-white mt-1 group-hover:text-emerald-300 transition truncate">${escapeHtml(comm.name)}</h2>
+                                        <p class="text-[11px] text-slate-400 truncate"><i class="fa-solid fa-building-columns mr-1 text-slate-500"></i>${escapeHtml(comm.university || 'Üniversite Kulübü')}</p>
+                                    </div>
+                                </div>
+                                <p class="text-xs text-slate-400 mb-3.5 leading-relaxed line-clamp-3">${escapeHtml(comm.description || '')}</p>
+                                ${tagsHtml ? `<div class="flex flex-wrap gap-1.5 mb-3.5">${tagsHtml}</div>` : ''}
+                            </div>
+
+                            <div class="flex items-center justify-between pt-3 border-t border-slate-700/60 gap-2">
+                                <span class="text-xs text-slate-400 font-semibold flex items-center"><i class="fa-solid fa-users text-emerald-400 mr-1.5 text-xs"></i><strong class="text-white mr-1" id="comm-count-${comm.id}">${Math.max(0, comm.memberCount || 0)}</strong> Üye</span>
+                                <div class="flex items-center space-x-1.5">
+                                    <button onclick="openClubDetailModal('${comm.id}')" class="bg-slate-700/60 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-xl font-semibold transition text-xs flex items-center space-x-1 border border-slate-600/50">
+                                        <i class="fa-solid fa-circle-info text-emerald-400"></i>
+                                        <span>Detay</span>
+                                    </button>
+                                    ${btnHtml}
                                 </div>
                             </div>
-                            <p class="text-xs text-slate-300 mb-4 leading-relaxed line-clamp-3">${escapeHtml(comm.description || '')}</p>
-                            <div class="flex flex-wrap gap-1 mb-4">${tagsHtml}</div>
                         </div>
-
-                        <div class="flex items-center justify-between pt-4 border-t border-slate-700/60 gap-2">
-                            <span class="text-xs text-slate-400 font-semibold flex items-center"><i class="fa-solid fa-users text-emerald-400 mr-1.5 text-xs"></i><strong class="text-white mr-1" id="comm-count-${comm.id}">${Math.max(0, comm.memberCount || 0)}</strong> Üye</span>
-                            <div class="flex items-center space-x-2">
-                                <button onclick="openClubDetailModal('${comm.id}')" class="bg-slate-700/60 hover:bg-slate-700 text-slate-200 px-3.5 py-2 rounded-xl font-semibold transition text-xs flex items-center space-x-1.5 border border-slate-600/50">
-                                    <i class="fa-solid fa-circle-info text-emerald-400"></i>
-                                    <span>Detay</span>
-                                </button>
-                                ${btnHtml}
-                            </div>
-                        </div>
-                    </div>
+                    </article>
                 `;
             }).join('');
         }
@@ -701,7 +857,7 @@
                     comm.memberCount = Math.max(0, (comm.memberCount || 0) - delta);
                     if (countEl) countEl.innerText = comm.memberCount;
                 }
-                renderCommunities(allCommunitiesCache);
+                applyCommunityFilters();
                 showToast("İşlem sırasında bir hata oluştu, lütfen tekrar deneyin.", "error");
             } finally {
                 membershipPending.delete(commId);
@@ -711,11 +867,16 @@
         function renderEvents(list) {
             const container = document.getElementById('events-container');
             const badge = document.getElementById('events-count-badge');
-            if (badge) badge.innerText = `${list.length} Etkinlik`;
+            if (badge) badge.innerText = list.length;
             if (!container) return;
 
             if (list.length === 0) {
-                container.innerHTML = '<div class="text-center py-6 text-slate-500 col-span-full bg-slate-800/40 border border-slate-700/50 rounded-2xl"><i class="fa-solid fa-calendar-xmark text-2xl text-slate-600 block mb-1"></i>Şu anda planlanmış aktif kulüp etkinliği bulunmuyor.</div>';
+                container.innerHTML = `
+                    <div class="col-span-full text-center py-14 bg-slate-800/50 border border-dashed border-slate-700 rounded-2xl">
+                        <div class="w-14 h-14 mx-auto mb-3 rounded-2xl bg-slate-700/50 flex items-center justify-center text-slate-500 text-2xl"><i class="fa-solid fa-calendar-xmark"></i></div>
+                        <p class="text-sm font-bold text-slate-300">Yaklaşan kulüp etkinliği bulunmuyor</p>
+                        <p class="text-xs text-slate-500 mt-1">Kulübünün bir etkinliği varsa üstteki "Etkinlik Bildir" butonundan paylaşabilirsin.</p>
+                    </div>`;
                 return;
             }
 
@@ -726,22 +887,29 @@
                 const day = d.getDate();
                 const month = months[d.getMonth()] || '';
                 const timeStr = d.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
+                const isToday = new Date().toDateString() === d.toDateString();
 
                 return `
-                    <div class="bg-slate-800 border border-slate-700/80 p-4 rounded-2xl hover:border-purple-500/50 transition flex items-center space-x-4 up-card-glow">
-                        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500/20 to-indigo-500/20 border border-purple-500/30 flex flex-col items-center justify-center flex-shrink-0 text-center">
-                            <span class="text-lg font-black text-purple-300 leading-none">${day}</span>
-                            <span class="text-[10px] font-bold uppercase text-purple-400 tracking-wider">${month}</span>
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <span class="text-[10px] text-purple-400 font-bold uppercase tracking-wide truncate block">${escapeHtml(ev.communityName || 'Kulüp')}</span>
-                            <h3 class="text-xs font-bold text-white truncate">${escapeHtml(ev.title)}</h3>
-                            <div class="flex items-center space-x-3 text-[10px] text-slate-400 mt-1">
-                                <span><i class="fa-solid fa-clock mr-1 text-slate-500"></i>${timeStr}</span>
-                                <span class="truncate"><i class="fa-solid fa-location-dot mr-1 text-slate-500"></i>${escapeHtml(ev.location || 'Kampüs')}</span>
+                    <article class="relative bg-slate-800 border border-slate-700 rounded-2xl hover:border-purple-500/50 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-purple-500/5 transition-all duration-200 overflow-hidden up-card-glow">
+                        <div class="h-1 bg-gradient-to-r from-purple-400 to-indigo-500"></div>
+                        <div class="p-4 flex items-center space-x-3.5">
+                            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500/20 to-indigo-500/20 border border-purple-500/30 flex flex-col items-center justify-center flex-shrink-0 text-center">
+                                <span class="text-lg font-black text-purple-300 leading-none">${day}</span>
+                                <span class="text-[10px] font-bold uppercase text-purple-400 tracking-wider">${month}</span>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-center gap-1.5">
+                                    <span class="text-[10px] text-purple-400 font-bold uppercase tracking-wide truncate">${escapeHtml(ev.communityName || 'Kulüp')}</span>
+                                    ${isToday ? '<span class="text-[9px] font-extrabold px-1.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex-shrink-0">BUGÜN</span>' : ''}
+                                </div>
+                                <h3 class="text-xs sm:text-sm font-bold text-white truncate mt-0.5">${escapeHtml(ev.title)}</h3>
+                                <div class="flex items-center space-x-3 text-[11px] text-slate-400 mt-1">
+                                    <span class="flex-shrink-0"><i class="fa-regular fa-clock mr-1 text-slate-500"></i>${timeStr}</span>
+                                    <span class="truncate"><i class="fa-solid fa-location-dot mr-1 text-slate-500"></i>${escapeHtml(ev.location || 'Kampüs')}</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </article>
                 `;
             }).join('');
         }
@@ -1155,7 +1323,7 @@
             } else if (allCommunitiesCache.length > 0) {
                 allCommunitiesCache = normalizeCommunitiesWithUser(allCommunitiesCache);
                 persistCommunitiesCache();
-                renderCommunities(allCommunitiesCache);
+                applyCommunityFilters();
             }
         });
 

@@ -2,6 +2,7 @@ const CACHE_NAME = 'uni-portal-v1';
 const OFFLINE_URL = '/portal/offline.html';
 const STATIC_ASSETS = [
   '/portal/index.html',
+  '/portal/akis.html',
   '/portal/offline.html',
   '/portal/portal-core.js',
   '/portal/manifest.json'

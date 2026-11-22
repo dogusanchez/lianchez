@@ -82,12 +82,12 @@
             
             <nav class="hidden md:flex items-center space-x-1 lg:space-x-2 text-xs lg:text-sm font-medium whitespace-nowrap">
                 <a href="/portal/index.html" class="px-2.5 py-1.5 rounded-xl bg-blue-500/20 text-blue-200 border border-blue-400/40 font-bold hover:bg-blue-500/30 transition flex items-center space-x-1.5 shadow-sm shadow-blue-500/10"><i class="fa-solid fa-house text-blue-300 text-xs"></i><span>Ana Sayfa</span></a>
+                <a href="/portal/akis.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">Akış</a>
                 <a href="/portal/forum.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">Forum</a>
                 <a href="/portal/oyunlar.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">Oyunlar</a>
                 <a href="/portal/ilanlar.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">İlanlar</a>
                 <a href="/portal/ogrenciler.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">Öğrenciler</a>
                 <a href="/portal/topluluk.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">Topluluklar</a>
-                <a href="/portal/iletisim.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">İletişim</a>
             </nav>
 
             <div class="flex items-center space-x-2 sm:space-x-4">
@@ -124,6 +124,13 @@
                                 <i class="fa-solid fa-user text-indigo-400"></i>
                                 <span>Profilim</span>
                             </a>
+                            <button onclick="openNotificationsModal()" class="w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center justify-between transition">
+                                <span class="flex items-center space-x-2">
+                                    <i class="fa-solid fa-bell text-blue-400"></i>
+                                    <span>Bildirimler</span>
+                                </span>
+                                <span id="dropdown-notif-count" class="bg-slate-700 text-slate-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-slate-600">0</span>
+                            </button>
                             <a href="/portal/magaza.html" class="block w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center space-x-2 transition">
                                 <i class="fa-solid fa-store text-yellow-400"></i>
                                 <span>Mağaza</span>
@@ -136,14 +143,14 @@
                                 </span>
                                 <span id="streak-dropdown-badge" class="bg-amber-500/20 text-amber-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-amber-500/30">0 Gün</span>
                             </button>
-                            
-                            <button onclick="openNotificationsModal()" class="w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center justify-between transition">
-                                <span class="flex items-center space-x-2">
-                                    <i class="fa-solid fa-bell text-blue-400"></i>
-                                    <span>Bildirimler</span>
-                                </span>
-                                <span id="dropdown-notif-count" class="bg-slate-700 text-slate-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-slate-600">0</span>
-                            </button>
+                            <a href="/portal/iletisim.html" class="block w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center space-x-2 transition">
+                                <i class="fa-solid fa-envelope-open-text text-cyan-400"></i>
+                                <span>İletişim</span>
+                            </a>
+                            <a href="/portal/tanitim.html" class="block w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center space-x-2 transition">
+                                <i class="fa-solid fa-circle-info text-cyan-400"></i>
+                                <span>Tanıtım</span>
+                            </a>
 
                             <div class="border-t border-slate-700/80 my-1"></div>
 
@@ -163,12 +170,12 @@
 
         <div id="mobile-menu" class="hidden md:hidden bg-slate-800 border-t border-slate-700 px-4 pt-3 pb-4 space-y-1.5">
             <a href="/portal/index.html" class="block px-3 py-2 rounded-xl text-sm font-bold text-blue-200 bg-blue-500/20 border border-blue-400/40 flex items-center"><i class="fa-solid fa-house text-blue-300 mr-2"></i>Ana Sayfa</a>
+            <a href="/portal/akis.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">Akış</a>
             <a href="/portal/forum.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">Forum</a>
             <a href="/portal/oyunlar.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">Oyunlar</a>
             <a href="/portal/ilanlar.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">İlanlar</a>
             <a href="/portal/ogrenciler.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">Öğrenciler</a>
             <a href="/portal/topluluk.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">Topluluklar</a>
-            <a href="/portal/iletisim.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">İletişim</a>
         </div>
     </header>
 
@@ -190,38 +197,77 @@
             </p>
         </div>
 
-        <!-- FORUM ÖNE ÇIKAN KART (KÜÇÜLTÜLDÜ) -->
-        <div class="mb-8">
+        <!-- FORUM & KAMPÜS AKIŞI (REELS) ÖNE ÇIKAN VİTRİN KARTLARI -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <!-- TARTIŞMA FORUMU KARTI -->
             <a href="/portal/forum.html" class="forum-highlight block relative overflow-hidden rounded-2xl border-2 border-purple-500/50 hover:border-purple-400 transition-all duration-300 group">
                 <div class="absolute inset-0 bg-gradient-to-br from-purple-900/70 via-indigo-900/60 to-slate-900/80"></div>
                 <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(168,85,247,0.3),transparent_60%)]"></div>
-                <div class="relative p-4 sm:p-6 flex flex-col md:flex-row items-center justify-between gap-4">
-                    <div class="flex-1 text-center md:text-left">
-                        <div class="inline-flex items-center space-x-1.5 bg-purple-500/30 text-purple-200 px-2.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold mb-2.5 border border-purple-400/40">
-                            <i class="fa-solid fa-fire text-orange-400 animate-pulse"></i>
-                            <span>EN POPÜLER BÖLÜM</span>
+                <div class="relative p-5 sm:p-6 flex flex-col justify-between h-full gap-4">
+                    <div class="flex items-start justify-between gap-4">
+                        <div class="flex-1">
+                            <div class="inline-flex items-center space-x-1.5 bg-purple-500/30 text-purple-200 px-2.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold mb-2.5 border border-purple-400/40">
+                                <i class="fa-solid fa-fire text-orange-400 animate-pulse"></i>
+                                <span>EN POPÜLER BÖLÜM</span>
+                            </div>
+                            <h2 class="text-lg sm:text-2xl font-extrabold text-white mb-2 leading-tight">
+                                Tartışma Forumu 💬
+                            </h2>
+                            <p class="text-slate-300 text-[11px] sm:text-xs leading-relaxed">
+                                Sorular sor, fikirlerini paylaş, deneyimlerini aktar ve tartışmalara katıl. Her konu açarak <strong class="text-yellow-400">+5 Coin & +15 XP</strong>, her yanıtla <strong class="text-yellow-400">+2 Coin & +8 XP</strong> kazan!
+                            </p>
                         </div>
-                        <h2 class="text-lg sm:text-2xl font-extrabold text-white mb-2 leading-tight">
-                            Tartışma Forumu 💬
-                        </h2>
-                        <p class="text-slate-300 text-[11px] sm:text-xs max-w-xl mx-auto md:mx-0 mb-3 leading-relaxed">
-                            Sorular sor, fikirlerini paylaş, deneyimlerini aktar ve tartışmalara katıl. Her konu açarak <strong class="text-yellow-400">+5 Coin & +15 XP</strong>, her yanıtla <strong class="text-yellow-400">+2 Coin & +8 XP</strong> kazan!
-                        </p>
-                        <div class="flex flex-wrap justify-center md:justify-start gap-1.5 mb-2">
+                        <div class="flex-shrink-0">
+                            <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-2xl sm:text-3xl shadow-2xl animate-float">
+                                <i class="fa-solid fa-comments text-white drop-shadow-lg"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-purple-400/20">
+                        <div class="flex flex-wrap gap-1.5">
                             <span class="text-[9px] bg-purple-500/20 text-purple-200 px-2 py-0.5 rounded-md border border-purple-400/30"><i class="fa-solid fa-lightbulb mr-1 text-yellow-400"></i>Soru & Cevap</span>
                             <span class="text-[9px] bg-purple-500/20 text-purple-200 px-2 py-0.5 rounded-md border border-purple-400/30"><i class="fa-solid fa-users mr-1"></i>Aktif Topluluk</span>
-                            <span class="text-[9px] bg-purple-500/20 text-purple-200 px-2 py-0.5 rounded-md border border-purple-400/30"><i class="fa-solid fa-bolt mr-1"></i>Coin Kazan</span>
                         </div>
-                    </div>
-                    <div class="flex-shrink-0 flex items-center justify-center">
-                        <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-3xl sm:text-4xl shadow-2xl animate-float">
-                            <i class="fa-solid fa-comments text-white drop-shadow-lg"></i>
-                        </div>
-                    </div>
-                    <div class="flex-shrink-0 w-full md:w-auto">
-                        <div class="bg-white text-purple-700 font-extrabold px-4 py-2 rounded-xl text-xs flex items-center justify-center space-x-1.5 group-hover:bg-purple-100 transition shadow-lg">
+                        <div class="bg-white text-purple-700 font-extrabold px-4 py-2 rounded-xl text-xs flex items-center space-x-1.5 group-hover:bg-purple-100 transition shadow-lg">
                             <span>Foruma Git</span>
                             <i class="fa-solid fa-arrow-right text-xs group-hover:translate-x-1 transition"></i>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+            <!-- KAMPÜS AKIŞI BAĞIMLILIK KARTI -->
+            <a href="/portal/akis.html" class="block relative overflow-hidden rounded-2xl border-2 border-pink-500/50 hover:border-pink-400 transition-all duration-300 group shadow-[0_0_25px_rgba(236,72,153,0.22)] hover:shadow-[0_0_35px_rgba(236,72,153,0.4)]">
+                <div class="absolute inset-0 bg-gradient-to-br from-rose-900/70 via-pink-900/60 to-slate-900/85"></div>
+                <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(236,72,153,0.35),transparent_60%)]"></div>
+                <div class="relative p-5 sm:p-6 flex flex-col justify-between h-full gap-4">
+                    <div class="flex items-start justify-between gap-4">
+                        <div class="flex-1">
+                            <div class="inline-flex items-center space-x-1.5 bg-pink-500/30 text-pink-200 px-2.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold mb-2.5 border border-pink-400/40">
+                                <span class="w-2 h-2 rounded-full bg-pink-400 animate-ping"></span>
+                                <span>YENİ • KAYDIR & KEŞFET</span>
+                            </div>
+                            <h2 class="text-lg sm:text-2xl font-extrabold text-white mb-2 leading-tight">
+                                Kampüs Akışı 🎬
+                            </h2>
+                            <p class="text-slate-200 text-[11px] sm:text-xs leading-relaxed">
+                                Aşağı kaydırdıkça kampüsten anlık haber, bilgi ve mizah paylaşımlarını keşfet! Çift dokunup beğen, akışta kaydırarak vakit geçirdikçe <strong class="text-yellow-300">ekstra Coin & XP</strong> kazan!
+                            </p>
+                        </div>
+                        <div class="flex-shrink-0">
+                            <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-br from-pink-500 via-rose-500 to-orange-500 flex items-center justify-center text-2xl sm:text-3xl shadow-2xl animate-float" style="animation-delay: 1s;">
+                                <i class="fa-solid fa-clapperboard text-white drop-shadow-lg"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-pink-400/20">
+                        <div class="flex flex-wrap gap-1.5">
+                            <span class="text-[9px] bg-pink-500/20 text-pink-200 px-2 py-0.5 rounded-md border border-pink-400/30"><i class="fa-solid fa-angles-down mr-1 text-amber-300"></i>Sonsuz Kaydırma</span>
+                            <span class="text-[9px] bg-pink-500/20 text-pink-200 px-2 py-0.5 rounded-md border border-pink-400/30"><i class="fa-solid fa-bolt mr-1 text-yellow-300"></i>Kaydırdıkça Kazan</span>
+                        </div>
+                        <div class="bg-gradient-to-r from-white to-pink-50 text-pink-700 font-extrabold px-4 py-2 rounded-xl text-xs flex items-center space-x-1.5 group-hover:from-pink-100 group-hover:to-white transition shadow-lg">
+                            <span>Akışı Kaydır</span>
+                            <i class="fa-solid fa-play text-[10px] group-hover:translate-x-1 transition"></i>
                         </div>
                     </div>
                 </div>
@@ -236,7 +282,7 @@
                     <div class="w-12 h-12 bg-amber-500/10 text-amber-400 rounded-2xl flex items-center justify-center text-xl mb-4 group-hover:scale-110 group-hover:bg-amber-500 group-hover:text-slate-900 transition shadow-inner">
                         <i class="fa-solid fa-gamepad"></i>
                     </div>
-                    <h2 class="text-lg font-bold text-white mb-2 group-hover:text-amber-400 transition">Bilgi & Oyunlar</h2>
+                    <h2 class="text-lg font-bold text-white mb-2 group-hover:text-amber-400 transition">Oyunlar</h2>
                     <p class="text-slate-400 text-xs leading-relaxed">Genel kültür, kelime ve hızlı zeka oyunlarıyla eğlenirken ekstra Coin ve XP kazan.</p>
                 </div>
                 <div class="mt-6 pt-4 border-t border-slate-700/60 flex items-center justify-between text-xs font-semibold text-amber-400">

@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Kampüs Akışı - Üni Portal</title>
+    <meta name="description" content="Üni Portal Kampüs Akışı: Aşağı kaydırdıkça yeni haber, güncelleme, bilgilendirme ve öğrenci ipuçlarını keşfet!">
+    <link rel="icon" type="image/png" href="/portal/fav.png">
+    <link rel="manifest" href="/portal/manifest.json">
+    <meta name="theme-color" content="#0f172a">
+    <link rel="apple-touch-icon" href="/portal/fav.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+            background-color: #020617;
+            overscroll-behavior-y: contain;
+        }
+
+        /* Dikey Scroll Snap Alanı */
+        #reels-viewport {
+            height: calc(100dvh - 4rem);
+            scroll-snap-type: y mandatory;
+            overflow-y: scroll;
+            scroll-behavior: smooth;
+            overscroll-behavior-y: contain;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .reel-slide {
+            height: calc(100dvh - 4rem);
+            scroll-snap-align: start;
+            scroll-snap-stop: always;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1rem;
+        }
+
+        @media (max-width: 640px) {
+            .reel-slide {
+                padding: 0.4rem 0.5rem;
+            }
+        }
+
+        /* Çift Tıklama Kalp Patlaması */
+        @keyframes bigHeartPop {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.3) rotate(-12deg); }
+            30% { opacity: 1; transform: translate(-50%, -50%) scale(1.25) rotate(6deg); }
+            60% { opacity: 1; transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+            100% { opacity: 0; transform: translate(-50%, -70%) scale(1.4) rotate(0deg); }
+        }
+        .double-tap-heart {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 60;
+            font-size: 5rem;
+            color: #f43f5e;
+            filter: drop-shadow(0 10px 25px rgba(244, 63, 94, 0.65));
+            animation: bigHeartPop 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes pulseSlow {
+            0%, 100% { opacity: 0.35; transform: scale(1); }
+            50% { opacity: 0.65; transform: scale(1.08); }
+        }
+        .reel-ambient-blob {
+            animation: pulseSlow 6s ease-in-out infinite;
+        }
+
+        @keyframes swipeBounce {
+            0%, 100% { transform: translateY(0); opacity: 0.65; }
+            50% { transform: translateY(-4px); opacity: 1; }
+        }
+        .swipe-hint-anim {
+            animation: swipeBounce 1.8s ease-in-out infinite;
+        }
+
+        .action-rail-btn {
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.2s;
+        }
+        .action-rail-btn:active {
+            transform: scale(0.86);
+        }
+        .action-rail-btn.liked-active {
+            background: rgba(244, 63, 94, 0.25);
+            border-color: rgba(244, 63, 94, 0.6);
+            color: #fb7185;
+            box-shadow: 0 0 18px rgba(244, 63, 94, 0.35);
+        }
+
+        .cat-pill.active {
+            background: linear-gradient(135deg, #ec4899, #8b5cf6);
+            color: #ffffff;
+            border-color: rgba(244, 114, 182, 0.6);
+            box-shadow: 0 4px 15px rgba(236, 72, 153, 0.35);
+        }
+
+        @keyframes assistantBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
+        @keyframes assistantPulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(6, 182, 212, 0.7), 0 8px 20px rgba(0,0,0,0.4); }
+            50% { box-shadow: 0 0 0 8px rgba(6, 182, 212, 0), 0 8px 24px rgba(0,0,0,0.5); }
+        }
+        .assistant-btn { animation: assistantPulse 2.5s ease-in-out infinite; }
+        .assistant-btn:hover .assistant-icon { animation: assistantBounce 0.6s ease infinite; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans h-screen flex flex-col overflow-hidden select-none">
+
+    <!-- ÜST BAR (HEADER) -->
+    <header class="bg-slate-800/80 backdrop-blur-md border-b border-slate-700/80 h-16 flex-shrink-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <a href="/portal/index.html" class="text-sm sm:text-xl font-extrabold bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-500 bg-clip-text text-transparent flex items-center tracking-wide whitespace-nowrap">
+                    <i class="fa-solid fa-graduation-cap mr-1.5 sm:mr-2.5 text-blue-400"></i>Üni Portal
+                </a>
+            </div>
+
+            <nav class="hidden md:flex items-center space-x-1 lg:space-x-2 text-xs lg:text-sm font-medium whitespace-nowrap">
+                <a href="/portal/index.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">Ana Sayfa</a>
+                <a href="/portal/akis.html" class="px-2.5 py-1.5 rounded-xl bg-pink-500/20 text-pink-200 border border-pink-400/40 font-bold hover:bg-pink-500/30 transition flex items-center space-x-1.5 shadow-sm shadow-pink-500/10">
+                    <i class="fa-solid fa-clapperboard text-pink-300 text-xs"></i>
+                    <span>Akış</span>
+                </a>
+                <a href="/portal/forum.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">Forum</a>
+                <a href="/portal/oyunlar.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">Oyunlar</a>
+                <a href="/portal/ilanlar.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">İlanlar</a>
+                <a href="/portal/ogrenciler.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">Öğrenciler</a>
+                <a href="/portal/topluluk.html" class="px-2.5 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-700/50 transition">Topluluklar</a>
+            </nav>
+
+            <div class="flex items-center space-x-2 sm:space-x-4">
+                <div id="auth-section" class="flex items-center space-x-2 sm:space-x-3">
+                    <a href="/portal/admin.html" id="admin-panel-link" class="hidden bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white px-2 sm:px-3.5 py-1.5 rounded-xl text-[10px] sm:text-xs font-semibold transition border border-red-500/30 flex items-center space-x-1 sm:space-x-1.5 whitespace-nowrap">
+                        <i class="fa-solid fa-shield-halved"></i>
+                        <span class="hidden sm:inline">Yönetim</span>
+                        <span class="sm:hidden">Admin</span>
+                    </a>
+
+                    <button id="login-btn" onclick="googleLogin()" class="hidden flex items-center space-x-1 sm:space-x-2 bg-white text-slate-900 px-2.5 sm:px-3.5 py-1.5 rounded-xl font-bold hover:bg-slate-100 transition shadow-sm text-[10px] sm:text-xs whitespace-nowrap">
+                        <i class="fa-brands fa-google text-red-500"></i>
+                        <span>Giriş Yap</span>
+                    </button>
+
+                    <div id="user-profile" class="hidden flex items-center space-x-2 sm:space-x-3 relative">
+                        <div class="flex items-center bg-slate-800 px-2 sm:px-2.5 py-1 rounded-full border border-slate-700 shadow-inner">
+                            <i class="fa-solid fa-coins text-yellow-400 mr-1 text-[10px] sm:text-xs"></i>
+                            <span id="user-coins" class="font-extrabold text-yellow-400 text-[10px] sm:text-xs">0</span>
+                        </div>
+
+                        <div class="relative cursor-pointer" onclick="toggleUserDropdown(event)">
+                            <img id="user-avatar" src="" alt="Profil" class="w-8 h-8 sm:w-9 sm:h-9 rounded-full border-2 border-pink-500/50 hover:border-pink-400 transition object-cover shadow-md">
+                            <span id="notification-badge" class="hidden absolute -bottom-0.5 -right-0.5 bg-red-500 text-white text-[10px] font-extrabold min-w-[16px] h-4 px-1 rounded-full flex items-center justify-center border-2 border-slate-900 animate-pulse">0</span>
+                        </div>
+
+                        <div id="user-dropdown" class="hidden absolute right-0 top-12 w-56 bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl py-2 z-50">
+                            <div class="px-4 py-2 border-b border-slate-700">
+                                <p id="dropdown-user-name" class="text-xs font-bold text-white truncate">Kullanıcı Adı</p>
+                                <p id="dropdown-user-email" class="text-[11px] text-slate-400 truncate">email@domain.com</p>
+                            </div>
+                            <a href="/portal/profil.html" class="block w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center space-x-2 transition">
+                                <i class="fa-solid fa-user text-indigo-400"></i>
+                                <span>Profilim</span>
+                            </a>
+                            <button onclick="openNotificationsModal()" class="w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center justify-between transition">
+                                <span class="flex items-center space-x-2">
+                                    <i class="fa-solid fa-bell text-blue-400"></i>
+                                    <span>Bildirimler</span>
+                                </span>
+                                <span id="dropdown-notif-count" class="bg-slate-700 text-slate-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-slate-600">0</span>
+                            </button>
+                            <a href="/portal/magaza.html" class="block w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center space-x-2 transition">
+                                <i class="fa-solid fa-store text-yellow-400"></i>
+                                <span>Mağaza</span>
+                            </a>
+                            <button onclick="openDailyStreakModal()" class="w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center justify-between transition">
+                                <span class="flex items-center space-x-2">
+                                    <i class="fa-solid fa-calendar-check text-amber-400"></i>
+                                    <span>Günlük Ödül</span>
+                                    <span id="streak-unclaimed-dot" class="hidden w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+                                </span>
+                                <span id="streak-dropdown-badge" class="bg-amber-500/20 text-amber-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-amber-500/30">0 Gün</span>
+                            </button>
+                            <a href="/portal/iletisim.html" class="block w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center space-x-2 transition">
+                                <i class="fa-solid fa-envelope-open-text text-cyan-400"></i>
+                                <span>İletişim</span>
+                            </a>
+                            <a href="/portal/tanitim.html" class="block w-full text-left px-4 py-2.5 text-xs text-slate-200 hover:bg-slate-700/60 flex items-center space-x-2 transition">
+                                <i class="fa-solid fa-circle-info text-cyan-400"></i>
+                                <span>Tanıtım</span>
+                            </a>
+                            <div class="border-t border-slate-700/80 my-1"></div>
+                            <button onclick="googleLogout()" class="w-full text-left px-4 py-2 text-xs text-red-400 hover:bg-red-500/10 flex items-center space-x-2 transition font-semibold">
+                                <i class="fa-solid fa-right-from-bracket"></i>
+                                <span>Çıkış Yap</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <button onclick="toggleMobileMenu()" class="md:hidden text-slate-300 hover:text-white focus:outline-none text-xl p-1.5">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="hidden md:hidden bg-slate-800 border-t border-slate-700 px-4 pt-3 pb-4 space-y-1.5 absolute w-full left-0 top-16 z-50 shadow-2xl">
+            <a href="/portal/index.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">Ana Sayfa</a>
+            <a href="/portal/akis.html" class="block px-3 py-2 rounded-xl text-sm font-bold text-pink-200 bg-pink-500/20 border border-pink-400/40 flex items-center"><i class="fa-solid fa-clapperboard text-pink-300 mr-2"></i>Akış</a>
+            <a href="/portal/forum.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">Forum</a>
+            <a href="/portal/oyunlar.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">Oyunlar</a>
+            <a href="/portal/ilanlar.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">İlanlar</a>
+            <a href="/portal/ogrenciler.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">Öğrenciler</a>
+            <a href="/portal/topluluk.html" class="block px-3 py-2 rounded-xl text-sm font-medium text-slate-300 hover:bg-slate-700/60 hover:text-white transition">Topluluklar</a>
+        </div>
+    </header>
+
+    <div id="toast-container" class="fixed bottom-5 right-5 z-[200] space-y-2 max-w-sm"></div>
+
+    <!-- ÜST YÜZEN KATEGORİ FİLTRE ÇUBUĞU -->
+    <div class="fixed top-[4.4rem] left-1/2 -translate-x-1/2 z-40 w-full max-w-sm px-3 pointer-events-none">
+        <div class="pointer-events-auto bg-slate-900/85 backdrop-blur-xl border border-slate-700/80 rounded-2xl p-1 shadow-2xl grid grid-cols-4 gap-1">
+            <button onclick="filterFeedCategory('all')" data-cat="all" class="cat-pill active px-2.5 py-1.5 rounded-xl text-[11px] font-bold text-slate-300 border border-transparent transition whitespace-nowrap flex items-center justify-center gap-1.5">
+                <i class="fa-solid fa-shuffle text-[10px]"></i>
+                <span>Tümü</span>
+            </button>
+            <button onclick="filterFeedCategory('haber')" data-cat="haber" class="cat-pill px-2.5 py-1.5 rounded-xl text-[11px] font-semibold text-slate-300 hover:bg-slate-800 border border-transparent transition whitespace-nowrap flex items-center justify-center gap-1.5">
+                <i class="fa-solid fa-newspaper text-rose-400 text-[10px]"></i>
+                <span>Haber</span>
+            </button>
+            <button onclick="filterFeedCategory('bilgi')" data-cat="bilgi" class="cat-pill px-2.5 py-1.5 rounded-xl text-[11px] font-semibold text-slate-300 hover:bg-slate-800 border border-transparent transition whitespace-nowrap flex items-center justify-center gap-1.5">
+                <i class="fa-solid fa-circle-info text-cyan-400 text-[10px]"></i>
+                <span>Bilgi</span>
+            </button>
+            <button onclick="filterFeedCategory('mizah')" data-cat="mizah" class="cat-pill px-2.5 py-1.5 rounded-xl text-[11px] font-semibold text-slate-300 hover:bg-slate-800 border border-transparent transition whitespace-nowrap flex items-center justify-center gap-1.5">
+                <i class="fa-solid fa-face-laugh-squint text-pink-400 text-[10px]"></i>
+                <span>Mizah</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- MASAÜSTÜ SAĞ YÖNLENDİRME OKLARI -->
+    <div class="hidden md:flex fixed right-6 top-1/2 -translate-y-1/2 z-30 flex-col space-y-2.5">
+        <button onclick="scrollReelBy(-1)" title="Önceki Gönderi (Yukarı Ok)" class="w-10 h-10 rounded-full bg-slate-900/85 hover:bg-slate-800 text-slate-200 border border-slate-700 hover:border-pink-500/50 flex items-center justify-center shadow-xl transition text-xs">
+            <i class="fa-solid fa-chevron-up"></i>
+        </button>
+        <button onclick="reshuffleFeedNow()" title="Akışı Yeniden Karıştır" class="w-10 h-10 rounded-full bg-gradient-to-br from-pink-600/80 to-purple-600/80 hover:from-pink-500 hover:to-purple-500 text-white border border-pink-400/40 flex items-center justify-center shadow-xl transition text-xs">
+            <i class="fa-solid fa-shuffle"></i>
+        </button>
+        <button onclick="scrollReelBy(1)" title="Sonraki Gönderi (Aşağı Ok)" class="w-10 h-10 rounded-full bg-slate-900/85 hover:bg-slate-800 text-slate-200 border border-slate-700 hover:border-pink-500/50 flex items-center justify-center shadow-xl transition text-xs">
+            <i class="fa-solid fa-chevron-down"></i>
+        </button>
+    </div>
+
+    <!-- ANA DİKEY AKIŞ KONTEYNERİ -->
+    <main id="reels-viewport" class="w-full no-scrollbar">
+        <!-- İlk yükleme iskeleti -->
+        <div class="reel-slide">
+            <div class="w-full max-w-lg h-[calc(100dvh-8.2rem)] max-h-[760px] mt-9 rounded-[1.75rem] bg-slate-900 border border-slate-800 p-5 sm:p-6 flex flex-col justify-between shadow-2xl">
+                <div class="flex items-center justify-between">
+                    <div class="skeleton h-5 w-24 rounded-full"></div>
+                    <div class="skeleton h-5 w-16 rounded-full"></div>
+                </div>
+                <div class="space-y-4 my-auto">
+                    <div class="skeleton h-12 w-12 rounded-2xl"></div>
+                    <div class="skeleton h-6 w-4/5 rounded-lg"></div>
+                    <div class="skeleton h-4 w-full rounded"></div>
+                    <div class="skeleton h-4 w-11/12 rounded"></div>
+                    <div class="skeleton h-4 w-3/4 rounded"></div>
+                </div>
+                <div class="flex items-center justify-between pt-3 border-t border-slate-800">
+                    <div class="skeleton h-4 w-28 rounded-full"></div>
+                    <div class="skeleton h-4 w-16 rounded-full"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- BİLDİRİMLER MODALI -->
+    <div id="notifications-modal" class="fixed inset-0 bg-black/75 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div class="bg-slate-800 border border-slate-700 rounded-2xl max-w-md w-full p-6 shadow-2xl relative">
+            <div class="flex justify-between items-center mb-4 border-b border-slate-700 pb-3">
+                <h3 class="text-lg font-bold text-white flex items-center">
+                    <i class="fa-solid fa-bell text-blue-400 mr-2"></i>Bildirimler
+                </h3>
+                <button onclick="closeNotificationsModal()" class="text-slate-400 hover:text-white p-1">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <div id="notifications-list" class="space-y-3 max-h-80 overflow-y-auto pr-1">
+                <div class="text-center py-8 text-slate-500 text-xs">Henüz bir bildiriminiz yok.</div>
+            </div>
+            <div class="mt-5 pt-3 border-t border-slate-700 flex justify-end">
+                <button onclick="closeNotificationsModal()" class="bg-slate-700 hover:bg-slate-600 text-slate-200 px-4 py-1.5 rounded-xl text-xs font-semibold transition">
+                    Kapat
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="fixed bottom-4 right-4 z-[150]" id="assistant-widget">
+        <div class="relative">
+            <button onclick="closeAssistantWidget()" title="Kapat" class="absolute -top-2 -right-2 z-10 w-6 h-6 bg-slate-800 hover:bg-red-600 text-slate-300 hover:text-white rounded-full flex items-center justify-center text-[10px] border border-slate-600 hover:border-red-500 shadow-lg transition">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <a href="/portal/iletisim.html" class="assistant-btn group flex items-center gap-2 bg-gradient-to-r from-cyan-600 to-blue-600 text-white pl-3 pr-4 py-2.5 rounded-full shadow-2xl border border-cyan-400/40 hover:from-cyan-500 hover:to-blue-500 transition-all">
+                <span class="assistant-icon w-8 h-8 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
+                    <i class="fa-solid fa-headset text-sm"></i>
+                </span>
+                <span class="text-left leading-tight">
+                    <span class="block text-[10px] font-extrabold tracking-wide">SORUN / İSTEK Mİ VAR?</span>
+                    <span class="block text-[9px] font-medium opacity-90">İletişim formundan bize ilet, hemen ilgilenelim!</span>
+                </span>
+                <i class="fa-solid fa-arrow-right text-[10px] opacity-80 group-hover:translate-x-0.5 transition"></i>
+            </a>
+        </div>
+    </div>
+    <script>
+        function closeAssistantWidget() {
+            const w = document.getElementById('assistant-widget');
+            if (w) w.style.display = 'none';
+        }
+    </script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, collection, getDocs, getCountFromServer, deleteDoc, updateDoc, addDoc, query, where, orderBy, limit, increment } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import {
+            escapeHtml, safeUrl, formatRelativeTime, formatCount, renderMarkdown,
+            injectCoreStyles, initDailyStreak, showRewardAnimation,
+            cacheGet, cacheSet, FEED_CATEGORIES, FEED_THEMES, getFeedItems, setFeedCache
+        } from '/portal/portal-core.js';
+
+        injectCoreStyles();
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAYTaUdfhWAngCSZQjAyFtP_IRubX_Gw4c",
+            authDomain: "lianchezportal.firebaseapp.com",
+            projectId: "lianchezportal",
+            storageBucket: "lianchezportal.firebasestorage.app",
+            messagingSenderId: "283567832811",
+            appId: "1:283567832811:web:cff0981ba1fa305a0dc8ae",
+            measurementId: "G-8KPN5EG95S"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const provider = new GoogleAuthProvider();
+
+        let currentUser = null;
+        let currentUserData = null;
+
+        // ===== AKIŞ DURUM DEĞİŞKENLERİ (SADECE 1 OKUMA İLE SONSUZ AKIŞ) =====
+        let masterFeedItems = [];
+        let activeQueue = [];
+        let activeCategory = 'all';
+        let currentSlideIndex = 0;
+
+        const LIKED_LS_KEY = 'up_feed_liked_v1';
+        const EXPLORE_LS_KEY = 'up_feed_explore_v2';
+
+        let likedSet = new Set();
+        let seenInSession = new Set();
+        let exploreState = { date: '', count: 0, rewardsClaimed: 0 };
+
+        // Senkronizasyon kuyruğu (Beğenileri topluca tek yazmada göndermek için - 0 ekstra okuma)
+        let dirtyLikesTimer = null;
+        let hasDirtyLikes = false;
+        let pendingLikeDeltas = {};
+
+        function loadLocalSets() {
+            try {
+                const l = JSON.parse(localStorage.getItem(LIKED_LS_KEY) || '[]');
+                if (Array.isArray(l)) likedSet = new Set(l);
+            } catch (_) {}
+            try {
+                const today = new Date().toISOString().slice(0, 10);
+                const ex = JSON.parse(localStorage.getItem(EXPLORE_LS_KEY) || '{}');
+                if (ex && ex.date === today) {
+                    exploreState = { date: today, count: Number(ex.count) || 0, rewardsClaimed: Number(ex.rewardsClaimed) || 0 };
+                } else {
+                    exploreState = { date: today, count: 0, rewardsClaimed: 0 };
+                }
+            } catch (_) {}
+        }
+
+        function saveLikedSet() {
+            try { localStorage.setItem(LIKED_LS_KEY, JSON.stringify([...likedSet])); } catch (_) {}
+        }
+        function saveExploreState() {
+            try { localStorage.setItem(EXPLORE_LS_KEY, JSON.stringify(exploreState)); } catch (_) {}
+        }
+
+        window.showToast = (message, type = 'info') => {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+            const colors = {
+                success: 'bg-emerald-600 border-emerald-400',
+                error: 'bg-red-600 border-red-400',
+                warning: 'bg-amber-600 border-amber-400',
+                info: 'bg-slate-800 border-pink-500/50'
+            };
+            const icons = {
+                success: 'fa-circle-check',
+                error: 'fa-circle-exclamation',
+                warning: 'fa-triangle-exclamation',
+                info: 'fa-wand-magic-sparkles'
+            };
+            const t = document.createElement('div');
+            t.className = `${colors[type] || colors.info} border text-white px-4 py-2.5 rounded-2xl shadow-2xl flex items-center space-x-2 text-xs font-bold transition-all duration-300`;
+            t.innerHTML = `<i class="fa-solid ${icons[type] || icons.info}"></i><span>${message}</span>`;
+            container.appendChild(t);
+            setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 300); }, 3000);
+        };
+
+        window.googleLogin = () => signInWithPopup(auth, provider);
+        window.googleLogout = () => signOut(auth);
+        window.toggleMobileMenu = () => document.getElementById('mobile-menu').classList.toggle('hidden');
+        window.toggleUserDropdown = (e) => { e.stopPropagation(); document.getElementById('user-dropdown').classList.toggle('hidden'); };
+        document.addEventListener('click', () => {
+            const d = document.getElementById('user-dropdown');
+            if (d && !d.classList.contains('hidden')) d.classList.add('hidden');
+        });
+
+        // ===== FISHER-YATES RANDOM KARIŞTIRMA MOTORU =====
+        function shuffleArray(arr) {
+            const copy = [...arr];
+            for (let i = copy.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [copy[i], copy[j]] = [copy[j], copy[i]];
+            }
+            return copy;
+        }
+
+        // Öne çıkarılanlar rastgele karışımda yukarı eğilimli (kesin sıralı değil)
+        function weightedShuffle(arr) {
+            return arr.map(x => ({ x, k: Math.random() - (x.pinned ? 0.45 : 0) })).sort((a, b) => a.k - b.k).map(o => o.x);
+        }
+
+        function getFilteredPool() {
+            const activeOnly = masterFeedItems.filter(item => item.active !== false);
+            if (activeCategory === 'all') return activeOnly;
+            return activeOnly.filter(item => item.category === activeCategory);
+        }
+
+        function buildInitialDeck() {
+            const pool = getFilteredPool();
+            if (pool.length === 0) return [];
+            return weightedShuffle(pool);
+        }
+
+        // ===== KART HTML ÜRETİCİ (FERAH, GENİŞ & SCROLLSUZ TASARIM) =====
+        function renderReelSlideHTML(item, slideUid) {
+            const cat = FEED_CATEGORIES[item.category] || FEED_CATEGORIES.haber;
+            const theme = FEED_THEMES[item.theme] || FEED_THEMES.galaxy;
+            const isLiked = likedSet.has(item.id);
+            const relTime = formatRelativeTime(new Date(item.createdAt));
+            const cleanImg = safeUrl(item.imageUrl);
+            const cleanLink = safeUrl(item.linkUrl);
+
+            return `
+                <section class="reel-slide" data-item-id="${escapeHtml(item.id)}" data-slide-uid="${escapeHtml(slideUid)}">
+                    <div ondblclick="handleReelDoubleTap(event, '${escapeHtml(item.id)}')" class="reel-card relative w-full max-w-lg h-[calc(100dvh-8.2rem)] max-h-[760px] mt-9 rounded-[1.75rem] bg-gradient-to-br ${theme.bg} border border-white/15 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.85)] overflow-hidden flex flex-col justify-between p-5 sm:p-7 select-none">
+
+                        <!-- Dekoratif Arka Plan Işıltıları -->
+                        <div class="reel-ambient-blob absolute -top-20 -left-16 w-60 h-60 rounded-full blur-3xl pointer-events-none" style="background:${theme.glow}"></div>
+                        <div class="reel-ambient-blob absolute -bottom-24 -right-16 w-64 h-64 rounded-full blur-3xl pointer-events-none" style="background:${theme.glow}; animation-delay: 2.5s;"></div>
+
+                        <!-- ÜST BİLGİ SATIRI: Kategori + Rozet + Paylaşım Zamanı -->
+                        <div class="relative z-10 flex items-center justify-between gap-2 flex-shrink-0">
+                            <div class="flex items-center gap-1.5 flex-wrap">
+                                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-extrabold ${cat.bg} ${cat.color} border ${cat.border} backdrop-blur-md shadow-sm">
+                                    <i class="fa-solid ${escapeHtml(cat.icon)}"></i>
+                                    <span>${escapeHtml(cat.label)}</span>
+                                </span>
+                                ${item.badge ? `
+                                    <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-white/10 text-white border border-white/20 backdrop-blur-md">
+                                        <i class="fa-solid fa-sparkles text-yellow-300 text-[9px]"></i>
+                                        <span>${escapeHtml(item.badge)}</span>
+                                    </span>
+                                ` : ''}
+                            </div>
+                            <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-300 bg-slate-950/50 border border-white/10 px-2.5 py-1 rounded-full backdrop-blur-md whitespace-nowrap" title="${new Date(item.createdAt).toLocaleString('tr-TR')}">
+                                <i class="fa-regular fa-clock text-pink-400 text-[10px]"></i>
+                                <span data-reltime-ts="${item.createdAt}">${escapeHtml(relTime)}</span>
+                            </span>
+                        </div>
+
+                        <!-- ORTA ANA İÇERİK (Ekran yüksekliğine tam yayılan, scrollsuz ve rahat okunan alan) -->
+                        <div class="relative z-10 flex-1 flex flex-col justify-center py-3 pr-12 sm:pr-14 gap-3.5 min-h-0 overflow-hidden">
+                            <div class="flex items-center gap-3 flex-shrink-0">
+                                <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-gradient-to-br ${cat.gradient} flex items-center justify-center text-white text-base sm:text-lg shadow-lg border border-white/20 flex-shrink-0">
+                                    <i class="fa-solid ${escapeHtml(item.icon || cat.icon)}"></i>
+                                </div>
+                                <h2 class="text-base sm:text-xl font-extrabold text-white leading-snug tracking-tight">${escapeHtml(item.title)}</h2>
+                            </div>
+
+                            ${cleanImg ? `
+                                <div class="rounded-2xl overflow-hidden border border-white/15 bg-slate-950/40 shadow-inner max-h-[24dvh] flex-shrink-1 flex items-center justify-center min-h-0">
+                                    <img src="${escapeHtml(cleanImg)}" alt="${escapeHtml(item.title)}" loading="lazy" class="w-full h-full max-h-[24dvh] object-cover">
+                                </div>
+                            ` : ''}
+
+                            <div class="text-xs sm:text-sm text-slate-100/95 leading-relaxed bg-slate-950/35 border border-white/10 rounded-2xl p-4 sm:p-5 backdrop-blur-sm shadow-inner">
+                                ${renderMarkdown(item.content)}
+                            </div>
+
+                            ${cleanLink ? `
+                                <div class="pt-0.5 flex-shrink-0">
+                                    <a href="${escapeHtml(cleanLink)}" ${cleanLink.startsWith('http') ? 'target="_blank" rel="noopener"' : ''} class="inline-flex items-center justify-center gap-2 bg-gradient-to-r ${cat.gradient} hover:brightness-110 text-white font-extrabold text-xs px-5 py-2.5 rounded-xl shadow-lg transition transform hover:-translate-y-0.5">
+                                        <span>${escapeHtml(item.linkText || 'Detayları Gör')}</span>
+                                        <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                                    </a>
+                                </div>
+                            ` : ''}
+                        </div>
+
+                        <!-- SAĞ DİKEY ETKİLEŞİM SÜTUNU (Beğen & Paylaş) -->
+                        <div class="absolute right-3 sm:right-4 bottom-16 z-20 flex flex-col items-center space-y-3.5">
+                            <!-- Beğen Butonu -->
+                            <div class="flex flex-col items-center">
+                                <button type="button" onclick="toggleFeedLike('${escapeHtml(item.id)}')" data-like-btn="${escapeHtml(item.id)}" class="action-rail-btn ${isLiked ? 'liked-active' : 'bg-slate-900/75 text-white border-white/15'} w-11 h-11 rounded-full border backdrop-blur-md flex items-center justify-center text-base shadow-xl">
+                                    <i class="${isLiked ? 'fa-solid' : 'fa-regular'} fa-heart"></i>
+                                </button>
+                                <span data-like-count="${escapeHtml(item.id)}" class="text-[11px] font-extrabold text-white mt-1 drop-shadow">${formatCount(item.likes || 0)}</span>
+                            </div>
+
+                            <!-- Paylaş Butonu -->
+                            <div class="flex flex-col items-center">
+                                <button type="button" onclick="shareFeedItem('${escapeHtml(item.id)}')" class="action-rail-btn bg-slate-900/75 hover:bg-slate-800 text-white border border-white/15 w-11 h-11 rounded-full backdrop-blur-md flex items-center justify-center text-sm shadow-xl">
+                                    <i class="fa-solid fa-share-nodes"></i>
+                                </button>
+                                <span class="text-[10px] font-semibold text-slate-300 mt-1">Paylaş</span>
+                            </div>
+                        </div>
+
+                        <!-- ALT BİLGİ SATIRI: Çift Dokun Hatırlatması & İnce Kaydır İpucu -->
+                        <div class="relative z-10 flex items-center justify-between pt-2.5 border-t border-white/10 text-[10px] flex-shrink-0">
+                            <span class="text-slate-300/80 font-medium flex items-center gap-1">
+                                <i class="fa-regular fa-hand-pointer text-pink-400 text-[10px]"></i>
+                                <span>Çift dokun ve beğen ❤️</span>
+                            </span>
+
+                            <div class="swipe-hint-anim inline-flex items-center space-x-1 text-[10px] font-medium text-pink-200/85 bg-white/5 px-2 py-0.5 rounded-full border border-white/10">
+                                <span>Kaydır</span>
+                                <i class="fa-solid fa-angles-down text-[9px]"></i>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            `;
+        }
+
+        // ===== AKIŞI BAŞLAT VE DOM'A BAS =====
+        async function initFeed() {
+            loadLocalSets();
+            masterFeedItems = await getFeedItems(db, { force: false });
+
+            const params = new URLSearchParams(window.location.search);
+            const targetId = params.get('id');
+
+            rebuildFeedViewport(targetId);
+        }
+
+        function rebuildFeedViewport(priorityId = null) {
+            const viewport = document.getElementById('reels-viewport');
+            if (!viewport) return;
+
+            let deck = buildInitialDeck();
+            if (priorityId) {
+                const foundIdx = deck.findIndex(x => x.id === priorityId);
+                if (foundIdx > 0) {
+                    const [prioItem] = deck.splice(foundIdx, 1);
+                    deck.unshift(prioItem);
+                }
+            }
+
+            if (deck.length === 0) {
+                viewport.innerHTML = `
+                    <div class="reel-slide">
+                        <div class="w-full max-w-md rounded-3xl bg-slate-900 border border-slate-800 p-8 text-center space-y-4 shadow-2xl">
+                            <div class="w-14 h-14 rounded-2xl bg-pink-500/15 border border-pink-500/30 text-pink-400 flex items-center justify-center text-xl mx-auto">
+                                <i class="fa-solid fa-layer-group"></i>
+                            </div>
+                            <h3 class="text-base font-extrabold text-white">Bu Kategoride Gönderi Yok</h3>
+                            <p class="text-xs text-slate-400 leading-relaxed">Seçtiğin filtrede henüz içerik bulunmuyor. Tüm kampüs akışına dönerek keşfetmeye devam edebilirsin.</p>
+                            <button onclick="filterFeedCategory('all')" class="bg-gradient-to-r from-pink-600 to-purple-600 text-white text-xs font-extrabold px-5 py-2 rounded-xl shadow-lg">
+                                Tüm Akışı Göster
+                            </button>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            activeQueue = [];
+            viewport.innerHTML = '';
+            appendDeckBatch(deck);
+            viewport.scrollTo({ top: 0, behavior: 'instant' });
+            observeSlides();
+        }
+
+        function appendDeckBatch(deckItems) {
+            const viewport = document.getElementById('reels-viewport');
+            if (!viewport || !deckItems || deckItems.length === 0) return;
+            const frag = document.createDocumentFragment();
+            const wrapper = document.createElement('div');
+
+            deckItems.forEach(item => {
+                const slideUid = item.id + '_' + Math.random().toString(36).substring(2, 7);
+                activeQueue.push({ item, slideUid });
+                wrapper.innerHTML = renderReelSlideHTML(item, slideUid);
+                if (wrapper.firstElementChild) {
+                    frag.appendChild(wrapper.firstElementChild);
+                }
+            });
+            viewport.appendChild(frag);
+        }
+
+        // ===== INTERSECTION OBSERVER: Aktif Slayt Takibi, Sonsuz Akış & Sessiz Ödül =====
+        let slideObserver = null;
+        function observeSlides() {
+            if (slideObserver) slideObserver.disconnect();
+            const viewport = document.getElementById('reels-viewport');
+            const slides = viewport.querySelectorAll('.reel-slide');
+
+            slideObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && entry.intersectionRatio >= 0.6) {
+                        const slideEl = entry.target;
+                        const itemId = slideEl.getAttribute('data-item-id');
+                        const allSlides = Array.from(viewport.querySelectorAll('.reel-slide'));
+                        currentSlideIndex = allSlides.indexOf(slideEl);
+
+                        if (itemId) {
+                            handleItemSeen(itemId);
+                        }
+
+                        // Sonsuz kaydırma: Son 2 karta gelindiğinde havuzu tekrar karıştırıp alta ekle (0 Read)
+                        if (currentSlideIndex >= allSlides.length - 2) {
+                            const moreDeck = weightedShuffle(getFilteredPool());
+                            if (moreDeck.length > 0) {
+                                appendDeckBatch(moreDeck);
+                                viewport.querySelectorAll('.reel-slide').forEach(s => slideObserver.observe(s));
+                            }
+                        }
+                    }
+                });
+            }, {
+                root: viewport,
+                threshold: [0.65]
+            });
+
+            slides.forEach(s => slideObserver.observe(s));
+        }
+
+        // ===== SESSİZ KAYDIRMA ÖDÜLÜ (Her 5 kaydırmada +1 Coin & +1 XP, Sayaç Yok) =====
+        async function handleItemSeen(itemId) {
+            if (seenInSession.has(itemId)) return;
+            seenInSession.add(itemId);
+            exploreState.count = (exploreState.count || 0) + 1;
+            saveExploreState();
+
+            if (exploreState.count > 0 && exploreState.count % 5 === 0 && exploreState.rewardsClaimed < 5) {
+                exploreState.rewardsClaimed += 1;
+                saveExploreState();
+
+                if (currentUser) {
+                    try {
+                        await updateDoc(doc(db, "users", currentUser.uid), {
+                            coins: increment(1),
+                            xp: increment(1)
+                        });
+                        const coinsEl = document.getElementById('user-coins');
+                        if (coinsEl) coinsEl.innerText = (parseInt(coinsEl.innerText, 10) || 0) + 1;
+                        showRewardAnimation('+1 Coin', 'text-yellow-400', 'fa-coins');
+                        setTimeout(() => showRewardAnimation('+1 XP', 'text-pink-400', 'fa-bolt'), 220);
+                    } catch (e) {}
+                }
+            }
+        }
+
+        // ===== BEĞENİ (LIKE), ÇİFT TIKLAMA VE TEK DOKÜMAN SENKRONİZASYONU =====
+        window.toggleFeedLike = (itemId, forceLike = false) => {
+            const item = masterFeedItems.find(x => x.id === itemId);
+            if (!item) return;
+
+            const alreadyLiked = likedSet.has(itemId);
+            if (forceLike && alreadyLiked) return;
+
+            if (alreadyLiked) {
+                likedSet.delete(itemId);
+                item.likes = Math.max(0, (item.likes || 1) - 1);
+            } else {
+                likedSet.add(itemId);
+                item.likes = (item.likes || 0) + 1;
+            }
+
+            saveLikedSet();
+            setFeedCache(masterFeedItems);
+
+            const nowLiked = likedSet.has(itemId);
+            document.querySelectorAll(`[data-like-btn="${itemId}"]`).forEach(btn => {
+                btn.classList.toggle('liked-active', nowLiked);
+                btn.classList.toggle('bg-slate-900/75', !nowLiked);
+                btn.classList.toggle('border-white/15', !nowLiked);
+                btn.classList.add('up-heart-pop');
+                setTimeout(() => btn.classList.remove('up-heart-pop'), 350);
+                const icon = btn.querySelector('i');
+                if (icon) icon.className = `${nowLiked ? 'fa-solid' : 'fa-regular'} fa-heart`;
+            });
+            document.querySelectorAll(`[data-like-count="${itemId}"]`).forEach(cnt => {
+                cnt.textContent = formatCount(item.likes || 0);
+            });
+
+            pendingLikeDeltas[itemId] = (pendingLikeDeltas[itemId] || 0) + (nowLiked ? 1 : -1);
+            if (pendingLikeDeltas[itemId] === 0) delete pendingLikeDeltas[itemId];
+            if (currentUser) {
+                hasDirtyLikes = true;
+                if (dirtyLikesTimer) clearTimeout(dirtyLikesTimer);
+                dirtyLikesTimer = setTimeout(flushLikesToFirestore, 4500);
+            }
+        };
+
+        // Sadece net farklar (+1/-1) tek yazmada gönderilir; okuma yapılmaz.
+        async function flushLikesToFirestore() {
+            if (!currentUser) return;
+            const ids = Object.keys(pendingLikeDeltas);
+            if (!ids.length) { hasDirtyLikes = false; return; }
+            const batch = {};
+            ids.forEach(id => { batch[id] = increment(pendingLikeDeltas[id]); });
+            const sent = { ...pendingLikeDeltas };
+            pendingLikeDeltas = {};
+            hasDirtyLikes = false;
+            try {
+                await setDoc(doc(db, "settings", "feedLikes"), { likes: batch }, { merge: true });
+            } catch (_) {
+                ids.forEach(id => { pendingLikeDeltas[id] = (pendingLikeDeltas[id] || 0) + sent[id]; });
+                hasDirtyLikes = true;
+            }
+        }
+        document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') flushLikesToFirestore(); });
+        window.addEventListener('pagehide', flushLikesToFirestore);
+
+        window.handleReelDoubleTap = (e, itemId) => {
+            const card = e.currentTarget;
+            if (!card) return;
+            const heart = document.createElement('i');
+            heart.className = 'fa-solid fa-heart double-tap-heart';
+            card.appendChild(heart);
+            setTimeout(() => heart.remove(), 900);
+            window.toggleFeedLike(itemId, true);
+        };
+
+        // ===== PAYLAŞMA =====
+        window.shareFeedItem = async (itemId) => {
+            const item = masterFeedItems.find(x => x.id === itemId);
+            if (!item) return;
+            const shareUrl = `${window.location.origin}/portal/akis.html?id=${encodeURIComponent(item.id)}`;
+            if (navigator.share) {
+                try {
+                    await navigator.share({
+                        title: `${item.title} - Üni Portal Akış`,
+                        text: item.title,
+                        url: shareUrl
+                    });
+                    return;
+                } catch (_) {}
+            }
+            try {
+                await navigator.clipboard.writeText(shareUrl);
+                showToast('Gönderi bağlantısı kopyalandı! 🔗', 'success');
+            } catch (_) {
+                showToast('Bağlantı: ' + shareUrl, 'info');
+            }
+        };
+
+        // ===== KATEGORİ FİLTRESİ & YENİDEN KARIŞTIRMA (0 OKUMA) =====
+        window.filterFeedCategory = (cat) => {
+            activeCategory = cat;
+            document.querySelectorAll('.cat-pill').forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('data-cat') === cat);
+            });
+            rebuildFeedViewport();
+        };
+
+        window.reshuffleFeedNow = () => {
+            rebuildFeedViewport();
+            showToast('Akış yeniden karıştırıldı 🎲', 'info');
+        };
+
+        window.scrollReelBy = (delta) => {
+            const viewport = document.getElementById('reels-viewport');
+            if (!viewport) return;
+            const slides = viewport.querySelectorAll('.reel-slide');
+            const targetIdx = Math.max(0, Math.min(slides.length - 1, currentSlideIndex + delta));
+            if (slides[targetIdx]) {
+                slides[targetIdx].scrollIntoView({ behavior: 'smooth' });
+            }
+        };
+
+        document.addEventListener('keydown', (e) => {
+            if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) return;
+            if (e.key === 'ArrowDown' || e.key === 'PageDown') {
+                e.preventDefault();
+                window.scrollReelBy(1);
+            } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+                e.preventDefault();
+                window.scrollReelBy(-1);
+            } else if (e.key.toLowerCase() === 'l') {
+                const viewport = document.getElementById('reels-viewport');
+                const slides = viewport?.querySelectorAll('.reel-slide');
+                const activeSlide = slides?.[currentSlideIndex];
+                const id = activeSlide?.getAttribute('data-item-id');
+                if (id) window.toggleFeedLike(id);
+            }
+        });
+
+        setInterval(() => {
+            document.querySelectorAll('[data-reltime-ts]').forEach(el => {
+                const ts = Number(el.getAttribute('data-reltime-ts'));
+                if (ts) el.textContent = formatRelativeTime(new Date(ts));
+            });
+        }, 60000);
+
+        // ===== BİLDİRİM & AUTH YÖNETİMİ =====
+        window.openNotificationsModal = async () => {
+            document.getElementById('user-dropdown').classList.add('hidden');
+            const modal = document.getElementById('notifications-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            if (!currentUser) return;
+            const listContainer = document.getElementById('notifications-list');
+            listContainer.innerHTML = '<div class="text-center py-8 text-slate-500 text-xs">Yükleniyor...</div>';
+            try {
+                const snap = await getDocs(query(collection(db, "users", currentUser.uid, "notifications"), orderBy("createdAt", "desc"), limit(20)));
+                if (snap.empty) { listContainer.innerHTML = '<div class="text-center py-8 text-slate-500 text-xs">Henüz bir bildiriminiz yok.</div>'; return; }
+                let itemsHTML = "";
+                snap.forEach((docSnap) => {
+                    const notif = docSnap.data();
+                    const notifId = docSnap.id;
+                    const safeLink = (notif.link || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+                    itemsHTML += `
+                        <div class="notif-item p-3 bg-slate-900/60 hover:bg-slate-700/50 border border-slate-700/70 rounded-xl flex items-start justify-between gap-3 transition group">
+                            <div class="flex-1 cursor-pointer" onclick="handleNotificationClick('${notifId}', '${safeLink}')">
+                                <p class="text-xs text-slate-200 font-medium group-hover:text-blue-400 transition">${escapeHtml(notif.message || 'Bildirim')}</p>
+                                ${notif.link ? `<span class="text-[10px] text-blue-400 underline mt-1 inline-block"><i class="fa-solid fa-arrow-up-right-from-square mr-1"></i>Bağlantıya Git</span>` : ''}
+                            </div>
+                            <button onclick="deleteNotification(event, '${notifId}')" title="Bildirimi Sil" class="text-slate-500 hover:text-red-400 p-1 text-xs transition flex-shrink-0">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        </div>
+                    `;
+                });
+                listContainer.innerHTML = itemsHTML;
+            } catch (e) { listContainer.innerHTML = '<div class="text-center py-8 text-red-400 text-xs">Bildirimler yüklenemedi.</div>'; }
+        };
+
+        window.closeNotificationsModal = () => {
+            document.getElementById('notifications-modal').classList.remove('flex');
+            document.getElementById('notifications-modal').classList.add('hidden');
+        };
+        window.handleNotificationClick = async (notifId, link) => {
+            if (currentUser && notifId) { try { await updateDoc(doc(db, "users", currentUser.uid, "notifications", notifId), { read: true }); } catch (e) {} }
+            if (link) { if (link.startsWith('http')) window.open(link, '_blank'); else window.location.href = link; }
+        };
+        window.deleteNotification = async (e, notifId) => {
+            e.stopPropagation();
+            if (!currentUser || !notifId) return;
+            const notifItem = e.currentTarget.closest('.notif-item');
+            if (notifItem) notifItem.remove();
+            try { await deleteDoc(doc(db, "users", currentUser.uid, "notifications", notifId)); } catch (err) {}
+        };
+
+        async function listenNotifications(uid) {
+            try {
+                const countSnap = await getCountFromServer(query(collection(db, "users", uid, "notifications"), where("read", "==", false)));
+                const unreadCount = countSnap.data().count;
+                const badge = document.getElementById('notification-badge');
+                const dropdownCount = document.getElementById('dropdown-notif-count');
+                if (unreadCount > 0) { badge.innerText = unreadCount; badge.classList.remove('hidden'); }
+                else badge.classList.add('hidden');
+                if (dropdownCount) dropdownCount.innerText = unreadCount;
+            } catch (e) {}
+        }
+
+        onAuthStateChanged(auth, async (user) => {
+            currentUser = user;
+            const loginBtn = document.getElementById('login-btn');
+            const userProfile = document.getElementById('user-profile');
+            const userAvatar = document.getElementById('user-avatar');
+            const userCoins = document.getElementById('user-coins');
+            const dropdownName = document.getElementById('dropdown-user-name');
+            const dropdownEmail = document.getElementById('dropdown-user-email');
+            const adminPanelLink = document.getElementById('admin-panel-link');
+
+            if (user) {
+                loginBtn.classList.add('hidden');
+                userProfile.classList.remove('hidden');
+                userAvatar.src = user.photoURL || 'https://via.placeholder.com/40';
+                dropdownName.innerText = user.displayName || "Kullanıcı";
+                dropdownEmail.innerText = user.email || "";
+
+                const userRef = doc(db, "users", user.uid);
+                const cachedUser = cacheGet(`user_profile_${user.uid}`);
+                if (cachedUser) {
+                    currentUserData = cachedUser;
+                    userCoins.innerText = cachedUser.coins || 0;
+                    if (cachedUser.role === 'admin' || cachedUser.role === 'moderator') adminPanelLink.classList.remove('hidden');
+                    else adminPanelLink.classList.add('hidden');
+                    initDailyStreak(db, user.uid, cachedUser);
+                } else {
+                    try {
+                        const userSnap = await getDoc(userRef);
+                        if (userSnap.exists()) {
+                            const userData = userSnap.data();
+                            currentUserData = userData;
+                            cacheSet(`user_profile_${user.uid}`, userData, 5 * 60 * 1000);
+                            userCoins.innerText = userData.coins || 0;
+                            if (userData.role === 'admin' || userData.role === 'moderator') adminPanelLink.classList.remove('hidden');
+                            else adminPanelLink.classList.add('hidden');
+                            initDailyStreak(db, user.uid, userData);
+                        }
+                    } catch (e) {}
+                }
+                listenNotifications(user.uid);
+            } else {
+                loginBtn.classList.remove('hidden');
+                userProfile.classList.add('hidden');
+                adminPanelLink.classList.add('hidden');
+                initDailyStreak(db, null, null);
+            }
+        });
+
+        initFeed();
+    </script>
+</body>
+</html>

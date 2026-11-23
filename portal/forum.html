@@ -131,7 +131,284 @@
             border-color: #a855f7 !important;
             color: #c084fc !important;
         }
+
+        /* Professional Markdown Editor */
+        .pro-md-editor {
+            border: 1px solid rgba(51, 65, 85, 0.9);
+            background: rgba(15, 23, 42, 0.85);
+            border-radius: 0.85rem;
+            overflow: hidden;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .pro-md-editor:focus-within {
+            border-color: #a855f7;
+            box-shadow: 0 0 0 2px rgba(168, 85, 247, 0.2);
+        }
+        .pro-md-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            padding: 0.45rem 0.65rem;
+            background: rgba(30, 41, 59, 0.75);
+            border-bottom: 1px solid rgba(51, 65, 85, 0.8);
+        }
+        .pro-md-tabs {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(15, 23, 42, 0.8);
+            padding: 0.2rem;
+            border-radius: 0.55rem;
+            border: 1px solid rgba(51, 65, 85, 0.7);
+            gap: 0.15rem;
+        }
+        .pro-md-tab {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.28rem 0.65rem;
+            border-radius: 0.4rem;
+            font-size: 11px;
+            font-weight: 700;
+            color: #94a3b8;
+            transition: all 0.15s ease;
+            cursor: pointer;
+        }
+        .pro-md-tab:hover {
+            color: #e2e8f0;
+        }
+        .pro-md-tab.active {
+            background: rgba(168, 85, 247, 0.2);
+            color: #e9d5ff;
+            box-shadow: inset 0 0 0 1px rgba(168, 85, 247, 0.4);
+        }
+        .pro-md-toolbar {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.15rem;
+        }
+        .pro-md-toolbar.is-disabled {
+            opacity: 0.4;
+            pointer-events: none;
+        }
+        .pro-md-btn {
+            width: 1.85rem;
+            height: 1.85rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.45rem;
+            color: #94a3b8;
+            font-size: 11px;
+            transition: all 0.15s ease;
+            cursor: pointer;
+        }
+        .pro-md-btn:hover {
+            background: rgba(168, 85, 247, 0.18);
+            color: #e9d5ff;
+        }
+        .pro-md-btn:active {
+            transform: scale(0.92);
+        }
+        .pro-md-sep {
+            width: 1px;
+            height: 1.1rem;
+            background: rgba(71, 85, 105, 0.6);
+            margin: 0 0.25rem;
+        }
+        .pro-md-textarea {
+            width: 100%;
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+            padding: 0.75rem 0.9rem;
+            font-size: 0.875rem;
+            color: #f8fafc;
+            resize: vertical;
+            min-height: 96px;
+        }
+        .pro-md-textarea:focus {
+            outline: none !important;
+        }
+        .pro-md-preview {
+            padding: 0.85rem 0.95rem;
+            min-height: 110px;
+            max-height: 320px;
+            overflow-y: auto;
+            font-size: 0.875rem;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        .pro-md-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            padding: 0.4rem 0.75rem;
+            background: rgba(15, 23, 42, 0.95);
+            border-top: 1px solid rgba(51, 65, 85, 0.65);
+            font-size: 11px;
+            color: #64748b;
+        }
+        .pro-md-shortcuts {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .pro-md-kbd {
+            background: rgba(30, 41, 59, 0.9);
+            border: 1px solid rgba(71, 85, 105, 0.7);
+            border-radius: 0.3rem;
+            padding: 0.05rem 0.3rem;
+            font-size: 10px;
+            color: #94a3b8;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        }
+        .pro-md-editor.is-fullscreen {
+            position: fixed;
+            inset: 1rem;
+            z-index: 90;
+            display: flex;
+            flex-direction: column;
+            background: #0f172a;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.75);
+        }
+        .pro-md-editor.is-fullscreen .pro-md-textarea,
+        .pro-md-editor.is-fullscreen .pro-md-preview {
+            flex: 1;
+            min-height: 0;
+            max-height: none;
+            height: 100%;
+        }
+        .pro-md-popover-wrap {
+            position: relative;
+            display: inline-flex;
+        }
+        .pro-md-popover {
+            position: absolute;
+            top: calc(100% + 6px);
+            left: 0;
+            z-index: 60;
+            background: #1e293b;
+            border: 1px solid #475569;
+            border-radius: 0.65rem;
+            padding: 0.5rem;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.55);
+        }
+        .pro-md-color-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 0.35rem;
+            width: 148px;
+        }
+        .pro-md-color-swatch {
+            width: 1.4rem;
+            height: 1.4rem;
+            border-radius: 0.35rem;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            cursor: pointer;
+            transition: transform 0.12s ease;
+        }
+        .pro-md-color-swatch:hover {
+            transform: scale(1.18);
+            border-color: #fff;
+        }
+        .pro-md-emoji-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 0.2rem;
+            width: 196px;
+        }
+        .pro-md-emoji-btn {
+            width: 1.85rem;
+            height: 1.85rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.4rem;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.12s ease, transform 0.12s ease;
+        }
+        .pro-md-emoji-btn:hover {
+            background: rgba(168, 85, 247, 0.22);
+            transform: scale(1.15);
+        }
+        /* Rich Markdown Extras */
+        .md-spoiler {
+            background: #334155;
+            color: transparent;
+            border-radius: 0.3rem;
+            padding: 0.05rem 0.35rem;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s ease;
+        }
+        .md-spoiler:hover {
+            background: #475569;
+        }
+        .md-spoiler.revealed {
+            background: rgba(168, 85, 247, 0.16);
+            color: #e9d5ff;
+            user-select: text;
+        }
+        .md-hr {
+            border: none;
+            border-top: 1px solid rgba(100, 116, 139, 0.45);
+            margin: 0.75rem 0;
+        }
+        .md-callout {
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.35);
+            border-left: 3px solid #a855f7;
+            border-radius: 0.55rem;
+            padding: 0.55rem 0.75rem;
+            margin: 0.5rem 0;
+            color: #e2e8f0;
+            font-size: 0.85rem;
+        }
+        .md-color .md-strong,
+        .md-color .md-em,
+        .md-color .md-h3,
+        .md-color del,
+        .md-color u {
+            color: inherit !important;
+        }
+        /* Forum yazar satırı rozet/tag hizalaması (ok gibi tek hiza) */
+        [data-author-title],
+        [data-author-badge] {
+            display: inline-flex;
+            align-items: center;
+            line-height: 1;
+        }
+        [data-author-title]:empty,
+        [data-author-badge]:empty {
+            display: none;
+        }
+        [data-author-title] > .user-title,
+        [data-author-badge] > span,
+        [title*="kelimelik"],
+        [title*="içerik"] {
+            display: inline-flex !important;
+            align-items: center !important;
+            height: 20px !important;
+            line-height: 1 !important;
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+            vertical-align: middle !important;
+            box-sizing: border-box !important;
+        }
+        [data-author-name] {
+            display: inline-flex;
+            align-items: center;
+            height: 20px;
+            line-height: 1;
+        }
     </style>
+    <script src="/portal/portal-theme.js"></script>
 </head>
 <body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col justify-between">
 
@@ -443,22 +720,69 @@
                     <span class="text-[11px] text-slate-500 hidden sm:inline"><i class="fa-solid fa-at mr-1"></i>@ ile kullanıcı etiketle</span>
                 </div>
                 <form id="reply-form" onsubmit="prepareReply(event)" class="space-y-3">
-                    <div class="reply-input-wrapper">
-                        <div id="mention-suggestions-reply" class="mention-suggestions hidden"></div>
-                        <textarea id="reply-content" rows="3" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500/40 text-white placeholder-slate-500 transition resize-y" placeholder="Fikrini veya cevabını paylaş... (@ ile etiketle)"></textarea>
-                    </div>
-                    <div class="flex items-center justify-between gap-2 flex-wrap pt-1">
-                        <div class="flex items-center gap-1.5">
-                            <button type="button" onclick="openEmbedModal('reply')" class="format-btn flex items-center gap-1.5 bg-slate-900 hover:bg-slate-700 border border-slate-700 text-slate-300 px-3 py-2 rounded-xl text-xs font-semibold transition">
-                                <i class="fa-solid fa-image text-emerald-400"></i>
-                                <span>Görsel</span>
-                            </button>
-                            <button type="button" onclick="openEmbedModal('reply', 'link')" class="format-btn flex items-center gap-1.5 bg-slate-900 hover:bg-slate-700 border border-slate-700 text-slate-300 px-3 py-2 rounded-xl text-xs font-semibold transition">
-                                <i class="fa-solid fa-link text-blue-400"></i>
-                                <span>Link</span>
-                            </button>
+                    <div class="pro-md-editor" id="pro-editor-reply">
+                        <div class="pro-md-header">
+                            <div class="pro-md-tabs" role="tablist">
+                                <button type="button" class="pro-md-tab active" data-tab="write" onclick="switchMdTab('reply', 'write')">
+                                    <i class="fa-solid fa-pen"></i><span>Yaz</span>
+                                </button>
+                                <button type="button" class="pro-md-tab" data-tab="preview" onclick="switchMdTab('reply', 'preview')">
+                                    <i class="fa-solid fa-eye"></i><span>Önizleme</span>
+                                </button>
+                            </div>
+                            <div class="pro-md-toolbar" id="pro-toolbar-reply">
+                                <button type="button" class="pro-md-btn" data-action="bold" title="Kalın (Ctrl+B)"><i class="fa-solid fa-bold"></i></button>
+                                <button type="button" class="pro-md-btn" data-action="italic" title="İtalik (Ctrl+I)"><i class="fa-solid fa-italic"></i></button>
+                                <button type="button" class="pro-md-btn" data-action="underline" title="Altı Çizili (Ctrl+U)"><i class="fa-solid fa-underline"></i></button>
+                                <button type="button" class="pro-md-btn" data-action="strike" title="Üstü Çizili"><i class="fa-solid fa-strikethrough"></i></button>
+                                <div class="pro-md-popover-wrap">
+                                    <button type="button" class="pro-md-btn text-pink-400" onclick="toggleMdPopover('color-reply', event)" title="Metin Rengi"><i class="fa-solid fa-palette"></i></button>
+                                    <div id="popover-color-reply" class="pro-md-popover hidden"><div class="pro-md-color-grid" data-color-target="reply"></div></div>
+                                </div>
+                                <button type="button" class="pro-md-btn" data-action="inlinecode" title="Satır İçi Kod"><i class="fa-solid fa-terminal"></i></button>
+                                <span class="pro-md-sep"></span>
+                                <button type="button" class="pro-md-btn" data-action="alignleft" title="Sola Hizala"><i class="fa-solid fa-align-left"></i></button>
+                                <button type="button" class="pro-md-btn" data-action="aligncenter" title="Ortala"><i class="fa-solid fa-align-center"></i></button>
+                                <button type="button" class="pro-md-btn" data-action="alignright" title="Sağa Hizala"><i class="fa-solid fa-align-right"></i></button>
+                                <button type="button" class="pro-md-btn" data-action="alignjustify" title="İki Yana Yasla"><i class="fa-solid fa-align-justify"></i></button>
+                                <span class="pro-md-sep"></span>
+                                <button type="button" class="pro-md-btn" data-action="h3" title="Başlık"><i class="fa-solid fa-heading"></i></button>
+                                <button type="button" class="pro-md-btn" data-action="quote" title="Alıntı"><i class="fa-solid fa-quote-left"></i></button>
+                                <button type="button" class="pro-md-btn" data-action="ul" title="Madde Listesi"><i class="fa-solid fa-list-ul"></i></button>
+                                <button type="button" class="pro-md-btn" data-action="ol" title="Numaralı Liste"><i class="fa-solid fa-list-ol"></i></button>
+                                <button type="button" class="pro-md-btn" data-action="codeblock" title="Kod Bloğu"><i class="fa-solid fa-code"></i></button>
+                                <button type="button" class="pro-md-btn" data-action="spoiler" title="Spoiler (Gizli Metin)"><i class="fa-solid fa-eye-slash"></i></button>
+                                <button type="button" class="pro-md-btn" data-action="note" title="Bilgi Kutusu"><i class="fa-solid fa-circle-info"></i></button>
+                                <button type="button" class="pro-md-btn" data-action="hr" title="Yatay Çizgi"><i class="fa-solid fa-minus"></i></button>
+                                <span class="pro-md-sep"></span>
+                                <button type="button" class="pro-md-btn text-blue-400" onclick="openEmbedModal('reply', 'link')" title="Link Ekle"><i class="fa-solid fa-link"></i></button>
+                                <button type="button" class="pro-md-btn text-emerald-400" onclick="openEmbedModal('reply')" title="Görsel Ekle"><i class="fa-solid fa-image"></i></button>
+                                <div class="pro-md-popover-wrap">
+                                    <button type="button" class="pro-md-btn text-amber-400" onclick="toggleMdPopover('emoji-reply', event)" title="Emoji Ekle"><i class="fa-regular fa-face-smile"></i></button>
+                                    <div id="popover-emoji-reply" class="pro-md-popover hidden"><div class="pro-md-emoji-grid" data-emoji-target="reply"></div></div>
+                                </div>
+                                <button type="button" class="pro-md-btn" onclick="toggleMdFullscreen('reply')" title="Tam Ekran"><i class="fa-solid fa-expand"></i></button>
+                            </div>
                         </div>
-                        <button type="submit" class="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white px-5 py-2 rounded-xl text-xs font-bold transition shadow-lg shadow-purple-500/20 flex items-center gap-1.5">
+                        <div class="reply-input-wrapper relative" id="pro-write-reply">
+                            <div id="mention-suggestions-reply" class="mention-suggestions hidden"></div>
+                            <textarea id="reply-content" rows="4" required class="pro-md-textarea placeholder-slate-500" placeholder="Fikrini veya cevabını Markdown ile yaz... (@ ile etiketle)"></textarea>
+                        </div>
+                        <div id="pro-preview-reply" class="pro-md-preview md-body hidden"></div>
+                        <div class="pro-md-footer">
+                            <div class="pro-md-shortcuts hidden sm:flex">
+                                <span><i class="fa-brands fa-markdown text-purple-400 mr-1"></i>Markdown</span>
+                                <span><kbd class="pro-md-kbd">Ctrl+B</kbd> Kalın</span>
+                                <span><kbd class="pro-md-kbd">Ctrl+I</kbd> İtalik</span>
+                                <span><kbd class="pro-md-kbd">Tab</kbd> Girinti</span>
+                            </div>
+                            <div class="flex items-center gap-3 ml-auto">
+                                <span id="pro-stats-reply" class="text-[11px] text-slate-400 font-medium">0 karakter · 0 kelime</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-end gap-2 pt-1">
+                        <button type="submit" class="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white px-5 py-2.5 rounded-xl text-xs font-bold transition shadow-lg shadow-purple-500/20 flex items-center gap-1.5">
                             <i class="fa-solid fa-paper-plane text-[11px]"></i>
                             <span>Yanıtı Gönder</span>
                         </button>
@@ -512,20 +836,70 @@
                     </div>
                     <div>
                         <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">İçerik</label>
-                        <textarea id="topic-content" rows="5" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-3 text-sm focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500/40 text-white placeholder-slate-500 transition resize-y" placeholder="Konu detaylarını veya sorunu buraya yaz..."></textarea>
-                        <!-- Format toolbar -->
+                        <div class="pro-md-editor" id="pro-editor-topic">
+                            <div class="pro-md-header">
+                                <div class="pro-md-tabs" role="tablist">
+                                    <button type="button" class="pro-md-tab active" data-tab="write" onclick="switchMdTab('topic', 'write')">
+                                        <i class="fa-solid fa-pen"></i><span>Yaz</span>
+                                    </button>
+                                    <button type="button" class="pro-md-tab" data-tab="preview" onclick="switchMdTab('topic', 'preview')">
+                                        <i class="fa-solid fa-eye"></i><span>Önizleme</span>
+                                    </button>
+                                </div>
+                                <div class="pro-md-toolbar" id="pro-toolbar-topic">
+                                    <button type="button" class="pro-md-btn" data-action="bold" title="Kalın (Ctrl+B)"><i class="fa-solid fa-bold"></i></button>
+                                    <button type="button" class="pro-md-btn" data-action="italic" title="İtalik (Ctrl+I)"><i class="fa-solid fa-italic"></i></button>
+                                    <button type="button" class="pro-md-btn" data-action="underline" title="Altı Çizili (Ctrl+U)"><i class="fa-solid fa-underline"></i></button>
+                                    <button type="button" class="pro-md-btn" data-action="strike" title="Üstü Çizili"><i class="fa-solid fa-strikethrough"></i></button>
+                                    <div class="pro-md-popover-wrap">
+                                        <button type="button" class="pro-md-btn text-pink-400" onclick="toggleMdPopover('color-topic', event)" title="Metin Rengi"><i class="fa-solid fa-palette"></i></button>
+                                        <div id="popover-color-topic" class="pro-md-popover hidden"><div class="pro-md-color-grid" data-color-target="topic"></div></div>
+                                    </div>
+                                    <button type="button" class="pro-md-btn" data-action="inlinecode" title="Satır İçi Kod"><i class="fa-solid fa-terminal"></i></button>
+                                    <span class="pro-md-sep"></span>
+                                    <button type="button" class="pro-md-btn" data-action="alignleft" title="Sola Hizala"><i class="fa-solid fa-align-left"></i></button>
+                                    <button type="button" class="pro-md-btn" data-action="aligncenter" title="Ortala"><i class="fa-solid fa-align-center"></i></button>
+                                    <button type="button" class="pro-md-btn" data-action="alignright" title="Sağa Hizala"><i class="fa-solid fa-align-right"></i></button>
+                                    <button type="button" class="pro-md-btn" data-action="alignjustify" title="İki Yana Yasla"><i class="fa-solid fa-align-justify"></i></button>
+                                    <span class="pro-md-sep"></span>
+                                    <button type="button" class="pro-md-btn" data-action="h3" title="Başlık"><i class="fa-solid fa-heading"></i></button>
+                                    <button type="button" class="pro-md-btn" data-action="quote" title="Alıntı"><i class="fa-solid fa-quote-left"></i></button>
+                                    <button type="button" class="pro-md-btn" data-action="ul" title="Madde Listesi"><i class="fa-solid fa-list-ul"></i></button>
+                                    <button type="button" class="pro-md-btn" data-action="ol" title="Numaralı Liste"><i class="fa-solid fa-list-ol"></i></button>
+                                    <button type="button" class="pro-md-btn" data-action="codeblock" title="Kod Bloğu"><i class="fa-solid fa-code"></i></button>
+                                    <button type="button" class="pro-md-btn" data-action="spoiler" title="Spoiler (Gizli Metin)"><i class="fa-solid fa-eye-slash"></i></button>
+                                    <button type="button" class="pro-md-btn" data-action="note" title="Bilgi Kutusu"><i class="fa-solid fa-circle-info"></i></button>
+                                    <button type="button" class="pro-md-btn" data-action="hr" title="Yatay Çizgi"><i class="fa-solid fa-minus"></i></button>
+                                    <span class="pro-md-sep"></span>
+                                    <button type="button" class="pro-md-btn text-blue-400" onclick="openEmbedModal('topic', 'link')" title="Link Ekle"><i class="fa-solid fa-link"></i></button>
+                                    <button type="button" class="pro-md-btn text-emerald-400" onclick="openEmbedModal('topic')" title="Görsel Ekle"><i class="fa-solid fa-image"></i></button>
+                                    <div class="pro-md-popover-wrap">
+                                        <button type="button" class="pro-md-btn text-amber-400" onclick="toggleMdPopover('emoji-topic', event)" title="Emoji Ekle"><i class="fa-regular fa-face-smile"></i></button>
+                                        <div id="popover-emoji-topic" class="pro-md-popover hidden"><div class="pro-md-emoji-grid" data-emoji-target="topic"></div></div>
+                                    </div>
+                                    <button type="button" class="pro-md-btn" onclick="toggleMdFullscreen('topic')" title="Tam Ekran"><i class="fa-solid fa-expand"></i></button>
+                                </div>
+                            </div>
+                            <div id="pro-write-topic">
+                                <textarea id="topic-content" rows="6" required class="pro-md-textarea placeholder-slate-500" placeholder="Konu detaylarını, kod bloklarını veya sorunu Markdown ile yaz..."></textarea>
+                            </div>
+                            <div id="pro-preview-topic" class="pro-md-preview md-body hidden"></div>
+                            <div class="pro-md-footer">
+                                <div class="pro-md-shortcuts hidden sm:flex">
+                                    <span><i class="fa-brands fa-markdown text-purple-400 mr-1"></i>Markdown</span>
+                                    <span><kbd class="pro-md-kbd">Ctrl+B</kbd> Kalın</span>
+                                    <span><kbd class="pro-md-kbd">Ctrl+I</kbd> İtalik</span>
+                                </div>
+                                <div class="flex items-center gap-3 ml-auto">
+                                    <span id="pro-stats-topic" class="text-[11px] text-slate-400 font-medium">0 karakter · 0 kelime</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Ekstra Araçlar -->
                         <div class="flex items-center gap-1.5 flex-wrap mt-2.5">
-                            <button type="button" onclick="openEmbedModal('topic')" class="format-btn flex items-center gap-1.5 bg-slate-900 hover:bg-slate-700 border border-slate-700 text-slate-300 px-3 py-1.5 rounded-xl text-xs font-semibold transition">
-                                <i class="fa-solid fa-image text-emerald-400"></i>
-                                <span>Görsel</span>
-                            </button>
-                            <button type="button" onclick="openEmbedModal('topic', 'link')" class="format-btn flex items-center gap-1.5 bg-slate-900 hover:bg-slate-700 border border-slate-700 text-slate-300 px-3 py-1.5 rounded-xl text-xs font-semibold transition">
-                                <i class="fa-solid fa-link text-blue-400"></i>
-                                <span>Link</span>
-                            </button>
                             <button type="button" id="poll-toggle-btn" onclick="togglePollSection()" class="format-btn flex items-center gap-1.5 bg-slate-900 hover:bg-slate-700 border border-slate-700 text-slate-300 px-3 py-1.5 rounded-xl text-xs font-semibold transition">
                                 <i class="fa-solid fa-chart-pie text-purple-400"></i>
-                                <span>Anket</span>
+                                <span>Anket Ekle</span>
                             </button>
                         </div>
                         <!-- Opsiyonel Anket Oluşturma Bölümü -->
@@ -898,7 +1272,7 @@ let forumLastVisible = null;
 
         function renderRichContent(text) {
             if (!text) return "";
-            return markdownToHtml(escapeHtml(text), (escaped) => {
+            let rendered = markdownToHtml(escapeHtml(text), (escaped) => {
                 let html = escaped;
                 html = html.replace(/\[resim\]\((https?:\/\/[^\s)]+)\)/gi, (match, url) => {
                     const safe = safeUrl(url);
@@ -915,11 +1289,23 @@ let forumLastVisible = null;
                     if (!safe) return match;
                     return `${prefix}<a href="${safe}" target="_blank" rel="noopener noreferrer" class="msg-embed-link">${safe}</a>`;
                 });
+                html = html.replace(/~~([^~]+)~~/g, '<del class="line-through text-slate-400">$1</del>');
+                html = html.replace(/\|\|([^|]+)\|\|/g, '<span class="md-spoiler" onclick="this.classList.toggle(\'revealed\')" title="Göstermek için tıkla">$1</span>');
                 html = html.replace(/@([A-Za-zÇĞİÖŞÜçğıöşü0-9_]+(?:\s+[A-Za-zÇĞİÖŞÜçğıöşü0-9_]+)?)/g, (m, name) => {
                     return `<span class="text-purple-300 font-bold bg-purple-500/10 px-1 rounded">@${name}</span>`;
                 });
                 return html;
             });
+            // Çok satırlı ve iç içe biçimlendirme destekli renk, altı çizili, hizalama, bilgi kutusu ve yatay çizgi
+            rendered = rendered.replace(/\[u\]([\s\S]*?)\[\/u\]/gi, '<u class="underline decoration-purple-400/70 underline-offset-2">$1</u>');
+            rendered = rendered.replace(/\[color=(?:&quot;|&#039;)?(#[0-9a-fA-F]{3,8}|[a-zA-Z]{3,20})(?:&quot;|&#039;)?\]([\s\S]*?)\[\/color\]/gi, '<span class="md-color" style="color:$1 !important">$2</span>');
+            rendered = rendered.replace(/\[left\]([\s\S]*?)\[\/left\]/gi, '<div style="text-align:left">$1</div>');
+            rendered = rendered.replace(/\[center\]([\s\S]*?)\[\/center\]/gi, '<div style="text-align:center">$1</div>');
+            rendered = rendered.replace(/\[right\]([\s\S]*?)\[\/right\]/gi, '<div style="text-align:right">$1</div>');
+            rendered = rendered.replace(/\[justify\]([\s\S]*?)\[\/justify\]/gi, '<div style="text-align:justify">$1</div>');
+            rendered = rendered.replace(/\[note\]([\s\S]*?)\[\/note\]/gi, '<div class="md-callout"><i class="fa-solid fa-circle-info text-purple-400 mr-1.5"></i>$1</div>');
+            rendered = rendered.replace(/(?:^|<br\s*\/?>)\s*---\s*(?=<br\s*\/?>|$)/g, '<hr class="md-hr">');
+            return rendered;
         }
 
         const selectedMentionsMap = new Map();
@@ -3093,6 +3479,202 @@ Keyifli forumlar! 🎉
                 defaultBtn.classList.add('bg-purple-600', 'text-white', 'shadow-lg', 'ring-2', 'ring-purple-400/50');
             }
 
+            const PRO_MD_ACTIONS = {
+                bold:         { wrap: ['**', '**'],           ph: 'kalın metin' },
+                italic:       { wrap: ['*', '*'],             ph: 'italik metin' },
+                underline:    { wrap: ['[u]', '[/u]'],        ph: 'altı çizili' },
+                strike:       { wrap: ['~~', '~~'],           ph: 'üstü çizili' },
+                inlinecode:   { wrap: ['`', '`'],             ph: 'kod' },
+                alignleft:    { wrap: ['[left]', '[/left]'],  ph: 'sola hizalı metin' },
+                aligncenter:  { wrap: ['[center]', '[/center]'], ph: 'ortalanmış metin' },
+                alignright:   { wrap: ['[right]', '[/right]'], ph: 'sağa hizalı metin' },
+                alignjustify: { wrap: ['[justify]', '[/justify]'], ph: 'iki yana yaslı metin' },
+                h3:           { line: '### ',                 ph: 'Başlık' },
+                quote:        { line: '> ',                   ph: 'alıntı' },
+                ul:           { line: '- ',                   ph: 'liste öğesi' },
+                ol:           { line: '1. ',                  ph: 'sıralı öğe' },
+                codeblock:    { block: true,                  ph: 'kod buraya' },
+                spoiler:      { wrap: ['||', '||'],           ph: 'gizli metin' },
+                note:         { wrap: ['[note]', '[/note]'],  ph: 'Bilgi notu buraya...' },
+                hr:           { insert: '\n---\n' }
+            };
+
+            const PRO_MD_COLORS = [
+                '#ef4444', '#f97316', '#eab308', '#22c55e', '#14b8a6',
+                '#0ea5e9', '#6366f1', '#a855f7', '#ec4899', '#64748b'
+            ];
+            const PRO_MD_EMOJIS = [
+                '😀','😂','😍','🤔','🔥','🎉','👍','👏','🙌','💡','🚀','⚡',
+                '❤️','✨','🎯','📌','⚠️','✅','❌','💻','📚','🎮','🎵','🏆'
+            ];
+
+            function closeAllMdPopovers() {
+                document.querySelectorAll('.pro-md-popover').forEach(p => p.classList.add('hidden'));
+            }
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.pro-md-popover-wrap')) closeAllMdPopovers();
+            });
+
+            window.toggleMdPopover = (id, e) => {
+                if (e) e.stopPropagation();
+                const pop = document.getElementById(`popover-${id}`);
+                if (!pop) return;
+                const wasHidden = pop.classList.contains('hidden');
+                closeAllMdPopovers();
+                if (wasHidden) pop.classList.remove('hidden');
+            };
+
+            window.toggleMdFullscreen = (type) => {
+                const editor = document.getElementById(`pro-editor-${type}`);
+                if (!editor) return;
+                editor.classList.toggle('is-fullscreen');
+            };
+
+            function applyProMdAction(ta, actionKey) {
+                const tool = PRO_MD_ACTIONS[actionKey];
+                if (!tool) return;
+                const start = ta.selectionStart, end = ta.selectionEnd;
+                const val = ta.value;
+                const sel = val.slice(start, end);
+                let insert, selStart, selEnd;
+                if (tool.insert) {
+                    insert = tool.insert;
+                    selStart = selEnd = start + insert.length;
+                } else if (tool.wrap) {
+                    const body = sel || tool.ph;
+                    insert = tool.wrap[0] + body + tool.wrap[1];
+                    selStart = start + tool.wrap[0].length;
+                    selEnd = selStart + body.length;
+                } else if (tool.block) {
+                    const body = sel || tool.ph;
+                    const pre = (start > 0 && val[start - 1] !== '\n') ? '\n' : '';
+                    insert = `${pre}\`\`\`\n${body}\n\`\`\`\n`;
+                    selStart = start + pre.length + 4;
+                    selEnd = selStart + body.length;
+                } else {
+                    const body = sel || tool.ph;
+                    const pre = (start > 0 && val[start - 1] !== '\n') ? '\n' : '';
+                    insert = pre + body.split('\n').map(l => tool.line + l).join('\n');
+                    selStart = start + pre.length + tool.line.length;
+                    selEnd = start + insert.length;
+                }
+                ta.focus();
+                ta.setRangeText(insert, start, end, 'end');
+                ta.setSelectionRange(selStart, selEnd);
+                ta.dispatchEvent(new Event('input', { bubbles: true }));
+            }
+
+            function applyProMdColor(ta, hex) {
+                const start = ta.selectionStart, end = ta.selectionEnd;
+                const sel = ta.value.slice(start, end) || 'renkli metin';
+                const open = `[color=${hex}]`, close = '[/color]';
+                ta.focus();
+                ta.setRangeText(open + sel + close, start, end, 'end');
+                ta.setSelectionRange(start + open.length, start + open.length + sel.length);
+                ta.dispatchEvent(new Event('input', { bubbles: true }));
+                closeAllMdPopovers();
+            }
+
+            function insertProMdEmoji(ta, emoji) {
+                const start = ta.selectionStart, end = ta.selectionEnd;
+                ta.focus();
+                ta.setRangeText(emoji, start, end, 'end');
+                ta.setSelectionRange(start + emoji.length, start + emoji.length);
+                ta.dispatchEvent(new Event('input', { bubbles: true }));
+                closeAllMdPopovers();
+            }
+
+            function updateProMdStats(type) {
+                const ta = document.getElementById(type === 'topic' ? 'topic-content' : 'reply-content');
+                const stats = document.getElementById(`pro-stats-${type}`);
+                if (!ta || !stats) return;
+                const text = ta.value || '';
+                const chars = text.length;
+                const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+                stats.textContent = `${chars} karakter · ${words} kelime`;
+            }
+
+            window.switchMdTab = (type, tab) => {
+                const editor = document.getElementById(`pro-editor-${type}`);
+                const writeBox = document.getElementById(`pro-write-${type}`);
+                const previewBox = document.getElementById(`pro-preview-${type}`);
+                const toolbar = document.getElementById(`pro-toolbar-${type}`);
+                const ta = document.getElementById(type === 'topic' ? 'topic-content' : 'reply-content');
+                if (!editor || !writeBox || !previewBox || !ta) return;
+
+                editor.querySelectorAll('.pro-md-tab').forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.tab === tab);
+                });
+
+                if (tab === 'preview') {
+                    writeBox.classList.add('hidden');
+                    previewBox.classList.remove('hidden');
+                    if (toolbar) toolbar.classList.add('is-disabled');
+                    const raw = (ta.value || '').trim();
+                    previewBox.innerHTML = raw
+                        ? renderRichContent(raw)
+                        : '<p class="text-slate-500 italic text-xs">Önizlenecek içerik yok...</p>';
+                } else {
+                    previewBox.classList.add('hidden');
+                    writeBox.classList.remove('hidden');
+                    if (toolbar) toolbar.classList.remove('is-disabled');
+                    ta.focus();
+                }
+            };
+
+            function initProMarkdownEditor(type) {
+                const ta = document.getElementById(type === 'topic' ? 'topic-content' : 'reply-content');
+                const toolbar = document.getElementById(`pro-toolbar-${type}`);
+                if (!ta) return;
+                ta.dataset.mdToolbar = '1'; // Eski attachMarkdownToolbar çağrılarını engelle
+
+                const colorGrid = document.querySelector(`[data-color-target="${type}"]`);
+                if (colorGrid && !colorGrid.children.length) {
+                    colorGrid.innerHTML = PRO_MD_COLORS.map(c => `<button type="button" class="pro-md-color-swatch" style="background:${c}" data-hex="${c}" title="${c}"></button>`).join('');
+                    colorGrid.addEventListener('click', e => {
+                        const sw = e.target.closest('[data-hex]');
+                        if (sw) applyProMdColor(ta, sw.dataset.hex);
+                    });
+                }
+
+                const emojiGrid = document.querySelector(`[data-emoji-target="${type}"]`);
+                if (emojiGrid && !emojiGrid.children.length) {
+                    emojiGrid.innerHTML = PRO_MD_EMOJIS.map(em => `<button type="button" class="pro-md-emoji-btn" data-emoji="${em}">${em}</button>`).join('');
+                    emojiGrid.addEventListener('click', e => {
+                        const eb = e.target.closest('[data-emoji]');
+                        if (eb) insertProMdEmoji(ta, eb.dataset.emoji);
+                    });
+                }
+
+                if (toolbar) {
+                    toolbar.addEventListener('mousedown', e => {
+                        if (!e.target.closest('.pro-md-popover')) e.preventDefault();
+                    });
+                    toolbar.addEventListener('click', e => {
+                        const btn = e.target.closest('[data-action]');
+                        if (btn) applyProMdAction(ta, btn.dataset.action);
+                    });
+                }
+
+                ta.addEventListener('keydown', e => {
+                    if (e.key === 'Tab') {
+                        e.preventDefault();
+                        const s = ta.selectionStart, end = ta.selectionEnd;
+                        ta.setRangeText('  ', s, end, 'end');
+                        ta.dispatchEvent(new Event('input', { bubbles: true }));
+                        return;
+                    }
+                    if (!(e.ctrlKey || e.metaKey)) return;
+                    const k = e.key.toLowerCase();
+                    if (k === 'b') { e.preventDefault(); applyProMdAction(ta, 'bold'); }
+                    else if (k === 'i') { e.preventDefault(); applyProMdAction(ta, 'italic'); }
+                    else if (k === 'u') { e.preventDefault(); applyProMdAction(ta, 'underline'); }
+                });
+
+                ta.addEventListener('input', () => updateProMdStats(type));
+                updateProMdStats(type);
+            }
+
             const replyTextarea = document.getElementById('reply-content');
             const replySuggestions = document.getElementById('mention-suggestions-reply');
             if (replyTextarea) {
@@ -3101,12 +3683,12 @@ Keyifli forumlar! 🎉
                     updateDepthPreview('reply');
                 });
                 replyTextarea.addEventListener('keydown', handleMentionKeydown);
-                attachMarkdownToolbar(replyTextarea);
+                initProMarkdownEditor('reply');
             }
             const topicTextarea = document.getElementById('topic-content');
             if (topicTextarea) {
                 topicTextarea.addEventListener('input', () => updateDepthPreview('topic'));
-                attachMarkdownToolbar(topicTextarea);
+                initProMarkdownEditor('topic');
             }
             updateDepthPreview('reply');
             updateDepthPreview('topic');

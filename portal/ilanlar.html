@@ -33,6 +33,7 @@
         .assistant-btn { animation: assistantPulse 2.5s ease-in-out infinite; }
         .assistant-btn:hover .assistant-icon { animation: assistantBounce 0.6s ease infinite; }
     </style>
+    <script src="/portal/portal-theme.js"></script>
 </head>
 <body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col justify-between">
 
@@ -474,10 +475,12 @@
             document.querySelectorAll('.cat-pill').forEach(btn => {
                 const on = btn.dataset.cat === cat;
                 btn.classList.toggle('bg-indigo-600', on);
+                btn.classList.toggle('hover:bg-indigo-500', on);
                 btn.classList.toggle('border-indigo-400', on);
                 btn.classList.toggle('text-white', on);
                 btn.classList.toggle('shadow-lg', on);
                 btn.classList.toggle('bg-slate-900', !on);
+                btn.classList.toggle('hover:bg-slate-700', !on);
                 btn.classList.toggle('text-slate-300', !on);
                 btn.classList.toggle('border-slate-700', !on);
             });

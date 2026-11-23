@@ -1,312 +1,1025 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="tr" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tanıtım - Üni Portal</title>
+    <title>Tanıtım — Üni Portal</title>
     <link rel="icon" type="image/png" href="/portal/fav.png">
     <link rel="manifest" href="/portal/manifest.json">
-    <meta name="theme-color" content="#0f172a">
+    <meta name="theme-color" content="#070b14">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        display: ['Plus Jakarta Sans', 'Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        html { overflow-y: scroll; overflow-x: hidden; scroll-behavior: smooth; }
-        body { overflow-x: hidden; min-height: 100vh; }
-        @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
-        @keyframes glow { 0%,100% { opacity:.35; transform: scale(1); } 50% { opacity:.7; transform: scale(1.08); } }
-        @keyframes shimmer { 0% { background-position: -200% center; } 100% { background-position: 200% center; } }
-        @keyframes pulseRing { 0% { box-shadow: 0 0 0 0 rgba(99,102,241,.6); } 100% { box-shadow: 0 0 0 16px rgba(99,102,241,0); } }
-        .animate-float { animation: float 5s ease-in-out infinite; }
-        .animate-glow { animation: glow 7s ease-in-out infinite; }
-        .shimmer-text { background: linear-gradient(90deg,#60a5fa,#a78bfa,#f472b6,#60a5fa); background-size: 200% auto; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; animation: shimmer 5s linear infinite; }
-        .pulse-ring { animation: pulseRing 2s ease-out infinite; }
-        .reveal { opacity: 0; transform: translateY(28px); transition: opacity .7s ease, transform .7s ease; }
-        .reveal.show { opacity: 1; transform: none; }
-        .glass { background: rgba(30,41,59,.65); backdrop-filter: blur(10px); border: 1px solid rgba(148,163,184,.15); }
-        .grid-bg { background-image: linear-gradient(rgba(148,163,184,.06) 1px, transparent 1px), linear-gradient(90deg, rgba(148,163,184,.06) 1px, transparent 1px); background-size: 44px 44px; -webkit-mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%); mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%); }
-        .feat-card { transition: transform .3s ease, border-color .3s ease, box-shadow .3s ease; }
-        .feat-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px -15px var(--c); border-color: var(--c); }
-        .step-line::before { content:''; position:absolute; left:19px; top:44px; bottom:-24px; width:2px; background: linear-gradient(to bottom, rgba(99,102,241,.6), rgba(99,102,241,.05)); }
+        :root {
+            --bg-base: #070b14;
+            --bg-surface: rgba(15, 23, 42, 0.62);
+            --border-subtle: rgba(148, 163, 184, 0.14);
+            --border-bright: rgba(148, 163, 184, 0.28);
+        }
+
+        html {
+            overflow-y: scroll;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            background-color: var(--bg-base);
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: #f1f5f9;
+            overflow-x: hidden;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Scroll Progress Bar */
+        #scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            width: 0%;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899, #f59e0b);
+            z-index: 100;
+            box-shadow: 0 0 12px rgba(139, 92, 246, 0.8);
+            transition: width 0.08s linear;
+        }
+
+        /* Ambient Background Grid & Noise */
+        .hero-grid {
+            background-image:
+                linear-gradient(rgba(148, 163, 184, 0.06) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(148, 163, 184, 0.06) 1px, transparent 1px);
+            background-size: 48px 48px;
+            -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 25%, #000 35%, transparent 80%);
+            mask-image: radial-gradient(ellipse 80% 60% at 50% 25%, #000 35%, transparent 80%);
+        }
+
+        /* Glassmorphism */
+        .glass {
+            background: var(--bg-surface);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-subtle);
+        }
+
+        .glass-strong {
+            background: rgba(15, 23, 42, 0.82);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(148, 163, 184, 0.18);
+        }
+
+        /* Shimmer Headline */
+        @keyframes shimmer {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .shimmer-text {
+            background: linear-gradient(110deg, #60a5fa 0%, #a78bfa 30%, #f472b6 60%, #fbbf24 85%, #60a5fa 100%);
+            background-size: 250% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 7s ease-in-out infinite;
+        }
+
+        /* Floating & Pulse */
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        .animate-float { animation: floatSlow 5.5s ease-in-out infinite; }
+
+        @keyframes pulseRing {
+            0% { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.65); }
+            100% { box-shadow: 0 0 0 12px rgba(52, 211, 153, 0); }
+        }
+        .pulse-dot { animation: pulseRing 2.2s ease-out infinite; }
+
+        @keyframes scrollWheel {
+            0% { transform: translateY(0); opacity: 1; }
+            70% { transform: translateY(10px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 0; }
+        }
+        .scroll-wheel { animation: scrollWheel 1.8s ease-in-out infinite; }
+
+        /* Reveal Animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(32px) scale(0.985);
+            transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, transform;
+        }
+        .reveal.reveal-left { transform: translateX(-32px); }
+        .reveal.reveal-right { transform: translateX(32px); }
+        .reveal.show {
+            opacity: 1;
+            transform: translate(0, 0) scale(1);
+        }
+
+        /* Spotlight Feature Card */
+        .spotlight-card {
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.35s ease, box-shadow 0.35s ease;
+        }
+        .spotlight-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(500px circle at var(--mx, 50%) var(--my, 50%), var(--glow, rgba(99, 102, 241, 0.18)), transparent 45%);
+            opacity: 0;
+            transition: opacity 0.35s ease;
+            pointer-events: none;
+        }
+        .spotlight-card:hover::before { opacity: 1; }
+        .spotlight-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--accent, rgba(99, 102, 241, 0.55));
+            box-shadow: 0 24px 48px -18px var(--shadow, rgba(99, 102, 241, 0.25));
+        }
+
+        /* Side Scroll-Spy Dots */
+        .spy-dot {
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .spy-link.active .spy-dot {
+            height: 26px;
+            background: linear-gradient(180deg, #60a5fa, #a855f7);
+            box-shadow: 0 0 12px rgba(139, 92, 246, 0.8);
+        }
+        .spy-link.active .spy-label {
+            opacity: 1;
+            transform: translateX(0);
+            color: #f8fafc;
+        }
+
+        /* Nav Link Active State */
+        .nav-link { position: relative; }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -6px;
+            width: 0%;
+            height: 2px;
+            border-radius: 99px;
+            background: linear-gradient(90deg, #60a5fa, #a855f7);
+            transition: width 0.3s ease;
+        }
+        .nav-link.active { color: #ffffff; }
+        .nav-link.active::after, .nav-link:hover::after { width: 100%; }
+
+        /* Timeline Progress Line */
+        .timeline-track {
+            position: absolute;
+            left: 23px;
+            top: 24px;
+            bottom: 24px;
+            width: 2px;
+            background: rgba(148, 163, 184, 0.16);
+            border-radius: 99px;
+        }
+        .timeline-fill {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 0%;
+            background: linear-gradient(180deg, #3b82f6, #8b5cf6, #ec4899, #f59e0b);
+            border-radius: 99px;
+            box-shadow: 0 0 12px rgba(139, 92, 246, 0.7);
+            transition: height 0.15s ease-out;
+        }
+
+        /* Accordion */
         details > summary { list-style: none; cursor: pointer; }
         details > summary::-webkit-details-marker { display: none; }
-        details[open] .chev { transform: rotate(180deg); }
-        @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } .reveal { opacity: 1; transform: none; } }
-    </style>
-</head>
-<body class="bg-slate-900 text-slate-100 font-sans">
+        details[open] .chev { transform: rotate(180deg); color: #818cf8; }
+        details[open] { border-color: rgba(129, 140, 248, 0.4); background: rgba(30, 41, 59, 0.78); }
 
-<header class="bg-slate-900/70 backdrop-blur-md border-b border-slate-700/60 sticky top-0 z-50">
+        /* Confetti burst for interactive coin demo */
+        @keyframes popUp {
+            0% { transform: translateY(0) scale(0.8); opacity: 1; }
+            100% { transform: translateY(-42px) scale(1.15); opacity: 0; }
+        }
+        .coin-pop {
+            animation: popUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation: none !important; transition: none !important; }
+            .reveal { opacity: 1 !important; transform: none !important; }
+            html { scroll-behavior: auto; }
+        }
+    </style>
+    <script src="/portal/portal-theme.js"></script>
+</head>
+<body class="font-sans selection:bg-indigo-500/40 selection:text-white">
+
+<!-- Üst Scroll İlerleme Çubuğu -->
+<div id="scroll-progress" aria-hidden="true"></div>
+
+<!-- Sağ Sabit Bölüm Navigasyonu (Scroll-Spy) -->
+<aside class="hidden xl:flex fixed right-6 top-1/2 -translate-y-1/2 z-40 flex-col items-end gap-3.5" aria-label="Sayfa bölümleri">
+    <a href="#giris" data-spy="giris" class="spy-link group flex items-center gap-3 active">
+        <span class="spy-label text-[11px] font-semibold text-slate-400 opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all">Başlangıç</span>
+        <span class="spy-dot w-1.5 h-2.5 rounded-full bg-slate-600 group-hover:bg-slate-400"></span>
+    </a>
+    <a href="#ozellikler" data-spy="ozellikler" class="spy-link group flex items-center gap-3">
+        <span class="spy-label text-[11px] font-semibold text-slate-400 opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all">Bölümler</span>
+        <span class="spy-dot w-1.5 h-2.5 rounded-full bg-slate-600 group-hover:bg-slate-400"></span>
+    </a>
+    <a href="#jeton" data-spy="jeton" class="spy-link group flex items-center gap-3">
+        <span class="spy-label text-[11px] font-semibold text-slate-400 opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all">Jeton Sistemi</span>
+        <span class="spy-dot w-1.5 h-2.5 rounded-full bg-slate-600 group-hover:bg-slate-400"></span>
+    </a>
+    <a href="#baslangic" data-spy="baslangic" class="spy-link group flex items-center gap-3">
+        <span class="spy-label text-[11px] font-semibold text-slate-400 opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all">Yol Haritası</span>
+        <span class="spy-dot w-1.5 h-2.5 rounded-full bg-slate-600 group-hover:bg-slate-400"></span>
+    </a>
+    <a href="#destek" data-spy="destek" class="spy-link group flex items-center gap-3">
+        <span class="spy-label text-[11px] font-semibold text-slate-400 opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all">Destek</span>
+        <span class="spy-dot w-1.5 h-2.5 rounded-full bg-slate-600 group-hover:bg-slate-400"></span>
+    </a>
+    <a href="#sss" data-spy="sss" class="spy-link group flex items-center gap-3">
+        <span class="spy-label text-[11px] font-semibold text-slate-400 opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all">SSS</span>
+        <span class="spy-dot w-1.5 h-2.5 rounded-full bg-slate-600 group-hover:bg-slate-400"></span>
+    </a>
+    <a href="#kesfet" data-spy="kesfet" class="spy-link group flex items-center gap-3">
+        <span class="spy-label text-[11px] font-semibold text-slate-400 opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all">Hızlı Erişim</span>
+        <span class="spy-dot w-1.5 h-2.5 rounded-full bg-slate-600 group-hover:bg-slate-400"></span>
+    </a>
+</aside>
+
+<!-- HEADER -->
+<header id="main-header" class="fixed top-0 inset-x-0 z-50 transition-all duration-300 border-b border-transparent">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-        <a href="/portal/index.html" class="text-sm sm:text-xl font-extrabold bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-500 bg-clip-text text-transparent flex items-center tracking-wide">
-            <i class="fa-solid fa-graduation-cap mr-2 text-blue-400"></i>Üni Portal
+        <a href="/portal/index.html" class="font-display text-base sm:text-xl font-extrabold flex items-center gap-2.5 tracking-tight group">
+            <span class="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-600 flex items-center justify-center text-white shadow-lg shadow-indigo-500/25 group-hover:scale-105 transition-transform">
+                <i class="fa-solid fa-graduation-cap text-sm"></i>
+            </span>
+            <span class="bg-gradient-to-r from-white via-blue-100 to-indigo-300 bg-clip-text text-transparent">Üni Portal</span>
         </a>
-        <nav class="hidden md:flex items-center gap-6 text-xs font-semibold text-slate-300">
-            <a href="#ozellikler" class="hover:text-white transition">Özellikler</a>
-            <a href="#jeton" class="hover:text-white transition">Jeton</a>
-            <a href="#baslangic" class="hover:text-white transition">Nasıl Başlarım?</a>
-            <a href="#destek" class="hover:text-white transition">Destek</a>
-            <a href="#sss" class="hover:text-white transition">SSS</a>
+
+        <nav class="hidden md:flex items-center gap-7 text-xs font-semibold text-slate-300">
+            <a href="#ozellikler" data-nav="ozellikler" class="nav-link hover:text-white transition">Bölümler</a>
+            <a href="#jeton" data-nav="jeton" class="nav-link hover:text-white transition">Jeton</a>
+            <a href="#baslangic" data-nav="baslangic" class="nav-link hover:text-white transition">Nasıl Başlarım?</a>
+            <a href="#destek" data-nav="destek" class="nav-link hover:text-white transition">Destek</a>
+            <a href="#sss" data-nav="sss" class="nav-link hover:text-white transition">SSS</a>
         </nav>
-        <a href="/portal/index.html" class="text-xs text-slate-200 hover:text-white bg-slate-700/50 hover:bg-slate-700 px-3.5 py-2 rounded-xl transition">
-            <i class="fa-solid fa-arrow-left mr-1"></i>Ana Sayfa
-        </a>
+
+        <div class="flex items-center gap-2.5">
+            <a href="/portal/akis.html" class="hidden sm:inline-flex items-center gap-1.5 text-xs font-semibold text-pink-200 hover:text-white bg-pink-500/15 hover:bg-pink-500/25 border border-pink-500/30 px-3.5 py-2 rounded-xl transition">
+                <i class="fa-solid fa-clapperboard text-[11px]"></i> Akış
+            </a>
+            <a href="/portal/index.html" class="inline-flex items-center gap-1.5 text-xs font-bold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 px-4 py-2 rounded-xl shadow-lg shadow-indigo-600/25 transition hover:-translate-y-0.5">
+                Portala Gir <i class="fa-solid fa-arrow-right text-[11px]"></i>
+            </a>
+        </div>
     </div>
 </header>
 
-<!-- HERO -->
-<section class="relative overflow-hidden">
-    <div class="absolute inset-0 grid-bg pointer-events-none"></div>
-    <div class="absolute -top-20 left-1/4 w-96 h-96 bg-blue-600/25 rounded-full blur-3xl animate-glow pointer-events-none"></div>
-    <div class="absolute top-20 right-1/4 w-96 h-96 bg-purple-600/25 rounded-full blur-3xl animate-glow pointer-events-none" style="animation-delay:2s"></div>
-    <div class="absolute bottom-0 left-1/2 w-80 h-80 bg-pink-600/15 rounded-full blur-3xl animate-glow pointer-events-none" style="animation-delay:4s"></div>
+<!-- HERO SECTION -->
+<section id="giris" class="relative min-h-[94vh] flex flex-col justify-center overflow-hidden pt-24 pb-16">
+    <!-- Ambient Parallax Orbs -->
+    <div class="absolute inset-0 hero-grid pointer-events-none"></div>
+    <div data-parallax="0.18" class="absolute -top-24 left-[15%] w-[28rem] h-[28rem] bg-blue-600/20 rounded-full blur-[110px] pointer-events-none"></div>
+    <div data-parallax="-0.14" class="absolute top-24 right-[12%] w-[26rem] h-[26rem] bg-purple-600/20 rounded-full blur-[110px] pointer-events-none"></div>
+    <div data-parallax="0.1" class="absolute -bottom-24 left-1/2 -translate-x-1/2 w-[32rem] h-[20rem] bg-pink-600/15 rounded-full blur-[110px] pointer-events-none"></div>
 
-    <div class="relative max-w-6xl mx-auto px-4 sm:px-6 pt-16 pb-20 sm:pt-24 sm:pb-28 text-center">
-        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-xs font-semibold text-indigo-200 mb-7">
-            <span class="w-2 h-2 rounded-full bg-emerald-400 pulse-ring"></span> Kampüsün öğrenci topluluğu
+    <div class="relative max-w-6xl mx-auto px-4 sm:px-6 text-center">
+        <!-- Live Pill -->
+        <div class="reveal inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full glass text-xs font-semibold text-indigo-200 mb-8 shadow-lg shadow-indigo-950/50">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 pulse-dot"></span>
+            <span>Kampüsün dijital öğrenci ekosistemi</span>
+            <span class="text-slate-500">•</span>
+            <span class="text-emerald-300">7/24 Aktif</span>
         </div>
-        <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold leading-tight tracking-tight">
-            Üniversite hayatın,<br><span class="shimmer-text">tek bir yerde.</span>
+
+        <!-- Main Headline -->
+        <h1 class="reveal font-display text-4xl sm:text-6xl lg:text-[4.5rem] font-extrabold leading-[1.08] tracking-tight max-w-4xl mx-auto" data-delay="80">
+            Üniversite hayatın,<br>
+            <span class="shimmer-text">tek bir akıllı portalda.</span>
         </h1>
-        <p class="mt-6 text-slate-300 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
-            Sohbet et, oyun oyna, ilan ver, topluluklara katıl ve kazandığın jetonlarla profilini özelleştir. Karmaşık değil: 2 dakikada alışırsın.
+
+        <p class="reveal mt-6 text-slate-300/90 text-base sm:text-lg lg:text-xl max-w-2xl mx-auto leading-relaxed" data-delay="160">
+            Anlık kampüs akışını keşfet, forumda tartış, mini oyunlarda yarış, ilan ver ve kazandığın jetonlarla profilini özelleştir. Karmaşa yok — <span class="text-white font-semibold">2 dakikada her şeye hakimsin.</span>
         </p>
-        <div class="mt-9 flex flex-col sm:flex-row gap-3 justify-center">
-            <a href="#baslangic" class="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 px-7 py-3.5 rounded-2xl font-bold text-sm shadow-xl shadow-indigo-600/30 transition hover:-translate-y-0.5">
-                <i class="fa-solid fa-rocket"></i> Hemen Başla
+
+        <!-- Primary CTAs -->
+        <div class="reveal mt-10 flex flex-col sm:flex-row items-center justify-center gap-3.5" data-delay="240">
+            <a href="/portal/index.html" class="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:via-indigo-500 hover:to-purple-500 px-8 py-4 rounded-2xl font-bold text-sm text-white shadow-xl shadow-indigo-600/30 transition-all hover:-translate-y-0.5 hover:shadow-indigo-500/40">
+                <i class="fa-solid fa-rocket"></i> Hemen Portala Gir
             </a>
-            <a href="#ozellikler" class="inline-flex items-center justify-center gap-2 glass hover:bg-slate-700/60 px-7 py-3.5 rounded-2xl font-bold text-sm transition">
-                <i class="fa-solid fa-compass"></i> Neler Var Keşfet
+            <a href="#ozellikler" class="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 glass hover:bg-slate-800/80 hover:border-slate-500/40 px-8 py-4 rounded-2xl font-bold text-sm text-slate-100 transition-all hover:-translate-y-0.5">
+                <i class="fa-solid fa-compass text-indigo-400"></i> Tüm Bölümleri İncele
             </a>
         </div>
 
-        <!-- Stat strip -->
-        <div class="mt-14 grid grid-cols-2 md:grid-cols-4 gap-3 max-w-3xl mx-auto">
-            <div class="glass rounded-2xl py-4"><div class="text-2xl font-extrabold text-blue-300">6</div><div class="text-[11px] text-slate-400">Ana bölüm</div></div>
-            <div class="glass rounded-2xl py-4"><div class="text-2xl font-extrabold text-yellow-300">Günlük</div><div class="text-[11px] text-slate-400">Ödül fırsatı</div></div>
-            <div class="glass rounded-2xl py-4"><div class="text-2xl font-extrabold text-emerald-300">Ücretsiz</div><div class="text-[11px] text-slate-400">Tek tık giriş</div></div>
-            <div class="glass rounded-2xl py-4"><div class="text-2xl font-extrabold text-pink-300">Mobil</div><div class="text-[11px] text-slate-400">Uygulama gibi</div></div>
+        <!-- Quick Jump Pills -->
+        <div class="reveal mt-8 flex flex-wrap items-center justify-center gap-2 text-xs" data-delay="300">
+            <span class="text-slate-500 mr-1">Doğrudan git:</span>
+            <a href="/portal/akis.html" class="px-3 py-1.5 rounded-full bg-slate-800/70 hover:bg-rose-500/20 border border-slate-700/70 hover:border-rose-500/40 text-slate-300 hover:text-rose-200 transition">Kampüs Akışı</a>
+            <a href="/portal/forum.html" class="px-3 py-1.5 rounded-full bg-slate-800/70 hover:bg-purple-500/20 border border-slate-700/70 hover:border-purple-500/40 text-slate-300 hover:text-purple-200 transition">Forum</a>
+            <a href="/portal/oyunlar.html" class="px-3 py-1.5 rounded-full bg-slate-800/70 hover:bg-pink-500/20 border border-slate-700/70 hover:border-pink-500/40 text-slate-300 hover:text-pink-200 transition">Oyunlar</a>
+            <a href="/portal/ilanlar.html" class="px-3 py-1.5 rounded-full bg-slate-800/70 hover:bg-emerald-500/20 border border-slate-700/70 hover:border-emerald-500/40 text-slate-300 hover:text-emerald-200 transition">İlanlar</a>
+            <a href="/portal/magaza.html" class="px-3 py-1.5 rounded-full bg-slate-800/70 hover:bg-amber-500/20 border border-slate-700/70 hover:border-amber-500/40 text-slate-300 hover:text-amber-200 transition">Mağaza</a>
         </div>
+
+        <!-- Stats Strip -->
+        <div class="reveal mt-14 grid grid-cols-2 md:grid-cols-4 gap-3.5 max-w-3xl mx-auto" data-delay="360">
+            <div class="glass rounded-2xl p-4 text-center hover:border-blue-500/30 transition">
+                <div class="font-display text-2xl sm:text-3xl font-extrabold text-blue-300">7</div>
+                <div class="text-xs text-slate-400 mt-0.5">Entegre Modül</div>
+            </div>
+            <div class="glass rounded-2xl p-4 text-center hover:border-amber-500/30 transition">
+                <div class="font-display text-2xl sm:text-3xl font-extrabold text-amber-300">Günlük</div>
+                <div class="text-xs text-slate-400 mt-0.5">Seri Jeton Ödülü</div>
+            </div>
+            <div class="glass rounded-2xl p-4 text-center hover:border-emerald-500/30 transition">
+                <div class="font-display text-2xl sm:text-3xl font-extrabold text-emerald-300">%100</div>
+                <div class="text-xs text-slate-400 mt-0.5">Ücretsiz & Tek Tık</div>
+            </div>
+            <div class="glass rounded-2xl p-4 text-center hover:border-pink-500/30 transition">
+                <div class="font-display text-2xl sm:text-3xl font-extrabold text-pink-300">PWA</div>
+                <div class="text-xs text-slate-400 mt-0.5">Uygulama Gibi Hızlı</div>
+            </div>
+        </div>
+
+        <!-- Scroll Cue -->
+        <a href="#ozellikler" class="reveal inline-flex flex-col items-center gap-2 mt-12 text-slate-400 hover:text-white transition group" data-delay="440">
+            <span class="text-[11px] font-medium tracking-wider uppercase">Keşfetmek için kaydır</span>
+            <span class="w-6 h-10 rounded-full border border-slate-600 group-hover:border-indigo-400 flex justify-center pt-2 transition">
+                <span class="w-1 h-2 rounded-full bg-indigo-400 scroll-wheel"></span>
+            </span>
+        </a>
     </div>
 </section>
 
-<main class="max-w-6xl mx-auto px-4 sm:px-6 space-y-24 sm:space-y-32 pb-24">
+<main class="max-w-6xl mx-auto px-4 sm:px-6 space-y-28 sm:space-y-36 pb-24">
 
-    <!-- ÖZELLİKLER -->
-    <section id="ozellikler" class="scroll-mt-24 reveal">
-        <div class="text-center mb-12">
-            <span class="text-xs font-bold tracking-widest text-indigo-400 uppercase">Özellikler</span>
-            <h2 class="text-3xl sm:text-4xl font-extrabold mt-2">İhtiyacın olan her şey burada</h2>
-            <p class="text-slate-400 mt-3 text-sm max-w-xl mx-auto">Her kart seni doğrudan ilgili bölüme götürür. İstediğinle başla.</p>
+    <!-- 1. ÖZELLİKLER / BÖLÜMLER (BENTO GRID) -->
+    <section id="ozellikler" class="scroll-mt-24">
+        <div class="reveal text-center max-w-2xl mx-auto mb-14">
+            <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/25 text-[11px] font-bold tracking-widest text-indigo-300 uppercase">
+                <i class="fa-solid fa-layer-group"></i> Portal Ekosistemi
+            </span>
+            <h2 class="font-display text-3xl sm:text-5xl font-extrabold mt-4 tracking-tight">İhtiyacın olan her şey, <span class="text-indigo-400">tek tık uzağında.</span></h2>
+            <p class="text-slate-400 mt-4 text-sm sm:text-base leading-relaxed">Her modül birbiriyle bağlantılı çalışır. Aşağıdaki kartlardan herhangi birine tıklayarak doğrudan ilgili sayfaya geçebilirsin.</p>
         </div>
+
+        <!-- Bento Grid: 7 Modül -->
         <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            <a href="/portal/akis.html" style="--c:rgba(244,63,94,.65)" class="feat-card glass rounded-3xl p-6 block">
-                <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-pink-500 via-rose-500 to-orange-500 flex items-center justify-center text-white text-lg shadow-lg mb-4"><i class="fa-solid fa-clapperboard"></i></div>
-                <h3 class="font-bold text-lg">Kampüs Akışı</h3>
-                <p class="text-sm text-slate-400 mt-1.5">Aşağı kaydırdıkça anlık haber, güncelleme, bilgilendirme ve öğrenci ipuçlarını keşfet, kaydırdıkça jeton kazan.</p>
-                <span class="inline-block mt-4 text-xs font-bold text-pink-300">Akışa git <i class="fa-solid fa-arrow-right ml-1"></i></span>
-            </a>
-            <a href="/portal/forum.html" style="--c:rgba(168,85,247,.6)" class="feat-card glass rounded-3xl p-6 block">
-                <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-purple-500 to-fuchsia-600 flex items-center justify-center text-white text-lg shadow-lg mb-4"><i class="fa-solid fa-comments"></i></div>
-                <h3 class="font-bold text-lg">Forum</h3>
-                <p class="text-sm text-slate-400 mt-1.5">Soru sor, konu aç, yanıt ver. Ders, kampüs ve hayat hakkında her şeyi konuş.</p>
-                <span class="inline-block mt-4 text-xs font-bold text-purple-300">Foruma git <i class="fa-solid fa-arrow-right ml-1"></i></span>
-            </a>
-            <a href="/portal/oyunlar.html" style="--c:rgba(236,72,153,.6)" class="feat-card glass rounded-3xl p-6 block">
-                <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-pink-500 to-rose-600 flex items-center justify-center text-white text-lg shadow-lg mb-4"><i class="fa-solid fa-gamepad"></i></div>
-                <h3 class="font-bold text-lg">Oyunlar</h3>
-                <p class="text-sm text-slate-400 mt-1.5">Ders arası mini oyunlarla eğlen, jeton kazan ve arkadaşlarınla yarış.</p>
-                <span class="inline-block mt-4 text-xs font-bold text-pink-300">Oyunlara git <i class="fa-solid fa-arrow-right ml-1"></i></span>
-            </a>
-            <a href="/portal/ilanlar.html" style="--c:rgba(16,185,129,.6)" class="feat-card glass rounded-3xl p-6 block">
-                <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white text-lg shadow-lg mb-4"><i class="fa-solid fa-bullhorn"></i></div>
-                <h3 class="font-bold text-lg">İlanlar</h3>
-                <p class="text-sm text-slate-400 mt-1.5">Ev arkadaşı, ders notu, ikinci el eşya… İlan ver ya da fırsatları yakala.</p>
-                <span class="inline-block mt-4 text-xs font-bold text-emerald-300">İlanlara git <i class="fa-solid fa-arrow-right ml-1"></i></span>
-            </a>
-            <a href="/portal/ogrenciler.html" style="--c:rgba(99,102,241,.6)" class="feat-card glass rounded-3xl p-6 block">
-                <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white text-lg shadow-lg mb-4"><i class="fa-solid fa-user-group"></i></div>
-                <h3 class="font-bold text-lg">Öğrenciler</h3>
-                <p class="text-sm text-slate-400 mt-1.5">Diğer öğrencilerin profillerini keşfet, yeni insanlarla tanış.</p>
-                <span class="inline-block mt-4 text-xs font-bold text-indigo-300">Öğrencilere git <i class="fa-solid fa-arrow-right ml-1"></i></span>
-            </a>
-            <a href="/portal/topluluk.html" style="--c:rgba(59,130,246,.6)" class="feat-card glass rounded-3xl p-6 block">
-                <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-600 flex items-center justify-center text-white text-lg shadow-lg mb-4"><i class="fa-solid fa-people-group"></i></div>
-                <h3 class="font-bold text-lg">Topluluklar</h3>
-                <p class="text-sm text-slate-400 mt-1.5">İlgi alanına uygun kulüp ve topluluklara katıl, etkinlikleri kaçırma.</p>
-                <span class="inline-block mt-4 text-xs font-bold text-blue-300">Topluluklara git <i class="fa-solid fa-arrow-right ml-1"></i></span>
-            </a>
-            <a href="/portal/magaza.html" style="--c:rgba(234,179,8,.6)" class="feat-card glass rounded-3xl p-6 block">
-                <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-yellow-500 to-amber-600 flex items-center justify-center text-white text-lg shadow-lg mb-4"><i class="fa-solid fa-store"></i></div>
-                <h3 class="font-bold text-lg">Mağaza</h3>
-                <p class="text-sm text-slate-400 mt-1.5">Jetonlarınla profilini ve görünümünü özelleştiren ürünler al.</p>
-                <span class="inline-block mt-4 text-xs font-bold text-yellow-300">Mağazaya git <i class="fa-solid fa-arrow-right ml-1"></i></span>
-            </a>
-        </div>
-    </section>
-
-    <!-- JETON -->
-    <section id="jeton" class="scroll-mt-24 reveal">
-        <div class="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-yellow-500/15 via-amber-500/5 to-slate-800/60 border border-yellow-500/30 p-7 sm:p-12">
-            <div class="absolute -right-10 -top-10 w-64 h-64 bg-yellow-500/20 rounded-full blur-3xl pointer-events-none"></div>
-            <div class="relative grid md:grid-cols-2 gap-10 items-center">
+            <!-- Kampüs Akışı (Öne Çıkan Geniş Kart) -->
+            <a href="/portal/akis.html"
+               style="--glow:rgba(244,63,94,0.22); --accent:rgba(244,63,94,0.55); --shadow:rgba(244,63,94,0.22)"
+               class="reveal spotlight-card glass rounded-3xl p-7 lg:col-span-2 flex flex-col justify-between group" data-delay="40">
                 <div>
-                    <span class="text-xs font-bold tracking-widest text-yellow-400 uppercase">Ödül sistemi</span>
-                    <h2 class="text-3xl sm:text-4xl font-extrabold mt-2">Kullandıkça <span class="text-yellow-300">kazan</span></h2>
-                    <p class="text-slate-300 text-sm mt-4 leading-relaxed">Sağ üstte gördüğün sarı sayaç jeton bakiyen. Portalda vakit geçirdikçe büyür, Mağaza'da harcarsın.</p>
-                    <ul class="mt-6 space-y-3 text-sm text-slate-200">
-                        <li class="flex gap-3"><span class="w-7 h-7 rounded-full bg-amber-500/20 text-amber-300 flex items-center justify-center shrink-0"><i class="fa-solid fa-calendar-check text-xs"></i></span>Her gün profil menüsünden <b>Günlük Ödül</b>'ünü al, seri yaptıkça büyür.</li>
-                        <li class="flex gap-3"><span class="w-7 h-7 rounded-full bg-pink-500/20 text-pink-300 flex items-center justify-center shrink-0"><i class="fa-solid fa-gamepad text-xs"></i></span>Oyunlarda başarılı ol, jeton topla.</li>
-                        <li class="flex gap-3"><span class="w-7 h-7 rounded-full bg-purple-500/20 text-purple-300 flex items-center justify-center shrink-0"><i class="fa-solid fa-comments text-xs"></i></span>Forumda aktif ol, topluluğa katkı sağla.</li>
-                    </ul>
+                    <div class="flex items-center justify-between gap-3 mb-5">
+                        <div class="w-13 h-13 w-12 h-12 rounded-2xl bg-gradient-to-br from-pink-500 via-rose-500 to-orange-500 flex items-center justify-center text-white text-lg shadow-lg shadow-rose-500/30">
+                            <i class="fa-solid fa-clapperboard"></i>
+                        </div>
+                        <span class="px-3 py-1 rounded-full text-[11px] font-bold bg-rose-500/15 text-rose-300 border border-rose-500/30">
+                            <i class="fa-solid fa-fire mr-1"></i> Kaydırdıkça Jeton Kazan
+                        </span>
+                    </div>
+                    <h3 class="font-display font-extrabold text-xl sm:text-2xl text-white group-hover:text-rose-200 transition">Kampüs Akışı</h3>
+                    <p class="text-sm sm:text-base text-slate-300/85 mt-2.5 leading-relaxed max-w-xl">
+                        Dikey kaydırma deneyimiyle kampüs haberleri, güncel duyurular, faydalı öğrenci ipuçları ve hızlı içerikler anında karşında. Üstelik akışta vakit geçirip kaydırdıkça jeton kazanırsın.
+                    </p>
                 </div>
-                <!-- görsel mockup -->
-                <div class="relative flex justify-center">
-                    <div class="glass rounded-3xl p-6 w-full max-w-xs animate-float shadow-2xl">
-                        <div class="flex items-center justify-between mb-5">
-                            <div class="flex items-center gap-2"><div class="w-9 h-9 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-sm font-bold">Sen</div><div class="text-xs"><div class="font-bold">Profilin</div><div class="text-slate-400">Yeni üye</div></div></div>
-                            <div class="flex items-center gap-1.5 bg-slate-900/70 px-3 py-1.5 rounded-full border border-slate-700"><i class="fa-solid fa-coins text-yellow-400 text-xs"></i><span class="font-extrabold text-yellow-300 text-sm">250</span></div>
+                <div class="mt-6 pt-5 border-t border-slate-700/50 flex items-center justify-between">
+                    <span class="text-xs text-slate-400">Anlık haberler & öğrenci ipuçları</span>
+                    <span class="inline-flex items-center gap-1.5 text-xs font-bold text-rose-300 group-hover:translate-x-1 transition-transform">
+                        Akışa Git <i class="fa-solid fa-arrow-right"></i>
+                    </span>
+                </div>
+            </a>
+
+            <!-- Forum -->
+            <a href="/portal/forum.html"
+               style="--glow:rgba(168,85,247,0.22); --accent:rgba(168,85,247,0.55); --shadow:rgba(168,85,247,0.22)"
+               class="reveal spotlight-card glass rounded-3xl p-7 flex flex-col justify-between group" data-delay="100">
+                <div>
+                    <div class="flex items-center justify-between mb-5">
+                        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-purple-500 to-fuchsia-600 flex items-center justify-center text-white text-lg shadow-lg shadow-purple-500/30">
+                            <i class="fa-solid fa-comments"></i>
                         </div>
-                        <div class="text-[11px] text-slate-400 mb-2">Günlük seri</div>
-                        <div class="grid grid-cols-7 gap-1.5">
-                            <div class="h-9 rounded-lg bg-amber-400/90 flex items-center justify-center text-slate-900 text-xs"><i class="fa-solid fa-check"></i></div>
-                            <div class="h-9 rounded-lg bg-amber-400/90 flex items-center justify-center text-slate-900 text-xs"><i class="fa-solid fa-check"></i></div>
-                            <div class="h-9 rounded-lg bg-amber-400/90 flex items-center justify-center text-slate-900 text-xs"><i class="fa-solid fa-check"></i></div>
-                            <div class="h-9 rounded-lg border-2 border-amber-400 text-amber-300 flex items-center justify-center text-xs pulse-ring"><i class="fa-solid fa-gift"></i></div>
-                            <div class="h-9 rounded-lg bg-slate-700/60"></div><div class="h-9 rounded-lg bg-slate-700/60"></div><div class="h-9 rounded-lg bg-slate-700/60"></div>
+                        <span class="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-purple-500/15 text-purple-300 border border-purple-500/25">Topluluk</span>
+                    </div>
+                    <h3 class="font-display font-extrabold text-xl text-white group-hover:text-purple-200 transition">Forum</h3>
+                    <p class="text-sm text-slate-400 mt-2 leading-relaxed">
+                        Soru sor, tartışma başlat, deneyim paylaş. Derslerden kampüs hayatına kadar her konuda öğrencilerle fikir alışverişi yap.
+                    </p>
+                </div>
+                <div class="mt-6 pt-4 border-t border-slate-700/50 flex items-center justify-between">
+                    <span class="text-xs text-slate-500">Konu aç & yanıtla</span>
+                    <span class="inline-flex items-center gap-1.5 text-xs font-bold text-purple-300 group-hover:translate-x-1 transition-transform">
+                        Foruma Git <i class="fa-solid fa-arrow-right"></i>
+                    </span>
+                </div>
+            </a>
+
+            <!-- Oyunlar -->
+            <a href="/portal/oyunlar.html"
+               style="--glow:rgba(236,72,153,0.22); --accent:rgba(236,72,153,0.55); --shadow:rgba(236,72,153,0.22)"
+               class="reveal spotlight-card glass rounded-3xl p-7 flex flex-col justify-between group" data-delay="140">
+                <div>
+                    <div class="flex items-center justify-between mb-5">
+                        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-pink-500 to-rose-600 flex items-center justify-center text-white text-lg shadow-lg shadow-pink-500/30">
+                            <i class="fa-solid fa-gamepad"></i>
                         </div>
-                        <div class="mt-5 text-center text-xs font-bold bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-900 py-2.5 rounded-xl">Ödülünü Al</div>
+                        <span class="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-pink-500/15 text-pink-300 border border-pink-500/25">Ödüllü</span>
+                    </div>
+                    <h3 class="font-display font-extrabold text-xl text-white group-hover:text-pink-200 transition">Oyunlar</h3>
+                    <p class="text-sm text-slate-400 mt-2 leading-relaxed">
+                        Ders aralarında kafa dağıtmak için mini oyunlar oyna, skorunu yükselt, arkadaşlarınla rekabet et ve bolca jeton topla.
+                    </p>
+                </div>
+                <div class="mt-6 pt-4 border-t border-slate-700/50 flex items-center justify-between">
+                    <span class="text-xs text-slate-500">Mini oyunlar & skorlar</span>
+                    <span class="inline-flex items-center gap-1.5 text-xs font-bold text-pink-300 group-hover:translate-x-1 transition-transform">
+                        Oyunlara Git <i class="fa-solid fa-arrow-right"></i>
+                    </span>
+                </div>
+            </a>
+
+            <!-- İlanlar -->
+            <a href="/portal/ilanlar.html"
+               style="--glow:rgba(16,185,129,0.22); --accent:rgba(16,185,129,0.55); --shadow:rgba(16,185,129,0.22)"
+               class="reveal spotlight-card glass rounded-3xl p-7 flex flex-col justify-between group" data-delay="180">
+                <div>
+                    <div class="flex items-center justify-between mb-5">
+                        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white text-lg shadow-lg shadow-emerald-500/30">
+                            <i class="fa-solid fa-bullhorn"></i>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-emerald-500/15 text-emerald-300 border border-emerald-500/25">Pano</span>
+                    </div>
+                    <h3 class="font-display font-extrabold text-xl text-white group-hover:text-emerald-200 transition">İlanlar</h3>
+                    <p class="text-sm text-slate-400 mt-2 leading-relaxed">
+                        Ev arkadaşı, ders notu, ikinci el kitap veya eşya… Güvenli öğrenci ağı içinde ilan oluştur ya da fırsatları yakala.
+                    </p>
+                </div>
+                <div class="mt-6 pt-4 border-t border-slate-700/50 flex items-center justify-between">
+                    <span class="text-xs text-slate-500">Al, sat, paylaş</span>
+                    <span class="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-300 group-hover:translate-x-1 transition-transform">
+                        İlanlara Git <i class="fa-solid fa-arrow-right"></i>
+                    </span>
+                </div>
+            </a>
+
+            <!-- Öğrenciler -->
+            <a href="/portal/ogrenciler.html"
+               style="--glow:rgba(99,102,241,0.22); --accent:rgba(99,102,241,0.55); --shadow:rgba(99,102,241,0.22)"
+               class="reveal spotlight-card glass rounded-3xl p-7 flex flex-col justify-between group" data-delay="220">
+                <div>
+                    <div class="flex items-center justify-between mb-5">
+                        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white text-lg shadow-lg shadow-indigo-500/30">
+                            <i class="fa-solid fa-user-group"></i>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-indigo-500/15 text-indigo-300 border border-indigo-500/25">Ağ</span>
+                    </div>
+                    <h3 class="font-display font-extrabold text-xl text-white group-hover:text-indigo-200 transition">Öğrenciler</h3>
+                    <p class="text-sm text-slate-400 mt-2 leading-relaxed">
+                        Aynı kampüsteki diğer öğrencilerin profillerini incele, bölümlerini gör ve yeni arkadaşlıklar kur.
+                    </p>
+                </div>
+                <div class="mt-6 pt-4 border-t border-slate-700/50 flex items-center justify-between">
+                    <span class="text-xs text-slate-500">Profilleri keşfet</span>
+                    <span class="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-300 group-hover:translate-x-1 transition-transform">
+                        Öğrencilere Git <i class="fa-solid fa-arrow-right"></i>
+                    </span>
+                </div>
+            </a>
+
+            <!-- Topluluklar -->
+            <a href="/portal/topluluk.html"
+               style="--glow:rgba(59,130,246,0.22); --accent:rgba(59,130,246,0.55); --shadow:rgba(59,130,246,0.22)"
+               class="reveal spotlight-card glass rounded-3xl p-7 flex flex-col justify-between group" data-delay="260">
+                <div>
+                    <div class="flex items-center justify-between mb-5">
+                        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-600 flex items-center justify-center text-white text-lg shadow-lg shadow-blue-500/30">
+                            <i class="fa-solid fa-people-group"></i>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-blue-500/15 text-blue-300 border border-blue-500/25">Kulüpler</span>
+                    </div>
+                    <h3 class="font-display font-extrabold text-xl text-white group-hover:text-blue-200 transition">Topluluklar</h3>
+                    <p class="text-sm text-slate-400 mt-2 leading-relaxed">
+                        İlgi alanına uygun öğrenci kulüplerini keşfet, katıl ve kampüsteki etkinlikleri hiçbir zaman kaçırma.
+                    </p>
+                </div>
+                <div class="mt-6 pt-4 border-t border-slate-700/50 flex items-center justify-between">
+                    <span class="text-xs text-slate-500">Etkinlikler & kulüpler</span>
+                    <span class="inline-flex items-center gap-1.5 text-xs font-bold text-blue-300 group-hover:translate-x-1 transition-transform">
+                        Topluluklara Git <i class="fa-solid fa-arrow-right"></i>
+                    </span>
+                </div>
+            </a>
+
+            <!-- Mağaza -->
+            <a href="/portal/magaza.html"
+               style="--glow:rgba(245,158,11,0.22); --accent:rgba(245,158,11,0.55); --shadow:rgba(245,158,11,0.22)"
+               class="reveal spotlight-card glass rounded-3xl p-7 lg:col-span-2 flex flex-col sm:flex-row sm:items-center justify-between gap-6 group" data-delay="300">
+                <div class="max-w-xl">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-yellow-500 to-amber-600 flex items-center justify-center text-white text-lg shadow-lg shadow-amber-500/30">
+                            <i class="fa-solid fa-store"></i>
+                        </div>
+                        <span class="px-3 py-1 rounded-full text-[11px] font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30">
+                            <i class="fa-solid fa-sparkles mr-1"></i> Profil Özelleştirme
+                        </span>
+                    </div>
+                    <h3 class="font-display font-extrabold text-xl sm:text-2xl text-white group-hover:text-amber-200 transition">Mağaza</h3>
+                    <p class="text-sm sm:text-base text-slate-300/85 mt-2 leading-relaxed">
+                        Portalda aktif olarak biriktirdiğin jetonları burada harca. Profil çerçeveleri, özel rozetler ve görünüm yükseltmeleriyle tarzını yansıt.
+                    </p>
+                </div>
+                <div class="shrink-0">
+                    <span class="inline-flex items-center gap-2 bg-amber-500/15 group-hover:bg-amber-500 text-amber-300 group-hover:text-slate-950 border border-amber-500/40 px-5 py-3 rounded-2xl text-xs font-extrabold transition-all">
+                        Mağazaya Git <i class="fa-solid fa-arrow-right"></i>
+                    </span>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <!-- 2. JETON & ÖDÜL SİSTEMİ (İNTERAKTİF DEMO) -->
+    <section id="jeton" class="scroll-mt-24 reveal">
+        <div class="relative overflow-hidden rounded-[2.25rem] bg-gradient-to-br from-amber-500/15 via-slate-900/90 to-slate-900 border border-amber-500/30 p-7 sm:p-12 lg:p-14 shadow-2xl shadow-amber-950/20">
+            <div class="absolute -right-20 -top-20 w-80 h-80 bg-amber-500/20 rounded-full blur-[90px] pointer-events-none"></div>
+            <div class="absolute -left-20 -bottom-20 w-72 h-72 bg-yellow-500/10 rounded-full blur-[90px] pointer-events-none"></div>
+
+            <div class="relative grid lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-[11px] font-bold tracking-widest text-amber-300 uppercase">
+                        <i class="fa-solid fa-coins"></i> Ödül Ekonomisi
+                    </span>
+                    <h2 class="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold mt-4 tracking-tight">
+                        Kullandıkça <span class="text-amber-300">kazan</span>, kazandıkça <span class="text-amber-300">fark yarat.</span>
+                    </h2>
+                    <p class="text-slate-300 text-sm sm:text-base mt-4 leading-relaxed">
+                        Portalın sağ üstünde gördüğün sarı sayaç senin jeton bakiyen. Gerçek para gerekmez — aktif oldukça bakiyen büyür ve Mağaza'da dilediğin gibi harcarsın.
+                    </p>
+
+                    <div class="mt-7 space-y-4">
+                        <div class="flex items-start gap-3.5 glass rounded-2xl p-4">
+                            <span class="w-9 h-9 rounded-xl bg-amber-500/20 text-amber-300 flex items-center justify-center shrink-0 mt-0.5"><i class="fa-solid fa-calendar-check"></i></span>
+                            <div>
+                                <div class="font-bold text-sm text-white">Günlük Giriş Serisi</div>
+                                <div class="text-xs text-slate-400 mt-0.5">Her gün profil menüsünden Günlük Ödül'ünü al; seri uzadıkça ödül katlanır.</div>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3.5 glass rounded-2xl p-4">
+                            <span class="w-9 h-9 rounded-xl bg-pink-500/20 text-pink-300 flex items-center justify-center shrink-0 mt-0.5"><i class="fa-solid fa-gamepad"></i></span>
+                            <div>
+                                <div class="font-bold text-sm text-white">Oyun & Akış Ödülleri</div>
+                                <div class="text-xs text-slate-400 mt-0.5">Mini oyunlarda yüksek skor yap veya Kampüs Akışı'nda içerikleri keşfet.</div>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3.5 glass rounded-2xl p-4">
+                            <span class="w-9 h-9 rounded-xl bg-purple-500/20 text-purple-300 flex items-center justify-center shrink-0 mt-0.5"><i class="fa-solid fa-comments"></i></span>
+                            <div>
+                                <div class="font-bold text-sm text-white">Topluluk Katkısı</div>
+                                <div class="text-xs text-slate-400 mt-0.5">Forumda yardımcı yanıtlar ver, topluluğu canlı tut ve ödüllendir.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-7 flex flex-wrap gap-3">
+                        <a href="/portal/magaza.html" class="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-extrabold text-xs px-5 py-3 rounded-xl shadow-lg shadow-amber-500/25 transition hover:-translate-y-0.5">
+                            <i class="fa-solid fa-store"></i> Mağazayı İncele
+                        </a>
+                        <a href="/portal/oyunlar.html" class="inline-flex items-center gap-2 glass hover:bg-slate-800 text-slate-200 font-bold text-xs px-5 py-3 rounded-xl transition">
+                            <i class="fa-solid fa-gamepad text-pink-400"></i> Oyunla Kazan
+                        </a>
+                    </div>
+                </div>
+
+                <!-- İnteraktif Jeton Kartı -->
+                <div class="relative flex flex-col items-center">
+                    <div class="text-[11px] font-semibold text-amber-300/80 mb-3 flex items-center gap-1.5">
+                        <i class="fa-solid fa-hand-pointer"></i> Aşağıdaki butona tıklayıp dene!
+                    </div>
+                    <div class="glass-strong rounded-3xl p-6 sm:p-7 w-full max-w-sm animate-float shadow-2xl border-amber-500/25 relative">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center gap-3">
+                                <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-sm font-extrabold shadow-md">Sen</div>
+                                <div>
+                                    <div class="font-bold text-sm text-white">Öğrenci Profilin</div>
+                                    <div class="text-[11px] text-emerald-400 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Çevrimiçi</div>
+                                </div>
+                            </div>
+                            <div class="relative flex items-center gap-2 bg-slate-950/80 px-3.5 py-2 rounded-full border border-amber-500/35">
+                                <i class="fa-solid fa-coins text-amber-400 text-sm"></i>
+                                <span id="demo-coins" class="font-display font-extrabold text-amber-300 text-base tabular-nums">250</span>
+                                <span id="coin-burst-anchor" class="absolute -top-2 right-2 pointer-events-none"></span>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between text-xs mb-2.5">
+                            <span class="text-slate-400 font-medium">7 Günlük Seri</span>
+                            <span id="demo-streak-text" class="text-amber-300 font-bold">4. Gün Hazır!</span>
+                        </div>
+                        <div class="grid grid-cols-7 gap-2">
+                            <div class="h-10 rounded-xl bg-amber-400 text-slate-950 flex items-center justify-center text-xs font-bold shadow-sm"><i class="fa-solid fa-check"></i></div>
+                            <div class="h-10 rounded-xl bg-amber-400 text-slate-950 flex items-center justify-center text-xs font-bold shadow-sm"><i class="fa-solid fa-check"></i></div>
+                            <div class="h-10 rounded-xl bg-amber-400 text-slate-950 flex items-center justify-center text-xs font-bold shadow-sm"><i class="fa-solid fa-check"></i></div>
+                            <div id="demo-day-4" class="h-10 rounded-xl border-2 border-amber-400 bg-amber-500/15 text-amber-300 flex items-center justify-center text-xs transition-all"><i class="fa-solid fa-gift"></i></div>
+                            <div class="h-10 rounded-xl bg-slate-800/80 border border-slate-700/60 flex items-center justify-center text-[10px] text-slate-500">5</div>
+                            <div class="h-10 rounded-xl bg-slate-800/80 border border-slate-700/60 flex items-center justify-center text-[10px] text-slate-500">6</div>
+                            <div class="h-10 rounded-xl bg-slate-800/80 border border-amber-500/30 flex items-center justify-center text-xs text-amber-400/60"><i class="fa-solid fa-crown"></i></div>
+                        </div>
+
+                        <button id="demo-claim-btn" type="button" class="mt-6 w-full font-extrabold text-xs bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 py-3.5 rounded-xl shadow-lg shadow-amber-500/25 transition active:scale-95 cursor-pointer">
+                            <i class="fa-solid fa-gift mr-1.5"></i> Günlük Ödülü Al (+50 Jeton)
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- BAŞLANGIÇ -->
-    <section id="baslangic" class="scroll-mt-24 reveal">
-        <div class="text-center mb-12">
-            <span class="text-xs font-bold tracking-widest text-indigo-400 uppercase">Yol haritası</span>
-            <h2 class="text-3xl sm:text-4xl font-extrabold mt-2">4 adımda başla</h2>
+    <!-- 3. 4 ADIMDA BAŞLA (SCROLL-LINKED TIMELINE) -->
+    <section id="baslangic" class="scroll-mt-24">
+        <div class="reveal text-center max-w-2xl mx-auto mb-14">
+            <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/25 text-[11px] font-bold tracking-widest text-blue-300 uppercase">
+                <i class="fa-solid fa-route"></i> Hızlı Yol Haritası
+            </span>
+            <h2 class="font-display text-3xl sm:text-5xl font-extrabold mt-4 tracking-tight">4 adımda <span class="text-blue-400">hazırsın.</span></h2>
+            <p class="text-slate-400 mt-4 text-sm sm:text-base">Hiçbir detayı atlamadan portalı en verimli şekilde kullanmaya başla.</p>
         </div>
-        <div class="max-w-2xl mx-auto space-y-6">
-            <div class="relative step-line flex gap-5">
-                <div class="w-10 h-10 shrink-0 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 font-extrabold flex items-center justify-center shadow-lg shadow-indigo-600/30">1</div>
-                <div class="glass rounded-2xl p-5 flex-1">
-                    <h3 class="font-bold">Google ile giriş yap</h3>
-                    <p class="text-sm text-slate-400 mt-1">Ana sayfada sağ üstteki "Giriş Yap" butonuna tıkla. Ayrı şifre yok, tek tık.</p>
-                    <a href="/portal/index.html" class="inline-block mt-3 text-xs font-bold text-blue-300 hover:text-blue-200">Ana sayfaya git →</a>
+
+        <div id="timeline-container" class="relative max-w-3xl mx-auto space-y-6">
+            <!-- Scroll ile dolan dikey çizgi -->
+            <div class="timeline-track" aria-hidden="true">
+                <div id="timeline-fill" class="timeline-fill"></div>
+            </div>
+
+            <!-- Adım 1 -->
+            <div class="reveal relative flex gap-5 sm:gap-7 items-start">
+                <div class="relative z-10 w-12 h-12 shrink-0 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 font-display font-extrabold text-lg flex items-center justify-center shadow-lg shadow-blue-600/30 ring-4 ring-[#070b14]">1</div>
+                <div class="glass rounded-3xl p-6 flex-1 hover:border-blue-500/40 transition">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <h3 class="font-display font-bold text-lg text-white">Google ile tek tıkla giriş yap</h3>
+                        <span class="text-[11px] font-semibold text-blue-300 bg-blue-500/10 px-2.5 py-0.5 rounded-full">10 saniye</span>
+                    </div>
+                    <p class="text-sm text-slate-400 mt-2 leading-relaxed">Ana sayfada sağ üstteki <b>"Giriş Yap"</b> butonuna tıkla. Yeni şifre belirlemekle uğraşma, tamamen güvenli ve ücretsiz.</p>
+                    <a href="/portal/index.html" class="inline-flex items-center gap-1.5 mt-4 text-xs font-bold text-blue-300 hover:text-blue-200 transition">
+                        Ana Sayfaya Git <i class="fa-solid fa-arrow-right"></i>
+                    </a>
                 </div>
             </div>
-            <div class="relative step-line flex gap-5">
-                <div class="w-10 h-10 shrink-0 rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 font-extrabold flex items-center justify-center shadow-lg shadow-indigo-600/30">2</div>
-                <div class="glass rounded-2xl p-5 flex-1">
-                    <h3 class="font-bold">Profilini oluştur</h3>
-                    <p class="text-sm text-slate-400 mt-1">Fotoğraf, bölüm ve kısa bir tanıtım ekle ki diğer öğrenciler seni tanısın.</p>
-                    <a href="/portal/profil.html" class="inline-block mt-3 text-xs font-bold text-indigo-300 hover:text-indigo-200">Profilime git →</a>
+
+            <!-- Adım 2 -->
+            <div class="reveal relative flex gap-5 sm:gap-7 items-start" data-delay="80">
+                <div class="relative z-10 w-12 h-12 shrink-0 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 font-display font-extrabold text-lg flex items-center justify-center shadow-lg shadow-indigo-600/30 ring-4 ring-[#070b14]">2</div>
+                <div class="glass rounded-3xl p-6 flex-1 hover:border-indigo-500/40 transition">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <h3 class="font-display font-bold text-lg text-white">Profilini düzenle</h3>
+                        <span class="text-[11px] font-semibold text-indigo-300 bg-indigo-500/10 px-2.5 py-0.5 rounded-full">Kimliğin</span>
+                    </div>
+                    <p class="text-sm text-slate-400 mt-2 leading-relaxed">Fotoğrafını, bölümünü ve kısa bir biyografi ekle. Böylece diğer öğrenciler seni kolayca tanıyıp iletişime geçebilir.</p>
+                    <a href="/portal/profil.html" class="inline-flex items-center gap-1.5 mt-4 text-xs font-bold text-indigo-300 hover:text-indigo-200 transition">
+                        Profilime Git <i class="fa-solid fa-arrow-right"></i>
+                    </a>
                 </div>
             </div>
-            <div class="relative step-line flex gap-5">
-                <div class="w-10 h-10 shrink-0 rounded-full bg-gradient-to-br from-purple-500 to-fuchsia-600 font-extrabold flex items-center justify-center shadow-lg shadow-purple-600/30">3</div>
-                <div class="glass rounded-2xl p-5 flex-1">
-                    <h3 class="font-bold">Kendini foruma tanıt</h3>
-                    <p class="text-sm text-slate-400 mt-1">İlk mesajını yaz ya da merak ettiğini sor. Herkes bir zamanlar yeniydi.</p>
-                    <a href="/portal/forum.html" class="inline-block mt-3 text-xs font-bold text-purple-300 hover:text-purple-200">Foruma git →</a>
+
+            <!-- Adım 3 -->
+            <div class="reveal relative flex gap-5 sm:gap-7 items-start" data-delay="140">
+                <div class="relative z-10 w-12 h-12 shrink-0 rounded-2xl bg-gradient-to-br from-purple-500 to-fuchsia-600 font-display font-extrabold text-lg flex items-center justify-center shadow-lg shadow-purple-600/30 ring-4 ring-[#070b14]">3</div>
+                <div class="glass rounded-3xl p-6 flex-1 hover:border-purple-500/40 transition">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <h3 class="font-display font-bold text-lg text-white">Akışı keşfet & foruma katıl</h3>
+                        <span class="text-[11px] font-semibold text-purple-300 bg-purple-500/10 px-2.5 py-0.5 rounded-full">Etkileşim</span>
+                    </div>
+                    <p class="text-sm text-slate-400 mt-2 leading-relaxed">Kampüs Akışı'nda gündemi yakala, Forum'da ilk mesajını yaz ya da merak ettiğin bir konuyu sor.</p>
+                    <div class="flex flex-wrap gap-4 mt-4">
+                        <a href="/portal/akis.html" class="inline-flex items-center gap-1.5 text-xs font-bold text-rose-300 hover:text-rose-200 transition">Kampüs Akışı <i class="fa-solid fa-arrow-right"></i></a>
+                        <a href="/portal/forum.html" class="inline-flex items-center gap-1.5 text-xs font-bold text-purple-300 hover:text-purple-200 transition">Foruma Git <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
                 </div>
             </div>
-            <div class="relative flex gap-5">
-                <div class="w-10 h-10 shrink-0 rounded-full bg-gradient-to-br from-yellow-500 to-amber-600 font-extrabold flex items-center justify-center shadow-lg shadow-amber-600/30">4</div>
-                <div class="glass rounded-2xl p-5 flex-1">
-                    <h3 class="font-bold">Ödülünü al, oyna, keşfet</h3>
-                    <p class="text-sm text-slate-400 mt-1">Günlük ödülünü topla, bir oyun oyna ve jetonlarını Mağaza'da değerlendir.</p>
-                    <div class="flex gap-4 mt-3">
-                        <a href="/portal/oyunlar.html" class="text-xs font-bold text-pink-300 hover:text-pink-200">Oyunlar →</a>
-                        <a href="/portal/magaza.html" class="text-xs font-bold text-yellow-300 hover:text-yellow-200">Mağaza →</a>
+
+            <!-- Adım 4 -->
+            <div class="reveal relative flex gap-5 sm:gap-7 items-start" data-delay="200">
+                <div class="relative z-10 w-12 h-12 shrink-0 rounded-2xl bg-gradient-to-br from-amber-500 to-yellow-500 text-slate-950 font-display font-extrabold text-lg flex items-center justify-center shadow-lg shadow-amber-500/30 ring-4 ring-[#070b14]">4</div>
+                <div class="glass rounded-3xl p-6 flex-1 hover:border-amber-500/40 transition">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <h3 class="font-display font-bold text-lg text-white">Ödülünü al, oyna ve özelleştir</h3>
+                        <span class="text-[11px] font-semibold text-amber-300 bg-amber-500/10 px-2.5 py-0.5 rounded-full">Ödüller</span>
+                    </div>
+                    <p class="text-sm text-slate-400 mt-2 leading-relaxed">Günlük ödülünü topla, mini oyunlarda jeton kazan ve Mağaza'dan profiline yakışan özel ürünleri al.</p>
+                    <div class="flex flex-wrap gap-4 mt-4">
+                        <a href="/portal/oyunlar.html" class="inline-flex items-center gap-1.5 text-xs font-bold text-pink-300 hover:text-pink-200 transition">Oyunlar <i class="fa-solid fa-arrow-right"></i></a>
+                        <a href="/portal/magaza.html" class="inline-flex items-center gap-1.5 text-xs font-bold text-amber-300 hover:text-amber-200 transition">Mağaza <i class="fa-solid fa-arrow-right"></i></a>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- DESTEK / İLETİŞİM ANLATIMI -->
+    <!-- 4. DESTEK & İLETİŞİM -->
     <section id="destek" class="scroll-mt-24 reveal">
-        <div class="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-cyan-500/15 via-blue-500/5 to-slate-800/60 border border-cyan-500/30 p-7 sm:p-12">
-            <div class="absolute -left-10 -bottom-10 w-64 h-64 bg-cyan-500/15 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="relative overflow-hidden rounded-[2.25rem] bg-gradient-to-br from-cyan-500/15 via-slate-900/90 to-slate-900 border border-cyan-500/30 p-7 sm:p-12">
+            <div class="absolute -left-16 -bottom-16 w-72 h-72 bg-cyan-500/20 rounded-full blur-[90px] pointer-events-none"></div>
+
             <div class="relative text-center max-w-2xl mx-auto">
-                <span class="text-xs font-bold tracking-widest text-cyan-400 uppercase">Yalnız değilsin</span>
-                <h2 class="text-3xl sm:text-4xl font-extrabold mt-2">Her zaman yanındayız</h2>
-                <p class="text-slate-300 text-sm mt-4 leading-relaxed">Portalda her sayfanın sağ altında <b class="text-cyan-300">İletişim</b> baloncuğu seni bekler. Takıldığında, bir hata gördüğünde ya da aklında bir fikir olduğunda ekibe doğrudan ulaşabilirsin.</p>
+                <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/15 border border-cyan-500/30 text-[11px] font-bold tracking-widest text-cyan-300 uppercase">
+                    <i class="fa-solid fa-headset"></i> Destek & İletişim
+                </span>
+                <h2 class="font-display text-3xl sm:text-4xl font-extrabold mt-4">Her zaman yanındayız</h2>
+                <p class="text-slate-300 text-sm sm:text-base mt-3 leading-relaxed">
+                    Her sayfanın sağ altındaki <b class="text-cyan-300">İletişim</b> baloncuğundan veya doğrudan İletişim sayfasından ekibe ulaşabilirsin.
+                </p>
             </div>
+
             <div class="relative grid sm:grid-cols-3 gap-4 mt-10">
-                <div class="glass rounded-2xl p-5 text-center">
-                    <div class="w-11 h-11 mx-auto rounded-xl bg-cyan-500/20 text-cyan-300 flex items-center justify-center mb-3"><i class="fa-solid fa-circle-question"></i></div>
-                    <h3 class="font-bold text-sm">Soru sor</h3>
-                    <p class="text-xs text-slate-400 mt-1">Portalı kullanırken aklına takılanları bize ilet.</p>
+                <div class="glass rounded-2xl p-6 text-center hover:border-cyan-500/40 transition">
+                    <div class="w-12 h-12 mx-auto rounded-2xl bg-cyan-500/15 text-cyan-300 flex items-center justify-center text-lg mb-4"><i class="fa-solid fa-circle-question"></i></div>
+                    <h3 class="font-display font-bold text-base">Soru Sor</h3>
+                    <p class="text-xs text-slate-400 mt-1.5 leading-relaxed">Portalı kullanırken aklına takılan her şeyi çekinmeden bize ilet.</p>
                 </div>
-                <div class="glass rounded-2xl p-5 text-center">
-                    <div class="w-11 h-11 mx-auto rounded-xl bg-rose-500/20 text-rose-300 flex items-center justify-center mb-3"><i class="fa-solid fa-bug"></i></div>
-                    <h3 class="font-bold text-sm">Sorun bildir</h3>
-                    <p class="text-xs text-slate-400 mt-1">Bir hata ya da uygunsuz içerik gördüysen hemen haber ver.</p>
+                <div class="glass rounded-2xl p-6 text-center hover:border-rose-500/40 transition">
+                    <div class="w-12 h-12 mx-auto rounded-2xl bg-rose-500/15 text-rose-300 flex items-center justify-center text-lg mb-4"><i class="fa-solid fa-bug"></i></div>
+                    <h3 class="font-display font-bold text-base">Sorun Bildir</h3>
+                    <p class="text-xs text-slate-400 mt-1.5 leading-relaxed">Bir teknik hata ya da uygunsuz içerik gördüysen hemen haber ver.</p>
                 </div>
-                <div class="glass rounded-2xl p-5 text-center">
-                    <div class="w-11 h-11 mx-auto rounded-xl bg-yellow-500/20 text-yellow-300 flex items-center justify-center mb-3"><i class="fa-solid fa-lightbulb"></i></div>
-                    <h3 class="font-bold text-sm">Öneri gönder</h3>
-                    <p class="text-xs text-slate-400 mt-1">Yeni özellik fikirlerin portalı birlikte geliştirmemizi sağlar.</p>
+                <div class="glass rounded-2xl p-6 text-center hover:border-amber-500/40 transition">
+                    <div class="w-12 h-12 mx-auto rounded-2xl bg-amber-500/15 text-amber-300 flex items-center justify-center text-lg mb-4"><i class="fa-solid fa-lightbulb"></i></div>
+                    <h3 class="font-display font-bold text-base">Öneri Gönder</h3>
+                    <p class="text-xs text-slate-400 mt-1.5 leading-relaxed">Yeni özellik fikirlerin portalı öğrencilerle birlikte büyütmemizi sağlar.</p>
                 </div>
+            </div>
+
+            <div class="relative mt-9 text-center">
+                <a href="/portal/iletisim.html" class="inline-flex items-center gap-2 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-extrabold text-xs px-6 py-3.5 rounded-xl shadow-lg shadow-cyan-500/25 transition hover:-translate-y-0.5">
+                    <i class="fa-solid fa-paper-plane"></i> İletişim Sayfasına Git
+                </a>
             </div>
         </div>
     </section>
 
-    <!-- SSS -->
+    <!-- 5. SIK SORULANLAR (SSS) -->
     <section id="sss" class="scroll-mt-24 reveal max-w-3xl mx-auto w-full">
         <div class="text-center mb-10">
-            <span class="text-xs font-bold tracking-widest text-indigo-400 uppercase">SSS</span>
-            <h2 class="text-3xl sm:text-4xl font-extrabold mt-2">Sık sorulanlar</h2>
+            <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/25 text-[11px] font-bold tracking-widest text-indigo-300 uppercase">
+                <i class="fa-solid fa-circle-info"></i> SSS
+            </span>
+            <h2 class="font-display text-3xl sm:text-4xl font-extrabold mt-4">Aklına takılanlar</h2>
         </div>
+
         <div class="space-y-3">
-            <details class="glass rounded-2xl p-5 group">
-                <summary class="flex items-center justify-between font-semibold text-sm">Üyelik ücretli mi?<i class="fa-solid fa-chevron-down chev text-slate-400 text-xs transition"></i></summary>
-                <p class="text-sm text-slate-400 mt-3">Hayır. Google hesabınla tek tıkla giriş yapıp tüm bölümleri kullanabilirsin.</p>
+            <details class="glass rounded-2xl p-5 transition-all" open>
+                <summary class="flex items-center justify-between gap-4 font-semibold text-sm sm:text-base text-white">
+                    <span>Üyelik ücretli mi?</span>
+                    <i class="fa-solid fa-chevron-down chev text-slate-400 text-xs transition-transform duration-300"></i>
+                </summary>
+                <p class="text-sm text-slate-300/85 mt-3 leading-relaxed">Hayır, tamamen ücretsizdir. Google hesabınla tek tıkla giriş yapıp tüm bölümleri hemen kullanabilirsin.</p>
             </details>
-            <details class="glass rounded-2xl p-5 group">
-                <summary class="flex items-center justify-between font-semibold text-sm">Jetonlar ne işe yarıyor?<i class="fa-solid fa-chevron-down chev text-slate-400 text-xs transition"></i></summary>
-                <p class="text-sm text-slate-400 mt-3">Mağaza'daki ürünleri satın almak için kullanılır. Günlük ödül, oyunlar ve aktiflik ile kazanılır.</p>
+
+            <details class="glass rounded-2xl p-5 transition-all">
+                <summary class="flex items-center justify-between gap-4 font-semibold text-sm sm:text-base text-white">
+                    <span>Jetonlar ne işe yarıyor ve nasıl kazanılır?</span>
+                    <i class="fa-solid fa-chevron-down chev text-slate-400 text-xs transition-transform duration-300"></i>
+                </summary>
+                <p class="text-sm text-slate-300/85 mt-3 leading-relaxed">Jetonlar Mağaza'daki profil özelleştirme ürünlerini almak için kullanılır. Günlük giriş ödülü, Kampüs Akışı'nda kaydırma, mini oyunlar ve forum aktifliğiyle kolayca kazanılır.</p>
             </details>
-            <details class="glass rounded-2xl p-5 group">
-                <summary class="flex items-center justify-between font-semibold text-sm">Telefonuma uygulama olarak ekleyebilir miyim?<i class="fa-solid fa-chevron-down chev text-slate-400 text-xs transition"></i></summary>
-                <p class="text-sm text-slate-400 mt-3">Evet. Profil menüsündeki "Uygulamayı Yükle" seçeneğiyle ana ekranına ekleyebilirsin.</p>
+
+            <details class="glass rounded-2xl p-5 transition-all">
+                <summary class="flex items-center justify-between gap-4 font-semibold text-sm sm:text-base text-white">
+                    <span>Telefonuma uygulama olarak yükleyebilir miyim?</span>
+                    <i class="fa-solid fa-chevron-down chev text-slate-400 text-xs transition-transform duration-300"></i>
+                </summary>
+                <p class="text-sm text-slate-300/85 mt-3 leading-relaxed">Evet! Üni Portal bir PWA (Progressive Web App) olarak tasarlandı. Profil menüsündeki "Uygulamayı Yükle" seçeneğiyle ana ekranına ekleyip uygulama gibi kullanabilirsin.</p>
             </details>
-            <details class="glass rounded-2xl p-5 group">
-                <summary class="flex items-center justify-between font-semibold text-sm">Bir sorunla karşılaşırsam ne yapmalıyım?<i class="fa-solid fa-chevron-down chev text-slate-400 text-xs transition"></i></summary>
-                <p class="text-sm text-slate-400 mt-3">Sağ alttaki İletişim baloncuğundan bize yaz, en kısa sürede dönüş yapalım.</p>
+
+            <details class="glass rounded-2xl p-5 transition-all">
+                <summary class="flex items-center justify-between gap-4 font-semibold text-sm sm:text-base text-white">
+                    <span>Bir sorunla karşılaşırsam ne yapmalıyım?</span>
+                    <i class="fa-solid fa-chevron-down chev text-slate-400 text-xs transition-transform duration-300"></i>
+                </summary>
+                <p class="text-sm text-slate-300/85 mt-3 leading-relaxed">Sağ alttaki İletişim baloncuğundan veya <a href="/portal/iletisim.html" class="text-cyan-300 underline hover:text-cyan-200">İletişim sayfasından</a> bize yazabilirsin; en kısa sürede dönüş yapıyoruz.</p>
             </details>
         </div>
     </section>
 
-    <!-- FİNAL CTA -->
-    <section class="reveal">
-        <div class="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 p-8 sm:p-14 text-center shadow-2xl shadow-purple-700/30">
-            <div class="absolute inset-0 grid-bg opacity-40 pointer-events-none"></div>
+    <!-- 6. FİNAL CTA + HIZLI PORTAL HARİTASI -->
+    <section id="kesfet" class="scroll-mt-24 reveal space-y-8">
+        <!-- Final CTA Banner -->
+        <div class="relative overflow-hidden rounded-[2.25rem] bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700 p-8 sm:p-14 text-center shadow-2xl shadow-indigo-700/30">
+            <div class="absolute inset-0 hero-grid opacity-35 pointer-events-none"></div>
             <div class="relative">
-                <div class="text-5xl mb-4 animate-float">🚀</div>
-                <h2 class="text-3xl sm:text-5xl font-extrabold">Hazırsan başlayalım!</h2>
-                <p class="text-white/85 mt-4 text-sm sm:text-base max-w-xl mx-auto">Ana sayfadan portalı keşfet ya da doğrudan foruma atlayıp ilk mesajını yaz.</p>
-                <div class="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
-                    <a href="/portal/index.html" class="inline-flex items-center justify-center gap-2 bg-white text-slate-900 hover:bg-slate-100 px-8 py-3.5 rounded-2xl font-extrabold text-sm shadow-xl transition hover:-translate-y-0.5">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-white/15 backdrop-blur-md text-3xl mb-5 animate-float shadow-lg">🚀</div>
+                <h2 class="font-display text-3xl sm:text-5xl font-extrabold text-white tracking-tight">Hazırsan başlayalım!</h2>
+                <p class="text-white/85 mt-4 text-sm sm:text-base max-w-xl mx-auto leading-relaxed">
+                    Artık tüm portalı tanıyorsun. Ana sayfadan giriş yap, akışı kaydır ya da doğrudan foruma katıl.
+                </p>
+                <div class="mt-8 flex flex-col sm:flex-row gap-3.5 justify-center">
+                    <a href="/portal/index.html" class="inline-flex items-center justify-center gap-2 bg-white text-slate-950 hover:bg-slate-100 px-8 py-4 rounded-2xl font-extrabold text-sm shadow-xl transition hover:-translate-y-0.5">
                         <i class="fa-solid fa-house"></i> Ana Sayfaya Git
                     </a>
-                    <a href="/portal/forum.html" class="inline-flex items-center justify-center gap-2 bg-slate-900/40 hover:bg-slate-900/60 border border-white/30 px-8 py-3.5 rounded-2xl font-extrabold text-sm transition hover:-translate-y-0.5">
-                        <i class="fa-solid fa-comments"></i> Foruma Git
+                    <a href="/portal/akis.html" class="inline-flex items-center justify-center gap-2 bg-slate-950/35 hover:bg-slate-950/55 border border-white/25 text-white px-8 py-4 rounded-2xl font-extrabold text-sm transition hover:-translate-y-0.5">
+                        <i class="fa-solid fa-clapperboard"></i> Kampüs Akışına Atla
                     </a>
                 </div>
+            </div>
+        </div>
+
+        <!-- Hızlı Site Haritası / Tüm Sayfalar -->
+        <div class="glass rounded-3xl p-6 sm:p-8">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6">
+                <div>
+                    <h3 class="font-display font-bold text-base text-white">Portal Hızlı Erişim Haritası</h3>
+                    <p class="text-xs text-slate-400">Gitmek istediğin sayfayı seç, tek tıkla aç.</p>
+                </div>
+                <a href="#giris" class="text-xs font-semibold text-indigo-300 hover:text-indigo-200 inline-flex items-center gap-1.5">
+                    <i class="fa-solid fa-arrow-up"></i> Yukarı Çık
+                </a>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5 text-xs font-semibold">
+                <a href="/portal/index.html" class="flex items-center gap-2.5 p-3 rounded-xl bg-slate-800/60 hover:bg-slate-700/80 border border-slate-700/60 hover:border-blue-500/40 text-slate-200 transition"><i class="fa-solid fa-house text-blue-400 w-4"></i> Ana Sayfa</a>
+                <a href="/portal/akis.html" class="flex items-center gap-2.5 p-3 rounded-xl bg-slate-800/60 hover:bg-slate-700/80 border border-slate-700/60 hover:border-rose-500/40 text-slate-200 transition"><i class="fa-solid fa-clapperboard text-rose-400 w-4"></i> Kampüs Akışı</a>
+                <a href="/portal/forum.html" class="flex items-center gap-2.5 p-3 rounded-xl bg-slate-800/60 hover:bg-slate-700/80 border border-slate-700/60 hover:border-purple-500/40 text-slate-200 transition"><i class="fa-solid fa-comments text-purple-400 w-4"></i> Forum</a>
+                <a href="/portal/oyunlar.html" class="flex items-center gap-2.5 p-3 rounded-xl bg-slate-800/60 hover:bg-slate-700/80 border border-slate-700/60 hover:border-pink-500/40 text-slate-200 transition"><i class="fa-solid fa-gamepad text-pink-400 w-4"></i> Oyunlar</a>
+                <a href="/portal/ilanlar.html" class="flex items-center gap-2.5 p-3 rounded-xl bg-slate-800/60 hover:bg-slate-700/80 border border-slate-700/60 hover:border-emerald-500/40 text-slate-200 transition"><i class="fa-solid fa-bullhorn text-emerald-400 w-4"></i> İlanlar</a>
+                <a href="/portal/ogrenciler.html" class="flex items-center gap-2.5 p-3 rounded-xl bg-slate-800/60 hover:bg-slate-700/80 border border-slate-700/60 hover:border-indigo-500/40 text-slate-200 transition"><i class="fa-solid fa-user-group text-indigo-400 w-4"></i> Öğrenciler</a>
+                <a href="/portal/topluluk.html" class="flex items-center gap-2.5 p-3 rounded-xl bg-slate-800/60 hover:bg-slate-700/80 border border-slate-700/60 hover:border-cyan-500/40 text-slate-200 transition"><i class="fa-solid fa-people-group text-cyan-400 w-4"></i> Topluluklar</a>
+                <a href="/portal/magaza.html" class="flex items-center gap-2.5 p-3 rounded-xl bg-slate-800/60 hover:bg-slate-700/80 border border-slate-700/60 hover:border-amber-500/40 text-slate-200 transition"><i class="fa-solid fa-store text-amber-400 w-4"></i> Mağaza</a>
+                <a href="/portal/profil.html" class="flex items-center gap-2.5 p-3 rounded-xl bg-slate-800/60 hover:bg-slate-700/80 border border-slate-700/60 hover:border-violet-500/40 text-slate-200 transition"><i class="fa-solid fa-user text-violet-400 w-4"></i> Profilim</a>
+                <a href="/portal/iletisim.html" class="flex items-center gap-2.5 p-3 rounded-xl bg-slate-800/60 hover:bg-slate-700/80 border border-slate-700/60 hover:border-teal-500/40 text-slate-200 transition"><i class="fa-solid fa-headset text-teal-400 w-4"></i> İletişim</a>
             </div>
         </div>
     </section>
 </main>
 
-<footer class="text-center text-xs text-slate-500 py-8 border-t border-slate-800">© Üni Portal</footer>
+<footer class="border-t border-slate-800/80 py-8 text-center text-xs text-slate-500">
+    <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <span>© Üni Portal — Öğrenciler için tasarlandı.</span>
+        <div class="flex items-center gap-4">
+            <a href="/portal/index.html" class="hover:text-slate-300 transition">Ana Sayfa</a>
+            <a href="/portal/iletisim.html" class="hover:text-slate-300 transition">İletişim</a>
+        </div>
+    </div>
+</footer>
 
 <script>
-    const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('show'); io.unobserve(e.target); } }), { threshold: 0.08 });
-    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+(() => {
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // 1. Staggered Reveal Observer
+    const revealEls = document.querySelectorAll('.reveal');
+    if (prefersReduced) {
+        revealEls.forEach(el => el.classList.add('show'));
+    } else {
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                const delay = Number(entry.target.dataset.delay || 0);
+                setTimeout(() => entry.target.classList.add('show'), delay);
+                revealObserver.unobserve(entry.target);
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+        revealEls.forEach(el => revealObserver.observe(el));
+    }
+
+    // 2. Scroll Progress, Header Glass, Parallax & Timeline Fill (60fps rAF)
+    const progressBar = document.getElementById('scroll-progress');
+    const header = document.getElementById('main-header');
+    const parallaxEls = document.querySelectorAll('[data-parallax]');
+    const timelineContainer = document.getElementById('timeline-container');
+    const timelineFill = document.getElementById('timeline-fill');
+    let ticking = false;
+
+    function onScrollFrame() {
+        ticking = false;
+        const scrollY = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = docHeight > 0 ? Math.min(100, Math.max(0, (scrollY / docHeight) * 100)) : 0;
+
+        progressBar.style.width = progress + '%';
+
+        // Header glass activation
+        if (scrollY > 24) {
+            header.classList.add('bg-[#070b14]/80', 'backdrop-blur-xl', 'border-slate-800/80', 'shadow-lg', 'shadow-black/20');
+            header.classList.remove('border-transparent');
+        } else {
+            header.classList.remove('bg-[#070b14]/80', 'backdrop-blur-xl', 'border-slate-800/80', 'shadow-lg', 'shadow-black/20');
+            header.classList.add('border-transparent');
+        }
+
+        // Subtle Hero Parallax
+        if (!prefersReduced && scrollY < window.innerHeight * 1.3) {
+            parallaxEls.forEach(el => {
+                const speed = parseFloat(el.dataset.parallax || 0);
+                el.style.transform = `translate3d(0, ${scrollY * speed}px, 0)`;
+            });
+        }
+
+        // Timeline Scroll Progress Line
+        if (timelineContainer && timelineFill) {
+            const rect = timelineContainer.getBoundingClientRect();
+            const vh = window.innerHeight;
+            const start = vh * 0.72;
+            const pct = Math.min(100, Math.max(0, ((start - rect.top) / rect.height) * 100));
+            timelineFill.style.height = pct + '%';
+        }
+    }
+
+    window.addEventListener('scroll', () => {
+        if (!ticking) {
+            requestAnimationFrame(onScrollFrame);
+            ticking = true;
+        }
+    }, { passive: true });
+    onScrollFrame();
+
+    // 3. Scroll-Spy for Side Dots & Top Nav
+    const spySections = ['giris', 'ozellikler', 'jeton', 'baslangic', 'destek', 'sss', 'kesfet']
+        .map(id => document.getElementById(id))
+        .filter(Boolean);
+    const spyLinks = document.querySelectorAll('[data-spy]');
+    const navLinks = document.querySelectorAll('[data-nav]');
+
+    const spyObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            const id = entry.target.id;
+            spyLinks.forEach(l => l.classList.toggle('active', l.dataset.spy === id));
+            navLinks.forEach(l => l.classList.toggle('active', l.dataset.nav === id));
+        });
+    }, { rootMargin: '-40% 0px -45% 0px', threshold: 0 });
+    spySections.forEach(sec => spyObserver.observe(sec));
+
+    // 4. Spotlight Mouse-Tracking Effect on Feature Cards
+    document.querySelectorAll('.spotlight-card').forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            card.style.setProperty('--mx', `${e.clientX - rect.left}px`);
+            card.style.setProperty('--my', `${e.clientY - rect.top}px`);
+        });
+    });
+
+    // 5. Interactive Coin Claim Demo
+    const claimBtn = document.getElementById('demo-claim-btn');
+    const coinsEl = document.getElementById('demo-coins');
+    const day4El = document.getElementById('demo-day-4');
+    const streakText = document.getElementById('demo-streak-text');
+    const burstAnchor = document.getElementById('coin-burst-anchor');
+    let claimed = false;
+
+    if (claimBtn && coinsEl) {
+        claimBtn.addEventListener('click', () => {
+            if (claimed) return;
+            claimed = true;
+
+            // Animate counter 250 -> 300
+            const start = 250, end = 300, duration = 600;
+            const t0 = performance.now();
+            function step(now) {
+                const p = Math.min(1, (now - t0) / duration);
+                coinsEl.textContent = Math.round(start + (end - start) * (1 - Math.pow(1 - p, 3)));
+                if (p < 1) requestAnimationFrame(step);
+            }
+            requestAnimationFrame(step);
+
+            // Pop "+50" badge
+            const pop = document.createElement('span');
+            pop.className = 'coin-pop inline-block text-xs font-extrabold text-amber-300 whitespace-nowrap';
+            pop.textContent = '+50';
+            burstAnchor.appendChild(pop);
+            setTimeout(() => pop.remove(), 950);
+
+            // Update day 4 card & button
+            day4El.className = 'h-10 rounded-xl bg-amber-400 text-slate-950 flex items-center justify-center text-xs font-bold shadow-sm transition-all';
+            day4El.innerHTML = '<i class="fa-solid fa-check"></i>';
+            streakText.textContent = '4. Gün Tamamlandı!';
+            streakText.className = 'text-emerald-400 font-bold';
+            claimBtn.innerHTML = '<i class="fa-solid fa-circle-check mr-1.5"></i> Ödül Alındı! Yarın Tekrar Gel';
+            claimBtn.className = 'mt-6 w-full font-bold text-xs bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 py-3.5 rounded-xl cursor-default';
+        });
+    }
+})();
 </script>
+<script type="module" src="/portal/portal-core.js"></script>
 </body>
 </html>
